@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-
-namespace Business.DefaultValue.Models
+﻿namespace Business.Models.ConfigModels
 {
+    using System.Collections.Generic;
     public class ConfigurationReadModel
     {
         public List<ModuleReadModel> Module { get; set; } = new List<ModuleReadModel>();

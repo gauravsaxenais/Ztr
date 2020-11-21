@@ -1,6 +1,6 @@
 ﻿namespace Business.RequestHandlers.Managers
 {
-    using Business.DefaultValue.Models;
+    using Business.Models.ConfigModels;
     using Business.RequestHandlers.Interfaces;
     using EnsureThat;
     using Microsoft.Extensions.Logging;

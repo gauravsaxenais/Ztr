@@ -1,4 +1,4 @@
-﻿namespace Business.DefaultValue.Models
+﻿namespace Business.Models.ConfigModels
 {
     public class BlockReadModel
     {
