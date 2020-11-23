@@ -8,8 +8,6 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Net;
-    using System.Net.Security;
     using System.Threading.Tasks;
     using ZTR.Framework.Business.File;
     using Blob = LibGit2Sharp.Blob;
@@ -66,11 +64,11 @@
                 Directory.CreateDirectory(_gitConnection.GitLocalFolder);
                 await Task.Run(() =>
                 {
-                // The following modification allowed me to fetch from repositories over LAN
-                var cloneOptions = new CloneOptions
-                {
-                    CredentialsProvider = new CredentialsHandler((url, usernameFromUrl, types) => new DefaultCredentials())
-                };
+                    // The following modification allowed me to fetch from repositories over LAN
+                    var cloneOptions = new CloneOptions
+                    {
+                        CredentialsProvider = new CredentialsHandler((url, usernameFromUrl, types) => new DefaultCredentials())
+                    };
 
                     cloneOptions.CertificateCheck += delegate (Certificate certificate, bool valid, string host)
                     {

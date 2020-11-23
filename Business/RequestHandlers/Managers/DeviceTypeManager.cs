@@ -4,7 +4,6 @@
     using EnsureThat;
     using Microsoft.Extensions.Logging;
     using System.Collections.Generic;
-    using System.IO;
     using System.Threading.Tasks;
     using ZTR.Framework.Business;
     using ZTR.Framework.Business.File.FileReaders;
@@ -13,18 +12,15 @@
     {
         private readonly IGitRepositoryManager _repoManager;
         
-        public DeviceTypeManager(ILogger<DeviceTypeManager> logger, IGitRepositoryManager gitRepoManager, DeviceGitConnectionOptions gitConnectionOptions) : base(logger)
+        public DeviceTypeManager(ILogger<DeviceTypeManager> logger, IGitRepositoryManager gitRepoManager, IEnvironmentSettings environmentSettings) : base(logger)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
-            EnsureArg.IsNotNull(gitConnectionOptions, nameof(gitConnectionOptions));
-            EnsureArg.IsNotNull(gitConnectionOptions.TomlConfiguration, nameof(gitConnectionOptions.TomlConfiguration));
-
-            var currentDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            gitConnectionOptions.GitLocalFolder = Path.Combine(currentDirectory, gitConnectionOptions.GitLocalFolder);
-            gitConnectionOptions.TomlConfiguration.DeviceFolder = Path.Combine(gitConnectionOptions.GitLocalFolder, gitConnectionOptions.TomlConfiguration.DeviceFolder);
+            EnsureArg.IsNotNull(environmentSettings, nameof(environmentSettings));
 
             _repoManager = gitRepoManager;
-            _repoManager.SetConnectionOptions(gitConnectionOptions);
+
+            var environmentOptions = environmentSettings.GetDeviceGitConnectionOptions();
+            _repoManager.SetConnectionOptions(environmentOptions);
         }
 
         public async Task<IEnumerable<string>> GetAllDevicesAsync()
