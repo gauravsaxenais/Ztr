@@ -24,18 +24,15 @@
         private static readonly string fileBlocks = "blocks";
         #endregion
 
-        public BlockManager(ILogger<ModuleManager> logger, IGitRepositoryManager repoManager, DeviceGitConnectionOptions gitConnectionOptions) : base(logger)
+        public BlockManager(ILogger<ModuleManager> logger, IGitRepositoryManager repoManager, IEnvironmentSettings environmentSettings) : base(logger)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
-            EnsureArg.IsNotNull(gitConnectionOptions, nameof(gitConnectionOptions));
-            EnsureArg.IsNotNull(gitConnectionOptions.TomlConfiguration, nameof(gitConnectionOptions.TomlConfiguration));
-
-            var currentDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            gitConnectionOptions.GitLocalFolder = Path.Combine(currentDirectory, gitConnectionOptions.GitLocalFolder);
-            gitConnectionOptions.TomlConfiguration.BlocksUrl = Path.Combine(gitConnectionOptions.GitLocalFolder, gitConnectionOptions.TomlConfiguration.BlocksUrl);
+            EnsureArg.IsNotNull(environmentSettings, nameof(environmentSettings));
 
             _repoManager = repoManager;
-            _repoManager.SetConnectionOptions(gitConnectionOptions);
+
+            var environmentOptions = environmentSettings.GetDeviceGitConnectionOptions();
+            _repoManager.SetConnectionOptions(environmentOptions);
         }
 
         /// <summary>
@@ -52,6 +49,7 @@
 
             string[] files = Directory.GetFiles(gitConnectionOptions.TomlConfiguration.BlocksUrl);
             int fileIndex = 1;
+            
             foreach (var currentFile in files)
             {
                 string filename = Path.GetFullPath(currentFile);
@@ -107,8 +105,13 @@
 
             if (flattenList.Any())
             {
-                json.Insert(json.Length, "{\"id\":" + fileIndex + ",\"type\":\"" + Path.GetFileNameWithoutExtension(currentFile) + "\",\"tag\":" + "\"\"," + "\"args\":[");
-                //var str2 = Regex.Replace()
+                json.Insert(json.Length, "{\"id\":"
+                    + fileIndex
+                    + ",\"type\":\""
+                    + Path.GetFileNameWithoutExtension(currentFile)
+                    + "\",\"tag\":" + "\"\","
+                    + "\"args\":[");
+
                 string[] str1 = Convert.ToString(flattenList[0])
                     .Replace("_ =", "")
                     .Replace("\r\n", "")
@@ -124,12 +127,16 @@
                 foreach (var item in str1)
                 {
                     strData =
-                        item.Replace("=", "\":")
+                        item
+                        .Replace("=", "\":")
                         .Replace(",", ",\"") + "},";
+
                     json.Append(strData);
                 }
 
-                json = json.Replace("]}},", "}").Replace("[,", "[");
+                json = json
+                    .Replace("]}},", "}")
+                    .Replace("[,", "[");
 
                 readFile.Close();
                 readFile = null;
@@ -173,11 +180,17 @@
                 }
                 foreach (var item in str1)
                 {
-                    strData = "{" + item.Replace("{", "{\"").Replace("=", "\":").Replace(",", ",\"").Replace("\"\",\"", "\",\"") + "},";
+                    strData = "{" + item
+                        .Replace("{", "{\"")
+                        .Replace("=", "\":")
+                        .Replace(",", ",\"")
+                        .Replace("\"\",\"", "\",\"") + "},";
+
                     json.AppendLine(strData);
                 }
 
-                json = json.Replace("]},", "]");
+                json = json
+                    .Replace("]},", "]");
 
                 readFile.Close();
                 readFile = null;

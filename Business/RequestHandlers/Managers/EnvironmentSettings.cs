@@ -17,6 +17,7 @@
             var currentDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             gitConnectionOptions.GitLocalFolder = Path.Combine(currentDirectory, gitConnectionOptions.GitLocalFolder);
             gitConnectionOptions.TomlConfiguration.DeviceFolder = Path.Combine(gitConnectionOptions.GitLocalFolder, gitConnectionOptions.TomlConfiguration.DeviceFolder);
+            gitConnectionOptions.TomlConfiguration.BlocksUrl = Path.Combine(gitConnectionOptions.GitLocalFolder, gitConnectionOptions.TomlConfiguration.BlocksUrl);
         }
 
         public DeviceGitConnectionOptions GetDeviceGitConnectionOptions()
