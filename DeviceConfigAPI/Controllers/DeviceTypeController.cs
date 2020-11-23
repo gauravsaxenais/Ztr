@@ -1,7 +1,6 @@
 ﻿namespace Service.Controllers
 {
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
     using System.Threading.Tasks;
     using Business.RequestHandlers.Interfaces;
     using EnsureThat;

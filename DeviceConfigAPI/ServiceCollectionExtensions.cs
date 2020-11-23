@@ -12,6 +12,7 @@
         {
             EnsureArg.IsNotNull(services, nameof(services));
 
+            services.AddSingleton<IEnvironmentSettings, EnvironmentSettings>();
             services.AddScoped<IModuleManager, ModuleManager>();
             services.AddScoped<IDeviceTypeManager, DeviceTypeManager>();
             services.AddScoped<IDefaultValueManager, DefaultValueManager>();

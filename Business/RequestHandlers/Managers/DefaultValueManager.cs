@@ -5,11 +5,9 @@
     using EnsureThat;
     using Microsoft.Extensions.Logging;
     using Nett;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
     using System;
     using System.Collections.Generic;
-    using System.IO;
+    using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
     using ZTR.Framework.Business;
@@ -17,60 +15,38 @@
 
     public class DefaultValueManager : Manager, IDefaultValueManager
     {
-        public DefaultValueManager(DeviceGitConnectionOptions gitConnectionOptions, ILogger<DefaultValueManager> logger) : base(logger)
+        private readonly IGitRepositoryManager _repoManager;
+        public DefaultValueManager(ILogger<ModuleManager> logger, IGitRepositoryManager repoManager, IEnvironmentSettings environmentSettings) : base(logger)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
-            EnsureArg.IsNotNull(logger, nameof(logger));
-            EnsureArg.IsNotNull(gitConnectionOptions, nameof(gitConnectionOptions));
-            EnsureArg.IsNotNull(gitConnectionOptions.TomlConfiguration, nameof(gitConnectionOptions.TomlConfiguration));
+            EnsureArg.IsNotNull(environmentSettings, nameof(environmentSettings));
 
-            var currentDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            gitConnectionOptions.GitLocalFolder = Path.Combine(currentDirectory, gitConnectionOptions.GitLocalFolder);
-            gitConnectionOptions.TomlConfiguration.DeviceFolder = Path.Combine(gitConnectionOptions.GitLocalFolder, gitConnectionOptions.TomlConfiguration.DeviceFolder);
+            _repoManager = repoManager;
+
+            var environmentOptions = environmentSettings.GetDeviceGitConnectionOptions();
+            _repoManager.SetConnectionOptions(environmentOptions);
         }
 
-        public async Task<IEnumerable<ModuleReadModel>> GetAllModulesAsync()
+        public async Task<IEnumerable<ModuleReadModel>> GetDefaultValuesAllModulesAsync(string firmwareVersion, string deviceType)
         {
-            var moduleInformation = await GetModuleDataAsync();
+            var listOfModules = await GetListOfModulesAsync(firmwareVersion, deviceType);
 
-            return moduleInformation;
-        }
-
-        public async Task<IEnumerable<string>> GetAllUuidsAsync()
-        {
-            var listOfModules = await GetModuleDataAsync();
-            var uuids = new List<string>();
-
-            if (listOfModules != null && listOfModules.Any())
-            {
-                uuids = listOfModules.Select(item => item.UUID).ToList();
-            }
-
-            return uuids;
-        }
-
-        public async Task<IEnumerable<ModuleReadModel>> GetModuleByNameAsync(IEnumerable<string> names)
-        {
-            var listOfModules = await GetModuleDataAsync();
-            var uuids = new List<string>();
-
-            listOfModules = listOfModules.Where(x => names.Contains(x.Name)).ToList();
             return listOfModules;
         }
 
-        public async Task<IEnumerable<ModuleReadModel>> GetModuleByNameAsync(string name, params string[] names)
+        private async Task<IEnumerable<ModuleReadModel>> GetListOfModulesAsync(string firmwareVersion, string deviceType)
         {
-            EnsureArg.IsNotNull(name, nameof(name));
-            return await GetModuleByNameAsync(names.Prepend(name)).ConfigureAwait(false);
-        }
+            var listOfModules = new List<ModuleReadModel>();
 
-        public async Task<ConfigurationReadModel> GetNetworkInformationAsync()
-        {
-            var tomlSettings = TomlFileReader.LoadLowerCaseTomlSettingsWithMappingForDefaultValues();
-            
-            var network = TomlFileReader.ReadDataFromString<ConfigurationReadModel>(data: string.Empty, settings: tomlSettings);
+            var fileContent = await GetDeviceDataFromFirmwareVersionAsync(firmwareVersion, deviceType);
+            if (!string.IsNullOrWhiteSpace(fileContent))
+            {
+                var data = GetTomlData(fileContent);
 
-            return network;
+                listOfModules = data.Module;
+            }
+
+            return listOfModules;
         }
 
         public static List<T> ReadDataModel<T>(string data, string fieldToRead, TomlSettings settings) where T : class, new()
@@ -92,77 +68,58 @@
             return items;
         }
 
-        private static bool IsValidJson(string strInput)
-        {
-            EnsureArg.IsNotEmptyOrWhiteSpace(strInput, nameof(strInput));
-
-            strInput = strInput.Trim();
-            if ((strInput.StartsWith("{") && strInput.EndsWith("}")) || //For object
-                (strInput.StartsWith("[") && strInput.EndsWith("]"))) //For array
-            {
-                try
-                {
-                    var obj = JToken.Parse(strInput);
-                    return true;
-                }
-                catch (JsonReaderException)
-                {
-                    //Exception in parsing json
-                    return false;
-                }
-                catch (Exception) //some other exception
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        private bool StartsWithAny(string source, IEnumerable<string> strings)
-        {
-            foreach (var valueToCheck in strings)
-            {
-                if (source.StartsWith(valueToCheck))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        private async Task<List<ModuleReadModel>> GetModuleDataAsync()
+        private ConfigurationReadModel GetTomlData(string fileContent)
         {
             var tomlSettings = TomlFileReader.LoadLowerCaseTomlSettingsWithMappingForDefaultValues();
 
-            var fileData = await FileReaderExtensions.ReadAllTextAsync(fileName: string.Empty, folderPath: string.Empty);
-            var modules = TomlFileReader.ReadDataAsListFromString<ModuleReadModel>(data: fileData, fieldToRead: "module", settings: tomlSettings);
+            var tomlData = TomlFileReader.ReadDataFromString<ConfigurationReadModel>(data: fileContent, settings: tomlSettings);
 
-            if (modules != null && modules.Any())
+            return tomlData;
+        }
+
+        private async Task<string> GetDeviceDataFromFirmwareVersionAsync(string firmwareVersion, string deviceType)
+        {
+            var gitConnectionOptions = _repoManager.GetConnectionOptions();
+
+            var listOfFiles = await _repoManager.GetFileDataFromTagAsync(firmwareVersion, gitConnectionOptions.TomlConfiguration.DeviceTomlFile);
+
+            // case insensitive search.
+            var deviceTypeFile = listOfFiles.Where(p => p.FileName?.IndexOf(deviceType, StringComparison.OrdinalIgnoreCase) >= 0).FirstOrDefault();
+
+            var fileContent = string.Empty;
+
+            if (deviceTypeFile != null)
             {
-                foreach (var data in modules)
-                {
-                    if (!string.IsNullOrWhiteSpace(data.Config))
-                    {
-                        data.Config = data.Config.Replace("=", ":").Trim().Replace("\r\n", "");
-
-                        if (!StartsWithAny(data.Config, new List<string>() { "{", "[" }))
-                        {
-                            data.Config = "{" + data.Config + "}";
-                        }
-
-                        if (!IsValidJson(data.Config))
-                        {
-                            data.Config = string.Empty;
-                        }
-                    }
-                }
+                fileContent = System.Text.Encoding.UTF8.GetString(deviceTypeFile.Data);
             }
 
-            return modules;
+            return fileContent;
+        }
+
+        private void GenerateCSharpFileFromProtoFile(string protoFileLocation, string csharpFileDirectory, string protoFileName)
+        {
+            // Use ProcessStartInfo class
+            var psi = new ProcessStartInfo
+            {
+                FileName = @"C:\Users\gaurav.saxena\source\repos\ProtoAppGoogleProtoBuff\ProtoCompiler\protoc-3.13.0-win64\bin\protoc.exe",
+                WindowStyle = ProcessWindowStyle.Hidden,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                Arguments = $" --include_imports --include_source_info --proto_path={protoFileLocation} --csharp_out={csharpFileDirectory} {protoFileName}"
+            };
+
+            try
+            {
+                // Start the process with the info we specified.
+                // Call WaitForExit and then the using statement will close.
+                using (var exeProcess = Process.Start(psi))
+                {
+                    exeProcess.WaitForExit();
+                }
+            }
+            catch (Exception)
+            {
+            }
         }
     }
 }

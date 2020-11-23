@@ -6,7 +6,6 @@
     using Microsoft.Extensions.Logging;
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
     using ZTR.Framework.Business;
@@ -16,18 +15,15 @@
     {
         private readonly IGitRepositoryManager _repoManager;
         
-        public ModuleManager(ILogger<ModuleManager> logger, IGitRepositoryManager repoManager, DeviceGitConnectionOptions gitConnectionOptions) : base(logger)
+        public ModuleManager(ILogger<ModuleManager> logger, IGitRepositoryManager repoManager, IEnvironmentSettings environmentSettings) : base(logger)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
-            EnsureArg.IsNotNull(gitConnectionOptions, nameof(gitConnectionOptions));
-            EnsureArg.IsNotNull(gitConnectionOptions.TomlConfiguration, nameof(gitConnectionOptions.TomlConfiguration));
-
-            var currentDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            gitConnectionOptions.GitLocalFolder = Path.Combine(currentDirectory, gitConnectionOptions.GitLocalFolder);
-            gitConnectionOptions.TomlConfiguration.DeviceFolder = Path.Combine(gitConnectionOptions.GitLocalFolder, gitConnectionOptions.TomlConfiguration.DeviceFolder);
+            EnsureArg.IsNotNull(environmentSettings, nameof(environmentSettings));
 
             _repoManager = repoManager;
-            _repoManager.SetConnectionOptions(gitConnectionOptions);
+
+            var environmentOptions = environmentSettings.GetDeviceGitConnectionOptions();
+            _repoManager.SetConnectionOptions(environmentOptions);
         }
 
         public async Task<IEnumerable<ModuleReadModel>> GetAllModulesAsync(string firmwareVersion, string deviceType)
