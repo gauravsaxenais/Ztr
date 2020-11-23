@@ -2,6 +2,4 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/.vs
-/Business.Test/obj/Release/netcoreapp3.1
-/DataAccess/obj/Debug/netcoreapp3.1
+/DataAccess/obj/Debug/netcoreapp3.1/DataAccess.csprojAssemblyReference.cache

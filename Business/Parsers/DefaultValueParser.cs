@@ -54,10 +54,10 @@
                     if (!foundMessage.Messages.Any())
                     {
                         json += $"\"{foundMessage.Name}\":";
-                        json += foundMessage.IsRepeated ? "[" : "";
+                        json += foundMessage.IsRepeated ? "[" : string.Empty;
                         json += "{";
                         json += WriteField(foundMessage.Fields, (Dictionary<string, object>[])entry.Value);
-                        json += foundMessage.IsRepeated ? "]" : "";
+                        json += foundMessage.IsRepeated ? "]" : string.Empty;
                         json += "}";
                     }
 
@@ -102,7 +102,7 @@
 
                 if (json.Length > 0)
                 {
-                    json.Length--;
+                    json.Length --;
                 }
 
                 json.Append("}");
