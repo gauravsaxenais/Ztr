@@ -67,7 +67,7 @@
                     // The following modification allowed me to fetch from repositories over LAN
                     var cloneOptions = new CloneOptions
                     {
-                        CredentialsProvider = new CredentialsHandler((url, usernameFromUrl, types) => new DefaultCredentials())
+                        CredentialsProvider = new CredentialsHandler((url, usernameFromUrl, types) => /*new DefaultCredentials()*/_credentials)
                     };
 
                     cloneOptions.CertificateCheck += delegate (Certificate certificate, bool valid, string host)
