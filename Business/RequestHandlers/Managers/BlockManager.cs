@@ -59,7 +59,7 @@
 
             //await _repoManager.CloneRepositoryAsync();
 
-            string[] files = Directory.GetFiles(blocksFolder);
+            string[] files = Directory.GetFiles(gitConnectionOptions.GitLocalFolder);
 
             int fileIndex = 1;
 
