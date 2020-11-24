@@ -84,9 +84,12 @@
                 else if (parserType.Contains(fileBlocks))
                 {
                     flattenList = dictionary.Where(x => x.Key == fileArguments).Select(x => x.Value).ToList();
-                    BlockParserToJson(currentFile, ref json, ref readFile, ref strData, flattenList, fileIndex);
+                    if (flattenList != null && flattenList.Any())
+                    {
+                        BlockParserToJson(currentFile, ref json, ref readFile, ref strData, flattenList, fileIndex);
+                        fileIndex++;
+                    }
                 }
-                fileIndex++;
             }
 
             if (parserType.Contains(fileModules))
@@ -120,45 +123,43 @@
         private static void BlockParserToJson(string currentFile, ref StringBuilder json, ref TextReader readFile,
             ref string strData, List<object> flattenList, int fileIndex)
         {
-            if (flattenList != null && flattenList.Any())
+
+            json.Insert(json.Length, "{\"id\":"
+                + fileIndex
+                + ",\"type\":\""
+                + Path.GetFileNameWithoutExtension(currentFile)
+                + "\",\"tag\":" + "\"\","
+                + "\"args\":[");
+
+            string[] tempData = Convert.ToString(flattenList[0])
+                .Replace("_ =", "")
+                .Replace("\r\n", "")
+                .Replace(" ", "")
+                .Replace("[", "")
+                .Replace("{", "{\"")
+                .Split("},");
+
+            if (json.Length > 0)
             {
-                json.Insert(json.Length, "{\"id\":"
-                    + fileIndex
-                    + ",\"type\":\""
-                    + Path.GetFileNameWithoutExtension(currentFile)
-                    + "\",\"tag\":" + "\"\","
-                    + "\"args\":[");
-
-                string[] tempData = Convert.ToString(flattenList[0])
-                    .Replace("_ =", "")
-                    .Replace("\r\n", "")
-                    .Replace(" ", "")
-                    .Replace("[", "")
-                    .Replace("{", "{\"")
-                    .Split("},");
-
-                if (json.Length > 0)
-                {
-                    json.Append(',');
-                }
-
-                foreach (var item in tempData)
-                {
-                    strData =
-                        item
-                        .Replace("=", "\":")
-                        .Replace(",", ",\"") + "},";
-
-                    json.Append(strData);
-                }
-
-                json = json
-                    .Replace("]}},", "}")
-                    .Replace("[,", "[");
-
-                readFile.Close();
-                readFile = null;
+                json.Append(',');
             }
+
+            foreach (var item in tempData)
+            {
+                strData =
+                    item
+                    .Replace("=", "\":")
+                    .Replace(",", ",\"") + "},";
+
+                json.Append(strData);
+            }
+
+            json = json
+                .Replace("]}},", "}")
+                .Replace("[,", "[");
+
+            readFile.Close();
+            readFile = null;
         }
 
         /// <summary>
