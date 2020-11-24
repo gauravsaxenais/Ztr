@@ -36,8 +36,8 @@
             _blockGitConnectionOptions = blockGitConnectionOptions;
 
             var currentDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-
-            _blockGitConnectionOptions.GitLocalFolder = Path.Combine(currentDirectory, _blockGitConnectionOptions.GitLocalFolder, _blockGitConnectionOptions.BlockLocalFolder);
+            var localPath = Path.Combine(currentDirectory, _blockGitConnectionOptions.GitLocalFolder);
+            _blockGitConnectionOptions.GitLocalFolder = localPath;
 
             _repoManager.SetConnectionOptions(_blockGitConnectionOptions);
         }
@@ -57,7 +57,7 @@
             StringBuilder json = new StringBuilder();
             var gitConnectionOptions = _repoManager.GetConnectionOptions();
 
-            await _repoManager.CloneRepositoryAsync();
+            //await _repoManager.CloneRepositoryAsync();
 
             string[] files = Directory.GetFiles(gitConnectionOptions.GitLocalFolder);
 

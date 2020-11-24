@@ -1,13 +1,12 @@
 ﻿namespace Service.Controllers
 {
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.Threading.Tasks;
-    using Business.Models;
     using Business.RequestHandlers.Interfaces;
     using EnsureThat;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using Newtonsoft.Json.Linq;
+    using System.ComponentModel.DataAnnotations;
+    using System.Threading.Tasks;
     using ZTR.Framework.Service;
 
     [ApiController]
@@ -32,8 +31,13 @@
         public async Task<IActionResult> GetAllBlocks([Required, FromQuery] string firmwareVersion, string deviceType)
         {
             var result = await this.manager.ParseTomlFilesAsync(firmwareVersion, deviceType, "blocks").ConfigureAwait(false);
+            if (string.IsNullOrEmpty(result))
+            {
+                return this.StatusCode(StatusCodes.Status200OK, result);
+            }
 
-            return this.StatusCode(StatusCodes.Status200OK, result);
+            var json = JObject.Parse(result);
+            return this.StatusCode(StatusCodes.Status200OK, json);
         }
     }
 }
