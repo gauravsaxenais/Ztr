@@ -1,5 +1,6 @@
 ﻿namespace Business.RequestHandlers.Managers
 {
+    using Business.Configuration;
     using Business.RequestHandlers.Interfaces;
     using EnsureThat;
     using System.IO;
@@ -17,7 +18,7 @@
             var currentDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             gitConnectionOptions.GitLocalFolder = Path.Combine(currentDirectory, gitConnectionOptions.GitLocalFolder);
             gitConnectionOptions.TomlConfiguration.DeviceFolder = Path.Combine(gitConnectionOptions.GitLocalFolder, gitConnectionOptions.TomlConfiguration.DeviceFolder);
-            gitConnectionOptions.TomlConfiguration.BlocksUrl = Path.Combine(gitConnectionOptions.GitLocalFolder, gitConnectionOptions.TomlConfiguration.BlocksUrl);
+            //gitConnectionOptions.TomlConfiguration.blo = Path.Combine(gitConnectionOptions.GitLocalFolder, gitConnectionOptions.TomlConfiguration.BlocksUrl);
         }
 
         public DeviceGitConnectionOptions GetDeviceGitConnectionOptions()

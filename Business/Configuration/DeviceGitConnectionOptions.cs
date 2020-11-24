@@ -1,6 +1,7 @@
 ﻿namespace Business.Configuration
 {
     using ZTR.Framework.Business.File;
+
     public sealed class DeviceGitConnectionOptions : GitConnectionOptions
     {
         public DeviceGitConnectionOptions()

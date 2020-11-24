@@ -49,7 +49,7 @@
             StringBuilder json = new StringBuilder();
             var gitConnectionOptions = _repoManager.GetConnectionOptions();
 
-            string[] files = Directory.GetFiles(gitConnectionOptions.TomlConfiguration.BlocksUrl);
+            string[] files = Directory.GetFiles(gitConnectionOptions.BlocksUrl);
             int fileIndex = 1;
 
             foreach (var currentFile in files)

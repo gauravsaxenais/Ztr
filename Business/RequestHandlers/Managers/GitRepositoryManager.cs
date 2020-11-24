@@ -1,5 +1,6 @@
 ﻿namespace Business.RequestHandlers.Managers
 {
+    using Business.Configuration;
     using Business.RequestHandlers.Interfaces;
     using EnsureThat;
     using LibGit2Sharp;
@@ -17,7 +18,7 @@
         #region Fields
         private UsernamePasswordCredentials _credentials;
         private DefaultCredentials _defaultCredentials;
-        private DeviceGitConnectionOptions _gitConnection;
+        private GitConnectionOptions _gitConnection;
         private readonly string GitFolder = ".git";
         private readonly string TextMimeType = "text/plain";
         #endregion
@@ -34,13 +35,11 @@
         #endregion
 
         #region Public methods
-        public void SetConnectionOptions(DeviceGitConnectionOptions gitConnection)
+        public void SetConnectionOptions(GitConnectionOptions gitConnection)
         {
             EnsureArg.IsNotNull(gitConnection);
-            EnsureArg.IsNotNull(gitConnection.TomlConfiguration);
             EnsureArg.IsNotEmptyOrWhiteSpace(gitConnection.GitLocalFolder);
             EnsureArg.IsNotEmptyOrWhiteSpace(gitConnection.GitRepositoryUrl);
-            EnsureArg.IsNotEmptyOrWhiteSpace(gitConnection.TomlConfiguration.DeviceFolder);
 
             _gitConnection = gitConnection;
 
@@ -53,7 +52,7 @@
             _defaultCredentials = new DefaultCredentials();
         }
 
-        public DeviceGitConnectionOptions GetConnectionOptions()
+        public GitConnectionOptions GetConnectionOptions()
         {
             return _gitConnection;
         }
@@ -324,6 +323,7 @@
                 return false;
             }
         }
+
         #endregion
     }
 }
