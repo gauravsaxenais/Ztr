@@ -57,7 +57,10 @@
             StringBuilder json = new StringBuilder();
             var gitConnectionOptions = _repoManager.GetConnectionOptions();
 
-            string[] files = Directory.GetFiles(gitConnectionOptions.GitLocalFolder);
+            //await _repoManager.CloneRepositoryAsync();
+
+            string[] files = Directory.GetFiles(/*gitConnectionOptions.GitLocalFolder*/ @"F:\ZTR\DeviceConfigAPI\bin\Debug\netcoreapp3.1\BlockConfig\blocks");
+
             int fileIndex = 1;
 
             foreach (var currentFile in files)
