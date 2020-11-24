@@ -10,3 +10,5 @@ _ReSharper.*
 bin
 obj
 packages
+/DeviceConfigAPI/Logs/Log-20201124.txt
+/DeviceConfigAPI/DeviceConfig
