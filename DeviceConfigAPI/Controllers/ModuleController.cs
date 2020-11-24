@@ -35,7 +35,7 @@
         [ProducesResponseType(typeof(IEnumerable<ModuleReadModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetAllModules([Required, FromQuery] string firmwareVersion, string deviceType)
+        public async Task<IActionResult> GetAllModules([Required, FromQuery] string firmwareVersion, [Required, FromQuery] string deviceType)
         {
             var result = await this.manager.GetAllModulesAsync(firmwareVersion, deviceType).ConfigureAwait(false);
 
@@ -53,7 +53,7 @@
         [ProducesResponseType(typeof(IEnumerable<ModuleReadModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetModuleByName([Required, FromQuery] string name, string firmwareVersion, string deviceType)
+        public async Task<IActionResult> GetModuleByName([Required, FromQuery] string name, [Required, FromQuery]  string firmwareVersion, string deviceType)
         {
             var result = await this.manager.GetModuleByNameAsync(name, firmwareVersion, deviceType).ConfigureAwait(false);
             return this.StatusCode(StatusCodes.Status200OK, result);
@@ -70,7 +70,7 @@
         [ProducesResponseType(typeof(IEnumerable<ModuleReadModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetModuleByNames([Required, FromQuery] string firmwareVersion, string deviceType, IEnumerable<string> names)
+        public async Task<IActionResult> GetModuleByNames([Required, FromQuery] string firmwareVersion, [Required, FromQuery] string deviceType, IEnumerable<string> names)
         {
             var result = await this.manager.GetModelByNameAsync(firmwareVersion, deviceType, names).ConfigureAwait(false);
             return this.StatusCode(StatusCodes.Status200OK, result);

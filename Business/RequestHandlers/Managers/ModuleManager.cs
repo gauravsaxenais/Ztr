@@ -16,9 +16,9 @@
     public class ModuleManager : Manager, IModuleManager
     {
         private readonly IGitRepositoryManager _gitRepoManager;
-        private readonly ModuleGitConnectionOptions _moduleGitConnectionOptions;
+        private readonly DeviceGitConnectionOptions _moduleGitConnectionOptions;
 
-        public ModuleManager(ILogger<ModuleManager> logger, IGitRepositoryManager gitRepoManager, ModuleGitConnectionOptions moduleGitConnectionOptions) : base(logger)
+        public ModuleManager(ILogger<ModuleManager> logger, IGitRepositoryManager gitRepoManager, DeviceGitConnectionOptions moduleGitConnectionOptions) : base(logger)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
             EnsureArg.IsNotNull(moduleGitConnectionOptions, nameof(moduleGitConnectionOptions));
@@ -29,6 +29,7 @@
             var currentDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
 
             _moduleGitConnectionOptions.GitLocalFolder = Path.Combine(currentDirectory, _moduleGitConnectionOptions.GitLocalFolder);
+            gitRepoManager.SetConnectionOptions(_moduleGitConnectionOptions);
         }
 
         public async Task<IEnumerable<ModuleReadModel>> GetAllModulesAsync(string firmwareVersion, string deviceType)
@@ -82,21 +83,21 @@
 
         private async Task<string> GetDeviceDataFromFirmwareVersionAsync(string firmwareVersion, string deviceType)
         {
-            var gitConnectionOptions = _gitRepoManager.GetConnectionOptions();
+            var gitConnectionOptions = (DeviceGitConnectionOptions)_gitRepoManager.GetConnectionOptions();
 
-            //var listOfFiles = await _gitRepoManager.GetFileDataFromTagAsync(firmwareVersion, gitConnectionOptions.TomlConfiguration.DeviceTomlFile);
+            var listOfFiles = await _gitRepoManager.GetFileDataFromTagAsync(firmwareVersion, gitConnectionOptions.TomlConfiguration.DeviceTomlFile);
 
-            //// case insensitive search.
-            //var deviceTypeFile = listOfFiles.Where(p => p.FileName?.IndexOf(deviceType, StringComparison.OrdinalIgnoreCase) >= 0).FirstOrDefault();
+            // case insensitive search.
+            var deviceTypeFile = listOfFiles.Where(p => p.FileName?.IndexOf(deviceType, StringComparison.OrdinalIgnoreCase) >= 0).FirstOrDefault();
 
-            //var fileContent = string.Empty;
+            var fileContent = string.Empty;
 
-            //if (deviceTypeFile != null)
-            //{
-            //    fileContent = System.Text.Encoding.UTF8.GetString(deviceTypeFile.Data);
-            //}
+            if (deviceTypeFile != null)
+            {
+                fileContent = System.Text.Encoding.UTF8.GetString(deviceTypeFile.Data);
+            }
 
-            return string.Empty;
+            return fileContent;
         }
     }
 }

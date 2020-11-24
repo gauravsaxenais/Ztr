@@ -52,7 +52,7 @@
 
             _defaultCredentials = new DefaultCredentials();
 
-            var credentialsProvider = new CredentialsHandler((url, usernameFromUrl, types) => _credentials);
+            var credentialsProvider = new CredentialsHandler((url, usernameFromUrl, types) => _defaultCredentials);
             _fetchOptions = new FetchOptions() { TagFetchMode = TagFetchMode.All, CredentialsProvider = credentialsProvider };
             
             _cloneOptions = new CloneOptions() { CredentialsProvider = credentialsProvider };
@@ -71,22 +71,16 @@
         {
             try
             {
-                if (!IsExistsContentRepositoryDirectory())
+                if (IsExistsContentRepositoryDirectory())
                 {
-                    Directory.CreateDirectory(_gitConnection.GitLocalFolder);
-                    await Task.Run(() =>
-                    {
-                        Repository.Clone(_gitConnection.GitRepositoryUrl, _gitConnection.GitLocalFolder, _cloneOptions);
-                    });
+                    DeleteReadOnlyDirectory(_gitConnection.GitLocalFolder);
                 }
-                else
+
+                Directory.CreateDirectory(_gitConnection.GitLocalFolder);
+                await Task.Run(() =>
                 {
-                    using var repo = new Repository(_gitConnection.GitLocalFolder);
-                    var network = repo.Network.Remotes.First();
-                    var refSpecs = new List<string>() { network.FetchRefSpecs.First().Specification };
-                    
-                    repo.Network.Fetch(network.Name, refSpecs, _fetchOptions);
-                }
+                    Repository.Clone(_gitConnection.GitRepositoryUrl, _gitConnection.GitLocalFolder, _cloneOptions);
+                });
             }
             catch (LibGit2SharpException ex)
             {
@@ -340,6 +334,26 @@
                 return false;
             }
         }
+
+        /// <summary>
+        /// Recursively deletes a directory as well as any subdirectories and files. If the files are read-only, they are flagged as normal and then deleted.
+        /// </summary>
+        /// <param name="directory">The name of the directory to remove.</param>
+        private void DeleteReadOnlyDirectory(string directory)
+        {
+            foreach (var subdirectory in Directory.EnumerateDirectories(directory))
+            {
+                DeleteReadOnlyDirectory(subdirectory);
+            }
+            foreach (var fileName in Directory.EnumerateFiles(directory))
+            {
+                var fileInfo = new FileInfo(fileName);
+                fileInfo.Attributes = FileAttributes.Normal;
+                fileInfo.Delete();
+            }
+            Directory.Delete(directory);
+        }
+
 
         #endregion
     }
