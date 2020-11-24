@@ -1,7 +1,7 @@
 namespace Service
 {
     using System;
-    using Business;
+    using Business.Configuration;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Hosting;
@@ -19,12 +19,22 @@ namespace Service
             CreateHostBuilder(args).Build().Run();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .DefaultAppConfiguration(new[] { typeof(ApplicationOptions).Assembly, typeof(SecurityOptions).Assembly, typeof(DeviceGitConnectionOptions).Assembly }, args)
+        public static IHostBuilder CreateHostBuilder(string[] args)
+        {
+            return Host.CreateDefaultBuilder(args)
+            .DefaultAppConfiguration(
+                new[]
+                {
+                    typeof(ApplicationOptions).Assembly,
+                    typeof(SecurityOptions).Assembly,
+                    typeof(DeviceGitConnectionOptions).Assembly,
+                    typeof(ModuleGitConnectionOptions).Assembly,
+                    typeof(BlockGitConnectionOptions).Assembly,
+                }, args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
                 });
+        }
     }
 }

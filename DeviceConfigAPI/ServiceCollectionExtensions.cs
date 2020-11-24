@@ -17,6 +17,7 @@
             services.AddScoped<IDeviceTypeManager, DeviceTypeManager>();
             services.AddScoped<IDefaultValueManager, DefaultValueManager>();
             services.AddScoped<IGitRepositoryManager, GitRepositoryManager>();
+            services.AddScoped<IBlockManager, BlockManager>();
 
             return services;
         }

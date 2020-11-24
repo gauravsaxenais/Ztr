@@ -5,6 +5,7 @@
     using System.IO;
     using System.Reflection;
     using System.Threading;
+
     public static class InputFileLoader
     {
         public static string CombinePathFromAppRoot(string path)

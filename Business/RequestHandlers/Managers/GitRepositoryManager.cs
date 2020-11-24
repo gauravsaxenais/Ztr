@@ -16,6 +16,7 @@
     {
         #region Fields
         private UsernamePasswordCredentials _credentials;
+        private DefaultCredentials _defaultCredentials;
         private DeviceGitConnectionOptions _gitConnection;
         private readonly string GitFolder = ".git";
         private readonly string TextMimeType = "text/plain";
@@ -37,8 +38,6 @@
         {
             EnsureArg.IsNotNull(gitConnection);
             EnsureArg.IsNotNull(gitConnection.TomlConfiguration);
-            EnsureArg.IsNotEmptyOrWhiteSpace(gitConnection.UserName);
-            EnsureArg.IsNotEmptyOrWhiteSpace(gitConnection.Password);
             EnsureArg.IsNotEmptyOrWhiteSpace(gitConnection.GitLocalFolder);
             EnsureArg.IsNotEmptyOrWhiteSpace(gitConnection.GitRepositoryUrl);
             EnsureArg.IsNotEmptyOrWhiteSpace(gitConnection.TomlConfiguration.DeviceFolder);
@@ -50,6 +49,8 @@
                 Username = gitConnection.UserName,
                 Password = gitConnection.Password
             };
+
+            _defaultCredentials = new DefaultCredentials();
         }
 
         public DeviceGitConnectionOptions GetConnectionOptions()
@@ -67,7 +68,7 @@
                     // The following modification allowed me to fetch from repositories over LAN
                     var cloneOptions = new CloneOptions
                     {
-                        CredentialsProvider = new CredentialsHandler((url, usernameFromUrl, types) => /*new DefaultCredentials()*/_credentials)
+                        CredentialsProvider = new CredentialsHandler((url, usernameFromUrl, types) => _defaultCredentials)
                     };
 
                     cloneOptions.CertificateCheck += delegate (Certificate certificate, bool valid, string host)
@@ -86,7 +87,7 @@
 
                 var fetchOptions = new FetchOptions { TagFetchMode = TagFetchMode.All };
 
-                fetchOptions.CredentialsProvider += (url, fromUrl, types) => _credentials;
+                fetchOptions.CredentialsProvider += (url, fromUrl, types) => _defaultCredentials;
                 repo.Network.Fetch(network.Name, refSpecs, fetchOptions);
             }
         }
