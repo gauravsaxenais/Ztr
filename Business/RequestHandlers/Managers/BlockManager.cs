@@ -142,14 +142,18 @@
                 json.Append(',');
             }
 
+            int argIndex = 1;
             foreach (var item in tempData)
             {
                 strData =
                     item
                     .Replace("=", "\":")
                     .Replace(",", ",\"") + "},";
+                    //.Replace("{\"", "{\"id\"" + argIndex + ",\"");
 
-                json.Append(strData);
+                json.Append(strData.Replace("{\"", "{\"id\":" + argIndex + ",\""));
+                //json.Append(strData);
+                argIndex++;
             }
 
             json = json
