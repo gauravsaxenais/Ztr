@@ -35,11 +35,11 @@
         [ProducesResponseType(typeof(IEnumerable<ModuleReadModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetAllDefaultValues([Required, FromQuery] string firmwareVersion, string deviceType)
+        public async Task<IActionResult> GetAllDefaultValues([Required, FromQuery] string firmwareVersion, [Required, FromQuery] string deviceType)
         {
-            await this.manager.GetDefaultValuesAllModulesAsync(firmwareVersion, deviceType).ConfigureAwait(false);
+            var result = await this.manager.GetDefaultValuesAllModulesAsync(firmwareVersion, deviceType).ConfigureAwait(false);
 
-            return this.StatusCode(StatusCodes.Status200OK, null);
+            return this.StatusCode(StatusCodes.Status200OK, result);
         }
     }
 }

@@ -18,3 +18,4 @@ F:\ZTR\DataAccess\obj\Debug\netcoreapp3.1\DataAccess.csproj.CoreCompileInputs.ca
 F:\ZTR\DataAccess\obj\Debug\netcoreapp3.1\DataAccess.csproj.CopyComplete
 F:\ZTR\DataAccess\obj\Debug\netcoreapp3.1\DataAccess.dll
 F:\ZTR\DataAccess\obj\Debug\netcoreapp3.1\DataAccess.pdb
+F:\ZTR\DataAccess\obj\Debug\netcoreapp3.1\DataAccess.csprojAssemblyReference.cache

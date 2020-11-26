@@ -9,9 +9,11 @@
       "Business/1.0.0": {
         "dependencies": {
           "Ben.Demystifier": "0.1.6",
+          "Business.Parsers": "1.0.0",
           "Ensure.That": "9.2.0",
+          "Google.Protobuf": "3.14.0",
           "LibGit2Sharp": "0.26.2",
-          "Microsoft.Extensions.Logging.Abstractions": "3.1.9",
+          "Microsoft.Extensions.Logging.Abstractions": "5.0.0",
           "Nett": "0.15.0",
           "Newtonsoft.Json": "12.0.3",
           "ZTR.Framework.Business": "1.0.0.0",
@@ -38,6 +40,18 @@
           "lib/netstandard2.0/Ensure.That.dll": {
             "assemblyVersion": "9.2.0.0",
             "fileVersion": "9.2.0.0"
+          }
+        }
+      },
+      "Google.Protobuf/3.14.0": {
+        "dependencies": {
+          "System.Memory": "4.5.3",
+          "System.Runtime.CompilerServices.Unsafe": "4.5.2"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Google.Protobuf.dll": {
+            "assemblyVersion": "3.14.0.0",
+            "fileVersion": "3.14.0.0"
           }
         }
       },
@@ -126,11 +140,11 @@
           }
         }
       },
-      "Microsoft.Extensions.Logging.Abstractions/3.1.9": {
+      "Microsoft.Extensions.Logging.Abstractions/5.0.0": {
         "runtime": {
           "lib/netstandard2.0/Microsoft.Extensions.Logging.Abstractions.dll": {
-            "assemblyVersion": "3.1.9.0",
-            "fileVersion": "3.100.920.47302"
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.20.51904"
           }
         }
       },
@@ -150,8 +164,21 @@
           }
         }
       },
+      "System.Memory/4.5.3": {},
       "System.Reflection.Metadata/1.6.0": {},
+      "System.Runtime.CompilerServices.Unsafe/4.5.2": {},
       "System.Threading.Tasks.Extensions/4.5.3": {},
+      "Business.Parsers/1.0.0": {
+        "dependencies": {
+          "Ensure.That": "9.2.0",
+          "Google.Protobuf": "3.14.0",
+          "Nett": "0.15.0",
+          "Newtonsoft.Json": "12.0.3"
+        },
+        "runtime": {
+          "Business.Parsers.dll": {}
+        }
+      },
       "ZTR.Framework.Business/1.0.0.0": {
         "runtime": {
           "ZTR.Framework.Business.dll": {
@@ -198,6 +225,13 @@
       "path": "ensure.that/9.2.0",
       "hashPath": "ensure.that.9.2.0.nupkg.sha512"
     },
+    "Google.Protobuf/3.14.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-9AkodyGNmLI+wJJPbwpWLmh4BMHoXDQ9+8qvDPhQQi/BNsleqKMBn3OlyLwC6CALwan2kc5+Cenb8fJSITX3nQ==",
+      "path": "google.protobuf/3.14.0",
+      "hashPath": "google.protobuf.3.14.0.nupkg.sha512"
+    },
     "LibGit2Sharp/0.26.2": {
       "type": "package",
       "serviceable": true,
@@ -212,12 +246,12 @@
       "path": "libgit2sharp.nativebinaries/2.0.306",
       "hashPath": "libgit2sharp.nativebinaries.2.0.306.nupkg.sha512"
     },
-    "Microsoft.Extensions.Logging.Abstractions/3.1.9": {
+    "Microsoft.Extensions.Logging.Abstractions/5.0.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-W5fbF8qVR9SMVVJqDQLIR7meWbev6Pu/lbrm7LDNr4Sp7HOotr4k2UULTdFSXOi5aoDdkQZpWnq0ZSpjrR3tjg==",
-      "path": "microsoft.extensions.logging.abstractions/3.1.9",
-      "hashPath": "microsoft.extensions.logging.abstractions.3.1.9.nupkg.sha512"
+      "sha512": "sha512-NxP6ahFcBnnSfwNBi2KH2Oz8Xl5Sm2krjId/jRR3I7teFphwiUoUeZPwTNA21EX+5PtjqmyAvKaOeBXcJjcH/w==",
+      "path": "microsoft.extensions.logging.abstractions/5.0.0",
+      "hashPath": "microsoft.extensions.logging.abstractions.5.0.0.nupkg.sha512"
     },
     "Nett/0.15.0": {
       "type": "package",
@@ -233,6 +267,13 @@
       "path": "newtonsoft.json/12.0.3",
       "hashPath": "newtonsoft.json.12.0.3.nupkg.sha512"
     },
+    "System.Memory/4.5.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-3oDzvc/zzetpTKWMShs1AADwZjQ/36HnsufHRPcOjyRAAMLDlu2iD33MBI2opxnezcVUtXyqDXXjoFMOU9c7SA==",
+      "path": "system.memory/4.5.3",
+      "hashPath": "system.memory.4.5.3.nupkg.sha512"
+    },
     "System.Reflection.Metadata/1.6.0": {
       "type": "package",
       "serviceable": true,
@@ -240,12 +281,24 @@
       "path": "system.reflection.metadata/1.6.0",
       "hashPath": "system.reflection.metadata.1.6.0.nupkg.sha512"
     },
+    "System.Runtime.CompilerServices.Unsafe/4.5.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-wprSFgext8cwqymChhrBLu62LMg/1u92bU+VOwyfBimSPVFXtsNqEWC92Pf9ofzJFlk4IHmJA75EDJn1b2goAQ==",
+      "path": "system.runtime.compilerservices.unsafe/4.5.2",
+      "hashPath": "system.runtime.compilerservices.unsafe.4.5.2.nupkg.sha512"
+    },
     "System.Threading.Tasks.Extensions/4.5.3": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-+MvhNtcvIbqmhANyKu91jQnvIRVSTiaOiFNfKWwXGHG48YAb4I/TyH8spsySiPYla7gKal5ZnF3teJqZAximyQ==",
       "path": "system.threading.tasks.extensions/4.5.3",
       "hashPath": "system.threading.tasks.extensions.4.5.3.nupkg.sha512"
+    },
+    "Business.Parsers/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     },
     "ZTR.Framework.Business/1.0.0.0": {
       "type": "reference",

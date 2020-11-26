@@ -10,14 +10,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Parsers\protoc.exe" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Parsers\protoc.exe" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Ben.Demystifier" Version="0.1.6" />
     <PackageReference Include="Ensure.That" Version="9.2.0" />
     <PackageReference Include="Google.Protobuf" Version="3.14.0" />
@@ -28,26 +20,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Business.Parsers\Business.Parsers.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="ZTR.Framework.Business">
       <HintPath>..\Framework\Framework.Business\bin\Debug\netcoreapp3.1\ZTR.Framework.Business.dll</HintPath>
     </Reference>
     <Reference Include="ZTR.Framework.Configuration">
       <HintPath>..\Framework\Framework.Configuration\bin\Debug\netcoreapp3.1\ZTR.Framework.Configuration.dll</HintPath>
     </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Parsers\ProtoFiles\GeneratedFiles\" />
-    <Folder Include="Parsers\ProtoFiles\Proto\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Parsers\ProtoFiles\Proto\j1939.proto">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Parsers\ProtoFiles\Proto\Power.proto">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>

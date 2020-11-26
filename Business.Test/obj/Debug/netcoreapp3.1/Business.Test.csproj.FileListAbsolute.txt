@@ -152,6 +152,7 @@ F:\ZTR\Business.Test\bin\Debug\netcoreapp3.1\ZTR.Framework.Test.pdb
 F:\ZTR\Business.Test\bin\Debug\netcoreapp3.1\ZTR.Framework.Test.xml
 F:\ZTR\Business.Test\bin\Debug\netcoreapp3.1\ZTR.Framework.DataAccess.pdb
 F:\ZTR\Business.Test\bin\Debug\netcoreapp3.1\ZTR.Framework.DataAccess.xml
+F:\ZTR\Business.Test\obj\Debug\netcoreapp3.1\Business.Test.csprojAssemblyReference.cache
 F:\ZTR\Business.Test\obj\Debug\netcoreapp3.1\Business.Test.AssemblyInfoInputs.cache
 F:\ZTR\Business.Test\obj\Debug\netcoreapp3.1\Business.Test.AssemblyInfo.cs
 F:\ZTR\Business.Test\obj\Debug\netcoreapp3.1\Business.Test.csproj.CoreCompileInputs.cache
@@ -159,4 +160,3 @@ F:\ZTR\Business.Test\obj\Debug\netcoreapp3.1\Business.Test.csproj.CopyComplete
 F:\ZTR\Business.Test\obj\Debug\netcoreapp3.1\Business.Test.dll
 F:\ZTR\Business.Test\obj\Debug\netcoreapp3.1\Business.Test.pdb
 F:\ZTR\Business.Test\obj\Debug\netcoreapp3.1\Business.Test.genruntimeconfig.cache
-F:\ZTR\Business.Test\obj\Debug\netcoreapp3.1\Business.Test.csprojAssemblyReference.cache

@@ -9,17 +9,13 @@
     {
         public GitConnectionOptions GetGitConnectionOption(GitConnectionOptionType connectionType)
         {
-            switch (connectionType)
+            return connectionType switch
             {
-                case GitConnectionOptionType.Module:
-                    return (ModuleGitConnectionOptions)Activator.CreateInstance(Type.GetType(typeof(ModuleGitConnectionOptions).AssemblyQualifiedName, false));
-                case GitConnectionOptionType.Device:
-                    return (DeviceGitConnectionOptions)Activator.CreateInstance(Type.GetType(typeof(DeviceGitConnectionOptions).AssemblyQualifiedName, false));
-                case GitConnectionOptionType.Block:
-                    return (BlockGitConnectionOptions)Activator.CreateInstance(Type.GetType(typeof(BlockGitConnectionOptions).AssemblyQualifiedName, false));
-                default:
-                    throw new NotImplementedException();
-            }
+                GitConnectionOptionType.Module => (ModuleGitConnectionOptions)Activator.CreateInstance(Type.GetType(typeof(ModuleGitConnectionOptions).AssemblyQualifiedName, false)),
+                GitConnectionOptionType.Device => (DeviceGitConnectionOptions)Activator.CreateInstance(Type.GetType(typeof(DeviceGitConnectionOptions).AssemblyQualifiedName, false)),
+                GitConnectionOptionType.Block => (BlockGitConnectionOptions)Activator.CreateInstance(Type.GetType(typeof(BlockGitConnectionOptions).AssemblyQualifiedName, false)),
+                _ => throw new NotImplementedException(),
+            };
         }
     }
 }

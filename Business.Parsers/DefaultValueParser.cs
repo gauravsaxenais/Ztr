@@ -10,27 +10,36 @@
 
     public class DefaultValueParser
     {
-        public static void ReadFile(string filePath, TomlSettings settings, Message message)
+        public string ReadFileAsJson(string fileContent, TomlSettings settings, Message message)
         {
-            EnsureArg.IsNotEmptyOrWhiteSpace(filePath, (nameof(filePath)));
+            EnsureArg.IsNotEmptyOrWhiteSpace(fileContent, (nameof(fileContent)));
 
-            var fileData = Toml.ReadFile(filePath, settings);
+            var json = string.Empty;
+
+            var fileData = Toml.ReadString(fileContent, settings);
 
             var dictionary = fileData.ToDictionary();
 
             var module = (Dictionary<string, object>[])dictionary["module"];
 
-            var moduleDetail = module.Where(dic => dic.Values.Contains("power")).FirstOrDefault();
-            var configValues = (Dictionary<string, object>)moduleDetail["config"];
+            // here message.name means Power, j1939 etc.
+            var moduleDetail = module.Where(dic => dic.Values.Contains(message.Name.ToLower())).FirstOrDefault();
 
-            var json = string.Empty;
+            if (moduleDetail != null)
+            {
+                var configValues = (Dictionary<string, object>)moduleDetail["config"];
 
-            json += "{";
-            WriteData(configValues, message, ref json);
-            json += "}";
+                json += "{";
+                WriteData(configValues, message, ref json);
+                json = json.TrimEnd(',');
+
+                json += "}";
+            }
+
+            return json;
         }
 
-        public static void WriteData(Dictionary<string, object> configValues, Message message, ref String json)
+        public static void WriteData(Dictionary<string, object> configValues, Message message, ref string json)
         {
             bool firstFieldWritten = false;
             foreach (KeyValuePair<string, object> entry in configValues)
@@ -55,10 +64,8 @@
                     {
                         json += $"\"{foundMessage.Name}\":";
                         json += foundMessage.IsRepeated ? "[" : string.Empty;
-                        json += "{";
-                        json += WriteField(foundMessage.Fields, (Dictionary<string, object>[])entry.Value);
+                        json += WriteMessageField(foundMessage.Fields, (Dictionary<string, object>[])entry.Value);
                         json += foundMessage.IsRepeated ? "]" : string.Empty;
-                        json += "}";
                     }
 
                     else
@@ -79,7 +86,7 @@
             }
         }
 
-        public static string WriteField(List<Field> fields, Dictionary<string, object>[] values)
+        public static string WriteMessageField(List<Field> fields, Dictionary<string, object>[] values)
         {
             var json = new StringBuilder();
             if (fields == null || !fields.Any() || values == null || !values.Any())

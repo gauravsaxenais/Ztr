@@ -1,10 +1,14 @@
 ﻿namespace Business.Parsers
 {
     using Business.Parser.Models;
+    using EnsureThat;
     using Google.Protobuf;
     using Google.Protobuf.Reflection;
     using System;
+    using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
+    using System.Reflection;
 
     public class ModuleParser
     {
@@ -15,7 +19,11 @@
         /// <returns>The formatted message.</returns>
         public Message Format(IMessage message)
         {
-            var protoParserMessage = new Message() { Name = "Modules" };
+            EnsureArg.IsNotNull(message);
+
+            var messageName = Path.GetFileNameWithoutExtension(message.Descriptor.File.Name);
+            var protoParserMessage = new Message() { Name = messageName };
+
             Format(message, protoParserMessage);
 
             return protoParserMessage;
@@ -34,7 +42,26 @@
             WriteMessage(protoParserMessage, message);
         }
 
-        private static void WriteMessage(Message protoParserMessage, IMessage message)
+        public List<IMessage> GetAllMessages()
+        {
+            var messages = new List<IMessage>();
+            var instances = from t in Assembly.GetExecutingAssembly().GetTypes()
+                            where t.GetInterfaces().Contains(typeof(IMessage))
+                                     && t.GetConstructor(Type.EmptyTypes) != null
+                            select Activator.CreateInstance(t) as IMessage;
+
+            foreach (var instance in instances)
+            {
+                if (instance.Descriptor.Name == "Config" && CanConvertToMessageType(instance.GetType()))
+                {
+                    messages.Add(instance);
+                }
+            }
+
+            return messages;
+        }
+
+        private void WriteMessage(Message protoParserMessage, IMessage message)
         {
             if (message == null)
             {
@@ -44,7 +71,7 @@
             WriteMessageFields(protoParserMessage, message);
         }
 
-        private static void WriteMessageFields(Message protoParserMessage, IMessage message)
+        private void WriteMessageFields(Message protoParserMessage, IMessage message)
         {
             foreach (var fieldDescriptor in message.Descriptor.Fields.InFieldNumberOrder())
             {
@@ -97,7 +124,7 @@
             }
         }
 
-        private static bool IsPrimitiveType(FieldDescriptor descriptor)
+        private bool IsPrimitiveType(FieldDescriptor descriptor)
         {
             switch (descriptor.FieldType)
             {
@@ -123,7 +150,18 @@
             }
         }
 
-        private static object GetDefaultValue(FieldDescriptor descriptor)
+        // <summary>
+        // Called by method to ask if this object can serialize
+        // an object of a given type.
+        // </summary>
+        // <returns>True if the objectType is a Protocol Message.</returns>
+        private bool CanConvertToMessageType(Type objectType)
+        {
+            return typeof(IMessage)
+                .IsAssignableFrom(objectType);
+        }
+
+        private object GetDefaultValue(FieldDescriptor descriptor)
         {
             switch (descriptor.FieldType)
             {

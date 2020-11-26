@@ -17,3 +17,7 @@ F:\ZTR\Business\obj\Release\netcoreapp3.1\Business.csproj.CoreCompileInputs.cach
 F:\ZTR\Business\obj\Release\netcoreapp3.1\Business.csproj.CopyComplete
 F:\ZTR\Business\obj\Release\netcoreapp3.1\Business.dll
 F:\ZTR\Business\obj\Release\netcoreapp3.1\Business.pdb
+F:\ZTR\Business\bin\Release\netcoreapp3.1\Business.Parsers.dll
+F:\ZTR\Business\bin\Release\netcoreapp3.1\Business.Parsers.pdb
+F:\ZTR\Business\bin\Release\netcoreapp3.1\ProtoFiles\Proto\j1939.proto
+F:\ZTR\Business\bin\Release\netcoreapp3.1\ProtoFiles\Proto\Power.proto

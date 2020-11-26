@@ -352,16 +352,21 @@
                 }
                 foreach (var fileName in Directory.EnumerateFiles(directory))
                 {
-                    var fileInfo = new FileInfo(fileName);
-                    fileInfo.Attributes = FileAttributes.Normal;
-                    fileInfo.Delete();
+                    var fileInfo = new FileInfo(fileName)
+                    {
+                        Attributes = FileAttributes.Normal
+                    };
+
+                    if (IOmethods.IsFileClosed(fileName))
+                    {
+                        fileInfo.Delete();
+                    }
                 }
                 Directory.Delete(directory);
             }
             catch (Exception)
             {
                 throw;
-                // swallow.
             }
         }
 

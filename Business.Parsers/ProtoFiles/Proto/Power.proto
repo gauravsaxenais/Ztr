@@ -73,7 +73,7 @@ message Config {
 	};
 
 	// The profile's 3 state.
-	Profile profiles = 1;
+	repeated Profile profiles = 1;
 
 	// Protocol Data Units message format.
 	Pdu1 pdu = 2;

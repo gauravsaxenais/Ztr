@@ -4,6 +4,81 @@
     "F:\\ZTR\\Business\\Business.csproj": {}
   },
   "projects": {
+    "F:\\ZTR\\Business.Parsers\\Business.Parsers.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "F:\\ZTR\\Business.Parsers\\Business.Parsers.csproj",
+        "projectName": "Business.Parsers",
+        "projectPath": "F:\\ZTR\\Business.Parsers\\Business.Parsers.csproj",
+        "packagesPath": "C:\\Users\\gaurav.saxena\\.nuget\\packages\\",
+        "outputPath": "F:\\ZTR\\Business.Parsers\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\gaurav.saxena\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\ServiceFabricSDK.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\Microsoft SDKs\\Service Fabric\\packages": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "dependencies": {
+            "Ensure.That": {
+              "target": "Package",
+              "version": "[9.2.0, )"
+            },
+            "Google.Protobuf": {
+              "target": "Package",
+              "version": "[3.14.0, )"
+            },
+            "Nett": {
+              "target": "Package",
+              "version": "[0.15.0, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[12.0.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.403\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
     "F:\\ZTR\\Business\\Business.csproj": {
       "version": "1.0.0",
       "restore": {
@@ -31,7 +106,11 @@
         },
         "frameworks": {
           "netcoreapp3.1": {
-            "projectReferences": {}
+            "projectReferences": {
+              "F:\\ZTR\\Business.Parsers\\Business.Parsers.csproj": {
+                "projectPath": "F:\\ZTR\\Business.Parsers\\Business.Parsers.csproj"
+              }
+            }
           }
         },
         "warningProperties": {

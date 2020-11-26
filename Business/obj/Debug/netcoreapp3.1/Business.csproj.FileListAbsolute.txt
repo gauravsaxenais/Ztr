@@ -10,10 +10,14 @@ F:\ZTR\Business\bin\Debug\netcoreapp3.1\ZTR.Framework.Configuration.pdb
 F:\ZTR\Business\bin\Debug\netcoreapp3.1\ZTR.Framework.Configuration.xml
 F:\ZTR\Business\bin\Debug\netcoreapp3.1\ZTR.Framework.DataAccess.pdb
 F:\ZTR\Business\bin\Debug\netcoreapp3.1\ZTR.Framework.DataAccess.xml
-F:\ZTR\Business\obj\Debug\netcoreapp3.1\Business.csprojAssemblyReference.cache
 F:\ZTR\Business\obj\Debug\netcoreapp3.1\Business.AssemblyInfoInputs.cache
 F:\ZTR\Business\obj\Debug\netcoreapp3.1\Business.AssemblyInfo.cs
-F:\ZTR\Business\obj\Debug\netcoreapp3.1\Business.csproj.CoreCompileInputs.cache
 F:\ZTR\Business\obj\Debug\netcoreapp3.1\Business.csproj.CopyComplete
 F:\ZTR\Business\obj\Debug\netcoreapp3.1\Business.dll
 F:\ZTR\Business\obj\Debug\netcoreapp3.1\Business.pdb
+F:\ZTR\Business\obj\Debug\netcoreapp3.1\Business.csprojAssemblyReference.cache
+F:\ZTR\Business\bin\Debug\netcoreapp3.1\Business.Parsers.dll
+F:\ZTR\Business\bin\Debug\netcoreapp3.1\Business.Parsers.pdb
+F:\ZTR\Business\obj\Debug\netcoreapp3.1\Business.csproj.CoreCompileInputs.cache
+F:\ZTR\Business\bin\Debug\netcoreapp3.1\ProtoFiles\Proto\j1939.proto
+F:\ZTR\Business\bin\Debug\netcoreapp3.1\ProtoFiles\Proto\Power.proto

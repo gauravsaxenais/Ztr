@@ -1,12 +1,12 @@
 ﻿namespace Service.Controllers
 {
+    using System.ComponentModel.DataAnnotations;
+    using System.Threading.Tasks;
     using Business.RequestHandlers.Interfaces;
     using EnsureThat;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Newtonsoft.Json.Linq;
-    using System.ComponentModel.DataAnnotations;
-    using System.Threading.Tasks;
     using ZTR.Framework.Service;
 
     [ApiController]
@@ -28,7 +28,7 @@
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetAllBlocks([Required, FromQuery] string firmwareVersion, string deviceType)
+        public async Task<IActionResult> GetAllBlocks([Required, FromQuery] string firmwareVersion, [Required, FromQuery] string deviceType)
         {
             var result = await this.manager.ParseTomlFilesAsync(firmwareVersion, deviceType, "blocks").ConfigureAwait(false);
             if (string.IsNullOrEmpty(result))

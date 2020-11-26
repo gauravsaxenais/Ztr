@@ -4,49 +4,29 @@
         <name>ZTR.Framework.Business</name>
     </assembly>
     <members>
-        <member name="T:ZTR.Framework.Business.DateTimeExtensions">
+        <member name="P:ZTR.Framework.Business.File.ExportFileResultModel.FileName">
             <summary>
-            Date and time extension methods.
+            Gets or sets the fileName.
             </summary>
-            <remarks>
-            Utility/Helper
-            </remarks>
+            <value>
+            The fileName.
+            </value>
         </member>
-        <member name="M:ZTR.Framework.Business.DateTimeExtensions.ParseDateTimeWithTimeZone(System.String,System.String)">
+        <member name="P:ZTR.Framework.Business.File.ExportFileResultModel.Data">
             <summary>
-            Parses the given string as a <see cref="T:System.DateTime"/>, respecting the given time zone that it is intended to be in.
+            Gets or sets the data.
             </summary>
-            <param name="sourceDateTime">The string to parse as a date/time.</param>
-            <param name="sourceTimeZoneId">The time zone the source date/time is in.</param>
-            <returns>The parsed <see cref="T:System.DateTimeOffset"/> with the source's time zone represented.</returns>
+            <value>
+            The data.
+            </value>
         </member>
-        <member name="M:ZTR.Framework.Business.DateTimeExtensions.TryParseExactWithTimeZone(System.String,System.String,System.String,System.IFormatProvider,System.Globalization.DateTimeStyles,System.DateTimeOffset@)">
+        <member name="P:ZTR.Framework.Business.File.ExportFileResultModel.MimeType">
             <summary>
-            Parses the given string as a <see cref="T:System.DateTime"/>, respecting the given time zone that it is intended to be in.
+            Gets or sets the mimeType.
             </summary>
-            <param name="sourceDateTime">The string to parse as a date/time.</param>
-            <param name="sourceTimeZoneId">The time zone the source date/time is in.</param>
-            <param name="format">The format.</param>
-            <param name="provider">The provider.</param>
-            <param name="style">The style.</param>
-            <param name="parsedDateTime">The parsed date time.</param>
-            <returns>The parsed <see cref="T:System.DateTimeOffset"/> with the source's time zone represented.</returns>
-        </member>
-        <member name="M:ZTR.Framework.Business.DateTimeExtensions.FormatDateTimeToCurrentTimeZone(System.String,System.DateTimeOffset)">
-            <summary>
-            Parses the given datetime, respecting the given time zone that it is intended to be in.
-            </summary>
-            <param name="currentTimeZone">The current time zone the source date/time is in.</param>
-            <param name="dateTime">The string to parse as a date/time.</param>
-            <returns>The parsed <see cref="T:System.DateTimeOffset"/> with the source's time zone represented.</returns>
-        </member>
-        <member name="M:ZTR.Framework.Business.DateTimeExtensions.FixToSpecifiedTimeZone(System.DateTimeOffset,System.String)">
-            <summary>
-            Chops off the <paramref name="source"/>'s offset and replaces it with the destination's offset.
-            </summary>
-            <param name="source">The source date/time with offset to augment.</param>
-            <param name="destinationTimeZoneId">The Id of the destination time zone.</param>
-            <returns>The fixed <see cref="T:System.DateTimeOffset"/> with respect to the destination time zone specified.</returns>
+            <value>
+            The mimeType.
+            </value>
         </member>
         <member name="T:ZTR.Framework.Business.File.FileDelimiterConstants">
             <summary>
@@ -67,155 +47,6 @@
             <summary>
             The comma delimiter
             </summary>
-        </member>
-        <member name="T:ZTR.Framework.Business.File.FileReaders.CsvFileReader">
-            <summary>
-            A helper class for reading csv files
-            </summary>
-        </member>
-        <member name="F:ZTR.Framework.Business.File.FileReaders.CsvFileReader.CsvFileExtension">
-            <summary>
-            Extension for CSV files.
-            </summary>
-        </member>
-        <member name="M:ZTR.Framework.Business.File.FileReaders.CsvFileReader.ReadFile``1(ZTR.Framework.Configuration.Ftp.FtpConnection,System.String,System.String,CsvHelper.Configuration.CsvConfiguration)">
-            <summary>
-            Reads the file.
-            </summary>
-            <typeparam name="T">type T</typeparam>
-            <param name="ftpConnection">The FTP connection.</param>
-            <param name="remoteFolderPath">The remote folder path.</param>
-            <param name="remoteFileName">Name of the remote file.</param>
-            <param name="csvConfiguration">The CSV configuration.</param>
-            <returns>
-            IEnumerable of type T
-            </returns>
-        </member>
-        <member name="M:ZTR.Framework.Business.File.FileReaders.CsvFileReader.ReadFile``1(ZTR.Framework.Configuration.Ftp.FtpConnection,System.String,System.String,System.String,System.Boolean)">
-            <summary>
-            Reads the file.
-            </summary>
-            <typeparam name="T">type T</typeparam>
-            <param name="ftpConnection">The FTP connection.</param>
-            <param name="remoteFolderPath">The remote folder path.</param>
-            <param name="remoteFileName">Name of the remote file.</param>
-            <param name="fileDelimiter">The file delimiter.</param>
-            <param name="fileDataHasHeader">if set to <c>true</c> [file data has header].</param>
-            <returns>
-            IEnumerable of type T
-            </returns>
-        </member>
-        <member name="M:ZTR.Framework.Business.File.FileReaders.CsvFileReader.ReadFile``1(System.String,System.String,CsvHelper.Configuration.CsvConfiguration)">
-            <summary>
-            Reads the file.
-            </summary>
-            <typeparam name="T">type T</typeparam>
-            <param name="remoteFolderPath">The remote folder path.</param>
-            <param name="remoteFileName">Name of the remote file.</param>
-            <param name="csvConfiguration">The CSV configuration.</param>
-            <returns>
-            IEnumerable of type T
-            </returns>
-        </member>
-        <member name="M:ZTR.Framework.Business.File.FileReaders.CsvFileReader.ReadFile``1(System.String,System.String,System.String,System.Boolean)">
-            <summary>
-            Reads the file.
-            </summary>
-            <typeparam name="T">type T</typeparam>
-            <param name="remoteFolderPath">The remote folder path.</param>
-            <param name="remoteFileName">Name of the remote file.</param>
-            <param name="fileDelimiter">The file delimiter.</param>
-            <param name="fileDataHasHeader">if set to <c>true</c> [file data has header].</param>
-            <returns>
-            IEnumerable of type T
-            </returns>
-        </member>
-        <member name="M:ZTR.Framework.Business.File.FileReaders.CsvFileReader.ReadFiles``1(ZTR.Framework.Business.File.FtpConfiguration,CsvHelper.Configuration.CsvConfiguration,Microsoft.Extensions.Logging.ILogger)">
-            <summary>
-            Reads the files.
-            </summary>
-            <typeparam name="TModel">The type of the model.</typeparam>
-            <param name="ftpConfiguration">The FTP configuration.</param>
-            <param name="csvConfiguration">The CSV configuration.</param>
-            <param name="logger">Logger to log messages</param>
-            <returns>ConcurrentDictionary with string List of TModel </returns>
-        </member>
-        <member name="M:ZTR.Framework.Business.File.FileReaders.CsvFileReader.ReadFiles``1(ZTR.Framework.Business.File.FtpConfiguration,System.String,System.Boolean,Microsoft.Extensions.Logging.ILogger)">
-            <summary>
-            Reads the files.
-            </summary>
-            <typeparam name="TModel">The type of the model.</typeparam>
-            <param name="ftpConfiguration">The FTP configuration.</param>
-            <param name="fileDelimiter">The file delimiter.</param>
-            <param name="fileDataHasHeader">if set to <c>true</c> [file data has header].</param>
-            <param name="logger">Logger to log messages</param>
-            <returns>ConcurrentDictionary with string List of TModel </returns>
-        </member>
-        <member name="M:ZTR.Framework.Business.File.FileReaders.CsvFileReader.ReadFiles``1(ZTR.Framework.Configuration.Ftp.FtpConnection,System.String,System.String,System.String,System.Boolean,Microsoft.Extensions.Logging.ILogger)">
-            <summary>
-            Reads the files.
-            </summary>
-            <typeparam name="TModel">The type of the model.</typeparam>
-            <param name="ftpConnection">The FTP connection.</param>
-            <param name="folderPath">The folder path.</param>
-            <param name="fileExtension">The file extension.</param>
-            <param name="fileDelimiter">The file delimiter.</param>
-            <param name="fileDataHasHeader">if set to <c>true</c> [file data has header].</param>
-            <param name="logger">Logger to log messages</param>
-            <returns>ConcurrentDictionary with string List of TModel </returns>
-        </member>
-        <member name="M:ZTR.Framework.Business.File.FileReaders.CsvFileReader.ReadFiles``1(Renci.SshNet.SftpClient,System.Collections.Generic.IEnumerable{Renci.SshNet.Sftp.SftpFile},CsvHelper.Configuration.CsvConfiguration,ZTR.Framework.Business.File.FtpConfiguration,Microsoft.Extensions.Logging.ILogger)">
-            <summary>
-            Reads the files.
-            </summary>
-            <typeparam name="TModel">The type of the model.</typeparam>
-            <param name="sftp">The SFTP.</param>
-            <param name="sftpFiles">The SFTP files.</param>
-            <param name="csvConfiguration">The CSV configuration.</param>
-            <param name="ftpConfiguration">The FTP configuration.</param>
-            <param name="logger">Logger to log messages</param>
-            <returns>ConcurrentDictionary with string List of TModel </returns>
-        </member>
-        <member name="M:ZTR.Framework.Business.File.FileReaders.CsvFileReader.UploadCsvFile``1(ZTR.Framework.Configuration.Ftp.FtpConnection,System.String,System.String,System.Collections.Generic.IEnumerable{``0})">
-            <summary>
-            Uploads the file.
-            </summary>
-            <typeparam name="T">type T</typeparam>
-            <param name="ftpConnection">The FTP connection.</param>
-            <param name="remoteFolderPath">The remote folder path.</param>
-            <param name="remoteFileName">Name of the remote file.</param>
-            <param name="rawData">The raw data.</param>
-            <returns>return true if uploaded sucessfully</returns>
-        </member>
-        <member name="M:ZTR.Framework.Business.File.FileReaders.CsvFileReader.ReadZipFile``1(ZTR.Framework.Business.File.FtpConfiguration,System.String,CsvHelper.Configuration.CsvConfiguration)">
-            <summary>
-            This function will unzip a file and export it's parsed files of TModel from FTP.
-            </summary>
-            <typeparam name="TModel">The model you're looking for.</typeparam>
-            <param name="ftpConfiguration">Setup of the FTP connection you're using.</param>
-            <param name="fileName">Name of the ZIP.</param>
-            <param name="csvConfiguration">CSV Configuration.</param>
-            <returns>IEnumarable of the Files that the ZIP contained using the TModel from an FTP Connection.</returns>
-        </member>
-        <member name="M:ZTR.Framework.Business.File.FileReaders.CsvFileReader.ReadZipFile``1(System.IO.Stream,CsvHelper.Configuration.CsvConfiguration,System.String)">
-            <summary>
-            This function will unzip a file and export it's parsed files of TModel.
-            </summary>
-            <typeparam name="TModel">The model you're looking for.</typeparam>
-            <param name="stream">Name of the ZIP.</param>
-            <param name="csvConfiguration">CSV Configuration.</param>
-            <param name="folderPath">Ftp FolderPath.</param>
-            <returns>IEnumarable of the Files that the ZIP contained using the TModel.</returns>
-            Used the example here to build.
-            https://stackoverflow.com/questions/8313791/sharpziplib-examine-and-select-contents-of-a-zip-file
-        </member>
-        <member name="M:ZTR.Framework.Business.File.FileReaders.CsvFileReader.CreateCsvConfiguration(System.String,System.Boolean)">
-            <summary>
-            Creates the CSV configuration.
-            </summary>
-            <param name="fileDelimiter">The file delimiter.</param>
-            <param name="fileDataHasHeader">if set to <c>true</c> [file data has header].</param>
-            <returns>CsvConfiguration</returns>
         </member>
         <member name="M:ZTR.Framework.Business.File.FileReaders.FileReaderExtensions.NormalizeFolderPath(System.String)">
             <summary>
@@ -304,30 +135,6 @@
             <summary>
             https://www.codeproject.com/Articles/16143/Handling-Fixed-width-Flat-Files-with-NET-Custom-At
             </summary>
-        </member>
-        <member name="P:ZTR.Framework.Business.Models.ExportFileResultModel.FileName">
-            <summary>
-            Gets or sets the fileName.
-            </summary>
-            <value>
-            The fileName.
-            </value>
-        </member>
-        <member name="P:ZTR.Framework.Business.Models.ExportFileResultModel.Data">
-            <summary>
-            Gets or sets the data.
-            </summary>
-            <value>
-            The data.
-            </value>
-        </member>
-        <member name="P:ZTR.Framework.Business.Models.ExportFileResultModel.MimeType">
-            <summary>
-            Gets or sets the mimeType.
-            </summary>
-            <value>
-            The mimeType.
-            </value>
         </member>
         <member name="P:ZTR.Framework.Business.Models.ModelWithCode.Code">
             <summary>

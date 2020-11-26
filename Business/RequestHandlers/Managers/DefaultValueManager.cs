@@ -1,15 +1,12 @@
 ﻿namespace Business.RequestHandlers.Managers
 {
     using Business.Configuration;
-    using Business.Models.ConfigModels;
     using Business.Parsers;
     using Business.RequestHandlers.Interfaces;
     using EnsureThat;
+    using Google.Protobuf;
     using Microsoft.Extensions.Logging;
-    using Nett;
     using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
@@ -36,65 +33,38 @@
             _gitRepoManager.SetConnectionOptions(_deviceGitConnectionOptions);
         }
 
-        public async Task GetDefaultValuesAllModulesAsync(string firmwareVersion, string deviceType)
+        public async Task<string> GetDefaultValuesAllModulesAsync(string firmwareVersion, string deviceType)
         {
-            await GetDataFromDefaultFileAsync(firmwareVersion, deviceType);
+            var outputFolderPath = @"ProtoFiles\GeneratedFiles\";
+            var protoFilePath = @"ProtoFiles\Proto";
 
-            //return listOfModules;
-        }
+            var json = string.Empty;
 
-        private async Task GetDataFromDefaultFileAsync(string firmwareVersion, string deviceType)
-        {
             var inputFileLoader = new InputFileLoader();
+            var moduleParser = new ModuleParser();
+            var defaultValueParser = new DefaultValueParser();
 
-            var compilerPath = string.Empty;
-            inputFileLoader.GetProtocPath(out compilerPath);
-
-            if(!string.IsNullOrWhiteSpace(compilerPath))
-            {
-                inputFileLoader.GenerateFiles("power.proto");
-            }
-
-            var fileContent = await GetDefaultData(firmwareVersion, deviceType);
-
-
-            //var listOfMessages = 
-            if (!string.IsNullOrWhiteSpace(fileContent))
-            {
-                var defaultFileData = GetTomlData(fileContent);
-
-                //listOfModules = defaultFileData.Module;
-            }
-
-            //return listOfModules;
-        }
-
-        public static List<T> ReadDataModel<T>(string data, string fieldToRead, TomlSettings settings) where T : class, new()
-        {
-            EnsureArg.IsNotEmptyOrWhiteSpace(data, nameof(data));
-            EnsureArg.IsNotNull(settings, nameof(settings));
-            EnsureArg.IsNotEmptyOrWhiteSpace(fieldToRead, nameof(fieldToRead));
-
-            TomlTable fileData = null;
-
-            fileData = Toml.ReadString(data, settings);
-
-            var readModels = (TomlTable)fileData[fieldToRead];
-
-            var items = new List<T>();
-            var dictionary = readModels.Rows.ToDictionary(t => t.Key, t => (object)t.Value.ToString());
-
-            items.Add(DictionaryExtensions.ToObject<T>(dictionary));
-            return items;
-        }
-
-        private ConfigurationReadModel GetTomlData(string fileContent)
-        {
             var tomlSettings = TomlFileReader.LoadLowerCaseTomlSettingsWithMappingForDefaultValues();
 
-            var tomlData = TomlFileReader.ReadDataFromString<ConfigurationReadModel>(data: fileContent, settings: tomlSettings);
+            var defaultFileContent = await GetDefaultData(firmwareVersion, deviceType);
+            protoFilePath = inputFileLoader.CombinePathFromAppRoot(protoFilePath);
 
-            return tomlData;
+            foreach (string file in Directory.EnumerateFiles(protoFilePath, "*.proto"))
+            {
+                var fileName = Path.GetFileName(file);
+                inputFileLoader.GenerateFiles(fileName, outputFolderPath, protoFilePath);
+            }
+
+            var messages = moduleParser.GetAllMessages();
+
+            foreach (IMessage message in messages)
+            {
+                var formattedMessage = moduleParser.Format(message);
+
+                json += defaultValueParser.ReadFileAsJson(defaultFileContent, tomlSettings, formattedMessage);
+            }
+
+            return json;
         }
 
         private async Task<string> GetDefaultData(string firmwareVersion, string deviceType)
@@ -114,32 +84,6 @@
             }
 
             return fileContent;
-        }
-
-        private void GenerateCSharpFileFromProtoFile(string protoFileLocation, string csharpFileDirectory, string protoFileName)
-        {
-            // Use ProcessStartInfo class
-            var psi = new ProcessStartInfo
-            {
-                FileName = @"C:\Users\gaurav.saxena\source\repos\ProtoAppGoogleProtoBuff\ProtoCompiler\protoc-3.13.0-win64\bin\protoc.exe",
-                WindowStyle = ProcessWindowStyle.Hidden,
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                Arguments = $" --include_imports --include_source_info --proto_path={protoFileLocation} --csharp_out={csharpFileDirectory} {protoFileName}"
-            };
-
-            try
-            {
-                // Start the process with the info we specified.
-                // Call WaitForExit and then the using statement will close.
-                using (var exeProcess = Process.Start(psi))
-                {
-                    exeProcess.WaitForExit();
-                }
-            }
-            catch (Exception)
-            {
-            }
         }
     }
 }

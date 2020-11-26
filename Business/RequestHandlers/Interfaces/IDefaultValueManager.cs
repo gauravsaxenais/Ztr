@@ -4,6 +4,6 @@
 
     public interface IDefaultValueManager
     {
-        Task GetDefaultValuesAllModulesAsync(string firmwareVersion, string deviceType);
+        Task<string> GetDefaultValuesAllModulesAsync(string firmwareVersion, string deviceType);
     }
 }

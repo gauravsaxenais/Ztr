@@ -10,6 +10,7 @@
     using Microsoft.AspNetCore.Mvc;
     using ZTR.Framework.Service;
 
+    [System.ComponentModel.Description("Module Controller Service")]
     [ApiController]
     [Produces(SupportedContentTypes.Json, SupportedContentTypes.Xml)]
     [Consumes(SupportedContentTypes.Json, SupportedContentTypes.Xml)]
@@ -53,7 +54,7 @@
         [ProducesResponseType(typeof(IEnumerable<ModuleReadModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetModuleByName([Required, FromQuery] string name, [Required, FromQuery]  string firmwareVersion, string deviceType)
+        public async Task<IActionResult> GetModuleByName([Required, FromQuery] string name, [Required, FromQuery] string firmwareVersion, string deviceType)
         {
             var result = await this.manager.GetModuleByNameAsync(name, firmwareVersion, deviceType).ConfigureAwait(false);
             return this.StatusCode(StatusCodes.Status200OK, result);
