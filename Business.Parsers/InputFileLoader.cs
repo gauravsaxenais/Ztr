@@ -15,6 +15,7 @@
 
     public class InputFileLoader
     {
+        private readonly string csFileExtension = ".g.cs";
         public IMessage GenerateCodeFiles(string protoFileName, string protoFilePath, params string[] args)
         {
             EnsureArg.IsNotEmptyOrWhiteSpace(protoFileName);
@@ -93,7 +94,7 @@
 
                 var psi = new ProcessStartInfo(
                     protocPath,
-                    arguments: $" --include_imports --proto_path={protoFilePath} --csharp_out={tmpOutputFolder} --error_format=gcc {fileName} {string.Join(" ", args)}"
+                    arguments: $" --include_imports --proto_path={protoFilePath} --csharp_out={tmpOutputFolder} --csharp_opt=file_extension={csFileExtension} --error_format=gcc {fileName} {string.Join(" ", args)}"
                 )
                 {
                     CreateNoWindow = true,
@@ -186,7 +187,7 @@
         private string GenerateDllFromCsFile(string fileName, string outputFolderPath)
         {
             string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
-            string filePathOut = outputFolderPath + fileNameWithoutExtension + ".cs";
+            string filePathOut = outputFolderPath + fileNameWithoutExtension + csFileExtension;
             string localDllFolder = FileReaderExtensions.NormalizeFolderPath(CombinePathFromAppRoot(string.Empty));
 
             TextReader readFile = new StreamReader(filePathOut);

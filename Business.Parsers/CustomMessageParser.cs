@@ -74,14 +74,14 @@
                     var field = new Field
                     {
                         Name = fieldDescriptor.Name,
-                        DataType = fieldDescriptor.FieldType.ToString().ToLower()
+                        DataType = GetTypeAndDefaultValue(fieldDescriptor).Item1
                     };
 
                     object fieldValue = null;
 
                     if (IsPrimitiveType(fieldDescriptor))
                     {
-                        fieldValue = GetDefaultValue(fieldDescriptor);
+                        fieldValue = GetTypeAndDefaultValue(fieldDescriptor).Item2;
                     }
 
                     var minValue = fieldValue;
@@ -131,34 +131,32 @@
             }
         }
 
-        private object GetDefaultValue(FieldDescriptor descriptor)
+        private Tuple<string, object> GetTypeAndDefaultValue(FieldDescriptor descriptor)
         {
             switch (descriptor.FieldType)
             {
                 case FieldType.Bool:
-                    return false;
+                    return new Tuple <string, object>("bool", false);
                 case FieldType.Bytes:
                 case FieldType.String:
-                    return "\"\"";
+                    return new Tuple<string, object>("string", "\"\"");
                 case FieldType.Double:
-                    return 0.0;
+                    return new Tuple<string, object>("double", 0.0);
                 case FieldType.SInt32:
                 case FieldType.Int32:
                 case FieldType.SFixed32:
-                case FieldType.Enum:
-                    return (int)0;
                 case FieldType.Fixed32:
                 case FieldType.UInt32:
-                    return (uint)0;
                 case FieldType.Fixed64:
                 case FieldType.UInt64:
-                    return (ulong)0;
                 case FieldType.SFixed64:
                 case FieldType.Int64:
                 case FieldType.SInt64:
-                    return (long)0;
+                    return new Tuple<string, object>("integer", 0);
+                case FieldType.Enum:
+                    return new Tuple<string, object>("enum", 0);
                 case FieldType.Float:
-                    return (float)0f;
+                    return new Tuple<string, object>("float", 0.0);
                 default:
                     throw new ArgumentException("Invalid field type");
             }

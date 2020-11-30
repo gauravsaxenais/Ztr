@@ -41,7 +41,6 @@
 
         public static void WriteData(Dictionary<string, object> configValues, Message message, ref string json)
         {
-            bool firstFieldWritten = false;
             foreach (KeyValuePair<string, object> entry in configValues)
             {
                 var key = entry.Key;
@@ -62,8 +61,9 @@
                 {
                     if (!foundMessage.Messages.Any())
                     {
-                        json += $"\"{foundMessage.Name}\":";
-                        json += foundMessage.IsRepeated ? "[" : string.Empty;
+                        json += $"\"name\": \"{foundMessage.Name}\"" + ", ";
+                        json += $"\"datatype\": " + (foundMessage.IsRepeated ? "\"array\"" : "\"notarray\"") + ", ";
+                        json += $"\"args\":" + (foundMessage.IsRepeated ? "[" : string.Empty);
                         json += WriteMessageField(foundMessage.Fields, (Dictionary<string, object>[])entry.Value);
                         json += foundMessage.IsRepeated ? "]" : string.Empty;
                     }
@@ -77,12 +77,7 @@
                     }
                 }
 
-                if (!firstFieldWritten)
-                {
-                    json += ",";
-                }
-
-                firstFieldWritten = true;
+                json += ",";
             }
         }
 
@@ -96,14 +91,15 @@
 
             foreach (var dictionary in values)
             {
-                json.Append("{");
-
-                foreach (var data in fields)
+                json.Append("[");
+                for(int temp = 0; temp  < fields.Count; temp++)
                 {
-                    object value = dictionary.ContainsKey(data.Name) ? dictionary[data.Name] : data.Value;
+                    json.Append("{");
+                    object value = dictionary.ContainsKey(fields[temp].Name) ? dictionary[fields[temp].Name] : fields[temp].Value;
 
-                    json.Append($"\"{data.Name}\": {{ \"min\": {data.Min}, \"max\": {data.Max}, \"value\": {value}, \"datatype\": \"{data.DataType}\"}}");
+                    json.Append($"\"id\": {temp}, \"name\": \"{fields[temp].Name} \", \"min\": {fields[temp].Min}, \"max\": {fields[temp].Max}, \"value\": {value}, \"datatype\": \"{fields[temp].DataType}\"");
 
+                    json.Append("}");
                     json.Append(",");
                 }
 
@@ -112,7 +108,7 @@
                     json.Length --;
                 }
 
-                json.Append("}");
+                json.Append("]");
 
                 json.Append(",");
             }

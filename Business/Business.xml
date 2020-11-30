@@ -353,6 +353,21 @@
             mapped to the fields.
             </summary>
         </member>
+        <member name="M:Business.Models.ModuleReadModel.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Business.Models.ModuleReadModel"/> class.
+            </summary>
+        </member>
+        <member name="P:Business.Models.ModuleReadModel.Id">
+            <summary>
+            Gets or sets the identifier.
+            This identifier starts from 0 and
+            autoincrements for every new model.
+            </summary>
+            <value>
+            The identifier.
+            </value>
+        </member>
         <member name="P:Business.Models.ModuleReadModel.Name">
             <summary>
             Gets or sets the name.
@@ -369,7 +384,7 @@
             The UUID.
             </value>
         </member>
-        <member name="P:Business.Models.ModuleReadModel.Attributes">
+        <member name="P:Business.Models.ModuleReadModel.Config">
             <summary>
             Gets or sets the attributes.
             </summary>
@@ -574,7 +589,7 @@
             <param name="deviceType">Type of the device.</param>
             <returns></returns>
         </member>
-        <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.GetProtoFilePath(System.String,System.Collections.Generic.IEnumerable{Business.Models.ModuleReadModel})">
+        <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.GetProtoFiles(System.String,System.Collections.Generic.IEnumerable{Business.Models.ModuleReadModel})">
             <summary>
             Gets the proto file path.
             </summary>
