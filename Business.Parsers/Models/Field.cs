@@ -1,22 +1,38 @@
 ﻿namespace Business.Parser.Models
 {
-    using Newtonsoft.Json;
-
-    public class Field
+    using System;
+    public class Field : ICloneable
     {
-        [JsonProperty("name")]
+        public int Id { get; set; }
+
         public string Name { get; set; }
 
-        [JsonProperty("value")]
         public object Value { get; set; }
         
-        [JsonProperty("min")]
         public object Min { get; set; }
         
-        [JsonProperty("max")]
         public object Max { get; set; }
         
-        [JsonProperty("datatype")]
         public string DataType { get; set; }
+
+        public Field Clone()
+        {
+            var newField = new Field
+            {
+                Id = this.Id,
+                Name = this.Name,
+                Value = this.Value,
+                Min = this.Min,
+                Max = this.Max,
+                DataType = this.DataType
+            };
+
+            return newField;
+        }
+
+        object ICloneable.Clone()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

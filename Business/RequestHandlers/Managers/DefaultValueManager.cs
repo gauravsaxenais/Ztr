@@ -7,7 +7,6 @@
     using Business.RequestHandlers.Interfaces;
     using EnsureThat;
     using Microsoft.Extensions.Logging;
-    using Newtonsoft.Json.Linq;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -81,7 +80,7 @@
             // read default values from toml file defaults.toml
             var defaultValueFromTomlFile = await GetDefaultValues(firmwareVersion, deviceType);
 
-           // get proto files for corresponding module and their uuid
+            // get proto files for corresponding module and their uuid
             var protoFilePaths = GetProtoFiles(modulesProtoFolder, listOfModules);
 
             foreach (var message in GetCustomMessages(protoFilePaths))
@@ -89,20 +88,13 @@
                 var formattedMessage = customMessageParser.Format(message.Message);
                 formattedMessage.Name = message.Name;
 
-                var jsonContent = moduleParser.ReadFileAsJson(defaultValueFromTomlFile, tomlSettings, formattedMessage);
+                moduleParser.ReadFileAsJson(defaultValueFromTomlFile, tomlSettings, formattedMessage);
 
                 var module = listOfModules.Where(p => p.Name?.IndexOf(formattedMessage.Name, StringComparison.OrdinalIgnoreCase) >= 0).FirstOrDefault();
 
                 if (module != null)
                 {
-                    if (string.IsNullOrWhiteSpace(jsonContent))
-                    {
-                        module.Config = formattedMessage;
-                    }
-                    else
-                    {
-                        module.Config = JArray.Parse(jsonContent);
-                    }
+                    module.Config = formattedMessage;
                 }
             }
 
@@ -153,7 +145,7 @@
                 {
                     var moduleFolder = FileReaderExtensions.GetSubDirectoryPath(moduleFilePath, moduleName.Name);
 
-                    if(!string.IsNullOrWhiteSpace(moduleFolder))
+                    if (!string.IsNullOrWhiteSpace(moduleFolder))
                     {
                         var uuidFolder = FileReaderExtensions.GetSubDirectoryPath(moduleFolder, moduleName.UUID);
 

@@ -17,12 +17,12 @@
         /// </summary>
         /// <param name="message">The message to format.</param>
         /// <returns>The formatted message.</returns>
-        public Parser.Models.Array Format(IMessage message)
+        public Parser.Models.Message Format(IMessage message)
         {
             EnsureArg.IsNotNull(message);
 
             var messageName = Path.GetFileNameWithoutExtension(message.Descriptor.File.Name);
-            var protoParserMessage = new Parser.Models.Array() { Name = messageName };
+            var protoParserMessage = new Parser.Models.Message() { Name = messageName };
 
             Format(message, protoParserMessage);
 
@@ -35,14 +35,14 @@
         /// <param name="message">The message to format.</param>
         /// <param name="protoParserMessage">The field to parse the formatted message to.</param>
         /// <returns>The formatted message.</returns>
-        public void Format(IMessage message, Parser.Models.Array protoParserMessage)
+        public void Format(IMessage message, Parser.Models.Message protoParserMessage)
         {
             ProtoPreconditions.CheckNotNull(message, nameof(message));
 
             WriteMessage(protoParserMessage, message);
         }
 
-        private void WriteMessage(Parser.Models.Array protoParserMessage, IMessage message)
+        private void WriteMessage(Parser.Models.Message protoParserMessage, IMessage message)
         {
             if (message == null)
             {
@@ -52,55 +52,62 @@
             WriteMessageFields(protoParserMessage, message);
         }
 
-        private void WriteMessageFields(Parser.Models.Array protoParserMessage, IMessage message)
+        private void WriteMessageFields(Parser.Models.Message protoParserMessage, IMessage message)
         {
-            foreach (var fieldDescriptor in message.Descriptor.Fields.InFieldNumberOrder())
+            var fieldCollection = message.Descriptor.Fields.InFieldNumberOrder();
+            for (int tempIndex = 0; tempIndex < fieldCollection.Count; tempIndex++)
             {
-                if (fieldDescriptor.FieldType == FieldType.Message)
+                if (fieldCollection[tempIndex].FieldType == FieldType.Message)
                 {
-                    var temp = new Parser.Models.Array
+                    var temp = new Parser.Models.Message
                     {
-                        Name = fieldDescriptor.Name,
-                        IsRepeated = fieldDescriptor.IsRepeated
+                        Id = tempIndex,
+                        Name = fieldCollection[tempIndex].Name,
+                        IsRepeated = fieldCollection[tempIndex].IsRepeated
                     };
 
-                    protoParserMessage.Arrays.Add(temp);
+                    protoParserMessage.Messages.Add(temp);
 
-                    IMessage cleanSubmessage = fieldDescriptor.MessageType.Parser.ParseFrom(ByteString.Empty);
+                    IMessage cleanSubmessage = fieldCollection[tempIndex].MessageType.Parser.ParseFrom(ByteString.Empty);
                     WriteMessageFields(temp, cleanSubmessage);
                 }
                 else
                 {
-                    var field = new Field
-                    {
-                        Name = fieldDescriptor.Name,
-                        DataType = GetTypeAndDefaultValue(fieldDescriptor).Item1
-                    };
-
                     object fieldValue = null;
 
-                    if (IsPrimitiveType(fieldDescriptor))
+                    if (IsPrimitiveType(fieldCollection[tempIndex]))
                     {
-                        fieldValue = GetTypeAndDefaultValue(fieldDescriptor).Item2;
+                        fieldValue = GetTypeAndDefaultValue(fieldCollection[tempIndex]).Item2;
                     }
 
-                    var minValue = fieldValue;
-                    var maxValue = fieldValue;
-
-                    if (fieldDescriptor.FieldType == FieldType.Enum)
+                    var field = new Field
                     {
-                        var firstValue = fieldDescriptor.EnumType.Values.First();
-                        var lastValue = fieldDescriptor.EnumType.Values.Last();
+                        Id = tempIndex,
+                        Name = fieldCollection[tempIndex].Name,
+                        DataType = GetTypeAndDefaultValue(fieldCollection[tempIndex]).Item1,
+                        Min = fieldValue,
+                        Max = fieldValue,
+                        Value = fieldValue
+                    };
 
-                        minValue = firstValue.Number.ToString();
-                        maxValue = lastValue.Number.ToString();
+                    if (fieldCollection[tempIndex].FieldType == FieldType.Enum)
+                    {
+                        var firstValue = fieldCollection[tempIndex].EnumType.Values.First();
+                        var lastValue = fieldCollection[tempIndex].EnumType.Values.Last();
+
+                       field.Min = firstValue.Number;
+                       field.Max = lastValue.Number;
                     }
 
-                    field.Min = minValue;
-                    field.Max = maxValue;
-                    field.Value = fieldValue;
+                    var fields = protoParserMessage.Fields.FirstOrDefault();
+                    if (fields == null)
+                    {
+                        fields = new List<Field>();
+                    }
 
-                    protoParserMessage.Fields.Add(field);
+                    fields.Add(field);
+
+                    protoParserMessage.Fields.Add(fields);
                 }
             }
         }
