@@ -13,11 +13,22 @@
     using ZTR.Framework.Business;
     using ZTR.Framework.Business.File.FileReaders;
 
+    /// <summary>
+    /// Returns list of all the modules.
+    /// </summary>
+    /// <seealso cref="ZTR.Framework.Business.Manager" />
+    /// <seealso cref="Business.RequestHandlers.Interfaces.IModuleManager" />
     public class ModuleManager : Manager, IModuleManager
     {
         private readonly IGitRepositoryManager _gitRepoManager;
         private readonly DeviceGitConnectionOptions _moduleGitConnectionOptions;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ModuleManager"/> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
+        /// <param name="gitRepoManager">The git repo manager.</param>
+        /// <param name="moduleGitConnectionOptions">The module git connection options.</param>
         public ModuleManager(ILogger<ModuleManager> logger, IGitRepositoryManager gitRepoManager, DeviceGitConnectionOptions moduleGitConnectionOptions) : base(logger)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
@@ -32,6 +43,12 @@
             gitRepoManager.SetConnectionOptions(_moduleGitConnectionOptions);
         }
 
+        /// <summary>
+        /// Gets all modules asynchronous.
+        /// </summary>
+        /// <param name="firmwareVersion">The firmware version.</param>
+        /// <param name="deviceType">Type of the device.</param>
+        /// <returns></returns>
         public async Task<IEnumerable<ModuleReadModel>> GetAllModulesAsync(string firmwareVersion, string deviceType)
         {
             var listOfModules = await GetListOfModulesAsync(firmwareVersion, deviceType);
@@ -39,6 +56,13 @@
             return listOfModules;
         }
 
+        /// <summary>
+        /// Gets the model by name asynchronous.
+        /// </summary>
+        /// <param name="firmwareVersion">The firmware version.</param>
+        /// <param name="deviceType">Type of the device.</param>
+        /// <param name="names">The names.</param>
+        /// <returns></returns>
         public async Task<IEnumerable<ModuleReadModel>> GetModelByNameAsync(string firmwareVersion, string deviceType, IEnumerable<string> names)
         {
             var listOfModules = await GetListOfModulesAsync(firmwareVersion, deviceType);
@@ -51,6 +75,14 @@
             return listOfModules;
         }
 
+        /// <summary>
+        /// Gets the module by name asynchronous.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="firmwareVersion">The firmware version.</param>
+        /// <param name="deviceType">Type of the device.</param>
+        /// <param name="names">The names.</param>
+        /// <returns></returns>
         public async Task<IEnumerable<ModuleReadModel>> GetModuleByNameAsync(string name, string firmwareVersion, string deviceType,  params string[] names)
         {
             EnsureArg.IsNotNull(name, nameof(name));
@@ -62,6 +94,7 @@
             var listOfModules = new List<ModuleReadModel>();
 
             var fileContent = await GetDeviceDataFromFirmwareVersionAsync(firmwareVersion, deviceType);
+
             if (!string.IsNullOrWhiteSpace(fileContent))
             {
                 var data = GetTomlData(fileContent);

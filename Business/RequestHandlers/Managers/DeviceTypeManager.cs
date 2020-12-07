@@ -10,11 +10,22 @@
     using ZTR.Framework.Business;
     using ZTR.Framework.Business.File.FileReaders;
 
+    /// <summary>
+    /// Returns device information.
+    /// </summary>
+    /// <seealso cref="ZTR.Framework.Business.Manager" />
+    /// <seealso cref="Business.RequestHandlers.Interfaces.IDeviceTypeManager" />
     public class DeviceTypeManager : Manager, IDeviceTypeManager
     {
         private readonly IGitRepositoryManager _repoManager;
         private readonly DeviceGitConnectionOptions _deviceGitConnectionOptions;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DeviceTypeManager"/> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
+        /// <param name="gitRepoManager">The git repo manager.</param>
+        /// <param name="deviceGitConnectionOptions">The device git connection options.</param>
         public DeviceTypeManager(ILogger<DeviceTypeManager> logger, IGitRepositoryManager gitRepoManager, DeviceGitConnectionOptions deviceGitConnectionOptions) : base(logger)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
@@ -31,6 +42,10 @@
             _repoManager.SetConnectionOptions(_deviceGitConnectionOptions);
         }
 
+        /// <summary>
+        /// Gets all devices asynchronous.
+        /// </summary>
+        /// <returns></returns>
         public async Task<IEnumerable<string>> GetAllDevicesAsync()
         {
             var listOfDevices = new List<string>();
@@ -47,6 +62,10 @@
             return listOfDevices;
         }
 
+        /// <summary>
+        /// Gets all firmware versions asynchronous.
+        /// </summary>
+        /// <returns></returns>
         public async Task<IEnumerable<string>> GetAllFirmwareVersionsAsync()
         {
             var listFirmwareVersions = await _repoManager.LoadTagNamesAsync();

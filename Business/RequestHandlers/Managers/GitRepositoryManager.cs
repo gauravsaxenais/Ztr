@@ -10,8 +10,14 @@
     using System.Linq;
     using System.Threading.Tasks;
     using ZTR.Framework.Business.File;
+    using ZTR.Framework.Business.File.FileReaders;
     using Blob = LibGit2Sharp.Blob;
 
+    /// <summary>
+    /// Git repo manager is responsible for cloning a git repo,
+    /// gets all the tags.
+    /// </summary>
+    /// <seealso cref="Business.RequestHandlers.Interfaces.IGitRepositoryManager" />
     public class GitRepositoryManager : IGitRepositoryManager
     {
         #region Fields
@@ -24,18 +30,21 @@
         private readonly string TextMimeType = "text/plain";
         #endregion
 
-        #region Constructors
+        #region Constructors        
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="GitRepositoryManager" /> class.
+        /// Initializes a new instance of the <see cref="GitRepositoryManager"/> class.
         /// </summary>
-        ///
-        /// <param name="gitConnection">The Git connection options from appsettings.</param>
         public GitRepositoryManager()
         {
         }
         #endregion
 
-        #region Public methods
+        #region Public methods        
+        /// <summary>
+        /// Sets the connection options.
+        /// </summary>
+        /// <param name="gitConnection">The git connection.</param>
         public void SetConnectionOptions(GitConnectionOptions gitConnection)
         {
             EnsureArg.IsNotNull(gitConnection);
@@ -62,11 +71,25 @@
             };
         }
 
+        /// <summary>
+        /// Gets the connection options.
+        /// </summary>
+        /// <returns></returns>
         public GitConnectionOptions GetConnectionOptions()
         {
             return _gitConnection;
         }
 
+        /// <summary>
+        /// Clones the repository asynchronous.
+        /// </summary>
+        /// <exception cref="Exception">
+        /// Unauthorised: Incorrect username/password
+        /// or
+        /// Forbidden: Possbily Incorrect username/password
+        /// or
+        /// Not found: The repository was not found
+        /// </exception>
         public async Task CloneRepositoryAsync()
         {
             try
@@ -98,13 +121,14 @@
                     throw new Exception("Not found: The repository was not found");
                 }
 
-                throw new Exception("There was an unknown problem with the Git repository you provided");
+                throw;
             }
         }
 
         /// <summary>
-        /// Loads all the tags.
+        /// Loads the tag names asynchronous.
         /// </summary>
+        /// <returns></returns>
         public async Task<string[]> LoadTagNamesAsync()
         {
             string[] tagNames;
@@ -187,7 +211,7 @@
         /// Checks a GIT tree to see if a file exists
         /// </summary>
         /// <param name="tree">The GIT tree</param>
-        /// <param name="filename">The file name</param>
+        /// <param name="fileName">The file name</param>
         /// <returns>true if file exists</returns>
         private bool TreeContainsFile(Tree tree, string fileName)
         {
@@ -357,7 +381,7 @@
                         Attributes = FileAttributes.Normal
                     };
 
-                    if (IOmethods.IsFileClosed(fileName))
+                    if (FileReaderExtensions.IsFileClosed(fileName))
                     {
                         fileInfo.Delete();
                     }

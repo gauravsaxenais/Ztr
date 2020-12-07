@@ -1,0 +1,675 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Business</name>
+    </assembly>
+    <members>
+        <member name="T:Business.Configuration.BlockGitConnectionOptions">
+            <summary>
+            This class maps to the connection options in appsettings.json file.
+            </summary>
+            <seealso cref="T:ZTR.Framework.Business.File.GitConnectionOptions" />
+        </member>
+        <member name="M:Business.Configuration.BlockGitConnectionOptions.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Business.Configuration.BlockGitConnectionOptions"/> class.
+            </summary>
+        </member>
+        <member name="M:Business.Configuration.BlockGitConnectionOptions.#ctor(System.String,System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Business.Configuration.BlockGitConnectionOptions"/> class.
+            </summary>
+            <param name="gitLocalFolder">The git local folder.</param>
+            <param name="userName">Name of the user.</param>
+            <param name="password">The password.</param>
+            <param name="gitRepositoryUrl">The git repository URL.</param>
+        </member>
+        <member name="M:Business.Configuration.BlockGitConnectionOptions.SetConnection">
+            <summary>
+            Sets the connection.
+            </summary>
+        </member>
+        <member name="M:Business.Configuration.BlockGitConnectionOptions.ToString">
+            <summary>
+            Converts to string.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Configuration.DeviceGitConnectionOptions">
+            <summary>
+            This class maps to the connection options in appsettings.json file.
+            </summary>
+        </member>
+        <member name="M:Business.Configuration.DeviceGitConnectionOptions.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Business.Configuration.DeviceGitConnectionOptions"/> class.
+            </summary>
+        </member>
+        <member name="M:Business.Configuration.DeviceGitConnectionOptions.#ctor(System.String,System.String,System.String,System.String,Business.TomlConfigurationFile)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Business.Configuration.DeviceGitConnectionOptions"/> class.
+            </summary>
+            <param name="gitLocalFolder">The git local folder.</param>
+            <param name="userName">Name of the user.</param>
+            <param name="password">The password.</param>
+            <param name="gitRepositoryUrl">The git repository URL.</param>
+            <param name="tomlConfiguration">The toml configuration.</param>
+        </member>
+        <member name="P:Business.Configuration.DeviceGitConnectionOptions.TomlConfiguration">
+            <summary>
+            Gets or sets the toml configuration.
+            </summary>
+            <value>
+            The toml configuration.
+            </value>
+        </member>
+        <member name="M:Business.Configuration.DeviceGitConnectionOptions.ToString">
+            <summary>
+            Converts to string.
+            </summary>
+            <returns>
+            A <see cref="T:System.String" /> that represents this instance.
+            </returns>
+        </member>
+        <member name="T:Business.Configuration.ModuleGitConnectionOptions">
+            <summary>
+            This class maps to configuration in appsettings.json file.
+            </summary>
+            <seealso cref="T:ZTR.Framework.Business.File.GitConnectionOptions" />
+        </member>
+        <member name="M:Business.Configuration.ModuleGitConnectionOptions.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Business.Configuration.ModuleGitConnectionOptions"/> class.
+            </summary>
+        </member>
+        <member name="M:Business.Configuration.ModuleGitConnectionOptions.#ctor(System.String,System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Business.Configuration.ModuleGitConnectionOptions"/> class.
+            </summary>
+            <param name="gitLocalFolder">The git local folder.</param>
+            <param name="userName">Name of the user.</param>
+            <param name="password">The password.</param>
+            <param name="gitRepositoryUrl">The git repository URL.</param>
+        </member>
+        <member name="M:Business.Configuration.ModuleGitConnectionOptions.ToString">
+            <summary>
+            Converts to string.
+            </summary>
+            <returns>
+            A <see cref="T:System.String" /> that represents this instance.
+            </returns>
+        </member>
+        <member name="T:Business.Models.ConfigurationReadModel">
+            <summary>
+            ConfigurationReadModel - This class maps to toml file.
+            </summary>
+        </member>
+        <member name="P:Business.Models.ConfigurationReadModel.Module">
+            <summary>
+            Gets or sets the module.
+            </summary>
+            <value>
+            The module.
+            </value>
+        </member>
+        <member name="P:Business.Models.ConfigurationReadModel.Device">
+            <summary>
+            Gets or sets the device.
+            </summary>
+            <value>
+            The device.
+            </value>
+        </member>
+        <member name="M:Business.Models.ConfigurationReadModel.ToString">
+            <summary>
+            Converts to string.
+            </summary>
+            <returns>
+            A <see cref="T:System.String" /> that represents this instance.
+            </returns>
+        </member>
+        <member name="T:Business.Models.DeviceReadModel">
+            <summary>
+            This class maps to toml file.
+            Toml file has a device which has all the
+            fields.
+            </summary>
+        </member>
+        <member name="P:Business.Models.DeviceReadModel.Name">
+            <summary>
+            Gets or sets the name.
+            </summary>
+            <value>
+            The name.
+            </value>
+        </member>
+        <member name="P:Business.Models.DeviceReadModel.Description">
+            <summary>
+            Gets or sets the description.
+            </summary>
+            <value>
+            The description.
+            </value>
+        </member>
+        <member name="P:Business.Models.DeviceReadModel.Digital_Inputs">
+            <summary>
+            Gets or sets the digital inputs.
+            </summary>
+            <value>
+            The digital inputs.
+            </value>
+        </member>
+        <member name="P:Business.Models.DeviceReadModel.Digital_Outputs">
+            <summary>
+            Gets or sets the digital outputs.
+            </summary>
+            <value>
+            The digital outputs.
+            </value>
+        </member>
+        <member name="P:Business.Models.DeviceReadModel.Analog_Inputs">
+            <summary>
+            Gets or sets the analog inputs.
+            </summary>
+            <value>
+            The analog inputs.
+            </value>
+        </member>
+        <member name="P:Business.Models.DeviceReadModel.Uarts">
+            <summary>
+            Gets or sets the uarts.
+            </summary>
+            <value>
+            The uarts.
+            </value>
+        </member>
+        <member name="M:Business.Models.DeviceReadModel.ToString">
+            <summary>
+            Converts to string.
+            </summary>
+            <returns>
+            A <see cref="T:System.String" /> that represents this instance.
+            </returns>
+        </member>
+        <member name="T:Business.Models.ModuleReadModel">
+            <summary>
+            This class maps to toml file.
+            The data in the toml file is
+            mapped to the fields.
+            </summary>
+        </member>
+        <member name="M:Business.Models.ModuleReadModel.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Business.Models.ModuleReadModel"/> class.
+            </summary>
+        </member>
+        <member name="P:Business.Models.ModuleReadModel.Id">
+            <summary>
+            Gets or sets the identifier.
+            This identifier starts from 0 and
+            autoincrements for every new model.
+            </summary>
+            <value>
+            The identifier.
+            </value>
+        </member>
+        <member name="P:Business.Models.ModuleReadModel.Name">
+            <summary>
+            Gets or sets the name.
+            </summary>
+            <value>
+            The name.
+            </value>
+        </member>
+        <member name="P:Business.Models.ModuleReadModel.UUID">
+            <summary>
+            Gets or sets the UUID.
+            </summary>
+            <value>
+            The UUID.
+            </value>
+        </member>
+        <member name="P:Business.Models.ModuleReadModel.Config">
+            <summary>
+            Gets or sets the attributes.
+            </summary>
+            <value>
+            The attributes.
+            </value>
+        </member>
+        <member name="M:Business.Models.ModuleReadModel.ToString">
+            <summary>
+            Converts to string.
+            </summary>
+            <returns>
+            A <see cref="T:System.String" /> that represents this instance.
+            </returns>
+        </member>
+        <member name="T:Business.RequestHandlers.Interfaces.IBlockManager">
+            <summary>
+            This interface maps with BlockManager
+            and responsible for parsing toml files.
+            </summary>
+        </member>
+        <member name="M:Business.RequestHandlers.Interfaces.IBlockManager.ParseTomlFilesAsync(System.String,System.String,System.String)">
+            <summary>
+            Parses the toml files asynchronous.
+            </summary>
+            <param name="firmwareVersion">The firmware version.</param>
+            <param name="deviceType">Type of the device.</param>
+            <param name="parserType">Type of the parser.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.RequestHandlers.Interfaces.IDefaultValueManager">
+            <summary>
+            Gets default values for all the modules
+            their names and uuid information.
+            </summary>
+        </member>
+        <member name="M:Business.RequestHandlers.Interfaces.IDefaultValueManager.GetDefaultValuesAllModulesAsync(System.String,System.String)">
+            <summary>
+            Gets the default values all modules asynchronous.
+            </summary>
+            <param name="firmwareVersion">The firmware version.</param>
+            <param name="deviceType">Type of the device.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.RequestHandlers.Interfaces.IDeviceTypeManager">
+            <summary>
+            Gets all the devices e.g. M3, M7, M9 etc.
+            </summary>
+        </member>
+        <member name="M:Business.RequestHandlers.Interfaces.IDeviceTypeManager.GetAllDevicesAsync">
+            <summary>
+            Gets all devices asynchronous.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Interfaces.IDeviceTypeManager.GetAllFirmwareVersionsAsync">
+            <summary>
+            Gets all firmware versions asynchronous.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Business.RequestHandlers.Interfaces.IGitRepositoryManager">
+            <summary>
+            Git repo manager - clones a repo and gets all the tags.
+            </summary>
+        </member>
+        <member name="M:Business.RequestHandlers.Interfaces.IGitRepositoryManager.SetConnectionOptions(ZTR.Framework.Business.File.GitConnectionOptions)">
+            <summary>
+            Sets the connection options.
+            </summary>
+            <param name="gitConnection">The git connection.</param>
+        </member>
+        <member name="M:Business.RequestHandlers.Interfaces.IGitRepositoryManager.GetConnectionOptions">
+            <summary>
+            Gets the connection options.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Interfaces.IGitRepositoryManager.CloneRepositoryAsync">
+            <summary>
+            Clones the repository asynchronous.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Interfaces.IGitRepositoryManager.LoadTagNamesAsync">
+            <summary>
+            Loads the tag names asynchronous.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Interfaces.IGitRepositoryManager.GetFileDataFromTagAsync(System.String,System.String)">
+            <summary>
+            Gets the file data from tag asynchronous.
+            </summary>
+            <param name="tag">The tag.</param>
+            <param name="fileName">Name of the file.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.RequestHandlers.Interfaces.IModuleManager">
+            <summary>
+            get list of all the modules, their name and uuid information.
+            </summary>
+        </member>
+        <member name="M:Business.RequestHandlers.Interfaces.IModuleManager.GetAllModulesAsync(System.String,System.String)">
+            <summary>
+            Gets all modules asynchronous.
+            </summary>
+            <param name="firmwareVersion">The firmware version.</param>
+            <param name="deviceType">Type of the device.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Interfaces.IModuleManager.GetModelByNameAsync(System.String,System.String,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Gets the model by name asynchronous.
+            </summary>
+            <param name="firmwareVersion">The firmware version.</param>
+            <param name="deviceType">Type of the device.</param>
+            <param name="names">The names.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Interfaces.IModuleManager.GetModuleByNameAsync(System.String,System.String,System.String,System.String[])">
+            <summary>
+            Gets the module by name asynchronous.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="firmwareVersion">The firmware version.</param>
+            <param name="deviceType">Type of the device.</param>
+            <param name="names">The names.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.RequestHandlers.Managers.BlockManager">
+            <summary>
+            Parses a toml file and returns arguments for a block
+            among others.
+            </summary>
+            <seealso cref="T:ZTR.Framework.Business.Manager" />
+            <seealso cref="T:Business.RequestHandlers.Interfaces.IBlockManager" />
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.BlockManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.ModuleManager},Business.RequestHandlers.Interfaces.IGitRepositoryManager,Business.Configuration.BlockGitConnectionOptions)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.BlockManager"/> class.
+            </summary>
+            <param name="logger">The logger.</param>
+            <param name="gitRepoManager">The git repo manager.</param>
+            <param name="blockGitConnectionOptions">The block git connection options.</param>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.BlockManager.ParseTomlFilesAsync(System.String,System.String,System.String)">
+            <summary>
+            Parses the toml files asynchronous.
+            </summary>
+            <param name="firmwareVersion">The firmware version.</param>
+            <param name="deviceType">Type of the device.</param>
+            <param name="parserType">Type of the parser.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.BlockManager.BlockParserToJson(System.String,System.Text.StringBuilder@,System.IO.TextReader@,System.String@,System.Collections.Generic.List{System.Object},System.Int32)">
+            <summary>
+            Block parser
+            </summary>
+            <param name="currentFile"></param>
+            <param name="json"></param>
+            <param name="readFile"></param>
+            <param name="strData"></param>
+            <param name="flattenList"></param>
+            <param name="fileIndex"></param>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.BlockManager.ModuleParserToJson(System.String,System.Text.StringBuilder@,System.IO.TextReader@,System.String@,System.Collections.Generic.List{System.Object})">
+            <summary>
+            Module parser
+            </summary>
+            <param name="currentFile"></param>
+            <param name="json"></param>
+            <param name="readFile"></param>
+            <param name="strData"></param>
+            <param name="flattenList"></param>
+        </member>
+        <member name="T:Business.RequestHandlers.Managers.DefaultValueManager">
+            <summary>
+            This class returns all the modules, their name and uuid information.
+            It also returns of the default values for all the modules.
+            It integrates with module parser to parse a proto file,
+            recieves all the default values from default.toml and 
+            receives the module.proto from corresponding module name
+            and uuid folder.
+            </summary>
+            <seealso cref="T:ZTR.Framework.Business.Manager" />
+            <seealso cref="T:Business.RequestHandlers.Interfaces.IDefaultValueManager" />
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.ModuleManager},Business.RequestHandlers.Interfaces.IGitRepositoryManager,Business.Configuration.DeviceGitConnectionOptions)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.DefaultValueManager"/> class.
+            </summary>
+            <param name="logger">The logger.</param>
+            <param name="gitRepoManager">The git repo manager.</param>
+            <param name="deviceGitConnectionOptions">The device git connection options.</param>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.GetDefaultValuesAllModulesAsync(System.String,System.String)">
+            <summary>
+            Gets the default values for all modules in asynchronous fashion.
+            </summary>
+            <param name="firmwareVersion">The firmware version.</param>
+            <param name="deviceType">Type of the device.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.GetProtoFiles(System.String,System.Collections.Generic.IEnumerable{Business.Models.ModuleReadModel})">
+            <summary>
+            Gets the proto file path.
+            </summary>
+            <param name="moduleFilePath">The module file path.</param>
+            <param name="listOfModules">The list of modules.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.GetListOfModulesAsync(System.String,System.String)">
+            <summary>
+            Gets the list of modules asynchronous.
+            </summary>
+            <param name="firmwareVersion">The firmware version.</param>
+            <param name="deviceType">Type of the device.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.GetTomlData(System.String)">
+            <summary>
+            Gets the toml data.
+            </summary>
+            <param name="fileContent">Content of the file.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.GetDeviceDataFromFirmwareVersionAsync(System.String,System.String)">
+            <summary>
+            Gets the device data from firmware version asynchronous.
+            </summary>
+            <param name="firmwareVersion">The firmware version.</param>
+            <param name="deviceType">Type of the device.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.RequestHandlers.Managers.DeviceTypeManager">
+            <summary>
+            Returns device information.
+            </summary>
+            <seealso cref="T:ZTR.Framework.Business.Manager" />
+            <seealso cref="T:Business.RequestHandlers.Interfaces.IDeviceTypeManager" />
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.DeviceTypeManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DeviceTypeManager},Business.RequestHandlers.Interfaces.IGitRepositoryManager,Business.Configuration.DeviceGitConnectionOptions)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.DeviceTypeManager"/> class.
+            </summary>
+            <param name="logger">The logger.</param>
+            <param name="gitRepoManager">The git repo manager.</param>
+            <param name="deviceGitConnectionOptions">The device git connection options.</param>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.DeviceTypeManager.GetAllDevicesAsync">
+            <summary>
+            Gets all devices asynchronous.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.DeviceTypeManager.GetAllFirmwareVersionsAsync">
+            <summary>
+            Gets all firmware versions asynchronous.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Business.RequestHandlers.Managers.GitRepositoryManager">
+            <summary>
+            Git repo manager is responsible for cloning a git repo,
+            gets all the tags.
+            </summary>
+            <seealso cref="T:Business.RequestHandlers.Interfaces.IGitRepositoryManager" />
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.GitRepositoryManager.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.GitRepositoryManager"/> class.
+            </summary>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.GitRepositoryManager.SetConnectionOptions(ZTR.Framework.Business.File.GitConnectionOptions)">
+            <summary>
+            Sets the connection options.
+            </summary>
+            <param name="gitConnection">The git connection.</param>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.GitRepositoryManager.GetConnectionOptions">
+            <summary>
+            Gets the connection options.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.GitRepositoryManager.CloneRepositoryAsync">
+            <summary>
+            Clones the repository asynchronous.
+            </summary>
+            <exception cref="T:System.Exception">
+            Unauthorised: Incorrect username/password
+            or
+            Forbidden: Possbily Incorrect username/password
+            or
+            Not found: The repository was not found
+            </exception>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.GitRepositoryManager.LoadTagNamesAsync">
+            <summary>
+            Loads the tag names asynchronous.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.GitRepositoryManager.GetFileDataFromTagAsync(System.String,System.String)">
+            <summary>
+            This method returns a filedata as string from a particular tag.
+            If a tag is "1.0.7", then the method returns data from all the files
+            for a particular tag.
+            </summary>
+            <param name="tag">Tag like 1.0.7 etc. in github.</param>
+            <param name="fileName">file name to search</param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.GitRepositoryManager.TreeContainsFile(LibGit2Sharp.Tree,System.String)">
+            <summary>
+            Checks a GIT tree to see if a file exists
+            </summary>
+            <param name="tree">The GIT tree</param>
+            <param name="fileName">The file name</param>
+            <returns>true if file exists</returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.GitRepositoryManager.IsExistsContentRepositoryDirectory">
+            <summary>
+            This method checks whether a folder 
+            exists in a local directory
+            and if there is ".git" sub folder
+            within the same.
+            </summary>
+            <returns>
+            true: if a folder and ".git" folder is present.
+            false: if a folder and ".git" folder isn't present.
+            </returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.GitRepositoryManager.CheckForGitSubDir(System.String)">
+            <summary>
+            Helper function to check whether the ".git" 
+            folder exists in a repository folder.
+            </summary>
+            <param name="pathToRep">path to a repository folder.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.GitRepositoryManager.DeleteReadOnlyDirectory(System.String)">
+            <summary>
+            Recursively deletes a directory as well as any subdirectories and files. If the files are read-only, they are flagged as normal and then deleted.
+            </summary>
+            <param name="directory">The name of the directory to remove.</param>
+        </member>
+        <member name="T:Business.RequestHandlers.Managers.ModuleManager">
+            <summary>
+            Returns list of all the modules.
+            </summary>
+            <seealso cref="T:ZTR.Framework.Business.Manager" />
+            <seealso cref="T:Business.RequestHandlers.Interfaces.IModuleManager" />
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.ModuleManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.ModuleManager},Business.RequestHandlers.Interfaces.IGitRepositoryManager,Business.Configuration.DeviceGitConnectionOptions)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.ModuleManager"/> class.
+            </summary>
+            <param name="logger">The logger.</param>
+            <param name="gitRepoManager">The git repo manager.</param>
+            <param name="moduleGitConnectionOptions">The module git connection options.</param>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.ModuleManager.GetAllModulesAsync(System.String,System.String)">
+            <summary>
+            Gets all modules asynchronous.
+            </summary>
+            <param name="firmwareVersion">The firmware version.</param>
+            <param name="deviceType">Type of the device.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.ModuleManager.GetModelByNameAsync(System.String,System.String,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Gets the model by name asynchronous.
+            </summary>
+            <param name="firmwareVersion">The firmware version.</param>
+            <param name="deviceType">Type of the device.</param>
+            <param name="names">The names.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.ModuleManager.GetModuleByNameAsync(System.String,System.String,System.String,System.String[])">
+            <summary>
+            Gets the module by name asynchronous.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="firmwareVersion">The firmware version.</param>
+            <param name="deviceType">Type of the device.</param>
+            <param name="names">The names.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.TomlConfigurationFile">
+            <summary>
+            Toml configuration file. 
+            </summary>
+        </member>
+        <member name="P:Business.TomlConfigurationFile.DeviceFolder">
+            <summary>
+            Gets or sets the device folder.
+            </summary>
+            <value>
+            The device folder.
+            </value>
+        </member>
+        <member name="P:Business.TomlConfigurationFile.TomlConfigFolder">
+            <summary>
+            Gets or sets the toml configuration folder.
+            </summary>
+            <value>
+            The toml configuration folder.
+            </value>
+        </member>
+        <member name="P:Business.TomlConfigurationFile.DeviceTomlFile">
+            <summary>
+            Gets or sets the device toml file.
+            </summary>
+            <value>
+            The device toml file.
+            </value>
+        </member>
+        <member name="P:Business.TomlConfigurationFile.DefaultTomlFile">
+            <summary>
+            Gets or sets the default toml file.
+            </summary>
+            <value>
+            The default toml file.
+            </value>
+        </member>
+        <member name="P:Business.TomlConfigurationFile.ModulesProtoFolder">
+            <summary>
+            Gets or sets the modules proto folder.
+            </summary>
+            <value>
+            The modules proto folder.
+            </value>
+        </member>
+        <member name="M:Business.TomlConfigurationFile.ToString">
+            <summary>
+            Converts to string.
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

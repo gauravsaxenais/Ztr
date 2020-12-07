@@ -1,23 +1,32 @@
-﻿namespace Business.Parser.Models
+﻿namespace Business.Parsers.Models
 {
-    using Newtonsoft.Json;
-
     public class Field
     {
-        [JsonProperty("name")]
+        public int Id { get; set; }
 
         public string Name { get; set; }
-        [JsonProperty("value")]
 
         public object Value { get; set; }
-        [JsonProperty("min")]
-
+        
         public object Min { get; set; }
-        [JsonProperty("max")]
-
+        
         public object Max { get; set; }
-        [JsonProperty("datatype")]
+
+        public object DefaultValue { get; set; }
 
         public string DataType { get; set; }
+
+        public Field DeepCopy()
+        {
+            Field other = (Field)this.MemberwiseClone();
+            other.Name = Name;
+            other.Value = Value;
+            other.Min = Min;
+            other.Max = Max;
+            other.DefaultValue = DefaultValue;
+            other.DataType = DataType;
+
+            return other;
+        }
     }
 }

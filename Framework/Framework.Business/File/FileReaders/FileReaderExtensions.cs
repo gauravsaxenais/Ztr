@@ -5,6 +5,7 @@
     using System.IO;
     using System.Linq;
     using System.Text;
+    using System.Threading;
     using System.Threading.Tasks;
     using EnsureThat;
     using Renci.SshNet;
@@ -274,6 +275,38 @@
             return directories;
         }
 
+        public static bool IsFileClosed(string filepath)
+        {
+            bool fileClosed = false;
+            int retries = 20;
+            const int delay = 400; // Max time spent here = retries*delay milliseconds
+
+            if (!File.Exists(filepath))
+                return false;
+
+            do
+            {
+                try
+                {
+                    // Attempts to open then close the file in RW mode, denying other users to place any locks.
+                    FileStream fs = File.Open(filepath, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+                    fs.Close();
+                    fileClosed = true; // success
+                }
+                catch (IOException) { }
+
+                retries--;
+
+                if (!fileClosed)
+                {
+                    Thread.Sleep(delay);
+                }
+            }
+            while (!fileClosed && retries > 0);
+
+            return fileClosed;
+        }
+
         private static List<string> GetDirectories(string path, string searchPattern = "*")
         {
             var directoryNames = new List<string>();
@@ -291,11 +324,11 @@
         SearchOption searchOption = SearchOption.TopDirectoryOnly)
         {
             var subDirectoryList = new List<string>(Directory.EnumerateDirectories(parentFolder, searchPattern, searchOption));
-            
+
             foreach (var directory in subDirectoryList)
             {
                 var subDirectoryFolder = directory.Substring(directory.LastIndexOf(Path.DirectorySeparatorChar) + 1);
-                if(string.Equals(folderNameToSearch, subDirectoryFolder, StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(folderNameToSearch, subDirectoryFolder, StringComparison.OrdinalIgnoreCase))
                 {
                     return directory;
                 }

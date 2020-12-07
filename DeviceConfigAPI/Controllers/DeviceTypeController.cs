@@ -8,6 +8,9 @@
     using Microsoft.AspNetCore.Mvc;
     using ZTR.Framework.Service;
 
+    /// <summary>
+    /// This service returns the device information.
+    /// </summary>
     [ApiController]
     [Produces(SupportedContentTypes.Json, SupportedContentTypes.Xml)]
     [Consumes(SupportedContentTypes.Json, SupportedContentTypes.Xml)]
@@ -16,6 +19,10 @@
     {
         private readonly IDeviceTypeManager manager;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DeviceTypeController"/> class.
+        /// </summary>
+        /// <param name="manager">The manager.</param>
         public DeviceTypeController(IDeviceTypeManager manager)
         {
             EnsureArg.IsNotNull(manager, nameof(manager));
@@ -26,7 +33,7 @@
         /// <summary>
         /// Gets all devices.
         /// </summary>
-        /// <returns>A <see cref="IEnumerable{string}"/> representing the result of the operation.</returns>
+        /// <returns>status code and the output.</returns>
         [HttpGet(nameof(GetAllDevices))]
         [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
@@ -41,8 +48,7 @@
         /// <summary>
         /// Gets the current firmware versions from github repository.
         /// </summary>
-        /// <param name="name">The name.</param>
-        /// <returns>A <see cref="IEnumerable{string}"/> representing the result of the operation.</returns>
+        /// <returns>status code representing the result of the operation and the result.</returns>
         [HttpGet(nameof(GetAllFirmwareVersions))]
         [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]

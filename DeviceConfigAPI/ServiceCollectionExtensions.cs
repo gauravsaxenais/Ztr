@@ -1,19 +1,26 @@
 ﻿namespace Service
 {
-    using Business.Configuration;
     using Business.RequestHandlers.Interfaces;
     using Business.RequestHandlers.Managers;
     using EnsureThat;
     using Microsoft.AspNetCore.Cors.Infrastructure;
     using Microsoft.Extensions.DependencyInjection;
 
+    /// <summary>
+    /// Services Collections Extensions.
+    /// Inject services in the application here.
+    /// </summary>
     public static class ServiceCollectionExtensions
     {
+        /// <summary>Adds the services.</summary>
+        /// <param name="services">The services.</param>
+        /// <returns>
+        ///   <br />
+        /// </returns>
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             EnsureArg.IsNotNull(services, nameof(services));
 
-            services.AddScoped<IGitConnectionOptionsFactory, GitConnectionOptionsFactory>();
             services.AddScoped<IGitRepositoryManager, GitRepositoryManager>();
 
             services.AddScoped<IModuleManager, ModuleManager>();

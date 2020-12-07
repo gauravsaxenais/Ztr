@@ -15,6 +15,12 @@
     using System.Threading.Tasks;
     using ZTR.Framework.Business;
 
+    /// <summary>
+    /// Parses a toml file and returns arguments for a block
+    /// among others.
+    /// </summary>
+    /// <seealso cref="ZTR.Framework.Business.Manager" />
+    /// <seealso cref="Business.RequestHandlers.Interfaces.IBlockManager" />
     public class BlockManager : Manager, IBlockManager
     {
         #region Private Variables
@@ -26,7 +32,14 @@
         private static readonly string fileBlocks = "blocks";
         #endregion
 
-        #region Constructors
+        #region Constructors        
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BlockManager"/> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
+        /// <param name="gitRepoManager">The git repo manager.</param>
+        /// <param name="blockGitConnectionOptions">The block git connection options.</param>
         public BlockManager(ILogger<ModuleManager> logger, IGitRepositoryManager gitRepoManager, BlockGitConnectionOptions blockGitConnectionOptions) : base(logger)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
@@ -46,18 +59,19 @@
         #region Public Methods
 
         /// <summary>
-        /// Toml file parser
+        /// Parses the toml files asynchronous.
         /// </summary>
-        /// <param name="firmwareVersion"></param>
-        /// <param name="deviceType"></param>
+        /// <param name="firmwareVersion">The firmware version.</param>
+        /// <param name="deviceType">Type of the device.</param>
+        /// <param name="parserType">Type of the parser.</param>
         /// <returns></returns>
         public async Task<string> ParseTomlFilesAsync(string firmwareVersion, string deviceType, string parserType)
         {
             string finalJson = string.Empty;
-            StringBuilder json = new StringBuilder();
+            var json = new StringBuilder();
             var gitConnectionOptions = (BlockGitConnectionOptions)_repoManager.GetConnectionOptions();
 
-            //await _repoManager.CloneRepositoryAsync();
+            await _repoManager.CloneRepositoryAsync();
 
             string[] files = Directory.GetFiles(gitConnectionOptions.GitLocalFolder);
 
@@ -109,6 +123,7 @@
         #endregion
 
         #region Private Methods
+
         /// <summary>
         /// Block parser
         /// </summary>
@@ -121,7 +136,6 @@
         private static void BlockParserToJson(string currentFile, ref StringBuilder json, ref TextReader readFile,
             ref string strData, List<object> flattenList, int fileIndex)
         {
-
             json.Insert(json.Length, "{\"id\":"
                 + fileIndex
                 + ",\"type\":\""
@@ -149,10 +163,9 @@
                     item
                     .Replace("=", "\":")
                     .Replace(",", ",\"") + "},";
-                    //.Replace("{\"", "{\"id\"" + argIndex + ",\"");
 
                 json.Append(strData.Replace("{\"", "{\"id\":" + argIndex + ",\""));
-                //json.Append(strData);
+
                 argIndex++;
             }
 
@@ -172,7 +185,6 @@
         /// <param name="readFile"></param>
         /// <param name="strData"></param>
         /// <param name="flattenList"></param>
-        /// <param name="newDir"></param>
         private static void ModuleParserToJson(string currentFile, ref StringBuilder json, ref TextReader readFile,
             ref string strData, List<object> flattenList)
         {

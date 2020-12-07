@@ -10,6 +10,11 @@
     using Microsoft.AspNetCore.Mvc;
     using ZTR.Framework.Service;
 
+    /// <summary>
+    /// This class return the list of modules and their
+    /// name and uuid information.
+    /// </summary>
+    /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
     [System.ComponentModel.Description("Module Controller Service")]
     [ApiController]
     [Produces(SupportedContentTypes.Json, SupportedContentTypes.Xml)]
@@ -19,6 +24,10 @@
     {
         private readonly IModuleManager manager;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ModuleController"/> class.
+        /// </summary>
+        /// <param name="manager">The manager.</param>
         public ModuleController(IModuleManager manager)
         {
             EnsureArg.IsNotNull(manager, nameof(manager));

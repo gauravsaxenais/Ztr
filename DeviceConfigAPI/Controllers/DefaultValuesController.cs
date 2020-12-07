@@ -3,13 +3,19 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Threading.Tasks;
-    using Business.Models.ConfigModels;
+    using Business.Models;
     using Business.RequestHandlers.Interfaces;
     using EnsureThat;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using ZTR.Framework.Service;
 
+    /// <summary>
+    /// This service returns all the modules and their default values.
+    /// If any module doesnt have any default values, then
+    /// only the attributes are returned.
+    /// </summary>
+    /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
     [ApiController]
     [Produces(SupportedContentTypes.Json, SupportedContentTypes.Xml)]
     [Consumes(SupportedContentTypes.Json, SupportedContentTypes.Xml)]
@@ -18,6 +24,10 @@
     {
         private readonly IDefaultValueManager manager;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DefaultValuesController"/> class.
+        /// </summary>
+        /// <param name="manager">interface of the 'backend' manager which does all the work.</param>
         public DefaultValuesController(IDefaultValueManager manager)
         {
             EnsureArg.IsNotNull(manager, nameof(manager));
@@ -26,7 +36,7 @@
         }
 
         /// <summary>
-        /// Gets all modules.
+        /// Gets default values for all the modules.
         /// </summary>
         /// <returns>A <see cref="IEnumerable{ModuleReadModel}"/> representing the result of the operation.</returns>
         /// <param name="firmwareVersion">firmware version.</param>

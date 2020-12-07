@@ -1,197 +1,197 @@
 ﻿namespace Business.Parsers
 {
-    using Business.Parser.Models;
+    using Business.Parsers.Models;
     using EnsureThat;
-    using Google.Protobuf;
-    using Google.Protobuf.Reflection;
+    using Nett;
     using System;
+    using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Reflection;
-
+    
     public class ModuleParser
     {
-        /// <summary>
-        /// Formats the specified message as JSON.
-        /// </summary>
-        /// <param name="message">The message to format.</param>
-        /// <returns>The formatted message.</returns>
-        public Message Format(IMessage message)
+        public JsonModel GetJsonFromDefaultValueAndProtoFile(string fileContent, TomlSettings settings, ProtoParsedMessage protoParserMessage)
         {
-            EnsureArg.IsNotNull(message);
+            EnsureArg.IsNotEmptyOrWhiteSpace(fileContent, (nameof(fileContent)));
 
-            var messageName = Path.GetFileNameWithoutExtension(message.Descriptor.File.Name);
-            var protoParserMessage = new Message() { Name = messageName };
 
-            Format(message, protoParserMessage);
-
-            return protoParserMessage;
-        }
-
-        /// <summary>
-        /// Formats the specified message as Protoparser message.
-        /// </summary>
-        /// <param name="message">The message to format.</param>
-        /// <param name="protoParserMessage">The field to parse the formatted message to.</param>
-        /// <returns>The formatted message.</returns>
-        public void Format(IMessage message, Message protoParserMessage)
-        {
-            ProtoPreconditions.CheckNotNull(message, nameof(message));
-
-            WriteMessage(protoParserMessage, message);
-        }
-
-        public List<IMessage> GetAllMessages()
-        {
-            var messages = new List<IMessage>();
-            var instances = from t in Assembly.GetExecutingAssembly().GetTypes()
-                            where t.GetInterfaces().Contains(typeof(IMessage))
-                                     && t.GetConstructor(Type.EmptyTypes) != null
-                            select Activator.CreateInstance(t) as IMessage;
-
-            foreach (var instance in instances)
+            var jsonModel = new JsonModel
             {
-                if (instance.Descriptor.Name == "Config" && CanConvertToMessageType(instance.GetType()))
+                Name = protoParserMessage.Name,
+                Arrays = new List<object>()
+            };
+
+            var fileData = Toml.ReadString(fileContent, settings);
+
+            var dictionary = fileData.ToDictionary();
+            var module = (Dictionary<string, object>[])dictionary["module"];
+
+            // here message.name means Power, j1939 etc.
+            var moduleDetail = module.Where(dic => dic.Values.Contains(protoParserMessage.Name.ToLower())).FirstOrDefault();
+
+            if (moduleDetail != null)
+            {
+                var configValues = new Dictionary<string, object>();
+
+                if (moduleDetail.ContainsKey("config"))
                 {
-                    messages.Add(instance);
+                    configValues = (Dictionary<string, object>)moduleDetail["config"];
                 }
+
+                MergeTomlWithProtoMessage(configValues, protoParserMessage, jsonModel);
             }
 
-            return messages;
+            return jsonModel;
         }
 
-        private void WriteMessage(Message protoParserMessage, IMessage message)
+        public void MergeTomlWithProtoMessage(Dictionary<string, object> configValues, ProtoParsedMessage protoParsedMessage, JsonModel model)
         {
-            if (message == null)
+            for (int tempIndex = 0; tempIndex < configValues.Count; tempIndex++)
             {
-                return;
-            }
+                var key = configValues.ElementAt(tempIndex).Key;
 
-            WriteMessageFields(protoParserMessage, message);
-        }
+                var messages = protoParsedMessage.Messages;
+                var fields = protoParsedMessage.Fields;
 
-        private void WriteMessageFields(Message protoParserMessage, IMessage message)
-        {
-            foreach (var fieldDescriptor in message.Descriptor.Fields.InFieldNumberOrder())
-            {
-                if (fieldDescriptor.FieldType == FieldType.Message)
+                var field = fields.Where(x => string.Equals(x.Name, key, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+                var repeatedMessage = messages.Where(x => string.Equals(x.Name, key, StringComparison.OrdinalIgnoreCase) && x.IsRepeated).FirstOrDefault();
+
+                // its a field
+                if (field != null)
                 {
-                    var temp = new Message
+                    field.Id = tempIndex;
+                    field.Value = GetFieldValue(configValues.ElementAt(tempIndex).Value);
+                    model.Fields.Add(field);
+                }
+
+                else if (repeatedMessage != null)
+                {
+                    var jsonArray = new JsonArray
                     {
-                        Name = fieldDescriptor.Name,
-                        IsRepeated = fieldDescriptor.IsRepeated
+                        Name = repeatedMessage.Name,
+                        IsRepeated = repeatedMessage.IsRepeated
                     };
 
-                    protoParserMessage.Messages.Add(temp);
+                    Dictionary<string, object>[] values = null;
+                    var arrayMessages = repeatedMessage.Messages.Where(x => x.IsRepeated);
 
-                    IMessage cleanSubmessage = fieldDescriptor.MessageType.Parser.ParseFrom(ByteString.Empty);
-                    WriteMessageFields(temp, cleanSubmessage);
+                    if (configValues.ElementAt(tempIndex).Value is Dictionary<string, object>[])
+                    {
+                        values = (Dictionary<string, object>[])configValues.ElementAt(tempIndex).Value;
+                    }
+
+                    // declare empty.
+                    else values = new Dictionary<string, object>[0];
+
+                    if (!arrayMessages.Any())
+                    {
+                        var fieldsWithData = GetFieldsData(repeatedMessage, values);
+                        jsonArray.Data = fieldsWithData;
+
+                        model.Arrays = jsonArray;
+                    }
+
+                    else
+                    {
+                        JsonModel[] jsonModels = new JsonModel[values.Length];
+
+                        for (int temp = 0; temp < values.Length; temp++)
+                        {
+                            jsonModels[temp] = new JsonModel();
+                            jsonModels[temp].Id = temp;
+                            MergeTomlWithProtoMessage(values[temp], repeatedMessage, jsonModels[temp]);
+                        }
+
+                        model.Arrays = jsonModels;
+                    }
                 }
-                else
+            }
+        }
+
+        private bool IsValueType(object obj)
+        {
+            var objType = obj.GetType();
+            return obj != null && objType.GetTypeInfo().IsValueType;
+        }
+
+        private object GetFieldValue(object field)
+        {
+            object result = new object();
+
+            var stringType = typeof(string);
+            var fieldType = field.GetType();
+
+            if (fieldType.IsArray)
+            {
+                var arrayResult = "[";
+                var element = ((IEnumerable)field).Cast<object>().FirstOrDefault();
+
+                if (IsValueType(element))
                 {
-                    var field = new Field
-                    {
-                        Name = fieldDescriptor.Name,
-                        DataType = fieldDescriptor.FieldType.ToString().ToLower()
-                    };
+                    IEnumerable fields = field as IEnumerable;
 
-                    object fieldValue = null;
-
-                    if (IsPrimitiveType(fieldDescriptor))
+                    foreach (var tempItem in fields)
                     {
-                        fieldValue = GetDefaultValue(fieldDescriptor);
+                        arrayResult += tempItem + ",";
                     }
 
-                    var minValue = fieldValue;
-                    var maxValue = fieldValue;
-
-                    if (fieldDescriptor.FieldType == FieldType.Enum)
-                    {
-                        var firstValue = fieldDescriptor.EnumType.Values.First();
-                        var lastValue = fieldDescriptor.EnumType.Values.Last();
-
-                        minValue = firstValue.Number.ToString();
-                        maxValue = lastValue.Number.ToString();
-                    }
-
-                    field.Min = minValue;
-                    field.Max = maxValue;
-                    field.Value = fieldValue;
-
-                    protoParserMessage.Fields.Add(field);
+                    arrayResult += arrayResult.TrimEnd(',');
                 }
-            }
-        }
 
-        private bool IsPrimitiveType(FieldDescriptor descriptor)
-        {
-            switch (descriptor.FieldType)
+                else if (stringType.IsAssignableFrom(element.GetType()))
+                {
+                    string[] stringFields = ((IEnumerable)field).Cast<object>()
+                                                                .Select(x => x.ToString())
+                                                                .ToArray();
+
+                    arrayResult += string.Join(",", stringFields);
+                }
+
+                arrayResult += "]";
+
+                result = arrayResult;
+            }
+
+            else
             {
-                case FieldType.Bool:
-                case FieldType.Bytes:
-                case FieldType.String:
-                case FieldType.Double:
-                case FieldType.SInt32:
-                case FieldType.Int32:
-                case FieldType.SFixed32:
-                case FieldType.Enum:
-                case FieldType.Fixed32:
-                case FieldType.UInt32:
-                case FieldType.Fixed64:
-                case FieldType.UInt64:
-                case FieldType.SFixed64:
-                case FieldType.Int64:
-                case FieldType.SInt64:
-                case FieldType.Float:
-                    return true;
-                default:
-                    return false;
+                result = field;
             }
+
+            return result;
         }
 
-        // <summary>
-        // Called by method to ask if this object can serialize
-        // an object of a given type.
-        // </summary>
-        // <returns>True if the objectType is a Protocol Message.</returns>
-        private bool CanConvertToMessageType(Type objectType)
+        private List<List<Field>> GetFieldsData(ProtoParsedMessage message, Dictionary<string, object>[] values)
         {
-            return typeof(IMessage)
-                .IsAssignableFrom(objectType);
-        }
+            var fields = message.Fields;
 
-        private object GetDefaultValue(FieldDescriptor descriptor)
-        {
-            switch (descriptor.FieldType)
+            var arrayOfDataAsFields = new List<List<Field>>();
+
+            if (fields == null || !fields.Any() || values == null || !values.Any())
             {
-                case FieldType.Bool:
-                    return false;
-                case FieldType.Bytes:
-                case FieldType.String:
-                    return "\"\"";
-                case FieldType.Double:
-                    return 0.0;
-                case FieldType.SInt32:
-                case FieldType.Int32:
-                case FieldType.SFixed32:
-                case FieldType.Enum:
-                    return (int)0;
-                case FieldType.Fixed32:
-                case FieldType.UInt32:
-                    return (uint)0;
-                case FieldType.Fixed64:
-                case FieldType.UInt64:
-                    return (ulong)0;
-                case FieldType.SFixed64:
-                case FieldType.Int64:
-                case FieldType.SInt64:
-                    return (long)0;
-                case FieldType.Float:
-                    return (float)0f;
-                default:
-                    throw new ArgumentException("Invalid field type");
+                return arrayOfDataAsFields;
             }
+
+            foreach (var dictionary in values)
+            {
+                var copyFirstList = fields.Select(x => x.DeepCopy()).ToList();
+
+                for (int tempIndex = 0; tempIndex < copyFirstList.Count; tempIndex++)
+                {
+                    object value = dictionary.ContainsKey(copyFirstList[tempIndex].Name) ? dictionary[copyFirstList[tempIndex].Name] : copyFirstList[tempIndex].Value;
+
+                    if (value != null)
+                    {
+                        // fix the indexes.
+                        copyFirstList[tempIndex].Id = tempIndex;
+                        copyFirstList[tempIndex].Value = value;
+                    }
+                }
+
+                arrayOfDataAsFields.Add(copyFirstList);
+            }
+
+            return arrayOfDataAsFields;
         }
     }
 }

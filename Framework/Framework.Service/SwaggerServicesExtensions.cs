@@ -25,10 +25,10 @@
 
             services.AddSwaggerGen(swaggerOptions =>
             {
-                #pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable CS0618 // Type or member is obsolete
                 swaggerOptions.DescribeAllEnumsAsStrings();
-                #pragma warning restore CS0618 // Type or member is obsolete
-                
+#pragma warning restore CS0618 // Type or member is obsolete
+
                 var swaggerInfo = new OpenApiInfo
                 {
                     Title = apiName,

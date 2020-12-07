@@ -1,32 +1,45 @@
 ﻿namespace Service
 {
-    using DataAccess;
     using EnsureThat;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Newtonsoft.Json.Converters;
-    using Service.Configuration;
     using ZTR.Framework.Business.Models;
     using ZTR.Framework.Configuration;
     using ZTR.Framework.Security;
     using ZTR.Framework.Service;
 
+    /// <summary>
+    ///   Added Startup class.
+    /// </summary>
     public class Startup
     {
         private static ILogger logger;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Startup"/> class.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
         public Startup(IConfiguration configuration)
         {
             this.Configuration = configuration;
         }
 
+        /// <summary>
+        /// Gets the configuration.
+        /// </summary>
+        /// <value>
+        /// The configuration.
+        /// </value>
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to add services to the container.
+        /// </summary>
+        /// <param name="services">service collection.</param>
 #pragma warning disable CA1822 // Mark members as static
         public void ConfigureServices(IServiceCollection services)
 #pragma warning restore CA1822 // Mark members as static
@@ -48,36 +61,14 @@
 
             services.AddSwaggerWithComments(ApiConstants.ApiName, ApiConstants.ApiVersion, ApiConstants.ApiDescription, swaggerAssemblies);
 
-            services.AddDbContext<UserDbContext>(
-                (serviceProvider, options) =>
-                {
-                    var applicationOptions = serviceProvider.GetRequiredService<ApplicationOptions>();
-                    if (ApplicationConfiguration.IsDevelopment)
-                    {
-                        options.EnableDetailedErrors();
-                        options.EnableSensitiveDataLogging();
-                    }
-
-                    options.UseNpgsql(applicationOptions.ConnectionString);
-                }, ServiceLifetime.Scoped);
-
-            services.AddDbContext<UserReadOnlyDbContext>(
-            (serviceProvider, options) =>
-            {
-                var applicationOptions = serviceProvider.GetRequiredService<ApplicationOptions>();
-                if (ApplicationConfiguration.IsDevelopment)
-                {
-                    options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-                }
-
-                options.UseNpgsql(applicationOptions.ReadOnlyConnectionString);
-            }, ServiceLifetime.Scoped);
-
             // we add our custom services here.
             services.AddServices();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// </summary>
+        /// <param name="app">application builder.</param>
 #pragma warning disable CA1822 // Mark members as static
         public void Configure(IApplicationBuilder app)
 #pragma warning restore CA1822 // Mark members as static
