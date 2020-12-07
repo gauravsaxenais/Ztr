@@ -66,7 +66,7 @@
             foreach (var currentFile in files)
             {
                 TextReader readFile = new StreamReader(currentFile);
-                string content = readFile.ReadToEnd();
+                string content = await readFile.ReadToEndAsync();
                 var fileContent = Toml.ReadString(content);
 
                 string strData = string.Empty;
@@ -149,10 +149,8 @@
                     item
                     .Replace("=", "\":")
                     .Replace(",", ",\"") + "},";
-                    //.Replace("{\"", "{\"id\"" + argIndex + ",\"");
 
                 json.Append(strData.Replace("{\"", "{\"id\":" + argIndex + ",\""));
-                //json.Append(strData);
                 argIndex++;
             }
 
@@ -172,7 +170,6 @@
         /// <param name="readFile"></param>
         /// <param name="strData"></param>
         /// <param name="flattenList"></param>
-        /// <param name="newDir"></param>
         private static void ModuleParserToJson(string currentFile, ref StringBuilder json, ref TextReader readFile,
             ref string strData, List<object> flattenList)
         {

@@ -20,6 +20,7 @@
             services.AddScoped<IDeviceTypeManager, DeviceTypeManager>();
             services.AddScoped<IDefaultValueManager, DefaultValueManager>();
             services.AddScoped<IBlockManager, BlockManager>();
+            services.AddScoped<IConfigGeneratorManager, ConfigGeneratorManager>();
 
             return services;
         }
