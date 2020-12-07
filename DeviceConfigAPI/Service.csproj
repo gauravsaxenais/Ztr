@@ -63,9 +63,6 @@
     <Reference Include="ZTR.Framework.Configuration">
       <HintPath>..\Framework\Framework.Business\bin\Debug\netcoreapp3.1\ZTR.Framework.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="ZTR.Framework.DataAccess">
-      <HintPath>..\Framework\Framework.Business\bin\Debug\netcoreapp3.1\ZTR.Framework.DataAccess.dll</HintPath>
-    </Reference>
     <Reference Include="ZTR.Framework.Security">
       <HintPath>..\Framework\Framework.Security\bin\Debug\netcoreapp3.1\ZTR.Framework.Security.dll</HintPath>
     </Reference>

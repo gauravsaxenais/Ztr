@@ -29,7 +29,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Framework.Business\Framework.Business.csproj" />
-    <ProjectReference Include="..\Framework.Test\Framework.Test.csproj" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

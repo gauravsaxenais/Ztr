@@ -41,7 +41,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Framework.Configuration\Framework.Configuration.csproj" />
-    <ProjectReference Include="..\Framework.DataAccess\Framework.DataAccess.csproj" />
   </ItemGroup>
 
 </Project>

@@ -18,4 +18,7 @@
   <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <Import Project="$(NuGetPackageRoot)libgit2sharp.nativebinaries\2.0.306\build\LibGit2Sharp.NativeBinaries.props" Condition="Exists('$(NuGetPackageRoot)libgit2sharp.nativebinaries\2.0.306\build\LibGit2Sharp.NativeBinaries.props')" />
   </ImportGroup>
+  <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <PkgMicrosoft_CodeAnalysis_Analyzers Condition=" '$(PkgMicrosoft_CodeAnalysis_Analyzers)' == '' ">C:\Users\gaurav.saxena\.nuget\packages\microsoft.codeanalysis.analyzers\3.0.0</PkgMicrosoft_CodeAnalysis_Analyzers>
+  </PropertyGroup>
 </Project>

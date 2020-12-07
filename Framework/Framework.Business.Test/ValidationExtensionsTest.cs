@@ -1,12 +1,9 @@
 ﻿namespace ZTR.Framework.Business.Test
 {
     using System.Linq;
-    using ZTR.Framework.Business;
-    using ZTR.Framework.Business.Test.FixtureSetup;
-    using ZTR.Framework.Business.Test.FixtureSetup.Business.Widget.Models;
-    using ZTR.Framework.Business.Test.FixtureSetup.Fakes;
     using EnsureThat;
     using Xunit;
+    using ZTR.Framework.Business;
 
     public sealed class ValidationExtensionsTest : IClassFixture<TestFixture>
     {

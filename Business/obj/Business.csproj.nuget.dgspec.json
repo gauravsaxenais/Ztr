@@ -51,6 +51,10 @@
               "target": "Package",
               "version": "[3.14.0, )"
             },
+            "Microsoft.CodeAnalysis.CSharp": {
+              "target": "Package",
+              "version": "[3.8.0, )"
+            },
             "Nett": {
               "target": "Package",
               "version": "[0.15.0, )"

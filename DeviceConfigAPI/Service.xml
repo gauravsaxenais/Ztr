@@ -75,6 +75,15 @@
             <param name="deviceType">Type of the device.</param>
             <returns>returns the block information and their arguments.</returns>
         </member>
+        <member name="T:Service.Controllers.ConfigController">
+            <summary>Config Controller - This service is responsible for generating the config toml.</summary>
+        </member>
+        <member name="M:Service.Controllers.ConfigController.#ctor(Business.RequestHandlers.Interfaces.IConfigGeneratorManager)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Service.Controllers.ConfigController"/> class.
+            </summary>
+            <param name="manager">The manager.</param>
+        </member>
         <member name="T:Service.Controllers.DefaultValuesController">
             <summary>
             This service returns all the modules and their default values.
