@@ -12,6 +12,7 @@
     using Newtonsoft.Json.Linq;
     using ZTR.Framework.Service;
 
+    /// <summary>Config Controller - This service is responsible for generating the config toml.</summary>
     [ApiController]
     [Produces(SupportedContentTypes.Json, SupportedContentTypes.Xml)]
     [Consumes(SupportedContentTypes.Json, SupportedContentTypes.Xml)]
@@ -20,6 +21,10 @@
     {
         private readonly IConfigGeneratorManager manager;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConfigController"/> class.
+        /// </summary>
+        /// <param name="manager">The manager.</param>
         public ConfigController(IConfigGeneratorManager manager)
         {
             EnsureArg.IsNotNull(manager, nameof(manager));
