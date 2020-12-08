@@ -78,9 +78,9 @@
                     Dictionary<string, object>[] values = null;
                     var arrayMessages = repeatedMessage.Messages.Where(x => x.IsRepeated);
 
-                    if (configValues.ElementAt(tempIndex).Value is Dictionary<string, object>[])
+                    if (configValues.ElementAt(tempIndex).Value is Dictionary<string, object>[] v)
                     {
-                        values = (Dictionary<string, object>[])configValues.ElementAt(tempIndex).Value;
+                        values = v;
                     }
 
                     // declare empty.
@@ -91,7 +91,7 @@
                         var fieldsWithData = GetFieldsData(repeatedMessage, values);
                         jsonArray.Data = fieldsWithData;
 
-                        model.Arrays = jsonArray;
+                        model.Arrays.Add(jsonArray);
                     }
 
                     else
@@ -100,14 +100,16 @@
                         
                         for (int temp = 0; temp < values.Length; temp++)
                         {
-                            var tempJsonModel = new JsonModel();
-                            tempJsonModel.Id = temp;
+                            var tempJsonModel = new JsonModel
+                            {
+                                Id = temp
+                            };
 
                             MergeTomlWithProtoMessage(values[temp], repeatedMessage, tempJsonModel);
                             jsonModels.Add(tempJsonModel);
                         }
 
-                        model.Arrays = jsonModels;
+                        model.Arrays.Add(jsonModels);
                     }
                 }
             }
