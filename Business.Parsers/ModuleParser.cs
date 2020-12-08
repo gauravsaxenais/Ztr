@@ -62,7 +62,9 @@
                 {
                     field.Id = tempIndex;
                     field.Value = GetFieldValue(configValues.ElementAt(tempIndex).Value);
-                    model.Fields.Add(field);
+
+                    var newField = field.DeepCopy();
+                    model.Fields.Add(newField);
                 }
 
                 else if (repeatedMessage != null)
@@ -94,13 +96,15 @@
 
                     else
                     {
-                        JsonModel[] jsonModels = new JsonModel[values.Length];
-
+                        var jsonModels = new List<JsonModel>();
+                        
                         for (int temp = 0; temp < values.Length; temp++)
                         {
-                            jsonModels[temp] = new JsonModel();
-                            jsonModels[temp].Id = temp;
-                            MergeTomlWithProtoMessage(values[temp], repeatedMessage, jsonModels[temp]);
+                            var tempJsonModel = new JsonModel();
+                            tempJsonModel.Id = temp;
+
+                            MergeTomlWithProtoMessage(values[temp], repeatedMessage, tempJsonModel);
+                            jsonModels.Add(tempJsonModel);
                         }
 
                         model.Arrays = jsonModels;

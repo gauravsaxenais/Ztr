@@ -71,7 +71,7 @@
             var json = new StringBuilder();
             var gitConnectionOptions = (BlockGitConnectionOptions)_repoManager.GetConnectionOptions();
 
-            await _repoManager.CloneRepositoryAsync();
+            //await _repoManager.CloneRepositoryAsync();
 
             string[] files = Directory.GetFiles(gitConnectionOptions.GitLocalFolder);
 
