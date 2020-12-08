@@ -84,6 +84,12 @@
             </summary>
             <param name="manager">The manager.</param>
         </member>
+        <member name="M:Service.Controllers.ConfigController.CreateTomlConfig">
+            <summary>Creates the toml configuration.</summary>
+            <returns>
+              <br />
+            </returns>
+        </member>
         <member name="T:Service.Controllers.DefaultValuesController">
             <summary>
             This service returns all the modules and their default values.
