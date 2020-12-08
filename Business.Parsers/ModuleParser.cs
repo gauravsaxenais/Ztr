@@ -8,7 +8,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
-    
+
     public class ModuleParser
     {
         public JsonModel GetJsonFromDefaultValueAndProtoFile(string fileContent, TomlSettings settings, ProtoParsedMessage protoParserMessage)
@@ -55,7 +55,6 @@
 
                 var field = fields.Where(x => string.Equals(x.Name, key, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
                 var repeatedMessage = messages.Where(x => string.Equals(x.Name, key, StringComparison.OrdinalIgnoreCase) && x.IsRepeated).FirstOrDefault();
-                var nonRepeatedMessage = messages.Where(x => string.Equals(x.Name, key, StringComparison.OrdinalIgnoreCase) && !x.IsRepeated).FirstOrDefault();
 
                 // its a field
                 if (field != null)
@@ -97,7 +96,7 @@
                     else
                     {
                         var jsonModels = new List<JsonModel>();
-                        
+
                         for (int temp = 0; temp < values.Length; temp++)
                         {
                             var tempJsonModel = new JsonModel
@@ -111,11 +110,6 @@
 
                         model.Arrays.Add(jsonModels);
                     }
-                }
-
-                else if (nonRepeatedMessage != null)
-                {
-
                 }
             }
         }
