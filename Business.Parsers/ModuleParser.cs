@@ -15,7 +15,6 @@
         {
             EnsureArg.IsNotEmptyOrWhiteSpace(fileContent, (nameof(fileContent)));
 
-
             var jsonModel = new JsonModel
             {
                 Name = protoParserMessage.Name,
@@ -56,6 +55,7 @@
 
                 var field = fields.Where(x => string.Equals(x.Name, key, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
                 var repeatedMessage = messages.Where(x => string.Equals(x.Name, key, StringComparison.OrdinalIgnoreCase) && x.IsRepeated).FirstOrDefault();
+                var nonRepeatedMessage = messages.Where(x => string.Equals(x.Name, key, StringComparison.OrdinalIgnoreCase) && !x.IsRepeated).FirstOrDefault();
 
                 // its a field
                 if (field != null)
@@ -76,7 +76,7 @@
                     };
 
                     Dictionary<string, object>[] values = null;
-                    var arrayMessages = repeatedMessage.Messages.Where(x => x.IsRepeated);
+                    var arrayMessages = repeatedMessage.Messages;
 
                     if (configValues.ElementAt(tempIndex).Value is Dictionary<string, object>[] v)
                     {
@@ -111,6 +111,11 @@
 
                         model.Arrays.Add(jsonModels);
                     }
+                }
+
+                else if (nonRepeatedMessage != null)
+                {
+
                 }
             }
         }
