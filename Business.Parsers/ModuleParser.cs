@@ -101,7 +101,8 @@
                         {
                             var tempJsonModel = new JsonModel
                             {
-                                Id = temp
+                                Id = temp,
+                                Name = repeatedMessage.Name
                             };
 
                             MergeTomlWithProtoMessage(values[temp], repeatedMessage, tempJsonModel);
@@ -179,17 +180,17 @@
 
             foreach (var dictionary in values)
             {
-                var copyFirstList = fields.Select(x => x.DeepCopy()).ToList();
+                var copyFirstList = new List<Field>();
 
-                for (int tempIndex = 0; tempIndex < copyFirstList.Count; tempIndex++)
+                for (int tempIndex = 0; tempIndex < fields.Count; tempIndex++)
                 {
-                    object value = dictionary.ContainsKey(copyFirstList[tempIndex].Name) ? dictionary[copyFirstList[tempIndex].Name] : copyFirstList[tempIndex].Value;
-
-                    if (value != null)
+                    if (dictionary.ContainsKey(fields[tempIndex].Name))
                     {
+                        var tempField = fields[tempIndex].DeepCopy();
+                        tempField.Value = dictionary[fields[tempIndex].Name];
+                        
                         // fix the indexes.
-                        copyFirstList[tempIndex].Id = tempIndex;
-                        copyFirstList[tempIndex].Value = value;
+                        copyFirstList.Add(tempField);
                     }
                 }
 

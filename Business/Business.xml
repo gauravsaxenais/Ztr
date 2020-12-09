@@ -260,6 +260,18 @@
             <param name="parserType">Type of the parser.</param>
             <returns></returns>
         </member>
+        <member name="T:Business.RequestHandlers.Interfaces.IConfigGeneratorManager">
+            <summary>
+            Config Generator interface methods.
+            </summary>
+        </member>
+        <member name="M:Business.RequestHandlers.Interfaces.IConfigGeneratorManager.CreateConfigAsync(System.String)">
+            <summary>Creates the configuration asynchronous.</summary>
+            <param name="jsonContent">Content of the json.</param>
+            <returns>
+              <br />
+            </returns>
+        </member>
         <member name="T:Business.RequestHandlers.Interfaces.IDefaultValueManager">
             <summary>
             Gets default values for all the modules
@@ -405,6 +417,18 @@
             <param name="readFile"></param>
             <param name="strData"></param>
             <param name="flattenList"></param>
+        </member>
+        <member name="T:Business.RequestHandlers.Managers.ConfigGeneratorManager">
+            <summary>
+              <br />
+            </summary>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.ConfigGeneratorManager.CreateConfigAsync(System.String)">
+            <summary>Creates the configuration asynchronous.</summary>
+            <param name="jsonContent">Content of the json.</param>
+            <returns>
+              <br />
+            </returns>
         </member>
         <member name="T:Business.RequestHandlers.Managers.DefaultValueManager">
             <summary>

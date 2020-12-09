@@ -2,7 +2,7 @@
 {
     using Google.Protobuf;
 
-    public class CustomIMessage
+    public class CustomMessage
     {
         public string Name { get; set; }
         public IMessage Message { get; set; }

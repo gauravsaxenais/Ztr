@@ -19,9 +19,7 @@
         {
             EnsureArg.IsNotNull(message);
 
-            var messageName = Path.GetFileNameWithoutExtension(message.Descriptor.File.Name);
-            var protoParserMessage = new ProtoParsedMessage() { Name = messageName };
-
+            var protoParserMessage = new ProtoParsedMessage();
             Format(message, protoParserMessage);
 
             return protoParserMessage;

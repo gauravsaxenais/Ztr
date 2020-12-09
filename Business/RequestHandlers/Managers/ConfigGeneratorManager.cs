@@ -1,15 +1,16 @@
-﻿using Business.RequestHandlers.Interfaces;
-using Nett;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Business.RequestHandlers.Managers
+﻿namespace Business.RequestHandlers.Managers
 {
+    using Business.RequestHandlers.Interfaces;
+    using Nett;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Text;
+    using System.Threading.Tasks;
+    using EnsureThat;
+
     /// <summary>
     ///   <br />
     /// </summary>
@@ -22,12 +23,16 @@ namespace Business.RequestHandlers.Managers
         /// </returns>
         public async Task<string> CreateConfigAsync(string jsonContent)
         {
+            EnsureArg.IsNotEmptyOrWhiteSpace(jsonContent);
+
             TextReader readFile = new StreamReader(@"C:\Users\admin.DESKTOP-G7578TS\source\ZTR\DeviceConfigAPI\bin\Debug\netcoreapp3.1\BlockConfig\config\config.json");
             string content = await readFile.ReadToEndAsync();
 
             JObject configurationObject = (JObject)JsonConvert.DeserializeObject(content);
             var serMe = configurationObject.ToObject<Dictionary<string, object>>();
-            StringBuilder sb = new StringBuilder();
+
+            var sb = new StringBuilder();
+
             foreach (var item in serMe)
             {
                 Console.WriteLine(item.Key);

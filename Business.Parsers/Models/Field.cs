@@ -19,6 +19,7 @@
         public Field DeepCopy()
         {
             Field other = (Field)this.MemberwiseClone();
+
             other.Name = Name;
             other.Value = Value;
             other.Min = Min;
