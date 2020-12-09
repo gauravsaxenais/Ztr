@@ -62,7 +62,7 @@
                     field.Id = tempIndex;
                     field.Value = GetFieldValue(configValues.ElementAt(tempIndex).Value);
 
-                    var newField = field.DeepCopy();
+                    var newField = (Field)field.Clone();
                     model.Fields.Add(newField);
                 }
 
@@ -186,7 +186,7 @@
                 {
                     if (dictionary.ContainsKey(fields[tempIndex].Name))
                     {
-                        var tempField = fields[tempIndex].DeepCopy();
+                        var tempField = (Field)fields[tempIndex].Clone();
                         tempField.Value = dictionary[fields[tempIndex].Name];
                         
                         // fix the indexes.
