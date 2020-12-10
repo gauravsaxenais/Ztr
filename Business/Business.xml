@@ -374,10 +374,6 @@
             <summary>Determines the maximum of the parameters.</summary>
             <value>The maximum.</value>
         </member>
-        <member name="P:Business.Models.NetworkArgumentReadModel.Value">
-            <summary>Gets or sets the value.</summary>
-            <value>The value.</value>
-        </member>
         <member name="T:Business.RequestHandlers.Interfaces.IBlockManager">
             <summary>
             This interface maps with BlockManager

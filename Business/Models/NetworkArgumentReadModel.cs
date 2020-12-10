@@ -29,10 +29,12 @@
 
         /// <summary>Determines the minimum of the parameters.</summary>
         /// <value>The minimum.</value>
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public object Min { get; set; }
 
         /// <summary>Determines the maximum of the parameters.</summary>
         /// <value>The maximum.</value>
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public object Max { get; set; }
     }
 }

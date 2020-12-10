@@ -80,7 +80,7 @@
                 {
                     var args = arguments.Arguments.Select((args, index) => new NetworkArgumentReadModel
                     {
-                        Id = index,
+                        Id = index+1,
                         Name = args.Name,
                         Label = args.Label,
                         Description = args.Description,
@@ -91,9 +91,9 @@
 
                     var jsonMdoel = new BlockJsonModel() { Id = index, Type = name, Tag = string.Empty, Args = args };
                     blocks.Add(jsonMdoel);
-                }
 
-                index++;
+                    index++;
+                }
             }
 
             return new { blocks };
