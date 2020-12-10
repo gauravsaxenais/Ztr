@@ -10,6 +10,7 @@ namespace Service
     using ZTR.Framework.Security;
 
 #pragma warning disable CA1052 // Static holder types should be Static or NotInheritable
+
     /// <summary>
     ///   Entry point of the application.
     /// </summary>

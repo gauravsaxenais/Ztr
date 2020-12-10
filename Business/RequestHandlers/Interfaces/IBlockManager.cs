@@ -1,7 +1,6 @@
 ﻿namespace Business.RequestHandlers.Interfaces
 {
     using Business.Models;
-    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -14,6 +13,6 @@
         /// Parses the toml files asynchronous.
         /// </summary>
         /// <returns></returns>
-        Task<List<BlockJsonModel>> ParseTomlFilesAsync();
+        Task<object> ParseTomlFilesAsync();
     }
 }

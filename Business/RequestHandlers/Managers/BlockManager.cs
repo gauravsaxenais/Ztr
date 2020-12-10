@@ -55,46 +55,50 @@
         /// Parses the toml files asynchronous.
         /// </summary>
         /// <returns>list of blocks.</returns>
-        public async Task<List<BlockJsonModel>> ParseTomlFilesAsync()
+        public async Task<object> ParseTomlFilesAsync()
         {
             var gitConnectionOptions = (BlockGitConnectionOptions)_repoManager.GetConnectionOptions();
             var tomlSettings = TomlFileReader.LoadLowerCaseTomlSettingsWithMappingForDefaultValues();
 
             await _repoManager.CloneRepositoryAsync();
 
-            int fileIndex = 0;
-            
             var directory = new DirectoryInfo(gitConnectionOptions.BlockConfig);
             var blocks = new List<BlockJsonModel>();
 
-            foreach (var currentFile in directory.EnumerateFiles())
+            var filesInDirectory = directory.EnumerateFiles();
+            int index = 1;
+
+            for (int lIndex = 0; lIndex < filesInDirectory.Count(); lIndex++)
             {
-                string content = File.ReadAllText(currentFile.FullName);
+                string content = File.ReadAllText(filesInDirectory.ElementAt(lIndex).FullName);
                 var fileContent = Toml.ReadString(content);
 
                 var arguments = Toml.ReadString<BlockReadModel>(content, tomlSettings);
-                var name = Path.GetFileNameWithoutExtension(currentFile.Name);
+                var name = Path.GetFileNameWithoutExtension(filesInDirectory.ElementAt(lIndex).Name);
 
-                var args = arguments.Arguments.Select((args, index) => new NetworkArgumentReadModel
+                if (arguments != null && arguments.Arguments != null && arguments.Arguments.Any())
                 {
-                    Id = index,
-                    Name = args.Name,
-                    Label = args.Label,
-                    Description = args.Description,
-                    DataType = args.DataType,
-                    Min = args.Min,
-                    Max = args.Max,
-                    Value = args.Value
-                }).ToList();
+                    var args = arguments.Arguments.Select((args, index) => new NetworkArgumentReadModel
+                    {
+                        Id = index,
+                        Name = args.Name,
+                        Label = args.Label,
+                        Description = args.Description,
+                        DataType = args.DataType,
+                        Min = args.Min,
+                        Max = args.Max
+                    }).ToList();
 
-                var jsonMdoel = new BlockJsonModel() { Id = fileIndex, Type = name, Tag = string.Empty, Args = args };
-                blocks.Add(jsonMdoel);
+                    var jsonMdoel = new BlockJsonModel() { Id = index, Type = name, Tag = string.Empty, Args = args };
+                    blocks.Add(jsonMdoel);
+                }
 
-                fileIndex++;
+                index++;
             }
 
-            return blocks;
+            return new { blocks };
         }
+
         #endregion
     }
 }
