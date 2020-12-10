@@ -13,6 +13,6 @@
         /// Parses the toml files asynchronous.
         /// </summary>
         /// <returns></returns>
-        public Task<string> ParseTomlFilesAsync(string firmwareVersion, string deviceType, string parserType);
+        Task<object> ParseTomlFilesAsync();
     }
 }

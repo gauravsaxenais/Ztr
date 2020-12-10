@@ -380,7 +380,7 @@
             and responsible for parsing toml files.
             </summary>
         </member>
-        <member name="M:Business.RequestHandlers.Interfaces.IBlockManager.ParseTomlFilesAsync(System.String,System.String,System.String)">
+        <member name="M:Business.RequestHandlers.Interfaces.IBlockManager.ParseTomlFilesAsync">
             <summary>
             Parses the toml files asynchronous.
             </summary>
@@ -514,31 +514,11 @@
             <param name="gitRepoManager">The git repo manager.</param>
             <param name="blockGitConnectionOptions">The block git connection options.</param>
         </member>
-        <member name="M:Business.RequestHandlers.Managers.BlockManager.ParseTomlFilesAsync(System.String,System.String,System.String)">
+        <member name="M:Business.RequestHandlers.Managers.BlockManager.ParseTomlFilesAsync">
             <summary>
             Parses the toml files asynchronous.
             </summary>
-            <param name="firmwareVersion">The firmware version.</param>
-            <param name="deviceType">Type of the device.</param>
-            <param name="parserType">Type of the parser.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.RequestHandlers.Managers.BlockManager.BlockParserToJson(System.String,System.Collections.Generic.List{System.Object},System.Int32)">
-            <summary>Blocks the parser to json.</summary>
-            <param name="currentFile">The current file.</param>
-            <param name="flattenList">The flatten list.</param>
-            <param name="fileIndex">Index of the file.</param>
-            <returns>
-              json as stringbuilder.
-            </returns>
-        </member>
-        <member name="M:Business.RequestHandlers.Managers.BlockManager.ModuleParserToJson(System.String,System.Collections.Generic.List{System.Object})">
-            <summary>Modules the parser to json.</summary>
-            <param name="currentFile">The current file.</param>
-            <param name="flattenList">The flatten list.</param>
-            <returns>
-              json as stringbuilder.
-            </returns>
+            <returns>list of blocks.</returns>
         </member>
         <member name="T:Business.RequestHandlers.Managers.ConfigGeneratorManager">
             <summary>

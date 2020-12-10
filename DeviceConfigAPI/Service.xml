@@ -67,13 +67,11 @@
             </summary>
             <param name="manager">The manager.</param>
         </member>
-        <member name="M:Service.Controllers.BlockController.GetAllBlocks(System.String,System.String)">
-            <summary>
-            Gets all blocks.
-            </summary>
-            <param name="firmwareVersion">The firmware version.</param>
-            <param name="deviceType">Type of the device.</param>
-            <returns>returns the block information and their arguments.</returns>
+        <member name="M:Service.Controllers.BlockController.GetAllBlocks">
+            <summary>Gets all blocks.</summary>
+            <returns>
+              list of blocks.
+            </returns>
         </member>
         <member name="T:Service.Controllers.ConfigController">
             <summary>Config Controller - This service is responsible for generating the config toml.</summary>
