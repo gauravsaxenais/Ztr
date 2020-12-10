@@ -24,13 +24,9 @@
         #region Private Variables
         private readonly IGitRepositoryManager _repoManager;
         private readonly BlockGitConnectionOptions _blockGitConnectionOptions;
-
-        private static readonly string fileArguments = "arguments";
-        private static readonly string fileModules = "module";
-        private static readonly string fileBlocks = "blocks";
         #endregion
-        #region Constructors        
 
+        #region Constructors        
         /// <summary>
         /// Initializes a new instance of the <see cref="BlockManager"/> class.
         /// </summary>

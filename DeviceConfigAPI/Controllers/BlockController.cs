@@ -27,7 +27,6 @@
             this.manager = manager;
         }
 
-
         /// <summary>Gets all blocks.</summary>
         /// <returns>
         ///   list of blocks.
