@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>F:\ZTR\DeviceConfigAPI\Service.xml</DocumentationFile>
+    <DocumentationFile>Service.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

@@ -8,7 +8,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
-    
+
     public class ModuleParser
     {
         public JsonModel GetJsonFromDefaultValueAndProtoFile(string fileContent, TomlSettings settings, ProtoParsedMessage protoParserMessage)
@@ -55,7 +55,6 @@
 
                 var field = fields.Where(x => string.Equals(x.Name, key, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
                 var repeatedMessage = messages.Where(x => string.Equals(x.Name, key, StringComparison.OrdinalIgnoreCase) && x.IsRepeated).FirstOrDefault();
-                var nonRepeatedMessage = messages.Where(x => string.Equals(x.Name, key, StringComparison.OrdinalIgnoreCase) && !x.IsRepeated).FirstOrDefault();
 
                 // its a field
                 if (field != null)
@@ -63,7 +62,7 @@
                     field.Id = tempIndex;
                     field.Value = GetFieldValue(configValues.ElementAt(tempIndex).Value);
 
-                    var newField = field.DeepCopy();
+                    var newField = (Field)field.Clone();
                     model.Fields.Add(newField);
                 }
 
@@ -97,12 +96,13 @@
                     else
                     {
                         var jsonModels = new List<JsonModel>();
-                        
+
                         for (int temp = 0; temp < values.Length; temp++)
                         {
                             var tempJsonModel = new JsonModel
                             {
-                                Id = temp
+                                Id = temp,
+                                Name = repeatedMessage.Name
                             };
 
                             MergeTomlWithProtoMessage(values[temp], repeatedMessage, tempJsonModel);
@@ -111,11 +111,6 @@
 
                         model.Arrays.Add(jsonModels);
                     }
-                }
-
-                else if (nonRepeatedMessage != null)
-                {
-
                 }
             }
         }
@@ -185,17 +180,17 @@
 
             foreach (var dictionary in values)
             {
-                var copyFirstList = fields.Select(x => x.DeepCopy()).ToList();
+                var copyFirstList = new List<Field>();
 
-                for (int tempIndex = 0; tempIndex < copyFirstList.Count; tempIndex++)
+                for (int tempIndex = 0; tempIndex < fields.Count; tempIndex++)
                 {
-                    object value = dictionary.ContainsKey(copyFirstList[tempIndex].Name) ? dictionary[copyFirstList[tempIndex].Name] : copyFirstList[tempIndex].Value;
-
-                    if (value != null)
+                    if (dictionary.ContainsKey(fields[tempIndex].Name))
                     {
+                        var tempField = (Field)fields[tempIndex].Clone();
+                        tempField.Value = dictionary[fields[tempIndex].Name];
+                        
                         // fix the indexes.
-                        copyFirstList[tempIndex].Id = tempIndex;
-                        copyFirstList[tempIndex].Value = value;
+                        copyFirstList.Add(tempField);
                     }
                 }
 

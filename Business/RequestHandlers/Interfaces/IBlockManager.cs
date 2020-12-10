@@ -1,6 +1,6 @@
 ﻿namespace Business.RequestHandlers.Interfaces
 {
-    using Newtonsoft.Json;
+    using Business.Models;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -12,10 +12,7 @@
         /// <summary>
         /// Parses the toml files asynchronous.
         /// </summary>
-        /// <param name="firmwareVersion">The firmware version.</param>
-        /// <param name="deviceType">Type of the device.</param>
-        /// <param name="parserType">Type of the parser.</param>
         /// <returns></returns>
-        Task<string> ParseTomlFilesAsync(string firmwareVersion, string deviceType, string parserType);
+        Task<object> ParseTomlFilesAsync();
     }
 }

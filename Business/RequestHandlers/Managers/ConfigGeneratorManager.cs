@@ -1,27 +1,38 @@
-﻿using Business.RequestHandlers.Interfaces;
-using Nett;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.IO;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Business.RequestHandlers.Managers
+﻿namespace Business.RequestHandlers.Managers
 {
+    using Business.RequestHandlers.Interfaces;
+    using Nett;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Text;
+    using System.Threading.Tasks;
+    using EnsureThat;
+
+    /// <summary>
+    ///   <br />
+    /// </summary>
     public class ConfigGeneratorManager : IConfigGeneratorManager
     {
+        /// <summary>Creates the configuration asynchronous.</summary>
+        /// <param name="jsonContent">Content of the json.</param>
+        /// <returns>
+        ///   <br />
+        /// </returns>
         public async Task<string> CreateConfigAsync(string jsonContent)
         {
+            EnsureArg.IsNotEmptyOrWhiteSpace(jsonContent);
+
             TextReader readFile = new StreamReader(@"C:\Users\admin.DESKTOP-G7578TS\source\ZTR\DeviceConfigAPI\bin\Debug\netcoreapp3.1\BlockConfig\config\config.json");
             string content = await readFile.ReadToEndAsync();
-            //var fileContent = Toml.ReadString(content);
-            //dynamic configurationObject = JsonConvert.DeserializeObject(content);
+
             JObject configurationObject = (JObject)JsonConvert.DeserializeObject(content);
             var serMe = configurationObject.ToObject<Dictionary<string, object>>();
-            StringBuilder sb = new StringBuilder();
+
+            var sb = new StringBuilder();
+
             foreach (var item in serMe)
             {
                 Console.WriteLine(item.Key);
@@ -59,8 +70,8 @@ namespace Business.RequestHandlers.Managers
                 sb.Append(Environment.NewLine);
                 sb.Append(Environment.NewLine);
             }
-            string contents = string.Empty;
-            contents = Toml.WriteString(serMe);
+
+            string contents = Toml.WriteString(serMe);
             Console.WriteLine(contents);
             
             return contents;

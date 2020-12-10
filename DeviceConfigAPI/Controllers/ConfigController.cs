@@ -1,15 +1,10 @@
 ﻿namespace Service.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.Linq;
     using System.Threading.Tasks;
     using Business.RequestHandlers.Interfaces;
     using EnsureThat;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
-    using Newtonsoft.Json.Linq;
     using ZTR.Framework.Service;
 
     /// <summary>Config Controller - This service is responsible for generating the config toml.</summary>
@@ -32,6 +27,10 @@
             this.manager = manager;
         }
 
+        /// <summary>Creates the toml configuration.</summary>
+        /// <returns>
+        ///   <br />
+        /// </returns>
         [HttpPost(nameof(CreateTomlConfig))]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]

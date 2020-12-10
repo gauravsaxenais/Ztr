@@ -7,7 +7,6 @@
     using Business.RequestHandlers.Interfaces;
     using EnsureThat;
     using Microsoft.Extensions.Logging;
-    using Newtonsoft.Json.Linq;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -84,14 +83,15 @@
             // get proto files for corresponding module and their uuid
             var protoFilePaths = GetProtoFiles(modulesProtoFolder, listOfModules);
 
-            foreach (var message in GetCustomMessages(protoFilePaths))
+            // get protoparsed messages from the proto files.
+            var messages = await GetCustomMessages(protoFilePaths).ConfigureAwait(false);
+
+            for (int temp = 0; temp < messages.Count; temp++)
             {
-                var formattedMessage = customMessageParser.Format(message.Message);
-                formattedMessage.Name = message.Name;
+                var formattedMessage = customMessageParser.Format(messages[temp].Message);
+                formattedMessage.Name = messages[temp].Name;
 
-                var jsonModel = new JsonModel();
-
-                jsonModel = moduleParser.GetJsonFromDefaultValueAndProtoFile(defaultValueFromTomlFile, tomlSettings, formattedMessage);
+                var jsonModel = moduleParser.GetJsonFromDefaultValueAndProtoFile(defaultValueFromTomlFile, tomlSettings, formattedMessage);
 
                 var module = listOfModules.Where(p => p.Name?.IndexOf(formattedMessage.Name, StringComparison.OrdinalIgnoreCase) >= 0).FirstOrDefault();
 
@@ -104,29 +104,34 @@
             return listOfModules;
         }
 
-        private IEnumerable<CustomIMessage> GetCustomMessages(Dictionary<string, string> protoFilePaths)
+        private async Task<List<CustomMessage>> GetCustomMessages(Dictionary<string, string> protoFilePaths)
         {
+            var tasks = new List<Task<CustomMessage>>();
+            var result = new List<CustomMessage>();
+
             var inputFileLoader = new InputFileLoader();
 
             foreach (var filePath in protoFilePaths)
             {
                 var fileName = Path.GetFileName(filePath.Value);
+                var moduleName = filePath.Key;
 
                 string protoDirectory = new FileInfo(filePath.Value).Directory.FullName;
 
-                var message = inputFileLoader.GenerateCodeFiles(fileName, protoDirectory);
+                tasks.Add(inputFileLoader.GenerateCodeFiles(moduleName, fileName, protoDirectory));
+            }
+            
+            var taskResults = await Task.WhenAll(tasks).ConfigureAwait(false);
 
-                if (message != null)
+            foreach (var taskResult in taskResults)
+            {
+                if (taskResult != null)
                 {
-                    var customIMessage = new CustomIMessage
-                    {
-                        Name = filePath.Key,
-                        Message = message
-                    };
-
-                    yield return customIMessage;
+                    result.Add(taskResult);
                 }
             }
+
+            return result;
         }
 
         /// <summary>
@@ -199,6 +204,8 @@
 
                 listOfModules = data.Module;
             }
+
+            listOfModules = listOfModules.Select((module, index) => new ModuleReadModel  { Id = index, Config = module.Config, Name = module.Name, UUID = module.UUID }).ToList();
 
             return listOfModules;
         }

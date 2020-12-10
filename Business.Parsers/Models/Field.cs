@@ -1,6 +1,8 @@
 ﻿namespace Business.Parsers.Models
 {
-    public class Field
+    using System;
+
+    public class Field : ICloneable
     {
         public int Id { get; set; }
 
@@ -16,17 +18,23 @@
 
         public string DataType { get; set; }
 
-        public Field DeepCopy()
+        public object Clone()
         {
             Field other = (Field)this.MemberwiseClone();
+
+            DeepCopy(other);
+
+            return other;
+        }
+
+        private void DeepCopy(Field other)
+        {
             other.Name = Name;
             other.Value = Value;
             other.Min = Min;
             other.Max = Max;
             other.DefaultValue = DefaultValue;
             other.DataType = DataType;
-
-            return other;
         }
     }
 }

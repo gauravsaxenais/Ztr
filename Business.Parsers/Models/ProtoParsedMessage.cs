@@ -1,7 +1,5 @@
 ﻿namespace Business.Parsers.Models
 {
-    using Business.Parsers.Models;
-    using Newtonsoft.Json;
     using System.Collections.Generic;
 
     public class ProtoParsedMessage
@@ -10,7 +8,6 @@
 
         public string Name { get; set; }
 
-        [JsonIgnore]
         public bool IsRepeated { get; set; }
 
         public List<Field> Fields { get; } = new List<Field>();

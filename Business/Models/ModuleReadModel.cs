@@ -1,7 +1,5 @@
 ﻿namespace Business.Models
 {
-    using System.Threading;
-
     /// <summary>
     /// This class maps to toml file.
     /// The data in the toml file is
@@ -9,15 +7,11 @@
     /// </summary>
     public class ModuleReadModel
     {
-        static int nextId;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ModuleReadModel"/> class.
         /// </summary>
         public ModuleReadModel()
-        {
-            Id = Interlocked.Increment(ref nextId);
-        }
+        {}
 
         /// <summary>
         /// Gets or sets the identifier.
@@ -27,7 +21,7 @@
         /// <value>
         /// The identifier.
         /// </value>
-        public int Id { get; private set; }
+        public int Id { get; set; }
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
@@ -56,7 +50,7 @@
         /// Converts to string.
         /// </summary>
         /// <returns>
-        /// A <see cref="System.String" /> that represents this instance.
+        /// A <see cref="string" /> that represents this instance.
         /// </returns>
         public override string ToString()
         {

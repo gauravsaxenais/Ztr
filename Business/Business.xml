@@ -24,10 +24,13 @@
             <param name="password">The password.</param>
             <param name="gitRepositoryUrl">The git repository URL.</param>
         </member>
-        <member name="M:Business.Configuration.BlockGitConnectionOptions.SetConnection">
+        <member name="P:Business.Configuration.BlockGitConnectionOptions.BlockConfig">
             <summary>
-            Sets the connection.
+            Gets or sets the block configuration.
             </summary>
+            <value>
+            The block configuration.
+            </value>
         </member>
         <member name="M:Business.Configuration.BlockGitConnectionOptions.ToString">
             <summary>
@@ -45,7 +48,7 @@
             Initializes a new instance of the <see cref="T:Business.Configuration.DeviceGitConnectionOptions"/> class.
             </summary>
         </member>
-        <member name="M:Business.Configuration.DeviceGitConnectionOptions.#ctor(System.String,System.String,System.String,System.String,Business.TomlConfigurationFile)">
+        <member name="M:Business.Configuration.DeviceGitConnectionOptions.#ctor(System.String,System.String,System.String,System.String,Business.Configuration.TomlConfigurationFile)">
             <summary>
             Initializes a new instance of the <see cref="T:Business.Configuration.DeviceGitConnectionOptions"/> class.
             </summary>
@@ -92,6 +95,99 @@
             <param name="gitRepositoryUrl">The git repository URL.</param>
         </member>
         <member name="M:Business.Configuration.ModuleGitConnectionOptions.ToString">
+            <summary>
+            Converts to string.
+            </summary>
+            <returns>
+            A <see cref="T:System.String" /> that represents this instance.
+            </returns>
+        </member>
+        <member name="T:Business.Configuration.TomlConfigurationFile">
+            <summary>
+            Toml configuration file. 
+            </summary>
+        </member>
+        <member name="P:Business.Configuration.TomlConfigurationFile.DeviceFolder">
+            <summary>
+            Gets or sets the device folder.
+            </summary>
+            <value>
+            The device folder.
+            </value>
+        </member>
+        <member name="P:Business.Configuration.TomlConfigurationFile.TomlConfigFolder">
+            <summary>
+            Gets or sets the toml configuration folder.
+            </summary>
+            <value>
+            The toml configuration folder.
+            </value>
+        </member>
+        <member name="P:Business.Configuration.TomlConfigurationFile.DeviceTomlFile">
+            <summary>
+            Gets or sets the device toml file.
+            </summary>
+            <value>
+            The device toml file.
+            </value>
+        </member>
+        <member name="P:Business.Configuration.TomlConfigurationFile.DefaultTomlFile">
+            <summary>
+            Gets or sets the default toml file.
+            </summary>
+            <value>
+            The default toml file.
+            </value>
+        </member>
+        <member name="P:Business.Configuration.TomlConfigurationFile.ModulesProtoFolder">
+            <summary>
+            Gets or sets the modules proto folder.
+            </summary>
+            <value>
+            The modules proto folder.
+            </value>
+        </member>
+        <member name="M:Business.Configuration.TomlConfigurationFile.ToString">
+            <summary>
+            Converts to string.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Models.BlockJsonModel">
+            <summary>
+              Returns list of arguments for block as a json.
+            </summary>
+        </member>
+        <member name="P:Business.Models.BlockJsonModel.Id">
+            <summary>Gets or sets the identifier.</summary>
+            <value>The identifier.</value>
+        </member>
+        <member name="P:Business.Models.BlockJsonModel.Type">
+            <summary>Gets or sets the type.</summary>
+            <value>The type.</value>
+        </member>
+        <member name="P:Business.Models.BlockJsonModel.Tag">
+            <summary>Gets or sets the tag.</summary>
+            <value>The tag.</value>
+        </member>
+        <member name="P:Business.Models.BlockJsonModel.Args">
+            <summary>Gets the arguments.</summary>
+            <value>The arguments.</value>
+        </member>
+        <member name="T:Business.Models.BlockReadModel">
+            <summary>
+            Block - This class maps to toml file.
+            </summary>
+        </member>
+        <member name="P:Business.Models.BlockReadModel.Arguments">
+            <summary>
+            Gets or sets the network arguments.
+            </summary>
+            <value>
+            The module.
+            </value>
+        </member>
+        <member name="M:Business.Models.BlockReadModel.ToString">
             <summary>
             Converts to string.
             </summary>
@@ -245,20 +341,62 @@
             A <see cref="T:System.String" /> that represents this instance.
             </returns>
         </member>
+        <member name="T:Business.Models.NetworkArgumentReadModel">
+            <summary>
+              <br />
+            </summary>
+        </member>
+        <member name="P:Business.Models.NetworkArgumentReadModel.Id">
+            <summary>Gets or sets the identifier.</summary>
+            <value>The identifier.</value>
+        </member>
+        <member name="P:Business.Models.NetworkArgumentReadModel.Name">
+            <summary>Gets or sets the name.</summary>
+            <value>The name.</value>
+        </member>
+        <member name="P:Business.Models.NetworkArgumentReadModel.Label">
+            <summary>Gets or sets the label.</summary>
+            <value>The label.</value>
+        </member>
+        <member name="P:Business.Models.NetworkArgumentReadModel.Description">
+            <summary>Gets or sets the description.</summary>
+            <value>The description.</value>
+        </member>
+        <member name="P:Business.Models.NetworkArgumentReadModel.DataType">
+            <summary>Gets or sets the type of the data.</summary>
+            <value>The type of the data.</value>
+        </member>
+        <member name="P:Business.Models.NetworkArgumentReadModel.Min">
+            <summary>Determines the minimum of the parameters.</summary>
+            <value>The minimum.</value>
+        </member>
+        <member name="P:Business.Models.NetworkArgumentReadModel.Max">
+            <summary>Determines the maximum of the parameters.</summary>
+            <value>The maximum.</value>
+        </member>
         <member name="T:Business.RequestHandlers.Interfaces.IBlockManager">
             <summary>
             This interface maps with BlockManager
             and responsible for parsing toml files.
             </summary>
         </member>
-        <member name="M:Business.RequestHandlers.Interfaces.IBlockManager.ParseTomlFilesAsync(System.String,System.String,System.String)">
+        <member name="M:Business.RequestHandlers.Interfaces.IBlockManager.ParseTomlFilesAsync">
             <summary>
             Parses the toml files asynchronous.
             </summary>
-            <param name="firmwareVersion">The firmware version.</param>
-            <param name="deviceType">Type of the device.</param>
-            <param name="parserType">Type of the parser.</param>
             <returns></returns>
+        </member>
+        <member name="T:Business.RequestHandlers.Interfaces.IConfigGeneratorManager">
+            <summary>
+            Config Generator interface methods.
+            </summary>
+        </member>
+        <member name="M:Business.RequestHandlers.Interfaces.IConfigGeneratorManager.CreateConfigAsync(System.String)">
+            <summary>Creates the configuration asynchronous.</summary>
+            <param name="jsonContent">Content of the json.</param>
+            <returns>
+              <br />
+            </returns>
         </member>
         <member name="T:Business.RequestHandlers.Interfaces.IDefaultValueManager">
             <summary>
@@ -376,35 +514,23 @@
             <param name="gitRepoManager">The git repo manager.</param>
             <param name="blockGitConnectionOptions">The block git connection options.</param>
         </member>
-        <member name="M:Business.RequestHandlers.Managers.BlockManager.ParseTomlFilesAsync(System.String,System.String,System.String)">
+        <member name="M:Business.RequestHandlers.Managers.BlockManager.ParseTomlFilesAsync">
             <summary>
             Parses the toml files asynchronous.
             </summary>
-            <param name="firmwareVersion">The firmware version.</param>
-            <param name="deviceType">Type of the device.</param>
-            <param name="parserType">Type of the parser.</param>
-            <returns></returns>
+            <returns>list of blocks.</returns>
         </member>
-        <member name="M:Business.RequestHandlers.Managers.BlockManager.BlockParserToJson(System.String,System.Text.StringBuilder@,System.IO.TextReader@,System.String@,System.Collections.Generic.List{System.Object},System.Int32)">
+        <member name="T:Business.RequestHandlers.Managers.ConfigGeneratorManager">
             <summary>
-            Block parser
+              <br />
             </summary>
-            <param name="currentFile"></param>
-            <param name="json"></param>
-            <param name="readFile"></param>
-            <param name="strData"></param>
-            <param name="flattenList"></param>
-            <param name="fileIndex"></param>
         </member>
-        <member name="M:Business.RequestHandlers.Managers.BlockManager.ModuleParserToJson(System.String,System.Text.StringBuilder@,System.IO.TextReader@,System.String@,System.Collections.Generic.List{System.Object})">
-            <summary>
-            Module parser
-            </summary>
-            <param name="currentFile"></param>
-            <param name="json"></param>
-            <param name="readFile"></param>
-            <param name="strData"></param>
-            <param name="flattenList"></param>
+        <member name="M:Business.RequestHandlers.Managers.ConfigGeneratorManager.CreateConfigAsync(System.String)">
+            <summary>Creates the configuration asynchronous.</summary>
+            <param name="jsonContent">Content of the json.</param>
+            <returns>
+              <br />
+            </returns>
         </member>
         <member name="T:Business.RequestHandlers.Managers.DefaultValueManager">
             <summary>
@@ -618,57 +744,6 @@
             <param name="firmwareVersion">The firmware version.</param>
             <param name="deviceType">Type of the device.</param>
             <param name="names">The names.</param>
-            <returns></returns>
-        </member>
-        <member name="T:Business.TomlConfigurationFile">
-            <summary>
-            Toml configuration file. 
-            </summary>
-        </member>
-        <member name="P:Business.TomlConfigurationFile.DeviceFolder">
-            <summary>
-            Gets or sets the device folder.
-            </summary>
-            <value>
-            The device folder.
-            </value>
-        </member>
-        <member name="P:Business.TomlConfigurationFile.TomlConfigFolder">
-            <summary>
-            Gets or sets the toml configuration folder.
-            </summary>
-            <value>
-            The toml configuration folder.
-            </value>
-        </member>
-        <member name="P:Business.TomlConfigurationFile.DeviceTomlFile">
-            <summary>
-            Gets or sets the device toml file.
-            </summary>
-            <value>
-            The device toml file.
-            </value>
-        </member>
-        <member name="P:Business.TomlConfigurationFile.DefaultTomlFile">
-            <summary>
-            Gets or sets the default toml file.
-            </summary>
-            <value>
-            The default toml file.
-            </value>
-        </member>
-        <member name="P:Business.TomlConfigurationFile.ModulesProtoFolder">
-            <summary>
-            Gets or sets the modules proto folder.
-            </summary>
-            <value>
-            The modules proto folder.
-            </value>
-        </member>
-        <member name="M:Business.TomlConfigurationFile.ToString">
-            <summary>
-            Converts to string.
-            </summary>
             <returns></returns>
         </member>
     </members>

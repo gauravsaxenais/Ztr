@@ -35,7 +35,7 @@
         /// </returns>
         public override string ToString()
         {
-            return $"ModuleGitConnectionOptions(${this.GitLocalFolder} {this.GitRepositoryUrl})";
+            return $"ModuleGitConnectionOptions($ GitLocalFolder: {this.GitLocalFolder} GitRepoUrl: {this.GitRepositoryUrl})";
         }
     }
 }
