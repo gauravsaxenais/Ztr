@@ -19,8 +19,8 @@
     /// Parses a toml file and returns arguments for a block
     /// among others.
     /// </summary>
-    /// <seealso cref="ZTR.Framework.Business.Manager" />
-    /// <seealso cref="Business.RequestHandlers.Interfaces.IBlockManager" />
+    /// <seealso cref="Manager" />
+    /// <seealso cref="IBlockManager" />
     public class BlockManager : Manager, IBlockManager
     {
         #region Private Variables
@@ -51,7 +51,7 @@
             var currentDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
 
             _blockGitConnectionOptions.GitLocalFolder = Path.Combine(currentDirectory, _blockGitConnectionOptions.GitLocalFolder);
-
+            _blockGitConnectionOptions.BlockConfig = Path.Combine(currentDirectory, _blockGitConnectionOptions.GitLocalFolder, _blockGitConnectionOptions.BlockConfig);
             _repoManager.SetConnectionOptions(_blockGitConnectionOptions);
         }
         #endregion
@@ -71,16 +71,15 @@
             var json = new StringBuilder();
             var gitConnectionOptions = (BlockGitConnectionOptions)_repoManager.GetConnectionOptions();
 
-            //await _repoManager.CloneRepositoryAsync();
-
-            string[] files = Directory.GetFiles(gitConnectionOptions.GitLocalFolder);
+            await _repoManager.CloneRepositoryAsync();
 
             int fileIndex = 1;
 
-            foreach (var currentFile in files)
+            var directory = new DirectoryInfo(gitConnectionOptions.BlockConfig);
+
+            foreach (var currentFile in directory.EnumerateFiles())
             {
-                TextReader readFile = new StreamReader(currentFile);
-                string content = await readFile.ReadToEndAsync();
+                string content = File.ReadAllText(currentFile.FullName);
                 var fileContent = Toml.ReadString(content);
 
                 string strData = string.Empty;
@@ -91,14 +90,14 @@
                 if (parserType.Contains(fileModules))
                 {
                     flattenList = dictionary.Where(x => x.Key == fileModules).Select(x => x.Value).ToList();
-                    ModuleParserToJson(currentFile, ref json, ref readFile, ref strData, flattenList);
+                    json.Append(ModuleParserToJson(currentFile.Name, flattenList));
                 }
                 else if (parserType.Contains(fileBlocks))
                 {
                     flattenList = dictionary.Where(x => x.Key == fileArguments).Select(x => x.Value).ToList();
                     if (flattenList != null && flattenList.Any())
                     {
-                        BlockParserToJson(currentFile, ref json, ref readFile, ref strData, flattenList, fileIndex);
+                        json.Append(BlockParserToJson(currentFile.Name, flattenList, fileIndex));
                         fileIndex++;
                     }
                 }
@@ -124,18 +123,17 @@
 
         #region Private Methods
 
-        /// <summary>
-        /// Block parser
-        /// </summary>
-        /// <param name="currentFile"></param>
-        /// <param name="json"></param>
-        /// <param name="readFile"></param>
-        /// <param name="strData"></param>
-        /// <param name="flattenList"></param>
-        /// <param name="fileIndex"></param>
-        private static void BlockParserToJson(string currentFile, ref StringBuilder json, ref TextReader readFile,
-            ref string strData, List<object> flattenList, int fileIndex)
+        /// <summary>Blocks the parser to json.</summary>
+        /// <param name="currentFile">The current file.</param>
+        /// <param name="flattenList">The flatten list.</param>
+        /// <param name="fileIndex">Index of the file.</param>
+        /// <returns>
+        ///   json as stringbuilder.
+        /// </returns>
+        private StringBuilder BlockParserToJson(string currentFile, List<object> flattenList, int fileIndex)
         {
+            var json = new StringBuilder();
+
             json.Insert(json.Length, "{\"id\":"
                 + fileIndex
                 + ",\"type\":\""
@@ -159,11 +157,10 @@
             int argIndex = 1;
             foreach (var item in tempData)
             {
-                strData =
-                    item
-                    .Replace("=", "\":")
-                    .Replace(",", ",\"") + "},";
-
+                string strData =
+                                item
+                                .Replace("=", "\":")
+                                .Replace(",", ",\"") + "},";
                 json.Append(strData.Replace("{\"", "{\"id\":" + argIndex + ",\""));
 
                 argIndex++;
@@ -173,21 +170,19 @@
                 .Replace("]}},", "}")
                 .Replace("[,", "[");
 
-            readFile.Close();
-            readFile = null;
+            return json;
         }
 
-        /// <summary>
-        /// Module parser
-        /// </summary>
-        /// <param name="currentFile"></param>
-        /// <param name="json"></param>
-        /// <param name="readFile"></param>
-        /// <param name="strData"></param>
-        /// <param name="flattenList"></param>
-        private static void ModuleParserToJson(string currentFile, ref StringBuilder json, ref TextReader readFile,
-            ref string strData, List<object> flattenList)
+        /// <summary>Modules the parser to json.</summary>
+        /// <param name="currentFile">The current file.</param>
+        /// <param name="flattenList">The flatten list.</param>
+        /// <returns>
+        ///   json as stringbuilder.
+        /// </returns>
+        private StringBuilder ModuleParserToJson(string currentFile, List<object> flattenList)
         {
+            var json = new StringBuilder();
+            
             if (flattenList != null && flattenList.Any())
             {
                 string[] tempData =
@@ -212,21 +207,20 @@
                 }
                 foreach (var item in tempData)
                 {
-                    strData = "{" + item
-                        .Replace("{", "{\"")
-                        .Replace("=", "\":")
-                        .Replace(",", ",\"")
-                        .Replace("\"\",\"", "\",\"") + "},";
-
+                    string strData = "{" + item
+                                    .Replace("{", "{\"")
+                                    .Replace("=", "\":")
+                                    .Replace(",", ",\"")
+                                    .Replace("\"\",\"", "\",\"") + "},";
+                    
                     json.AppendLine(strData);
                 }
 
                 json = json
                     .Replace("]},", "]");
-
-                readFile.Close();
-                readFile = null;
             }
+
+            return json;
         }
 
         private static bool IsValidJson(string strInput)

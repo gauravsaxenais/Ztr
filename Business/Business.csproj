@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>F:\ZTR\Business\Business.xml</DocumentationFile>
+    <DocumentationFile>Business.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

@@ -24,10 +24,13 @@
             <param name="password">The password.</param>
             <param name="gitRepositoryUrl">The git repository URL.</param>
         </member>
-        <member name="M:Business.Configuration.BlockGitConnectionOptions.SetConnection">
+        <member name="P:Business.Configuration.BlockGitConnectionOptions.BlockConfig">
             <summary>
-            Sets the connection.
+            Gets or sets the block configuration.
             </summary>
+            <value>
+            The block configuration.
+            </value>
         </member>
         <member name="M:Business.Configuration.BlockGitConnectionOptions.ToString">
             <summary>
@@ -45,7 +48,7 @@
             Initializes a new instance of the <see cref="T:Business.Configuration.DeviceGitConnectionOptions"/> class.
             </summary>
         </member>
-        <member name="M:Business.Configuration.DeviceGitConnectionOptions.#ctor(System.String,System.String,System.String,System.String,Business.TomlConfigurationFile)">
+        <member name="M:Business.Configuration.DeviceGitConnectionOptions.#ctor(System.String,System.String,System.String,System.String,Business.Configuration.TomlConfigurationFile)">
             <summary>
             Initializes a new instance of the <see cref="T:Business.Configuration.DeviceGitConnectionOptions"/> class.
             </summary>
@@ -98,6 +101,57 @@
             <returns>
             A <see cref="T:System.String" /> that represents this instance.
             </returns>
+        </member>
+        <member name="T:Business.Configuration.TomlConfigurationFile">
+            <summary>
+            Toml configuration file. 
+            </summary>
+        </member>
+        <member name="P:Business.Configuration.TomlConfigurationFile.DeviceFolder">
+            <summary>
+            Gets or sets the device folder.
+            </summary>
+            <value>
+            The device folder.
+            </value>
+        </member>
+        <member name="P:Business.Configuration.TomlConfigurationFile.TomlConfigFolder">
+            <summary>
+            Gets or sets the toml configuration folder.
+            </summary>
+            <value>
+            The toml configuration folder.
+            </value>
+        </member>
+        <member name="P:Business.Configuration.TomlConfigurationFile.DeviceTomlFile">
+            <summary>
+            Gets or sets the device toml file.
+            </summary>
+            <value>
+            The device toml file.
+            </value>
+        </member>
+        <member name="P:Business.Configuration.TomlConfigurationFile.DefaultTomlFile">
+            <summary>
+            Gets or sets the default toml file.
+            </summary>
+            <value>
+            The default toml file.
+            </value>
+        </member>
+        <member name="P:Business.Configuration.TomlConfigurationFile.ModulesProtoFolder">
+            <summary>
+            Gets or sets the modules proto folder.
+            </summary>
+            <value>
+            The modules proto folder.
+            </value>
+        </member>
+        <member name="M:Business.Configuration.TomlConfigurationFile.ToString">
+            <summary>
+            Converts to string.
+            </summary>
+            <returns></returns>
         </member>
         <member name="T:Business.Models.ConfigurationReadModel">
             <summary>
@@ -397,7 +451,7 @@
             <param name="parserType">Type of the parser.</param>
             <returns></returns>
         </member>
-        <member name="M:Business.RequestHandlers.Managers.BlockManager.BlockParserToJson(System.String,System.Text.StringBuilder@,System.IO.TextReader@,System.String@,System.Collections.Generic.List{System.Object},System.Int32)">
+        <member name="M:Business.RequestHandlers.Managers.BlockManager.BlockParserToJson(System.String,System.String,System.Collections.Generic.List{System.Object},System.Int32)">
             <summary>
             Block parser
             </summary>
@@ -408,7 +462,7 @@
             <param name="flattenList"></param>
             <param name="fileIndex"></param>
         </member>
-        <member name="M:Business.RequestHandlers.Managers.BlockManager.ModuleParserToJson(System.String,System.Text.StringBuilder@,System.IO.TextReader@,System.String@,System.Collections.Generic.List{System.Object})">
+        <member name="M:Business.RequestHandlers.Managers.BlockManager.ModuleParserToJson(System.String,System.String,System.Collections.Generic.List{System.Object})">
             <summary>
             Module parser
             </summary>
@@ -642,57 +696,6 @@
             <param name="firmwareVersion">The firmware version.</param>
             <param name="deviceType">Type of the device.</param>
             <param name="names">The names.</param>
-            <returns></returns>
-        </member>
-        <member name="T:Business.TomlConfigurationFile">
-            <summary>
-            Toml configuration file. 
-            </summary>
-        </member>
-        <member name="P:Business.TomlConfigurationFile.DeviceFolder">
-            <summary>
-            Gets or sets the device folder.
-            </summary>
-            <value>
-            The device folder.
-            </value>
-        </member>
-        <member name="P:Business.TomlConfigurationFile.TomlConfigFolder">
-            <summary>
-            Gets or sets the toml configuration folder.
-            </summary>
-            <value>
-            The toml configuration folder.
-            </value>
-        </member>
-        <member name="P:Business.TomlConfigurationFile.DeviceTomlFile">
-            <summary>
-            Gets or sets the device toml file.
-            </summary>
-            <value>
-            The device toml file.
-            </value>
-        </member>
-        <member name="P:Business.TomlConfigurationFile.DefaultTomlFile">
-            <summary>
-            Gets or sets the default toml file.
-            </summary>
-            <value>
-            The default toml file.
-            </value>
-        </member>
-        <member name="P:Business.TomlConfigurationFile.ModulesProtoFolder">
-            <summary>
-            Gets or sets the modules proto folder.
-            </summary>
-            <value>
-            The modules proto folder.
-            </value>
-        </member>
-        <member name="M:Business.TomlConfigurationFile.ToString">
-            <summary>
-            Converts to string.
-            </summary>
             <returns></returns>
         </member>
     </members>

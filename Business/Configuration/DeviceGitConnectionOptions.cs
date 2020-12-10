@@ -44,7 +44,7 @@
         /// </returns>
         public override string ToString()
         {
-            return $"DeviceGitConnectionOptions(${this.GitLocalFolder} {this.GitRepositoryUrl} {this.TomlConfiguration})";
+            return $"DeviceGitConnectionOptions($ GitLocalFolder: {this.GitLocalFolder} GitRepoUrl: {this.GitRepositoryUrl} TomlConfiguration: {this.TomlConfiguration})";
         }
     }
 }

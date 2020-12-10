@@ -8,6 +8,7 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
     using ZTR.Framework.Business.File;
     using ZTR.Framework.Business.File.FileReaders;
@@ -24,7 +25,6 @@
         private UsernamePasswordCredentials _credentials;
         private DefaultCredentials _defaultCredentials;
         private GitConnectionOptions _gitConnection;
-        private FetchOptions _fetchOptions;
         private CloneOptions _cloneOptions;
         private readonly string GitFolder = ".git";
         private readonly string TextMimeType = "text/plain";
@@ -62,8 +62,7 @@
             _defaultCredentials = new DefaultCredentials();
 
             var credentialsProvider = new CredentialsHandler((url, usernameFromUrl, types) => _defaultCredentials);
-            _fetchOptions = new FetchOptions() { TagFetchMode = TagFetchMode.All, CredentialsProvider = credentialsProvider };
-
+            
             _cloneOptions = new CloneOptions() { CredentialsProvider = credentialsProvider };
             _cloneOptions.CertificateCheck += delegate (Certificate certificate, bool valid, string host)
             {
@@ -100,6 +99,7 @@
                 }
 
                 Directory.CreateDirectory(_gitConnection.GitLocalFolder);
+                
                 await Task.Run(() =>
                 {
                     Repository.Clone(_gitConnection.GitRepositoryUrl, _gitConnection.GitLocalFolder, _cloneOptions);
@@ -386,6 +386,8 @@
                         fileInfo.Delete();
                     }
                 }
+
+                Thread.Sleep(1);
                 Directory.Delete(directory);
             }
             catch (Exception)

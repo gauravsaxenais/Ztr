@@ -13,8 +13,8 @@
     /// <summary>
     /// Returns device information.
     /// </summary>
-    /// <seealso cref="ZTR.Framework.Business.Manager" />
-    /// <seealso cref="Business.RequestHandlers.Interfaces.IDeviceTypeManager" />
+    /// <seealso cref="Manager" />
+    /// <seealso cref="IDeviceTypeManager" />
     public class DeviceTypeManager : Manager, IDeviceTypeManager
     {
         private readonly IGitRepositoryManager _repoManager;
