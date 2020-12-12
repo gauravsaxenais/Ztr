@@ -208,7 +208,7 @@
               Added Startup class.
             </summary>
         </member>
-        <member name="M:Service.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+        <member name="M:Service.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
             <summary>
             Initializes a new instance of the <see cref="T:Service.Startup"/> class.
             </summary>
@@ -233,6 +233,87 @@
             This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
             </summary>
             <param name="app">application builder.</param>
+        </member>
+        <member name="T:Abbbd3832Ad747A0A1B0Cd1B3C6D6579.ModuleReflection">
+            <summary>Holder for reflection information generated from module.proto</summary>
+        </member>
+        <member name="P:Abbbd3832Ad747A0A1B0Cd1B3C6D6579.ModuleReflection.Descriptor">
+            <summary>File descriptor for module.proto</summary>
+        </member>
+        <member name="F:Abbbd3832Ad747A0A1B0Cd1B3C6D6579.Allocator.DoNotRemove">
+            <summary>
+            This needs to be here as a zero value.
+            </summary>
+        </member>
+        <member name="F:Abbbd3832Ad747A0A1B0Cd1B3C6D6579.StandardEventCodes.PowerUp">
+            <summary>
+            Signal: N/A
+            </summary>
+        </member>
+        <member name="F:Abbbd3832Ad747A0A1B0Cd1B3C6D6579.StandardEventCodes.WakeUp">
+            <summary>
+            Signal: N/A
+            </summary>
+        </member>
+        <member name="F:Abbbd3832Ad747A0A1B0Cd1B3C6D6579.StandardEventCodes.PowerOrWakeUp">
+            <summary>
+            Signal: N/A
+            </summary>
+        </member>
+        <member name="F:Abbbd3832Ad747A0A1B0Cd1B3C6D6579.StandardFilterCodes.IsCurrentProfile">
+            <summary>
+            Signal: The current profile.
+            </summary>
+        </member>
+        <member name="F:Abbbd3832Ad747A0A1B0Cd1B3C6D6579.StandardFilterCodes.IsRestrictedMode">
+            <summary>
+            Signal: The restricted mode
+            0 - unrestricted
+            1 - restricted
+            2 - transport
+            3 - invalid
+            </summary>
+        </member>
+        <member name="F:Abbbd3832Ad747A0A1B0Cd1B3C6D6579.StandardActionCodes.ApplyProfile">
+            <summary>
+            Signal: The profile to apply.
+            </summary>
+        </member>
+        <member name="F:Abbbd3832Ad747A0A1B0Cd1B3C6D6579.Config.ProfilesFieldNumber">
+            <summary>Field number for the "profiles" field.</summary>
+        </member>
+        <member name="F:Abbbd3832Ad747A0A1B0Cd1B3C6D6579.Config.Test123FieldNumber">
+            <summary>Field number for the "test123" field.</summary>
+        </member>
+        <member name="T:Abbbd3832Ad747A0A1B0Cd1B3C6D6579.Config.Types">
+            <summary>Container for nested types declared in the Config message type.</summary>
+        </member>
+        <member name="F:Abbbd3832Ad747A0A1B0Cd1B3C6D6579.Config.Types.Profile.StateFieldNumber">
+            <summary>Field number for the "state" field.</summary>
+        </member>
+        <member name="P:Abbbd3832Ad747A0A1B0Cd1B3C6D6579.Config.Types.Profile.State">
+            <summary>
+            The profile's state.
+            </summary>
+        </member>
+        <member name="F:Abbbd3832Ad747A0A1B0Cd1B3C6D6579.Config.Types.Profile.WakeupMaskFieldNumber">
+            <summary>Field number for the "wakeup_mask" field.</summary>
+        </member>
+        <member name="P:Abbbd3832Ad747A0A1B0Cd1B3C6D6579.Config.Types.Profile.WakeupMask">
+            <summary>
+            What will wake the device up (input, adc_threshold, cell, etc).
+            </summary>
+        </member>
+        <member name="F:Abbbd3832Ad747A0A1B0Cd1B3C6D6579.Config.Types.Profile.DelaySFieldNumber">
+            <summary>Field number for the "delay_s" field.</summary>
+        </member>
+        <member name="P:Abbbd3832Ad747A0A1B0Cd1B3C6D6579.Config.Types.Profile.DelayS">
+            <summary>
+            How long to wait before applying this profile in seconds.
+            </summary>
+        </member>
+        <member name="T:Abbbd3832Ad747A0A1B0Cd1B3C6D6579.Config.Types.Profile.Types">
+            <summary>Container for nested types declared in the Profile message type.</summary>
         </member>
     </members>
 </doc>

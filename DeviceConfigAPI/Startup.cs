@@ -1,5 +1,6 @@
 ﻿namespace Service
 {
+    using Business.Core;
     using EnsureThat;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -8,7 +9,6 @@
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Newtonsoft.Json.Converters;
-    using Service.Core;
     using ZTR.Framework.Business.Models;
     using ZTR.Framework.Configuration;
     using ZTR.Framework.Security;
@@ -28,7 +28,7 @@
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             this.Configuration = configuration;
-            Global.RootPath = env.ContentRootPath;
+            Global.WebRoot = env.ContentRootPath;
         }
 
         /// <summary>

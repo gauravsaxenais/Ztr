@@ -406,31 +406,6 @@
             <param name="strData"></param>
             <param name="flattenList"></param>
         </member>
-        <member name="T:Business.RequestHandlers.Managers.BlockManagerV">
-            <summary>
-            Parses a toml file and returns arguments for a block
-            among others.
-            </summary>
-            <seealso cref="T:ZTR.Framework.Business.Manager" />
-            <seealso cref="T:Business.RequestHandlers.Interfaces.IBlockManager" />
-        </member>
-        <member name="M:Business.RequestHandlers.Managers.BlockManagerV.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.ModuleManager},Business.RequestHandlers.Interfaces.IGitRepositoryManager,Business.Configuration.BlockGitConnectionOptions)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.BlockManager"/> class.
-            </summary>
-            <param name="logger">The logger.</param>
-            <param name="gitRepoManager">The git repo manager.</param>
-            <param name="blockGitConnectionOptions">The block git connection options.</param>
-        </member>
-        <member name="M:Business.RequestHandlers.Managers.BlockManagerV.ParseTomlFilesAsync(System.String,System.String,System.String)">
-            <summary>
-            Parses the toml files asynchronous.
-            </summary>
-            <param name="firmwareVersion">The firmware version.</param>
-            <param name="deviceType">Type of the device.</param>
-            <param name="parserType">Type of the parser.</param>
-            <returns></returns>
-        </member>
         <member name="T:Business.RequestHandlers.Managers.DefaultValueManager">
             <summary>
             This class returns all the modules, their name and uuid information.

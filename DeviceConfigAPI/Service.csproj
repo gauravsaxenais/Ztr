@@ -57,21 +57,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="ZTR.Framework.Business">
-      <HintPath>..\Framework\Framework.Business\bin\Debug\netcoreapp3.1\ZTR.Framework.Business.dll</HintPath>
-    </Reference>
-    <Reference Include="ZTR.Framework.Configuration">
-      <HintPath>..\Framework\Framework.Business\bin\Debug\netcoreapp3.1\ZTR.Framework.Configuration.dll</HintPath>
-    </Reference>
-    <Reference Include="ZTR.Framework.Security">
-      <HintPath>..\Framework\Framework.Security\bin\Debug\netcoreapp3.1\ZTR.Framework.Security.dll</HintPath>
-    </Reference>
-    <Reference Include="ZTR.Framework.Service">
-      <HintPath>..\Framework\Framework.Service\bin\Debug\netcoreapp3.1\ZTR.Framework.Service.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

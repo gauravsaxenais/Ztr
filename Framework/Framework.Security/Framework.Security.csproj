@@ -46,7 +46,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Framework.Business\Framework.Business.csproj" />
-    <ProjectReference Include="..\Framework.Configuration\Framework.Configuration.csproj" />
   </ItemGroup>
   
 </Project>

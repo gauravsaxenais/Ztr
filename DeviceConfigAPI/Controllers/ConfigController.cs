@@ -38,15 +38,8 @@
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateTomlConfig()
         {
-            string jsonContent = System.IO.File.ReadAllText(@"C:\Users\admin.DESKTOP-G7578TS\source\ZTR\DeviceConfigAPI\bin\Debug\netcoreapp3.1\BlockConfig\config\config.json");
-            var result = await this.manager.CreateConfigAsync(jsonContent).ConfigureAwait(false);
-            if (string.IsNullOrEmpty(result))
-            {
-                return this.StatusCode(StatusCodes.Status200OK, result);
-            }
 
-            var json = result;
-            return this.StatusCode(StatusCodes.Status200OK, json);
+            return Ok();
         }
     }
 }

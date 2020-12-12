@@ -234,5 +234,1101 @@
             </summary>
             <param name="app">application builder.</param>
         </member>
+        <member name="T:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.ModuleReflection">
+            <summary>Holder for reflection information generated from module.proto</summary>
+        </member>
+        <member name="P:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.ModuleReflection.Descriptor">
+            <summary>File descriptor for module.proto</summary>
+        </member>
+        <member name="F:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.Allocator.DoNotRemove">
+            <summary>
+            This needs to be here as a zero value.
+            </summary>
+        </member>
+        <member name="F:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.StandardEventCodes.Cos">
+            <summary>
+            Signal: Index into the repeated change of state field.
+            </summary>
+        </member>
+        <member name="F:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.StandardEventCodes.BelowThreshold">
+            <summary>
+            Signal: Index into repeated thresholds field.
+            </summary>
+        </member>
+        <member name="F:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.StandardEventCodes.AboveOrEqualThreshold">
+            <summary>
+            Signal: Index into the repeated threshold field.
+            </summary>
+        </member>
+        <member name="F:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.StandardEventCodes.Connected">
+            <summary>
+            Signal: N/A.
+            </summary>
+        </member>
+        <member name="F:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.StandardEventCodes.Disconnected">
+            <summary>
+            Signal: N/A.
+            </summary>
+        </member>
+        <member name="F:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.StandardEventCodes.FaultStatusUpdate">
+            <summary>
+            Signal: N/A.
+            </summary>
+        </member>
+        <member name="F:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.StandardFilterCodes.IsBelowThreshold">
+            <summary>
+            Signal: Index into the repeated threshold field.
+            </summary>
+        </member>
+        <member name="F:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.StandardFilterCodes.IsAboveOrEqualThreshold">
+            <summary>
+            Signal: Index into the repeated threshold field.
+            </summary>
+        </member>
+        <member name="F:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.StandardFilterCodes.IsConnected">
+            <summary>
+            Signal: N/A.
+            </summary>
+        </member>
+        <member name="F:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.StandardFilterCodes.IsEnabled">
+            <summary>
+            Signal: N/A.
+            </summary>
+        </member>
+        <member name="F:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.StandardActionCodes.Write">
+            <summary>
+            Signal: Index into the repeated write profile.
+            </summary>
+        </member>
+        <member name="F:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.StandardActionCodes.Enable">
+            <summary>
+            Signal: N/A.
+            </summary>
+        </member>
+        <member name="F:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.StandardActionCodes.Disable">
+            <summary>
+            Signal: N/A.
+            </summary>
+        </member>
+        <member name="F:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.StandardActionCodes.ResetCan">
+            <summary>
+            Signal: N/A.
+            </summary>
+        </member>
+        <member name="F:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.Config.RawFieldNumber">
+            <summary>Field number for the "raw" field.</summary>
+        </member>
+        <member name="F:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.Config.RequestFieldNumber">
+            <summary>Field number for the "request" field.</summary>
+        </member>
+        <member name="F:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.Config.ChangeOfStateFieldNumber">
+            <summary>Field number for the "change_of_state" field.</summary>
+        </member>
+        <member name="F:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.Config.ThresholdsFieldNumber">
+            <summary>Field number for the "thresholds" field.</summary>
+        </member>
+        <member name="F:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.Config.WritesFieldNumber">
+            <summary>Field number for the "writes" field.</summary>
+        </member>
+        <member name="F:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.Config.BaudRateFieldNumber">
+            <summary>Field number for the "baud_rate" field.</summary>
+        </member>
+        <member name="P:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.Config.BaudRate">
+            <summary>
+            Speed to communicate with the can bus.
+            </summary>
+        </member>
+        <member name="F:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.Config.PduFieldNumber">
+            <summary>Field number for the "pdu" field.</summary>
+        </member>
+        <member name="P:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.Config.Pdu">
+            <summary>
+            Protocol Data Units message format.
+            </summary>
+        </member>
+        <member name="T:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.Config.Types">
+            <summary>Container for nested types declared in the Config message type.</summary>
+        </member>
+        <member name="F:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.Config.Types.BaudRate.Low">
+            <summary>
+            Slow rate (250 KBPS).
+            </summary>
+        </member>
+        <member name="F:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.Config.Types.BaudRate.High">
+            <summary>
+            Fast rate (500 KBPS).
+            </summary>
+        </member>
+        <member name="F:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.Config.Types.Pdu1.Enable">
+            <summary>
+            Enable the Pdu1 PGN Mask.
+            </summary>
+        </member>
+        <member name="F:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.Config.Types.Pdu1.Disable">
+            <summary>
+            Disable the Pdu1 PGN Mask.
+            </summary>
+        </member>
+        <member name="F:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.Config.Types.Raw.IdFieldNumber">
+            <summary>Field number for the "id" field.</summary>
+        </member>
+        <member name="P:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.Config.Types.Raw.Id">
+            <summary>
+            Pgn id that will be added to the raw list.
+            </summary>
+        </member>
+        <member name="F:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.Config.Types.Raw.AddressFieldNumber">
+            <summary>Field number for the "address" field.</summary>
+        </member>
+        <member name="P:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.Config.Types.Raw.Address">
+            <summary>
+            Source address for the desired raw pgn.
+            </summary>
+        </member>
+        <member name="F:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.Config.Types.Request.IdFieldNumber">
+            <summary>Field number for the "id" field.</summary>
+        </member>
+        <member name="P:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.Config.Types.Request.Id">
+            <summary>
+            Pgn id of the desired request pgn.
+            </summary>
+        </member>
+        <member name="F:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.Config.Types.Datapoint.IdFieldNumber">
+            <summary>Field number for the "id" field.</summary>
+        </member>
+        <member name="P:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.Config.Types.Datapoint.Id">
+            <summary>
+            The id of the pgn for this given datapoint.
+            </summary>
+        </member>
+        <member name="F:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.Config.Types.Datapoint.OffsetFieldNumber">
+            <summary>Field number for the "offset" field.</summary>
+        </member>
+        <member name="P:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.Config.Types.Datapoint.Offset">
+            <summary>
+            Zero-based offset of where to begin processing the datapoint.
+            </summary>
+        </member>
+        <member name="F:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.Config.Types.Datapoint.LengthFieldNumber">
+            <summary>Field number for the "length" field.</summary>
+        </member>
+        <member name="P:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.Config.Types.Datapoint.Length">
+            <summary>
+            Length of the datapoint in bytes.
+            </summary>
+        </member>
+        <member name="F:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.Config.Types.Cos.DatapointFieldNumber">
+            <summary>Field number for the "datapoint" field.</summary>
+        </member>
+        <member name="P:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.Config.Types.Cos.Datapoint">
+            <summary>
+            Submessage contatining all datapoint meta information.
+            </summary>
+        </member>
+        <member name="F:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.Config.Types.Cos.BitmaskFieldNumber">
+            <summary>Field number for the "bitmask" field.</summary>
+        </member>
+        <member name="P:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.Config.Types.Cos.Bitmask">
+            <summary>
+            Mask used to determine if a change has occurred.
+            </summary>
+        </member>
+        <member name="F:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.Config.Types.Threshold.DatapointFieldNumber">
+            <summary>Field number for the "datapoint" field.</summary>
+        </member>
+        <member name="P:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.Config.Types.Threshold.Datapoint">
+            <summary>
+            Submessage contatining all datapoint meta information.
+            </summary>
+        </member>
+        <member name="F:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.Config.Types.Threshold.ValueFieldNumber">
+            <summary>Field number for the "value" field.</summary>
+        </member>
+        <member name="P:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.Config.Types.Threshold.Value">
+            <summary>
+            Threshold of the pgn data.
+            </summary>
+        </member>
+        <member name="F:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.Config.Types.Write.IdFieldNumber">
+            <summary>Field number for the "id" field.</summary>
+        </member>
+        <member name="P:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.Config.Types.Write.Id">
+            <summary>
+            Pgn that will be written to.
+            </summary>
+        </member>
+        <member name="F:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.Config.Types.Write.ExpireTimeSFieldNumber">
+            <summary>Field number for the "expire_time_s" field.</summary>
+        </member>
+        <member name="P:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.Config.Types.Write.ExpireTimeS">
+            <summary>
+            Length of writes to be done for the given request.
+            </summary>
+        </member>
+        <member name="F:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.Config.Types.Write.ContentFieldNumber">
+            <summary>Field number for the "content" field.</summary>
+        </member>
+        <member name="P:E85Bf76Ea1Cb449A8Fcbfec5Da8B50Fb.Config.Types.Write.Content">
+            <summary>
+            Data to write for this pgn.
+            </summary>
+        </member>
+        <member name="T:A2Fa4F8500E044F92B1368164D8E1E49C.ModuleReflection">
+            <summary>Holder for reflection information generated from module.proto</summary>
+        </member>
+        <member name="P:A2Fa4F8500E044F92B1368164D8E1E49C.ModuleReflection.Descriptor">
+            <summary>File descriptor for module.proto</summary>
+        </member>
+        <member name="F:A2Fa4F8500E044F92B1368164D8E1E49C.Allocator.DoNotRemove">
+            <summary>
+            This needs to be here as a zero value.
+            </summary>
+        </member>
+        <member name="F:A2Fa4F8500E044F92B1368164D8E1E49C.StandardEventCodes.InputLow">
+            <summary>
+            Signal: Zero based harness input pin number.
+            </summary>
+        </member>
+        <member name="F:A2Fa4F8500E044F92B1368164D8E1E49C.StandardEventCodes.InputHigh">
+            <summary>
+            Signal: Zero based harness input pin number.
+            </summary>
+        </member>
+        <member name="F:A2Fa4F8500E044F92B1368164D8E1E49C.StandardFilterCodes.IsLow">
+            <summary>
+            Signal: Zero based harness pin number.
+            </summary>
+        </member>
+        <member name="F:A2Fa4F8500E044F92B1368164D8E1E49C.StandardFilterCodes.IsHigh">
+            <summary>
+            Signal: Zero based harness pin number.
+            </summary>
+        </member>
+        <member name="F:A2Fa4F8500E044F92B1368164D8E1E49C.StandardActionCodes.SetLow">
+            <summary>
+            Signal: Zero based harness output pin number.
+            </summary>
+        </member>
+        <member name="F:A2Fa4F8500E044F92B1368164D8E1E49C.StandardActionCodes.SetHigh">
+            <summary>
+            Signal: Zero based harness output pin number.
+            </summary>
+        </member>
+        <member name="F:A2Fa4F8500E044F92B1368164D8E1E49C.Config.InputDebounceIntervalFieldNumber">
+            <summary>Field number for the "input_debounce_interval" field.</summary>
+        </member>
+        <member name="P:A2Fa4F8500E044F92B1368164D8E1E49C.Config.InputDebounceInterval">
+            <summary>
+            Sets the time in seconds that an input must settle in before a change of
+            state occurs.
+            </summary>
+        </member>
+        <member name="F:A2Fa4F8500E044F92B1368164D8E1E49C.Config.AnalogInputsFieldNumber">
+            <summary>Field number for the "analog_inputs" field.</summary>
+        </member>
+        <member name="P:A2Fa4F8500E044F92B1368164D8E1E49C.Config.AnalogInputs">
+            <summary>
+            List of all virtual analog inputs to monitor.
+            </summary>
+        </member>
+        <member name="T:A2Fa4F8500E044F92B1368164D8E1E49C.Config.Types">
+            <summary>Container for nested types declared in the Config message type.</summary>
+        </member>
+        <member name="F:A2Fa4F8500E044F92B1368164D8E1E49C.Config.Types.AnalogInput.AdcInputFieldNumber">
+            <summary>Field number for the "adc_input" field.</summary>
+        </member>
+        <member name="P:A2Fa4F8500E044F92B1368164D8E1E49C.Config.Types.AnalogInput.AdcInput">
+            <summary>
+            Index of ADC channel to use as source voltage.
+            </summary>
+        </member>
+        <member name="F:A2Fa4F8500E044F92B1368164D8E1E49C.Config.Types.AnalogInput.DigitalInputFieldNumber">
+            <summary>Field number for the "digital_input" field.</summary>
+        </member>
+        <member name="P:A2Fa4F8500E044F92B1368164D8E1E49C.Config.Types.AnalogInput.DigitalInput">
+            <summary>
+            Index to map the digital input state into.
+            </summary>
+        </member>
+        <member name="F:A2Fa4F8500E044F92B1368164D8E1E49C.Config.Types.AnalogInput.SetValueFieldNumber">
+            <summary>Field number for the "set_value" field.</summary>
+        </member>
+        <member name="P:A2Fa4F8500E044F92B1368164D8E1E49C.Config.Types.AnalogInput.SetValue">
+            <summary>
+            High threshold for ON state.
+            </summary>
+        </member>
+        <member name="F:A2Fa4F8500E044F92B1368164D8E1E49C.Config.Types.AnalogInput.ClearValueFieldNumber">
+            <summary>Field number for the "clear_value" field.</summary>
+        </member>
+        <member name="P:A2Fa4F8500E044F92B1368164D8E1E49C.Config.Types.AnalogInput.ClearValue">
+            <summary>
+            Low threshold for OFF state.
+            </summary>
+        </member>
+        <member name="T:A4947E836D9414A2Ab59E260B52E5E252.ModuleReflection">
+            <summary>Holder for reflection information generated from module.proto</summary>
+        </member>
+        <member name="P:A4947E836D9414A2Ab59E260B52E5E252.ModuleReflection.Descriptor">
+            <summary>File descriptor for module.proto</summary>
+        </member>
+        <member name="F:A4947E836D9414A2Ab59E260B52E5E252.Allocator.DoNotRemove">
+            <summary>
+            This needs to be here as a zero value.
+            </summary>
+        </member>
+        <member name="F:A4947E836D9414A2Ab59E260B52E5E252.StandardActionCodes.Enable">
+            <summary>
+            Signal: Mask of which diagnostic PGN(s) to enable, index map included in the Config::Type.
+            </summary>
+        </member>
+        <member name="F:A4947E836D9414A2Ab59E260B52E5E252.StandardActionCodes.Disable">
+            <summary>
+            Signal: Mask of which diagnostic PGN(s) to disable, index map included in the Config::Type.
+            </summary>
+        </member>
+        <member name="F:A4947E836D9414A2Ab59E260B52E5E252.Config.DiagnosticsFieldNumber">
+            <summary>Field number for the "diagnostics" field.</summary>
+        </member>
+        <member name="P:A4947E836D9414A2Ab59E260B52E5E252.Config.Diagnostics">
+            <summary>
+            List of each diagnostic PGN and its write frequency
+            </summary>
+        </member>
+        <member name="T:A4947E836D9414A2Ab59E260B52E5E252.Config.Types">
+            <summary>Container for nested types declared in the Config message type.</summary>
+        </member>
+        <member name="T:A4947E836D9414A2Ab59E260B52E5E252.Config.Types.Type">
+            <summary>
+            Values used to create a bit packed number for diagnostic PGNs
+            </summary>
+        </member>
+        <member name="F:A4947E836D9414A2Ab59E260B52E5E252.Config.Types.Diagnostic.PgnFieldNumber">
+            <summary>Field number for the "pgn" field.</summary>
+        </member>
+        <member name="P:A4947E836D9414A2Ab59E260B52E5E252.Config.Types.Diagnostic.Pgn">
+            <summary>
+            The diagnostic PGN type
+            </summary>
+        </member>
+        <member name="F:A4947E836D9414A2Ab59E260B52E5E252.Config.Types.Diagnostic.FrequencyMsFieldNumber">
+            <summary>Field number for the "frequency_ms" field.</summary>
+        </member>
+        <member name="P:A4947E836D9414A2Ab59E260B52E5E252.Config.Types.Diagnostic.FrequencyMs">
+            <summary>
+            Frequency PGN is written to the j1939 bus e.g. 100 ms
+            </summary>
+        </member>
+        <member name="T:S2E48782D9D424B678C583755877Fa687.ModuleReflection">
+            <summary>Holder for reflection information generated from module.proto</summary>
+        </member>
+        <member name="P:S2E48782D9D424B678C583755877Fa687.ModuleReflection.Descriptor">
+            <summary>File descriptor for module.proto</summary>
+        </member>
+        <member name="F:S2E48782D9D424B678C583755877Fa687.Allocator.DoNotRemove">
+            <summary>
+            This needs to be here as a zero value.
+            </summary>
+        </member>
+        <member name="F:S2E48782D9D424B678C583755877Fa687.StandardEventCodes.BelowThreshold">
+            <summary>
+            Signal: Offset into repeated thresholds field.
+            </summary>
+        </member>
+        <member name="F:S2E48782D9D424B678C583755877Fa687.StandardEventCodes.AboveThreshold">
+            <summary>
+            Signal: Offset into repeated thresholds field.
+            </summary>
+        </member>
+        <member name="F:S2E48782D9D424B678C583755877Fa687.StandardFilterCodes.IsBelowThreshold">
+            <summary>
+            Signal: Offset into repeated thresholds field.
+            </summary>
+        </member>
+        <member name="F:S2E48782D9D424B678C583755877Fa687.StandardFilterCodes.IsAboveThreshold">
+            <summary>
+            Signal: Offset into repeated thresholds field.
+            </summary>
+        </member>
+        <member name="F:S2E48782D9D424B678C583755877Fa687.ExtendedFilterCodes.IsBelowValue">
+            <summary>
+            Signal: ADC input number.
+            Modifier: Value to compare against.
+            </summary>
+        </member>
+        <member name="F:S2E48782D9D424B678C583755877Fa687.ExtendedFilterCodes.IsAboveValue">
+            <summary>
+            Signal: ADC input number.
+            Modifier: Value to compare against.
+            </summary>
+        </member>
+        <member name="F:S2E48782D9D424B678C583755877Fa687.Config.ThresholdsFieldNumber">
+            <summary>Field number for the "thresholds" field.</summary>
+        </member>
+        <member name="P:S2E48782D9D424B678C583755877Fa687.Config.Thresholds">
+            <summary>
+            List of all thresholds to be monitored.
+            </summary>
+        </member>
+        <member name="T:S2E48782D9D424B678C583755877Fa687.Config.Types">
+            <summary>Container for nested types declared in the Config message type.</summary>
+        </member>
+        <member name="F:S2E48782D9D424B678C583755877Fa687.Config.Types.Threshold.IndexFieldNumber">
+            <summary>Field number for the "index" field.</summary>
+        </member>
+        <member name="P:S2E48782D9D424B678C583755877Fa687.Config.Types.Threshold.Index">
+            <summary>
+            Zero based ADC input number.
+            </summary>
+        </member>
+        <member name="F:S2E48782D9D424B678C583755877Fa687.Config.Types.Threshold.ValueFieldNumber">
+            <summary>Field number for the "value" field.</summary>
+        </member>
+        <member name="P:S2E48782D9D424B678C583755877Fa687.Config.Types.Threshold.Value">
+            <summary>
+            Threshold of the analog input in mV.
+            </summary>
+        </member>
+        <member name="T:A1D376724B74C40Bc86Aa4Ee57441B9Dd.ModuleReflection">
+            <summary>Holder for reflection information generated from module.proto</summary>
+        </member>
+        <member name="P:A1D376724B74C40Bc86Aa4Ee57441B9Dd.ModuleReflection.Descriptor">
+            <summary>File descriptor for module.proto</summary>
+        </member>
+        <member name="F:A1D376724B74C40Bc86Aa4Ee57441B9Dd.Allocator.DoNotRemove">
+            <summary>
+            This needs to be here as a zero value.
+            </summary>
+        </member>
+        <member name="F:A1D376724B74C40Bc86Aa4Ee57441B9Dd.StandardFilterCodes.Exists">
+            <summary>
+            Signal: Record to check for existence.
+            </summary>
+        </member>
+        <member name="F:A1D376724B74C40Bc86Aa4Ee57441B9Dd.StandardActionCodes.Clear">
+            <summary>
+            Signal: Record to set to 0.
+            </summary>
+        </member>
+        <member name="F:A1D376724B74C40Bc86Aa4Ee57441B9Dd.StandardActionCodes.Delete">
+            <summary>
+            Signal: Record to delete.
+            </summary>
+        </member>
+        <member name="F:A1D376724B74C40Bc86Aa4Ee57441B9Dd.StandardActionCodes.StartAccumulatingTime">
+            <summary>
+            Signal: Record to start counting seconds.
+            </summary>
+        </member>
+        <member name="F:A1D376724B74C40Bc86Aa4Ee57441B9Dd.StandardActionCodes.StopAccumulatingTime">
+            <summary>
+            Signal: Record to stop counting seconds.
+            </summary>
+        </member>
+        <member name="F:A1D376724B74C40Bc86Aa4Ee57441B9Dd.StandardActionCodes.Increment">
+            <summary>
+            Signal: Record to increment by 1.
+            </summary>
+        </member>
+        <member name="F:A1D376724B74C40Bc86Aa4Ee57441B9Dd.StandardActionCodes.Decrement">
+            <summary>
+            Signal: Record to decrement by 1.
+            </summary>
+        </member>
+        <member name="F:A1D376724B74C40Bc86Aa4Ee57441B9Dd.ExtendedActionCodes.Set">
+            <summary>
+            Signal: Record to write to.
+            Modifier: Value to set.
+            </summary>
+        </member>
+        <member name="F:A1D376724B74C40Bc86Aa4Ee57441B9Dd.ExtendedActionCodes.Add">
+            <summary>
+            Signal: Record to modify.
+            Modifier: Value to add.
+            </summary>
+        </member>
+        <member name="F:A1D376724B74C40Bc86Aa4Ee57441B9Dd.ExtendedActionCodes.Subtract">
+            <summary>
+            Signal: Record to modify.
+            Modifier: Value to subtract.
+            </summary>
+        </member>
+        <member name="F:A1D376724B74C40Bc86Aa4Ee57441B9Dd.Config.SyncFrequencyMinutesFieldNumber">
+            <summary>Field number for the "sync_frequency_minutes" field.</summary>
+        </member>
+        <member name="P:A1D376724B74C40Bc86Aa4Ee57441B9Dd.Config.SyncFrequencyMinutes">
+            <summary>
+            Frequency in minutes to write all records to flash.
+            </summary>
+        </member>
+        <member name="F:A1D376724B74C40Bc86Aa4Ee57441B9Dd.Config.DefaultsFieldNumber">
+            <summary>Field number for the "defaults" field.</summary>
+        </member>
+        <member name="P:A1D376724B74C40Bc86Aa4Ee57441B9Dd.Config.Defaults">
+            <summary>
+            List of default records and their default values.
+            </summary>
+        </member>
+        <member name="F:A1D376724B74C40Bc86Aa4Ee57441B9Dd.Config.TestVarFieldNumber">
+            <summary>Field number for the "test_var" field.</summary>
+        </member>
+        <member name="T:A1D376724B74C40Bc86Aa4Ee57441B9Dd.Config.Types">
+            <summary>Container for nested types declared in the Config message type.</summary>
+        </member>
+        <member name="F:A1D376724B74C40Bc86Aa4Ee57441B9Dd.Config.Types.Record.KeyFieldNumber">
+            <summary>Field number for the "key" field.</summary>
+        </member>
+        <member name="P:A1D376724B74C40Bc86Aa4Ee57441B9Dd.Config.Types.Record.Key">
+            <summary>
+            Unique key.
+            </summary>
+        </member>
+        <member name="F:A1D376724B74C40Bc86Aa4Ee57441B9Dd.Config.Types.Record.ValueFieldNumber">
+            <summary>Field number for the "value" field.</summary>
+        </member>
+        <member name="P:A1D376724B74C40Bc86Aa4Ee57441B9Dd.Config.Types.Record.Value">
+            <summary>
+            Value that corresponds to a key.
+            </summary>
+        </member>
+        <member name="T:E757221195064B5Ba9A93Be57B2967B1.ModuleReflection">
+            <summary>Holder for reflection information generated from module.proto</summary>
+        </member>
+        <member name="P:E757221195064B5Ba9A93Be57B2967B1.ModuleReflection.Descriptor">
+            <summary>File descriptor for module.proto</summary>
+        </member>
+        <member name="F:E757221195064B5Ba9A93Be57B2967B1.Allocator.DoNotRemove">
+            <summary>
+            This needs to be here as a zero value.
+            </summary>
+        </member>
+        <member name="F:E757221195064B5Ba9A93Be57B2967B1.Config.DigitalRegistersFieldNumber">
+            <summary>Field number for the "digital_registers" field.</summary>
+        </member>
+        <member name="P:E757221195064B5Ba9A93Be57B2967B1.Config.DigitalRegisters">
+            <summary>
+            List of registers allocated through the digital-io module protocol.
+            </summary>
+        </member>
+        <member name="F:E757221195064B5Ba9A93Be57B2967B1.Config.AnalogRegistersFieldNumber">
+            <summary>Field number for the "analog_registers" field.</summary>
+        </member>
+        <member name="P:E757221195064B5Ba9A93Be57B2967B1.Config.AnalogRegisters">
+            <summary>
+            List of registers allocated through the analog-io module protocol.
+            </summary>
+        </member>
+        <member name="F:E757221195064B5Ba9A93Be57B2967B1.Config.KvRegistersFieldNumber">
+            <summary>Field number for the "kv_registers" field.</summary>
+        </member>
+        <member name="P:E757221195064B5Ba9A93Be57B2967B1.Config.KvRegisters">
+            <summary>
+            List of registers allocated through the kv module protocol.
+            </summary>
+        </member>
+        <member name="T:E757221195064B5Ba9A93Be57B2967B1.Config.Types">
+            <summary>Container for nested types declared in the Config message type.</summary>
+        </member>
+        <member name="F:E757221195064B5Ba9A93Be57B2967B1.Config.Types.RegisterConfiguration.IndexFieldNumber">
+            <summary>Field number for the "index" field.</summary>
+        </member>
+        <member name="P:E757221195064B5Ba9A93Be57B2967B1.Config.Types.RegisterConfiguration.Index">
+            <summary>
+            Zero based register index to assign the argument to.
+            </summary>
+        </member>
+        <member name="F:E757221195064B5Ba9A93Be57B2967B1.Config.Types.RegisterConfiguration.ArgFieldNumber">
+            <summary>Field number for the "arg" field.</summary>
+        </member>
+        <member name="P:E757221195064B5Ba9A93Be57B2967B1.Config.Types.RegisterConfiguration.Arg">
+            <summary>
+            Zero based subsystem argument index to pass to the intended register.
+            </summary>
+        </member>
+        <member name="F:E757221195064B5Ba9A93Be57B2967B1.Config.Types.VirtualConfiguration.ConfigFieldNumber">
+            <summary>Field number for the "config" field.</summary>
+        </member>
+        <member name="P:E757221195064B5Ba9A93Be57B2967B1.Config.Types.VirtualConfiguration.Config">
+            <summary>
+            Configure the virtual register index and arg.
+            </summary>
+        </member>
+        <member name="F:E757221195064B5Ba9A93Be57B2967B1.Config.Types.VirtualConfiguration.BitFieldNumber">
+            <summary>Field number for the "bit" field.</summary>
+        </member>
+        <member name="P:E757221195064B5Ba9A93Be57B2967B1.Config.Types.VirtualConfiguration.Bit">
+            <summary>
+            Zero based bit index to configure in the intended register.
+            </summary>
+        </member>
+        <member name="T:Edce8Ad7992042Ecb031Bff36E195163.ModuleReflection">
+            <summary>Holder for reflection information generated from module.proto</summary>
+        </member>
+        <member name="P:Edce8Ad7992042Ecb031Bff36E195163.ModuleReflection.Descriptor">
+            <summary>File descriptor for module.proto</summary>
+        </member>
+        <member name="F:Edce8Ad7992042Ecb031Bff36E195163.Allocator.DoNotRemove">
+            <summary>
+            This needs to be here as a zero value.
+            </summary>
+        </member>
+        <member name="F:Edce8Ad7992042Ecb031Bff36E195163.StandardEventCodes.FixAcquired">
+            <summary>
+            Signal: N/A.
+            </summary>
+        </member>
+        <member name="F:Edce8Ad7992042Ecb031Bff36E195163.StandardEventCodes.FixLost">
+            <summary>
+            Signal: N/A.
+            </summary>
+        </member>
+        <member name="F:Edce8Ad7992042Ecb031Bff36E195163.StandardEventCodes.FixStateChange">
+            <summary>
+            Signal: FixType config enum value for fix state.
+            </summary>
+        </member>
+        <member name="F:Edce8Ad7992042Ecb031Bff36E195163.StandardFilterCodes.HasFix">
+            <summary>
+            Signal: N/A.
+            </summary>
+        </member>
+        <member name="F:Edce8Ad7992042Ecb031Bff36E195163.StandardFilterCodes.IsFixType">
+            <summary>
+            Signal: FixType config enum value for fix state being tested.
+            </summary>
+        </member>
+        <member name="F:Edce8Ad7992042Ecb031Bff36E195163.StandardFilterCodes.IsFixQualityEqualOrAbove">
+            <summary>
+            Signal: QualityType config enum value for quality being tested.
+            </summary>
+        </member>
+        <member name="T:Edce8Ad7992042Ecb031Bff36E195163.Config.Types">
+            <summary>Container for nested types declared in the Config message type.</summary>
+        </member>
+        <member name="T:Edce8Ad7992042Ecb031Bff36E195163.Config.Types.FixQualityType">
+            <summary>
+            @warning Must be in ascending order of quality.
+            </summary>
+        </member>
+        <member name="T:A69Fdf7Ae3D5011Eab77F2E728Ce88125.ModuleReflection">
+            <summary>Holder for reflection information generated from module.proto</summary>
+        </member>
+        <member name="P:A69Fdf7Ae3D5011Eab77F2E728Ce88125.ModuleReflection.Descriptor">
+            <summary>File descriptor for module.proto</summary>
+        </member>
+        <member name="F:A69Fdf7Ae3D5011Eab77F2E728Ce88125.Allocator.DoNotRemove">
+            <summary>
+            This needs to be here as a zero value.
+            </summary>
+        </member>
+        <member name="F:A69Fdf7Ae3D5011Eab77F2E728Ce88125.ExtendedFilterCodes.LastSentWithin">
+            <summary>
+            Signal: Report index.
+            Modifier: Time since last report sent.
+            </summary>
+        </member>
+        <member name="F:A69Fdf7Ae3D5011Eab77F2E728Ce88125.StandardActionCodes.Send">
+            <summary>
+            Signal: Report to generate and send.
+            </summary>
+        </member>
+        <member name="F:A69Fdf7Ae3D5011Eab77F2E728Ce88125.ExtendedActionCodes.SendEvent">
+            <summary>
+            Signal: Report to generate and send.
+            Modifier: Signal of the event.
+            </summary>
+        </member>
+        <member name="F:A69Fdf7Ae3D5011Eab77F2E728Ce88125.Config.InboundServerFieldNumber">
+            <summary>Field number for the "inbound_server" field.</summary>
+        </member>
+        <member name="P:A69Fdf7Ae3D5011Eab77F2E728Ce88125.Config.InboundServer">
+            <summary>
+            Hostname of the inbound server.
+            </summary>
+        </member>
+        <member name="F:A69Fdf7Ae3D5011Eab77F2E728Ce88125.Config.InboundPortFieldNumber">
+            <summary>Field number for the "inbound_port" field.</summary>
+        </member>
+        <member name="P:A69Fdf7Ae3D5011Eab77F2E728Ce88125.Config.InboundPort">
+            <summary>
+            UDP port used to send packets to the inbound server.
+            </summary>
+        </member>
+        <member name="F:A69Fdf7Ae3D5011Eab77F2E728Ce88125.Config.MaintenanceServerFieldNumber">
+            <summary>Field number for the "maintenance_server" field.</summary>
+        </member>
+        <member name="P:A69Fdf7Ae3D5011Eab77F2E728Ce88125.Config.MaintenanceServer">
+            <summary>
+            Hostname of the maintenance server.
+            </summary>
+        </member>
+        <member name="F:A69Fdf7Ae3D5011Eab77F2E728Ce88125.Config.MaintenanceInboundPortFieldNumber">
+            <summary>Field number for the "maintenance_inbound_port" field.</summary>
+        </member>
+        <member name="P:A69Fdf7Ae3D5011Eab77F2E728Ce88125.Config.MaintenanceInboundPort">
+            <summary>
+            UDP port used to checkin to the maintenance server.
+            </summary>
+        </member>
+        <member name="F:A69Fdf7Ae3D5011Eab77F2E728Ce88125.Config.MaintenanceCheckinIntervalFieldNumber">
+            <summary>Field number for the "maintenance_checkin_interval" field.</summary>
+        </member>
+        <member name="P:A69Fdf7Ae3D5011Eab77F2E728Ce88125.Config.MaintenanceCheckinInterval">
+            <summary>
+            Interval used to perform checkins to the maintenance server.
+            </summary>
+        </member>
+        <member name="F:A69Fdf7Ae3D5011Eab77F2E728Ce88125.Config.ReportsFieldNumber">
+            <summary>Field number for the "reports" field.</summary>
+        </member>
+        <member name="P:A69Fdf7Ae3D5011Eab77F2E728Ce88125.Config.Reports">
+            <summary>
+            List of reports that the module is able to construct.
+            </summary>
+        </member>
+        <member name="T:A69Fdf7Ae3D5011Eab77F2E728Ce88125.Config.Types">
+            <summary>Container for nested types declared in the Config message type.</summary>
+        </member>
+        <member name="F:A69Fdf7Ae3D5011Eab77F2E728Ce88125.Config.Types.Report.UriIndexFieldNumber">
+            <summary>Field number for the "uri_index" field.</summary>
+        </member>
+        <member name="P:A69Fdf7Ae3D5011Eab77F2E728Ce88125.Config.Types.Report.UriIndex">
+            <summary>
+            Uri index that will be the lookup index to the event message.
+            </summary>
+        </member>
+        <member name="F:A69Fdf7Ae3D5011Eab77F2E728Ce88125.Config.Types.Report.BlockBitmaskFieldNumber">
+            <summary>Field number for the "block_bitmask" field.</summary>
+        </member>
+        <member name="P:A69Fdf7Ae3D5011Eab77F2E728Ce88125.Config.Types.Report.BlockBitmask">
+            <summary>
+            Indicate which blocks it will be packing in the message.
+            </summary>
+        </member>
+        <member name="F:A69Fdf7Ae3D5011Eab77F2E728Ce88125.Config.Types.Report.BlockConfigFieldNumber">
+            <summary>Field number for the "block_config" field.</summary>
+        </member>
+        <member name="P:A69Fdf7Ae3D5011Eab77F2E728Ce88125.Config.Types.Report.BlockConfig">
+            <summary>
+            BlockConfigurations for the blocks enabled.
+            </summary>
+        </member>
+        <member name="T:A69Fdf7Ae3D5011Eab77F2E728Ce88125.Config.Types.Report.Types">
+            <summary>Container for nested types declared in the Report message type.</summary>
+        </member>
+        <member name="F:A69Fdf7Ae3D5011Eab77F2E728Ce88125.Config.Types.Report.Types.BlockConfiguration.IndexFieldNumber">
+            <summary>Field number for the "index" field.</summary>
+        </member>
+        <member name="P:A69Fdf7Ae3D5011Eab77F2E728Ce88125.Config.Types.Report.Types.BlockConfiguration.Index">
+            <summary>
+            Indicates which block to apply the argument.
+            </summary>
+        </member>
+        <member name="F:A69Fdf7Ae3D5011Eab77F2E728Ce88125.Config.Types.Report.Types.BlockConfiguration.ArgFieldNumber">
+            <summary>Field number for the "arg" field.</summary>
+        </member>
+        <member name="P:A69Fdf7Ae3D5011Eab77F2E728Ce88125.Config.Types.Report.Types.BlockConfiguration.Arg">
+            <summary>
+            Argument to pass to the attended message group.
+            </summary>
+        </member>
+        <member name="T:Abbbd3832Ad747A0A1B0Cd1B3C6D6579.ModuleReflection">
+            <summary>Holder for reflection information generated from module.proto</summary>
+        </member>
+        <member name="P:Abbbd3832Ad747A0A1B0Cd1B3C6D6579.ModuleReflection.Descriptor">
+            <summary>File descriptor for module.proto</summary>
+        </member>
+        <member name="F:Abbbd3832Ad747A0A1B0Cd1B3C6D6579.Allocator.DoNotRemove">
+            <summary>
+            This needs to be here as a zero value.
+            </summary>
+        </member>
+        <member name="F:Abbbd3832Ad747A0A1B0Cd1B3C6D6579.StandardEventCodes.PowerUp">
+            <summary>
+            Signal: N/A
+            </summary>
+        </member>
+        <member name="F:Abbbd3832Ad747A0A1B0Cd1B3C6D6579.StandardEventCodes.WakeUp">
+            <summary>
+            Signal: N/A
+            </summary>
+        </member>
+        <member name="F:Abbbd3832Ad747A0A1B0Cd1B3C6D6579.StandardEventCodes.PowerOrWakeUp">
+            <summary>
+            Signal: N/A
+            </summary>
+        </member>
+        <member name="F:Abbbd3832Ad747A0A1B0Cd1B3C6D6579.StandardFilterCodes.IsCurrentProfile">
+            <summary>
+            Signal: The current profile.
+            </summary>
+        </member>
+        <member name="F:Abbbd3832Ad747A0A1B0Cd1B3C6D6579.StandardFilterCodes.IsRestrictedMode">
+            <summary>
+            Signal: The restricted mode
+            0 - unrestricted
+            1 - restricted
+            2 - transport
+            3 - invalid
+            </summary>
+        </member>
+        <member name="F:Abbbd3832Ad747A0A1B0Cd1B3C6D6579.StandardActionCodes.ApplyProfile">
+            <summary>
+            Signal: The profile to apply.
+            </summary>
+        </member>
+        <member name="F:Abbbd3832Ad747A0A1B0Cd1B3C6D6579.Config.ProfilesFieldNumber">
+            <summary>Field number for the "profiles" field.</summary>
+        </member>
+        <member name="F:Abbbd3832Ad747A0A1B0Cd1B3C6D6579.Config.Test123FieldNumber">
+            <summary>Field number for the "test123" field.</summary>
+        </member>
+        <member name="T:Abbbd3832Ad747A0A1B0Cd1B3C6D6579.Config.Types">
+            <summary>Container for nested types declared in the Config message type.</summary>
+        </member>
+        <member name="F:Abbbd3832Ad747A0A1B0Cd1B3C6D6579.Config.Types.Profile.StateFieldNumber">
+            <summary>Field number for the "state" field.</summary>
+        </member>
+        <member name="P:Abbbd3832Ad747A0A1B0Cd1B3C6D6579.Config.Types.Profile.State">
+            <summary>
+            The profile's state.
+            </summary>
+        </member>
+        <member name="F:Abbbd3832Ad747A0A1B0Cd1B3C6D6579.Config.Types.Profile.WakeupMaskFieldNumber">
+            <summary>Field number for the "wakeup_mask" field.</summary>
+        </member>
+        <member name="P:Abbbd3832Ad747A0A1B0Cd1B3C6D6579.Config.Types.Profile.WakeupMask">
+            <summary>
+            What will wake the device up (input, adc_threshold, cell, etc).
+            </summary>
+        </member>
+        <member name="F:Abbbd3832Ad747A0A1B0Cd1B3C6D6579.Config.Types.Profile.DelaySFieldNumber">
+            <summary>Field number for the "delay_s" field.</summary>
+        </member>
+        <member name="P:Abbbd3832Ad747A0A1B0Cd1B3C6D6579.Config.Types.Profile.DelayS">
+            <summary>
+            How long to wait before applying this profile in seconds.
+            </summary>
+        </member>
+        <member name="T:Abbbd3832Ad747A0A1B0Cd1B3C6D6579.Config.Types.Profile.Types">
+            <summary>Container for nested types declared in the Profile message type.</summary>
+        </member>
+        <member name="T:A018E7E898Ac74A06936Fab03B5Fc6094.ModuleReflection">
+            <summary>Holder for reflection information generated from module.proto</summary>
+        </member>
+        <member name="P:A018E7E898Ac74A06936Fab03B5Fc6094.ModuleReflection.Descriptor">
+            <summary>File descriptor for module.proto</summary>
+        </member>
+        <member name="F:A018E7E898Ac74A06936Fab03B5Fc6094.Allocator.DoNotRemove">
+            <summary>
+            This needs to be here as a zero value.
+            </summary>
+        </member>
+        <member name="F:A018E7E898Ac74A06936Fab03B5Fc6094.StandardEventCodes.Expired">
+            <summary>
+            Signal: Timer instance number.
+            </summary>
+        </member>
+        <member name="F:A018E7E898Ac74A06936Fab03B5Fc6094.StandardFilterCodes.Active">
+            <summary>
+            Signal: Timer instance number.
+            </summary>
+        </member>
+        <member name="F:A018E7E898Ac74A06936Fab03B5Fc6094.StandardActionCodes.Cancel">
+            <summary>
+            Signal: Timer instance number.
+            </summary>
+        </member>
+        <member name="F:A018E7E898Ac74A06936Fab03B5Fc6094.ExtendedActionCodes.After">
+            <summary>
+            Signal: Timer instance number.
+            Modifier: Frequency for timer to be set at.
+            </summary>
+        </member>
+        <member name="F:A018E7E898Ac74A06936Fab03B5Fc6094.Config.ResourceCountFieldNumber">
+            <summary>Field number for the "resource_count" field.</summary>
+        </member>
+        <member name="P:A018E7E898Ac74A06936Fab03B5Fc6094.Config.ResourceCount">
+            <summary>
+            Number of resources allocated through EDD.
+            </summary>
+        </member>
+        <member name="T:C609D032Bc7844Aba78Ef3044D9Fbec5.ModuleReflection">
+            <summary>Holder for reflection information generated from module.proto</summary>
+        </member>
+        <member name="P:C609D032Bc7844Aba78Ef3044D9Fbec5.ModuleReflection.Descriptor">
+            <summary>File descriptor for module.proto</summary>
+        </member>
+        <member name="F:C609D032Bc7844Aba78Ef3044D9Fbec5.Allocator.DoNotRemove">
+            <summary>
+            This needs to be here as a zero value.
+            </summary>
+        </member>
+        <member name="F:C609D032Bc7844Aba78Ef3044D9Fbec5.Allocator.Value">
+            <summary>
+            Encode a dynamic resource with a count.
+            </summary>
+        </member>
+        <member name="F:C609D032Bc7844Aba78Ef3044D9Fbec5.StandardEventCodes.Expired">
+            <summary>
+            Signal: A 0-based index for the timer.
+            </summary>
+        </member>
+        <member name="F:C609D032Bc7844Aba78Ef3044D9Fbec5.StandardFilterCodes.Active">
+            <summary>
+            Signal: A 0-based index for the timer.
+            </summary>
+        </member>
+        <member name="F:C609D032Bc7844Aba78Ef3044D9Fbec5.StandardActionCodes.Cancel">
+            <summary>
+            Signal: A 0-based index for the timer.
+            </summary>
+        </member>
+        <member name="F:C609D032Bc7844Aba78Ef3044D9Fbec5.ExtendedActionCodes.After">
+            <summary>
+            Signal: A 0-based index for the timer.
+            Modifier: The timer's duration in minutes.
+            </summary>
+        </member>
+        <member name="F:C609D032Bc7844Aba78Ef3044D9Fbec5.ExtendedActionCodes.Every">
+            <summary>
+            Signal: A 0-based index for the timer.
+            Modifier: The timer's duration in minutes.
+            </summary>
+        </member>
+        <member name="F:C609D032Bc7844Aba78Ef3044D9Fbec5.ExtendedActionCodes.WakeAfter">
+            <summary>
+            Signal: A 0-based index for the timer.
+            Modifier: The timer's duration in minutes.
+            </summary>
+        </member>
+        <member name="F:C609D032Bc7844Aba78Ef3044D9Fbec5.ExtendedActionCodes.WakeEvery">
+            <summary>
+            Signal: A 0-based index for the timer.
+            Modifier: The timer's duration in minutes.
+            </summary>
+        </member>
+        <member name="F:C609D032Bc7844Aba78Ef3044D9Fbec5.Config.ResourceCountFieldNumber">
+            <summary>Field number for the "resource_count" field.</summary>
+        </member>
+        <member name="P:C609D032Bc7844Aba78Ef3044D9Fbec5.Config.ResourceCount">
+            <summary>
+            Number of resources allocated by goat.
+            </summary>
+        </member>
+        <member name="T:S20E7068614E94D4980Cbffce06F71433.ModuleReflection">
+            <summary>Holder for reflection information generated from module.proto</summary>
+        </member>
+        <member name="P:S20E7068614E94D4980Cbffce06F71433.ModuleReflection.Descriptor">
+            <summary>File descriptor for module.proto</summary>
+        </member>
+        <member name="F:S20E7068614E94D4980Cbffce06F71433.Allocator.DoNotRemove">
+            <summary>
+            This needs to be here as a zero value.
+            </summary>
+        </member>
+        <member name="F:S20E7068614E94D4980Cbffce06F71433.StandardEventCodes.GatewayDisabled">
+            <summary>
+            Signal: n/a.
+            </summary>
+        </member>
+        <member name="F:S20E7068614E94D4980Cbffce06F71433.StandardEventCodes.GatewayEnabled">
+            <summary>
+            Signal: n/a.
+            </summary>
+        </member>
+        <member name="F:S20E7068614E94D4980Cbffce06F71433.StandardEventCodes.SiteSurveyCompleted">
+            <summary>
+            Signal: n/a.
+            </summary>
+        </member>
+        <member name="F:S20E7068614E94D4980Cbffce06F71433.StandardFilterCodes.IsGatewayEnabled">
+            <summary>
+            Signal: n/a.
+            </summary>
+        </member>
+        <member name="F:S20E7068614E94D4980Cbffce06F71433.StandardActionCodes.EnableGateway">
+            <summary>
+            Signal: n/a.
+            </summary>
+        </member>
+        <member name="F:S20E7068614E94D4980Cbffce06F71433.StandardActionCodes.DisableGateway">
+            <summary>
+            Signal: n/a.
+            </summary>
+        </member>
+        <member name="F:S20E7068614E94D4980Cbffce06F71433.StandardActionCodes.SiteSurvey">
+            <summary>
+            Signal: n/a.
+            </summary>
+        </member>
+        <member name="F:S20E7068614E94D4980Cbffce06F71433.Config.ConnectMessageThresholdFieldNumber">
+            <summary>Field number for the "connect_message_threshold" field.</summary>
+        </member>
+        <member name="P:S20E7068614E94D4980Cbffce06F71433.Config.ConnectMessageThreshold">
+            <summary>
+            Minimum number of messages needed to connect to a device.
+            </summary>
+        </member>
+        <member name="F:S20E7068614E94D4980Cbffce06F71433.Config.DisconnectMessageThresholdFieldNumber">
+            <summary>Field number for the "disconnect_message_threshold" field.</summary>
+        </member>
+        <member name="P:S20E7068614E94D4980Cbffce06F71433.Config.DisconnectMessageThreshold">
+            <summary>
+            Number of messages to drain device until before disconnecting.
+            </summary>
+        </member>
+        <member name="F:S20E7068614E94D4980Cbffce06F71433.Config.ScanMessageThresholdFieldNumber">
+            <summary>Field number for the "scan_message_threshold" field.</summary>
+        </member>
+        <member name="P:S20E7068614E94D4980Cbffce06F71433.Config.ScanMessageThreshold">
+            <summary>
+            Minimum number of device messages used for filtering scan results.
+            </summary>
+        </member>
+        <member name="F:S20E7068614E94D4980Cbffce06F71433.Config.MaxScanResultsFieldNumber">
+            <summary>Field number for the "max_scan_results" field.</summary>
+        </member>
+        <member name="P:S20E7068614E94D4980Cbffce06F71433.Config.MaxScanResults">
+            <summary>
+            Maximum number of results to include.
+            </summary>
+        </member>
+        <member name="F:S20E7068614E94D4980Cbffce06F71433.Config.SortByFieldNumber">
+            <summary>Field number for the "sort_by" field.</summary>
+        </member>
+        <member name="P:S20E7068614E94D4980Cbffce06F71433.Config.SortBy">
+            <summary>
+            Method to sort devices after scanning is done
+            </summary>
+        </member>
+        <member name="T:S20E7068614E94D4980Cbffce06F71433.Config.Types">
+            <summary>Container for nested types declared in the Config message type.</summary>
+        </member>
+        <member name="F:S20E7068614E94D4980Cbffce06F71433.Config.Types.SortMethod.None">
+            <summary>
+            No sorting applied.
+            </summary>
+        </member>
+        <member name="F:S20E7068614E94D4980Cbffce06F71433.Config.Types.SortMethod.MessageCountAsc">
+            <summary>
+            Sort ascending based on number of messages.
+            </summary>
+        </member>
+        <member name="F:S20E7068614E94D4980Cbffce06F71433.Config.Types.SortMethod.MessageCountDesc">
+            <summary>
+            Sort descending based on number of messages.
+            </summary>
+        </member>
+        <member name="F:S20E7068614E94D4980Cbffce06F71433.Config.Types.SortMethod.RssiAsc">
+            <summary>
+            Sort ascending based on RSSI.
+            </summary>
+        </member>
+        <member name="F:S20E7068614E94D4980Cbffce06F71433.Config.Types.SortMethod.RssiDesc">
+            <summary>
+            Sort descending based on RSSI.
+            </summary>
+        </member>
     </members>
 </doc>

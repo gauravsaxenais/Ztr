@@ -1,7 +1,10 @@
 ﻿namespace Business.Parsers
 {
+    using Business.Core;
     using EnsureThat;
     using Google.Protobuf;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using System;
@@ -14,7 +17,7 @@
     using ZTR.Framework.Business.File.FileReaders;
 
     public class InputFileLoader
-    {
+    {       
         private readonly string csFileExtension = ".g.cs", dllExtension = ".dll", fileDescriptorExtension = ".desc";
         public IMessage GenerateCodeFiles(string protoFileName, string protoFilePath, params string[] args)
         {
@@ -52,7 +55,7 @@
 
             try
             {
-                tmpOutputFolder = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("n"));
+                tmpOutputFolder = Path.Combine($"{Global.WebRoot}/tmp", Guid.NewGuid().ToString("n"));
                 Directory.CreateDirectory(tmpOutputFolder);
 
                 string protocPath = GetProtoCompilerPath(out tmpFolder);
@@ -149,7 +152,7 @@
                 return lazyPath;
             }
 
-            folder = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("n"));
+            folder = Path.Combine($"{Global.WebRoot}/tmp", Guid.NewGuid().ToString("n"));
             Directory.CreateDirectory(folder);
             string path = Path.Combine(folder, Name);
 
