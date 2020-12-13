@@ -1,6 +1,7 @@
 ﻿namespace Service
 {
     using Business.Core;
+    using Business.Parsers;
     using EnsureThat;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -51,7 +52,8 @@
 #if RELEASE
             services.AddAllowAllOriginsCorsPolicy();
 #endif
-           
+            services.AddSingleton<InputFileLoader>();
+
             services.AddMvc()
                 .AddNewtonsoftJson(options => options.SerializerSettings.Converters.Add(new StringEnumConverter()))
                 .AddXmlSerializerFormatters()

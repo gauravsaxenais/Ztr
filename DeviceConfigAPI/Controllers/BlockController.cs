@@ -1,5 +1,6 @@
 ﻿namespace Service.Controllers
 {
+    using System.Runtime.InteropServices;
     using System.Threading.Tasks;
     using Business.RequestHandlers.Interfaces;
     using EnsureThat;

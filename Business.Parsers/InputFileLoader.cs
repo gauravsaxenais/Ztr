@@ -8,6 +8,7 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
+    using Microsoft.Extensions.Logging;
     using System;
     using System.Diagnostics;
     using System.IO;
@@ -20,7 +21,11 @@
 
     public class InputFileLoader
     {
-
+        private readonly ILogger<InputFileLoader> log;
+        public InputFileLoader(ILogger<InputFileLoader> logger)
+        {
+            log = logger;
+        }
         private readonly string csFileExtension = ".g.cs", dllExtension = ".dll", fileDescriptorExtension = ".desc";
         public async Task<CustomMessage> GenerateCodeFiles(string moduleName, string protoFileName, string protoFilePath, params string[] args)
         {
@@ -68,44 +73,57 @@
             tmpOutputFolder = Path.Combine($"{Global.WebRoot}/tmp", Guid.NewGuid().ToString("n"));
             Directory.CreateDirectory(tmpOutputFolder);
 
-            string protocPath = GetProtoCompilerPath(out tmpFolder);
+            string protocPath = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? GetProtoCompilerPath(out tmpFolder) : "protoc";
             string tmpDescriptorFile = Path.Combine(tmpOutputFolder, fileName + fileDescriptorExtension);
-
-            var psi = new ProcessStartInfo(
-                protocPath,
-                arguments: $" --descriptor_set_out={tmpDescriptorFile} --include_imports --proto_path={protoFilePath} --csharp_out={tmpOutputFolder} --csharp_opt=file_extension={csFileExtension} --error_format=gcc {fileName} {string.Join(" ", args)}"
-            )
-            {
-                CreateNoWindow = true,
-                WindowStyle = ProcessWindowStyle.Hidden,
-                WorkingDirectory = Global.WebRoot,
-                UseShellExecute = false
-            };
-
-            psi.CreateNoWindow = true;
-            psi.WindowStyle = ProcessWindowStyle.Hidden;
-            psi.WorkingDirectory = Global.WebRoot;
-            psi.UseShellExecute = false;
-            psi.RedirectStandardOutput = psi.RedirectStandardError = true;
-
-            using Process proc = Process.Start(psi);
-            Thread errThread = new Thread(DumpStream(proc.StandardError));
-            Thread outThread = new Thread(DumpStream(proc.StandardOutput));
-            errThread.Name = "stderr reader";
-            outThread.Name = "stdout reader";
-            errThread.Start();
-            outThread.Start();
-            proc.WaitForExit();
-            outThread.Join();
-            errThread.Join();
-            if (proc.ExitCode != 0)
-            {
-                if (HasByteOrderMark(fileName))
+            string inputs = $" --descriptor_set_out={tmpDescriptorFile} --include_imports --proto_path={protoFilePath} --csharp_out={tmpOutputFolder} --csharp_opt=file_extension={csFileExtension} --error_format=gcc {fileName} {string.Join(" ", args)}";
+            
+                var psi = new ProcessStartInfo(
+                    protocPath,
+                    arguments: inputs
+                )
                 {
-                    //stderr.WriteLine("The input file should be UTF8 without a byte-order-mark (in Visual Studio use \"File\" -> \"Advanced Save Options...\" to rectify)");
+                    CreateNoWindow = true,
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    WorkingDirectory = Global.WebRoot,
+                    UseShellExecute = false
+                };
+
+                psi.CreateNoWindow = true;
+                psi.WindowStyle = ProcessWindowStyle.Hidden;
+                psi.WorkingDirectory = Global.WebRoot;
+                psi.UseShellExecute = false;
+                psi.RedirectStandardOutput = psi.RedirectStandardError = true;                
+
+                Process proc = Process.Start(psi);                
+                Thread errThread = new Thread(DumpStream(proc.StandardError));
+                Thread outThread = new Thread(DumpStream(proc.StandardOutput));
+                errThread.Name = "stderr reader";
+                outThread.Name = "stdout reader";
+                errThread.Start();
+                outThread.Start();
+                proc.WaitForExit();
+                outThread.Join();
+                errThread.Join();
+                if (proc.ExitCode != 0)
+                {
+                    if (HasByteOrderMark(fileName))
+                    {
+                        //stderr.WriteLine("The input file should be UTF8 without a byte-order-mark (in Visual Studio use \"File\" -> \"Advanced Save Options...\" to rectify)");
+                    }
+                    throw new ApplicationException("Protoc in linux error" + fileName);
                 }
-                throw new ProtoParseException(Path.GetFileName(fileName));
-            }
+            
+            //if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            //{
+            //    log.LogInformation("proto in Linux starting..");
+            //    using Process proc = Process.Start("protoc",inputs);
+               
+            //    proc.WaitForExit();
+            //    if (proc.ExitCode != 0)
+            //    {
+            //        throw new ApplicationException("Protoc in linux error");
+            //    }
+            //}
             return tmpOutputFolder;
 
 
@@ -136,11 +154,15 @@
 
         private string GetProtoCompilerPath(out string folder)
         {
-            const string Name = "protoc.exe";
+            string Name = "protoc";
+            if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                Name += ".exe";
+            }
             string path = $"{Global.WebRoot}/{Name}";
             //string lazyPath = CombinePathFromAppRoot(Name);
             folder = Global.WebRoot;
-            if (!File.Exists(path))
+            if (!File.Exists(path) && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 // look inside ourselves...
                 using (Stream resStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(
@@ -232,7 +254,7 @@
                 string line;
                 while ((line = reader.ReadLine()) != null)
                 {
-                    Debug.WriteLine(line);
+                    log.LogError(line);
                 }
             };
         }

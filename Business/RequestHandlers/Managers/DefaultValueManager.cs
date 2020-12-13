@@ -30,19 +30,20 @@
         private readonly IGitRepositoryManager _gitRepoManager;
         private readonly DeviceGitConnectionOptions _deviceGitConnectionOptions;
         private readonly string ProtoFileName = "module.proto";
-
+        private InputFileLoader inputFileLoader;
         /// <summary>
         /// Initializes a new instance of the <see cref="DefaultValueManager"/> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
         /// <param name="gitRepoManager">The git repo manager.</param>
         /// <param name="deviceGitConnectionOptions">The device git connection options.</param>
-        public DefaultValueManager(ILogger<ModuleManager> logger, IGitRepositoryManager gitRepoManager, DeviceGitConnectionOptions deviceGitConnectionOptions) : base(logger)
+        public DefaultValueManager(ILogger<ModuleManager> logger, IGitRepositoryManager gitRepoManager, DeviceGitConnectionOptions deviceGitConnectionOptions, InputFileLoader fl) : base(logger)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
             EnsureArg.IsNotNull(deviceGitConnectionOptions, nameof(deviceGitConnectionOptions));
             EnsureArg.IsNotNull(deviceGitConnectionOptions.TomlConfiguration, nameof(deviceGitConnectionOptions.TomlConfiguration));
 
+            inputFileLoader = fl;
             _gitRepoManager = gitRepoManager;
             _deviceGitConnectionOptions = deviceGitConnectionOptions;
 
@@ -69,8 +70,7 @@
 
             var customMessageParser = new CustomMessageParser();
             var moduleParser = new ModuleParser();
-            var inputFileLoader = new InputFileLoader();
-
+          
             var modulesProtoFolder = Path.Combine(_deviceGitConnectionOptions.TomlConfiguration.DeviceFolder, deviceType, _deviceGitConnectionOptions.TomlConfiguration.ModulesProtoFolder);
             var tomlSettings = TomlFileReader.LoadLowerCaseTomlSettingsWithMappingForDefaultValues();
 
@@ -109,8 +109,7 @@
             var tasks = new List<Task<CustomMessage>>();
             var result = new List<CustomMessage>();
 
-            var inputFileLoader = new InputFileLoader();
-
+           
             foreach (var filePath in protoFilePaths)
             {
                 var fileName = Path.GetFileName(filePath.Value);
