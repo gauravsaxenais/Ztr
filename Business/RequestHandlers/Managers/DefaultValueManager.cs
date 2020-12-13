@@ -121,7 +121,7 @@
                 tasks.Add(inputFileLoader.GenerateCodeFiles(moduleName, fileName, protoDirectory));
             }
             
-            var taskResults = await Task.WhenAll(tasks).ConfigureAwait(false);
+            var taskResults = await Task.WhenAll(tasks);
 
             foreach (var taskResult in taskResults)
             {
@@ -131,6 +131,7 @@
                 }
             }
 
+          
             return result;
         }
 

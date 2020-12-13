@@ -6,6 +6,6 @@ namespace Business.Core
 {
     public class Global
     {
-        public static string WebRoot { get; set; }
+        public static string WebRoot => AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
     }
 }

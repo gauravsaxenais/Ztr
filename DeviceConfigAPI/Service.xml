@@ -214,7 +214,7 @@
               Added Startup class.
             </summary>
         </member>
-        <member name="M:Service.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+        <member name="M:Service.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
             <summary>
             Initializes a new instance of the <see cref="T:Service.Startup"/> class.
             </summary>

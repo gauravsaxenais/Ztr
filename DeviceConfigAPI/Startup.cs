@@ -25,10 +25,9 @@
         /// Initializes a new instance of the <see cref="Startup"/> class.
         /// </summary>
         /// <param name="configuration">The configuration.</param>
-        public Startup(IConfiguration configuration, IWebHostEnvironment env)
+        public Startup(IConfiguration configuration)
         {
-            this.Configuration = configuration;
-            Global.WebRoot = env.ContentRootPath;
+            this.Configuration = configuration;            
         }
 
         /// <summary>

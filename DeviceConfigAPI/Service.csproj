@@ -11,6 +11,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Logs\**" />
+    <Compile Remove="tmp\**" />
+    <Content Remove="Logs\**" />
+    <Content Remove="tmp\**" />
+    <EmbeddedResource Remove="Logs\**" />
+    <EmbeddedResource Remove="tmp\**" />
+    <None Remove="Logs\**" />
+    <None Remove="tmp\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Ensure.That" Version="9.2.0" />
     <PackageReference Include="IdentityModel" Version="4.4.0" />
     <PackageReference Include="IdentityServer4.Storage" Version="4.1.1" />
