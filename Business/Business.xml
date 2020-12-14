@@ -544,13 +544,14 @@
             <seealso cref="T:ZTR.Framework.Business.Manager" />
             <seealso cref="T:Business.RequestHandlers.Interfaces.IDefaultValueManager" />
         </member>
-        <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.ModuleManager},Business.RequestHandlers.Interfaces.IGitRepositoryManager,Business.Configuration.DeviceGitConnectionOptions)">
+        <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.ModuleManager},Business.RequestHandlers.Interfaces.IGitRepositoryManager,Business.Configuration.DeviceGitConnectionOptions,Business.Parsers.InputFileLoader)">
             <summary>
             Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.DefaultValueManager"/> class.
             </summary>
             <param name="logger">The logger.</param>
             <param name="gitRepoManager">The git repo manager.</param>
             <param name="deviceGitConnectionOptions">The device git connection options.</param>
+            /// <param name="inputFileLoader">File loader which reads a proto file as input and gives out custom message.</param>
         </member>
         <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.GetDefaultValuesAllModulesAsync(System.String,System.String)">
             <summary>

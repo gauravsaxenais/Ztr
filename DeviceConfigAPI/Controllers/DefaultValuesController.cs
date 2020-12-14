@@ -16,11 +16,11 @@
     /// only the attributes are returned.
     /// </summary>
     /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
-    [ApiController]
+   
     [Produces(SupportedContentTypes.Json, SupportedContentTypes.Xml)]
     [Consumes(SupportedContentTypes.Json, SupportedContentTypes.Xml)]
     [QueryRoute]
-    public class DefaultValuesController : ControllerBase
+    public class DefaultValuesController : ApiControllerBase
     {
         private readonly IDefaultValueManager manager;
 

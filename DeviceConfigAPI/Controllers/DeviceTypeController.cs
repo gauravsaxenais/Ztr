@@ -11,11 +11,10 @@
     /// <summary>
     /// This service returns the device information.
     /// </summary>
-    [ApiController]
     [Produces(SupportedContentTypes.Json, SupportedContentTypes.Xml)]
     [Consumes(SupportedContentTypes.Json, SupportedContentTypes.Xml)]
     [QueryRoute]
-    public class DeviceTypeController : ControllerBase
+    public class DeviceTypeController : ApiControllerBase
     {
         private readonly IDeviceTypeManager manager;
 

@@ -1,9 +1,9 @@
 ﻿namespace Service
 {
+    using Business.Parsers;
     using Business.RequestHandlers.Interfaces;
     using Business.RequestHandlers.Managers;
     using EnsureThat;
-    using Microsoft.AspNetCore.Cors.Infrastructure;
     using Microsoft.Extensions.DependencyInjection;
 
     /// <summary>
@@ -20,6 +20,8 @@
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             EnsureArg.IsNotNull(services, nameof(services));
+
+            services.AddSingleton<InputFileLoader>();
 
             services.AddScoped<IGitRepositoryManager, GitRepositoryManager>();
 
@@ -39,17 +41,12 @@
         public static void AddAllowAllOriginsCorsPolicy(this IServiceCollection services)
         {
             // Setup CORS
-            var corsBuilder = new CorsPolicyBuilder();
-
-            corsBuilder.AllowAnyOrigin(); // For anyone access.
-            corsBuilder.AllowAnyMethod();
-            corsBuilder.AllowAnyHeader();
-            corsBuilder.AllowCredentials();
-
-            services.AddCors(options =>
+            services.AddCors(o => o.AddPolicy(ApiConstants.ApiAllowAllOriginsPolicy, builder =>
             {
-                options.AddPolicy(ApiConstants.ApiAllowAllOriginsPolicy, corsBuilder.Build());
-            });
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
         }
     }
 }

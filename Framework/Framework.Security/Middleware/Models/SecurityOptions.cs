@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using ZTR.Framework.Configuration;
+    using Framework.Configuration;
 
     public class SecurityOptions : ConfigurationOptions
     {

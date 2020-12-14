@@ -49,7 +49,6 @@
 #if RELEASE
             services.AddAllowAllOriginsCorsPolicy();
 #endif
-
             services.AddMvc()
                 .AddNewtonsoftJson(options => options.SerializerSettings.Converters.Add(new StringEnumConverter()))
                 .AddXmlSerializerFormatters()

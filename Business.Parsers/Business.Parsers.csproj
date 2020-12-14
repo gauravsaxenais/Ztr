@@ -18,9 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="ZTR.Framework.Business">
-      <HintPath>..\Framework\Framework.Business\bin\Debug\netcoreapp3.1\ZTR.Framework.Business.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\Framework\Framework.Service\Framework.Service.csproj" />
   </ItemGroup>
 
 </Project>

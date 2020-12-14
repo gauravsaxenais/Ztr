@@ -8,11 +8,10 @@
     using ZTR.Framework.Service;
 
     /// <summary>Block Controller - This service is responsible for getting arguments in network blocks.</summary>
-    [ApiController]
     [Produces(SupportedContentTypes.Json, SupportedContentTypes.Xml)]
     [Consumes(SupportedContentTypes.Json, SupportedContentTypes.Xml)]
     [QueryRoute]
-    public class BlockController : ControllerBase
+    public class BlockController : ApiControllerBase
     {
         private readonly IBlockManager manager;
 
