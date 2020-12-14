@@ -54,7 +54,7 @@
                 var fields = protoParsedMessage.Fields;
 
                 var field = fields.Where(x => string.Equals(x.Name, key, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
-                var repeatedMessage = messages.Where(x => string.Equals(x.Name, key, StringComparison.OrdinalIgnoreCase) && x.IsRepeated).FirstOrDefault();
+                var repeatedMessage = messages.Where(x => string.Equals(x.Name, key, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
 
                 // its a field
                 if (field != null)
@@ -68,50 +68,71 @@
 
                 else if (repeatedMessage != null)
                 {
+                    var defaultValuesFromToml = new List<Dictionary<string, object>>();
+
                     var jsonArray = new JsonArray
                     {
                         Name = repeatedMessage.Name,
                         IsRepeated = repeatedMessage.IsRepeated
                     };
 
-                    Dictionary<string, object>[] values = null;
-                    var arrayMessages = repeatedMessage.Messages;
-
                     if (configValues.ElementAt(tempIndex).Value is Dictionary<string, object>[] v)
                     {
-                        values = v;
+                        defaultValuesFromToml.AddRange(v);
                     }
 
-                    // declare empty.
-                    else values = new Dictionary<string, object>[0];
+                    ProcessArray(defaultValuesFromToml, jsonArray, repeatedMessage);
 
-                    if (!arrayMessages.Any())
+                    model.Arrays.Add(jsonArray);
+                }
+            }
+        }
+
+        private void ProcessArray(List<Dictionary<string, object>> defaultValuesFromToml, JsonArray jsonArray, ProtoParsedMessage repeatedMessage)
+        {
+            foreach (var defaultValueFromToml in defaultValuesFromToml)
+            {
+                var arrayOfFields = new List<object>();
+
+                for (int temp = 0; temp < defaultValueFromToml.Count(); temp++)
+                {
+                    var messageField = repeatedMessage.Fields.Where(x => x.Name == defaultValueFromToml.ElementAt(temp).Key).FirstOrDefault();
+                    var messageMessage = repeatedMessage.Messages.Where(x => x.Name == defaultValueFromToml.ElementAt(temp).Key).FirstOrDefault();
+
+                    if (messageField != null)
                     {
-                        var fieldsWithData = GetFieldsData(repeatedMessage, values);
-                        jsonArray.Data = fieldsWithData;
+                        var tempField = (Field)messageField.Clone();
+                        tempField.Value = defaultValueFromToml.ElementAt(temp).Value;
 
-                        model.Arrays.Add(jsonArray);
+                        // fix the indexes.
+                        arrayOfFields.Add(tempField);
                     }
 
-                    else
+                    else if (messageMessage != null)
                     {
-                        var jsonModels = new List<JsonModel>();
-
-                        for (int temp = 0; temp < values.Length; temp++)
+                        if (defaultValueFromToml.ElementAt(temp).Value is Dictionary<string, object>[] tomlValue)
                         {
                             var tempJsonModel = new JsonModel
                             {
                                 Id = temp,
-                                Name = repeatedMessage.Name
+                                Name = messageMessage.Name
                             };
 
-                            MergeTomlWithProtoMessage(values[temp], repeatedMessage, tempJsonModel);
-                            jsonModels.Add(tempJsonModel);
-                        }
+                            var tempJsonArray = new JsonArray
+                            {
+                                Name = messageMessage.Name,
+                                IsRepeated = messageMessage.IsRepeated
+                            };
 
-                        model.Arrays.Add(jsonModels);
+                            ProcessArray(tomlValue.ToList(), tempJsonArray, messageMessage);
+
+                            tempJsonModel.Arrays.Add(tempJsonArray);
+                            arrayOfFields.Add(tempJsonModel);
+                        }
                     }
                 }
+
+                jsonArray.Data.Add(arrayOfFields);
             }
         }
 
@@ -167,37 +188,29 @@
             return result;
         }
 
-        private List<List<Field>> GetFieldsData(ProtoParsedMessage message, Dictionary<string, object>[] values)
+        private List<Field> GetFieldsData(ProtoParsedMessage message, Dictionary<string, object> values)
         {
+            var arrayOfFields = new List<Field>();
             var fields = message.Fields;
-
-            var arrayOfDataAsFields = new List<List<Field>>();
 
             if (fields == null || !fields.Any() || values == null || !values.Any())
             {
-                return arrayOfDataAsFields;
+                return arrayOfFields;
             }
 
-            foreach (var dictionary in values)
+            for (int tempIndex = 0; tempIndex < fields.Count; tempIndex++)
             {
-                var copyFirstList = new List<Field>();
-
-                for (int tempIndex = 0; tempIndex < fields.Count; tempIndex++)
+                if (values.ContainsKey(fields[tempIndex].Name))
                 {
-                    if (dictionary.ContainsKey(fields[tempIndex].Name))
-                    {
-                        var tempField = (Field)fields[tempIndex].Clone();
-                        tempField.Value = dictionary[fields[tempIndex].Name];
-                        
-                        // fix the indexes.
-                        copyFirstList.Add(tempField);
-                    }
-                }
+                    var tempField = (Field)fields[tempIndex].Clone();
+                    tempField.Value = values[fields[tempIndex].Name];
 
-                arrayOfDataAsFields.Add(copyFirstList);
+                    // fix the indexes.
+                    arrayOfFields.Add(tempField);
+                }
             }
 
-            return arrayOfDataAsFields;
+            return arrayOfFields;
         }
     }
 }

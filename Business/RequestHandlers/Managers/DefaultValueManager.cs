@@ -91,7 +91,9 @@
                 var formattedMessage = customMessageParser.Format(messages[temp].Message);
                 formattedMessage.Name = messages[temp].Name;
 
-                var jsonModel = moduleParser.GetJsonFromDefaultValueAndProtoFile(defaultValueFromTomlFile, tomlSettings, formattedMessage);
+                JsonModel jsonModel = null;
+
+                jsonModel = moduleParser.GetJsonFromDefaultValueAndProtoFile(defaultValueFromTomlFile, tomlSettings, formattedMessage);
 
                 var module = listOfModules.Where(p => p.Name?.IndexOf(formattedMessage.Name, StringComparison.OrdinalIgnoreCase) >= 0).FirstOrDefault();
 
