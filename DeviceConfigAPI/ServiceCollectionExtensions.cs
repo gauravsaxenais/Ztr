@@ -1,5 +1,6 @@
 ﻿namespace Service
 {
+    using Business.Parsers;
     using Business.RequestHandlers.Interfaces;
     using Business.RequestHandlers.Managers;
     using EnsureThat;
@@ -20,6 +21,8 @@
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             EnsureArg.IsNotNull(services, nameof(services));
+
+            services.AddSingleton<InputFileLoader>();
 
             services.AddScoped<IGitRepositoryManager, GitRepositoryManager>();
 

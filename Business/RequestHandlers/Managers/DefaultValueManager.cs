@@ -23,27 +23,29 @@
     /// receives the module.proto from corresponding module name
     /// and uuid folder.
     /// </summary>
-    /// <seealso cref="ZTR.Framework.Business.Manager" />
-    /// <seealso cref="Business.RequestHandlers.Interfaces.IDefaultValueManager" />
+    /// <seealso cref="Manager" />
+    /// <seealso cref="IDefaultValueManager" />
     public class DefaultValueManager : Manager, IDefaultValueManager
     {
         private readonly IGitRepositoryManager _gitRepoManager;
         private readonly DeviceGitConnectionOptions _deviceGitConnectionOptions;
-        private readonly string ProtoFileName = "module.proto";
-        private InputFileLoader inputFileLoader;
+        private readonly string protoFileName = "module.proto";
+        private readonly InputFileLoader _inputFileLoader;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DefaultValueManager"/> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
         /// <param name="gitRepoManager">The git repo manager.</param>
         /// <param name="deviceGitConnectionOptions">The device git connection options.</param>
-        public DefaultValueManager(ILogger<ModuleManager> logger, IGitRepositoryManager gitRepoManager, DeviceGitConnectionOptions deviceGitConnectionOptions, InputFileLoader fl) : base(logger)
+        /// /// <param name="inputFileLoader">File loader which reads a proto file as input and gives out custom message.</param>
+        public DefaultValueManager(ILogger<ModuleManager> logger, IGitRepositoryManager gitRepoManager, DeviceGitConnectionOptions deviceGitConnectionOptions, InputFileLoader inputFileLoader) : base(logger)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
             EnsureArg.IsNotNull(deviceGitConnectionOptions, nameof(deviceGitConnectionOptions));
             EnsureArg.IsNotNull(deviceGitConnectionOptions.TomlConfiguration, nameof(deviceGitConnectionOptions.TomlConfiguration));
 
-            inputFileLoader = fl;
+            _inputFileLoader = inputFileLoader;
             _gitRepoManager = gitRepoManager;
             _deviceGitConnectionOptions = deviceGitConnectionOptions;
 
@@ -117,7 +119,7 @@
 
                 string protoDirectory = new FileInfo(filePath.Value).Directory.FullName;
 
-                tasks.Add(inputFileLoader.GenerateCodeFiles(moduleName, fileName, protoDirectory));
+                tasks.Add(_inputFileLoader.GenerateCodeFiles(moduleName, fileName, protoDirectory));
             }
             
             var taskResults = await Task.WhenAll(tasks);
@@ -157,7 +159,7 @@
                     {
                         var uuidFolder = FileReaderExtensions.GetSubDirectoryPath(moduleFolder, moduleName.UUID);
 
-                        foreach (string file in Directory.EnumerateFiles(uuidFolder, ProtoFileName))
+                        foreach (string file in Directory.EnumerateFiles(uuidFolder, protoFileName))
                         {
                             protoFilePath.Add(moduleName.Name, file);
                         }

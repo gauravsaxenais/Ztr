@@ -37,7 +37,7 @@ namespace Service
             return Host.CreateDefaultBuilder(args)
             .DefaultAppConfiguration(
                 new[]
-                {                   
+                {
                     typeof(ApplicationOptions).Assembly,
                     typeof(SecurityOptions).Assembly,
                     typeof(DeviceGitConnectionOptions).Assembly,

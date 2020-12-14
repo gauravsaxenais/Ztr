@@ -14,7 +14,7 @@
     /// This class return the list of modules and their
     /// name and uuid information.
     /// </summary>
-    /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
+    /// <seealso cref="ControllerBase" />
     [System.ComponentModel.Description("Module Controller Service")]
     [ApiController]
     [Produces(SupportedContentTypes.Json, SupportedContentTypes.Xml)]

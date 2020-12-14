@@ -1,10 +1,7 @@
 ﻿namespace Service
 {
-    using Business.Core;
-    using Business.Parsers;
     using EnsureThat;
     using Microsoft.AspNetCore.Builder;
-    using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -28,7 +25,7 @@
         /// <param name="configuration">The configuration.</param>
         public Startup(IConfiguration configuration)
         {
-            this.Configuration = configuration;            
+            this.Configuration = configuration;
         }
 
         /// <summary>
@@ -52,8 +49,6 @@
 #if RELEASE
             services.AddAllowAllOriginsCorsPolicy();
 #endif
-            services.AddSingleton<InputFileLoader>();
-
             services.AddMvc()
                 .AddNewtonsoftJson(options => options.SerializerSettings.Converters.Add(new StringEnumConverter()))
                 .AddXmlSerializerFormatters()

@@ -4,8 +4,6 @@
     using Business.Parsers.Models;
     using EnsureThat;
     using Google.Protobuf;
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.Extensions.Logging;
@@ -21,12 +19,14 @@
 
     public class InputFileLoader
     {
-        private readonly ILogger<InputFileLoader> log;
+        private readonly ILogger<InputFileLoader> _logger;
+        private readonly string csFileExtension = ".cs", dllExtension = ".dll", fileDescriptorExtension = ".desc";
+
         public InputFileLoader(ILogger<InputFileLoader> logger)
         {
-            log = logger;
+            _logger = logger;
         }
-        private readonly string csFileExtension = ".cs", dllExtension = ".dll", fileDescriptorExtension = ".desc";
+
         public async Task<CustomMessage> GenerateCodeFiles(string moduleName, string protoFileName, string protoFilePath, params string[] args)
         {
             EnsureArg.IsNotEmptyOrWhiteSpace(moduleName);
@@ -59,21 +59,25 @@
             }
             finally
             {
-                if (!string.IsNullOrEmpty(outputFolder))
-                   Directory.Delete(outputFolder, true);
+                try
+                {
+                    if (!string.IsNullOrEmpty(outputFolder))
+                        Directory.Delete(outputFolder, true);
+                }
+                catch (Exception) { 
+                    // swallow.
+                }
             }
-
-
         }
 
         public string GenerateCSharpFile(string fileName, string protoFilePath, params string[] args)
         {
-            string tmpFolder, tmpOutputFolder;
+            string tmpOutputFolder;
 
             tmpOutputFolder = Path.Combine($"{Global.WebRoot}tmp", Guid.NewGuid().ToString("n"));
             Directory.CreateDirectory(tmpOutputFolder);
 
-            string protocPath = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? GetProtoCompilerPath(out tmpFolder) : "protoc";
+            string protocPath = GetProtoCompilerPath();
             string tmpDescriptorFile = Path.Combine(tmpOutputFolder, fileName + fileDescriptorExtension);
             string inputs = $" --descriptor_set_out={tmpDescriptorFile} --include_imports --proto_path={protoFilePath} --csharp_out={tmpOutputFolder}  --error_format=gcc {fileName} {string.Join(" ", args)}";
 
@@ -93,29 +97,31 @@
             psi.WorkingDirectory = Global.WebRoot;
             psi.UseShellExecute = false;
             psi.RedirectStandardOutput = psi.RedirectStandardError = true;
-            log.LogInformation("Starting Proto compiler");
-            log.LogInformation(inputs);
-            Process proc = Process.Start(psi);
+            
+            _logger.LogInformation("Starting Proto compiler");
+            _logger.LogInformation(inputs);
+            var proc = Process.Start(psi);
         
             var result = proc.StandardOutput.ReadToEnd();
             result += " " + proc.StandardError.ReadToEnd();
             proc.WaitForExit();           
-            log.LogInformation(result);
+            
+            _logger.LogInformation(result);
+            
             if (proc.ExitCode != 0)
             {
                 if (HasByteOrderMark(fileName))
                 {
                     //stderr.WriteLine("The input file should be UTF8 without a byte-order-mark (in Visual Studio use \"File\" -> \"Advanced Save Options...\" to rectify)");
                 }
+                
                 throw new ApplicationException("Protoc in linux error" + fileName);
             }
 
             return tmpOutputFolder;
-
-
         }
 
-        public IMessage GetIMessage(string dllPath)
+        private IMessage GetIMessage(string dllPath)
         {
             EnsureArg.IsNotNullOrWhiteSpace(dllPath);
 
@@ -138,21 +144,22 @@
             return null;
         }
 
-        private string GetProtoCompilerPath(out string folder)
+        private string GetProtoCompilerPath()
         {
-            string Name = "protoc";
+            string name = "protoc";
+            
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                Name += ".exe";
+                name += ".exe";
             }
-            string path = $"{Global.WebRoot}/{Name}";
-            //string lazyPath = CombinePathFromAppRoot(Name);
-            folder = Global.WebRoot;
+            
+            string path = $"{Global.WebRoot}/{name}";
+            
             if (!File.Exists(path) && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 // look inside ourselves...
                 using (Stream resStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(
-                    typeof(InputFileLoader).Namespace + "." + Name))
+                    typeof(InputFileLoader).Namespace + "." + name))
                 using (Stream outFile = File.OpenWrite(path))
                 {
                     long len = 0;
@@ -167,9 +174,7 @@
                 }
             }
 
-
             return path;
-
         }
 
         // <summary>
@@ -234,21 +239,10 @@
             }
         }
 
-        private ThreadStart DumpStream(TextReader reader)
-        {
-            return (ThreadStart)delegate
-            {
-                string line;
-                while ((line = reader.ReadLine()) != null)
-                {
-                    log.LogError(line);
-                }
-            };
-        }
-
         public string CombinePathFromAppRoot(string path)
         {
             string loaderPath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
+
             if (!string.IsNullOrEmpty(loaderPath)
 #pragma warning disable IDE0056 // Use index operator
                 && loaderPath[loaderPath.Length - 1] != Path.DirectorySeparatorChar

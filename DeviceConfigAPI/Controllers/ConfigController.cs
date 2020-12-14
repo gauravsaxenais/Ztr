@@ -37,8 +37,7 @@
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateTomlConfig()
         {
-
-            return Ok();
+            return this.Ok();
         }
     }
 }
