@@ -7,7 +7,7 @@
     using Microsoft.Extensions.Logging;
     using ZTR.Framework.Service.ExceptionLogger;
 
-    /// <summary>ApplicationBuilder </summary>
+    /// <summary>ApplicationBuilder.</summary>
     public static class ApplicationBuilderExtensions
     {
         /// <summary>
