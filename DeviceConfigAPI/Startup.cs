@@ -5,11 +5,9 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Logging;
     using Newtonsoft.Json.Converters;
     using ZTR.Framework.Business.Models;
     using ZTR.Framework.Configuration;
-    using ZTR.Framework.Security;
     using ZTR.Framework.Service;
 
     /// <summary>
@@ -17,8 +15,6 @@
     /// </summary>
     public class Startup
     {
-        private static ILogger logger;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Startup"/> class.
         /// </summary>
@@ -58,6 +54,14 @@
             };
 
             services.AddSwaggerWithComments(ApiConstants.ApiName, ApiConstants.ApiVersion, ApiConstants.ApiDescription, swaggerAssemblies);
+
+            // Add cors here.
+            services.AddCors(o => o.AddPolicy(ApiConstants.ApiAllowAllOriginsPolicy, builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
 
             // we add our custom services here.
             services.AddCustomServices();

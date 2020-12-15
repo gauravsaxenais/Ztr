@@ -31,17 +31,7 @@
             services.AddScoped<IBlockManager, BlockManager>();
             services.AddScoped<IConfigGeneratorManager, ConfigGeneratorManager>();
 
-            // Setup CORS .....
-            services.AddCors(o => o.AddPolicy(ApiConstants.ApiAllowAllOriginsPolicy, builder =>
-            {
-                builder.AllowAnyOrigin()
-                       .AllowAnyMethod()
-                       .AllowAnyHeader();
-            }));
-
-
             return services;
         }
-
     }
 }

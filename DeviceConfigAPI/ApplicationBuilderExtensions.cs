@@ -5,11 +5,13 @@
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using ZTR.Framework.Service.ExceptionLogger;
+    using EnsureThat;
 
     public static class ApplicationBuilderExtensions
     {
         public static void AddAppCustomBuild(this IApplicationBuilder app)
         {
+            EnsureArg.IsNotNull(app, nameof(app));
             app.UseMiddleware<ExceptionMiddleware>();
 
             // Cors needs to be before MVC and Swagger. Otherwise typescript clients throw cors related exceptions.
