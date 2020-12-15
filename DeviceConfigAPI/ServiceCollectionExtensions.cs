@@ -17,7 +17,7 @@
         /// <returns>
         ///   <br />
         /// </returns>
-        public static IServiceCollection AddServices(this IServiceCollection services)
+        public static IServiceCollection AddCustomServices(this IServiceCollection services)
         {
             EnsureArg.IsNotNull(services, nameof(services));
 
