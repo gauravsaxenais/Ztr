@@ -386,6 +386,19 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:Business.RequestHandlers.Interfaces.IConfigCreateFromManager">
+            <summary>
+            This module takes config.toml as input 
+            and generates a model for the config.toml.
+            </summary>
+        </member>
+        <member name="M:Business.RequestHandlers.Interfaces.IConfigCreateFromManager.GenerateConfigTomlModelAsync(System.String)">
+            <summary>
+            Gets the default values all modules asynchronous.
+            </summary>
+            <param name="configTomlFile">The firmware version.</param>
+            <returns></returns>
+        </member>
         <member name="T:Business.RequestHandlers.Interfaces.IConfigGeneratorManager">
             <summary>
             Config Generator interface methods.
