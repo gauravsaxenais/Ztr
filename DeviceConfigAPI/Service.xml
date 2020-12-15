@@ -221,18 +221,12 @@
             Inject services in the application here.
             </summary>
         </member>
-        <member name="M:Service.ServiceCollectionExtensions.AddServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+        <member name="M:Service.ServiceCollectionExtensions.AddCustomServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>Adds the services.</summary>
             <param name="services">The services.</param>
             <returns>
               <br />
             </returns>
-        </member>
-        <member name="M:Service.ServiceCollectionExtensions.AddAllowAllOriginsCorsPolicy(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
-            <summary>
-            Add CORS policy for the project.
-            </summary>
-            <param name="services">services collection.</param>
         </member>
         <member name="T:Service.Startup">
             <summary>
@@ -264,6 +258,15 @@
             This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
             </summary>
             <param name="app">application builder.</param>
+        </member>
+        <member name="T:ZTR.Framework.Service.ApplicationBuilderExtensions">
+            <summary>ApplicationBuilder.</summary>
+        </member>
+        <member name="M:ZTR.Framework.Service.ApplicationBuilderExtensions.AddAppCustomBuild(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            Adds the application custom build.
+            </summary>
+            <param name="app">The application.</param>
         </member>
     </members>
 </doc>
