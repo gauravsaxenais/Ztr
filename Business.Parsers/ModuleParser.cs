@@ -11,11 +11,11 @@
 
     public class ModuleParser
     {
-        public JsonModel GetJsonFromDefaultValueAndProtoFile(string fileContent, TomlSettings settings, ProtoParsedMessage protoParserMessage)
+        public List<JsonModel> GetJsonFromDefaultValueAndProtoFile(string fileContent, TomlSettings settings, ProtoParsedMessage protoParserMessage)
         {
             EnsureArg.IsNotEmptyOrWhiteSpace(fileContent, (nameof(fileContent)));
 
-            var jsonModel = new JsonModel();
+            var jsonModel = new List<JsonModel>();
 
             var fileData = Toml.ReadString(fileContent, settings);
 
@@ -34,23 +34,23 @@
                     configValues = (Dictionary<string, object>)moduleDetail["config"];
                 }
 
-                MergeTomlWithProtoMessage(configValues, protoParserMessage, jsonModel);
+                jsonModel = MergeTomlWithProtoMessage(configValues, protoParserMessage);
             }
 
             return jsonModel;
         }
 
-        public void MergeTomlWithProtoMessage(Dictionary<string, object> configValues, ProtoParsedMessage protoParsedMessage, JsonModel model)
+        public List<JsonModel> MergeTomlWithProtoMessage(Dictionary<string, object> configValues, ProtoParsedMessage protoParsedMessage)
         {
-            model.Name = protoParsedMessage.Name;
-            AddFieldsToJsonModel(protoParsedMessage, model);
+            var listOfData = new List<JsonModel>();
+            listOfData.AddRange(AddFieldsToJsonModel(protoParsedMessage));
 
             foreach (var tempItem in configValues.Select((KeyValue, Index) => new { KeyValue, Index }))
             {
                 var messages = protoParsedMessage.Messages;
                 var fields = protoParsedMessage.Fields;
 
-                var field = model.Fields.Where(x => string.Equals(x.Name, tempItem.KeyValue.Key, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+                var field = listOfData.Where(x => string.Equals(x.Name, tempItem.KeyValue.Key, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
                 var repeatedMessage = messages.Where(x => string.Equals(x.Name, tempItem.KeyValue.Key, StringComparison.OrdinalIgnoreCase) && x.IsRepeated).FirstOrDefault();
                 
                 // its a field
@@ -61,13 +61,22 @@
 
                 else if (repeatedMessage != null)
                 {
-                    ProcessRepeatedMessage(model, repeatedMessage, tempItem.KeyValue.Value);
+                    var jsonModel = new JsonModel()
+                    {
+                        Name = repeatedMessage.Name
+                    };
+
+                    jsonModel.Arrays.AddRange(ProcessRepeatedMessage(repeatedMessage, tempItem.KeyValue.Value));
+                    listOfData.Add(jsonModel);
                 }
             }
+
+            return listOfData;
         }
 
-        private void ProcessRepeatedMessage(JsonModel model, ProtoParsedMessage repeatedMessage, object value)
+        private List<List<JsonModel>> ProcessRepeatedMessage(ProtoParsedMessage repeatedMessage, object value)
         {
+            var arrayData = new List<List<JsonModel>>();
             var values = new List<Dictionary<string, object>>();
 
             if (value is Dictionary<string, object>[] v)
@@ -105,7 +114,7 @@
                                     Name = repeatedSubMessage.Name
                                 };
 
-                                ProcessRepeatedMessage(tempJsonModel, repeatedSubMessage, tempValue);
+                                ProcessRepeatedMessage(repeatedSubMessage, tempValue);
 
                                 listOfData.Add(tempJsonModel);
                             }
@@ -138,28 +147,35 @@
                     }
                 }
 
-                model.Arrays.Add(listOfData);
+                arrayData.Add(listOfData);
             }
+
+            return arrayData;
         }
 
-        private void AddFieldsToJsonModel(ProtoParsedMessage protoParsedMessage, JsonModel model)
+        private List<JsonModel> AddFieldsToJsonModel(ProtoParsedMessage protoParsedMessage)
         {
+            EnsureArg.IsNotNull(protoParsedMessage);
+
+            var listOfFields = new List<JsonModel>();
             for (int tempIndex = 0; tempIndex < protoParsedMessage.Fields.Count; tempIndex++)
             {
                 var newField = (Field)protoParsedMessage.Fields[tempIndex].Clone();
 
                 var jsonModel = new JsonModel
                 {
-                    Id = tempIndex,
                     Name = newField.Name,
                     Value = newField.Value,
                     Min = newField.Min,
                     Max = newField.Max,
+                    DataType = newField.DataType,
                     DefaultValue = newField.DefaultValue
                 };
 
-                model.Fields.Add(jsonModel);
+                listOfFields.Add(jsonModel);
             }
+
+            return listOfFields;
         }
 
         private bool IsValueType(object obj)

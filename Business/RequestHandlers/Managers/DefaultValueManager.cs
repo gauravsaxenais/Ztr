@@ -93,13 +93,13 @@
                 var formattedMessage = customMessageParser.Format(messages[temp].Message);
                 formattedMessage.Name = messages[temp].Name;
 
-                var jsonModel = moduleParser.GetJsonFromDefaultValueAndProtoFile(defaultValueFromTomlFile, tomlSettings, formattedMessage);
+                var jsonModels = moduleParser.GetJsonFromDefaultValueAndProtoFile(defaultValueFromTomlFile, tomlSettings, formattedMessage);
                 
                 var module = listOfModules.Where(p => p.Name?.IndexOf(formattedMessage.Name, StringComparison.OrdinalIgnoreCase) >= 0).FirstOrDefault();
 
                 if (module != null)
                 {
-                    module.Config = jsonModel;
+                    module.Config = jsonModels;
                 }
             }
 

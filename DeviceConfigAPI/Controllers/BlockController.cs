@@ -1,11 +1,9 @@
 ﻿namespace Service.Controllers
 {
-    using System.Threading.Tasks;
-    using Business.Parsers.Models;
     using Business.RequestHandlers.Interfaces;
     using EnsureThat;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using System.Threading.Tasks;
     using ZTR.Framework.Service;
 
     /// <summary>Block Controller - This service is responsible for getting arguments in network blocks.</summary>

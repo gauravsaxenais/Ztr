@@ -70,10 +70,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Logs\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="configsetting\convertconfig.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
