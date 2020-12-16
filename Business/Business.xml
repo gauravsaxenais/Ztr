@@ -391,7 +391,7 @@
             Config Generator interface methods.
             </summary>
         </member>
-        <member name="M:Business.RequestHandlers.Interfaces.IConfigGeneratorManager.CreateConfigAsync(System.String)">
+        <member name="M:Business.RequestHandlers.Interfaces.IConfigGeneratorManager.CreateConfigAsync(Business.Models.ConfigModel)">
             <summary>Creates the configuration asynchronous.</summary>
             <param name="jsonContent">Content of the json.</param>
             <returns>
@@ -525,7 +525,7 @@
               <br />
             </summary>
         </member>
-        <member name="M:Business.RequestHandlers.Managers.ConfigGeneratorManager.CreateConfigAsync(System.String)">
+        <member name="M:Business.RequestHandlers.Managers.ConfigGeneratorManager.CreateConfigAsync(Business.Models.ConfigModel)">
             <summary>Creates the configuration asynchronous.</summary>
             <param name="jsonContent">Content of the json.</param>
             <returns>

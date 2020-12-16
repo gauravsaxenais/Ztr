@@ -1,6 +1,7 @@
 ﻿namespace Service.Controllers
 {
     using System.Threading.Tasks;
+    using Business.Models;
     using Business.Parsers.Models;
     using Business.RequestHandlers.Interfaces;
     using EnsureThat;
@@ -32,9 +33,17 @@
         ///   <br />
         /// </returns>
         [HttpPost(nameof(CreateTomlConfig))]
-        public async Task<IActionResult> CreateTomlConfig()
+        public async Task<IActionResult> CreateTomlConfig([FromBody] ConfigModel json)
         {
-            return Ok();
+            var result = await manager.CreateConfigAsync(json);
+            return Ok(result);
+        }
+
+        [HttpGet(nameof(ConfigRule))]
+        public async Task<IActionResult> ConfigRule(string properties)
+        {
+            var result = await manager.UpdateTomlConfig(properties);
+            return Ok(result);
         }
     }
 }

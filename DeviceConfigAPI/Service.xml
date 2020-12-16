@@ -85,7 +85,7 @@
             </summary>
             <param name="manager">The manager.</param>
         </member>
-        <member name="M:Service.Controllers.ConfigController.CreateTomlConfig">
+        <member name="M:Service.Controllers.ConfigController.CreateTomlConfig(Business.Models.ConfigModel)">
             <summary>Creates the toml configuration.</summary>
             <returns>
               <br />
