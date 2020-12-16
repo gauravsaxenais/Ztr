@@ -1,6 +1,7 @@
 ﻿namespace Service.Controllers
 {
     using System.Threading.Tasks;
+    using Business.Parsers.Models;
     using Business.RequestHandlers.Interfaces;
     using EnsureThat;
     using Microsoft.AspNetCore.Http;
@@ -31,14 +32,11 @@
         ///   list of blocks.
         /// </returns>
         [HttpGet(nameof(GetAllBlocks))]
-        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllBlocks()
         {
             var result = await this.manager.ParseTomlFilesAsync().ConfigureAwait(false);
 
-            return this.StatusCode(StatusCodes.Status200OK, result);
+            return Ok(result);
         }
     }
 }

@@ -345,3 +345,4 @@ ASALocalRun/
 healthchecksdb
 /DeviceConfigAPI/tmp
 /DeviceConfigAPI/Logs
+/DeviceConfigAPI/Test

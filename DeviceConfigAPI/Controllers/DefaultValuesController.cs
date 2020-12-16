@@ -4,6 +4,7 @@
     using System.ComponentModel.DataAnnotations;
     using System.Threading.Tasks;
     using Business.Models;
+    using Business.Parsers.Models;
     using Business.RequestHandlers.Interfaces;
     using EnsureThat;
     using Microsoft.AspNetCore.Http;
@@ -40,15 +41,12 @@
         /// <returns>A <see cref="IEnumerable{ModuleReadModel}"/> representing the result of the operation.</returns>
         /// <param name="firmwareVersion">firmware version.</param>
         /// <param name="deviceType">device type.</param>
-        [HttpGet(nameof(GetAllDefaultValues))]
-        [ProducesResponseType(typeof(IEnumerable<ModuleReadModel>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+        [HttpGet(nameof(GetAllDefaultValues))]        
         public async Task<IActionResult> GetAllDefaultValues([Required, FromQuery] string firmwareVersion, [Required, FromQuery] string deviceType)
         {
             var result = await this.manager.GetDefaultValuesAllModulesAsync(firmwareVersion, deviceType).ConfigureAwait(false);
 
-            return this.StatusCode(StatusCodes.Status200OK, result);
+            return Ok(result);
         }
     }
 }

@@ -59,7 +59,7 @@
             </value>
         </member>
         <member name="T:Service.Controllers.ApiControllerBase">
-            <summary>Base controller implementing CorsPolicy.</summary>
+            <summary>Base controller implementing Base shared methods.</summary>
         </member>
         <member name="T:Service.Controllers.BlockController">
             <summary>Block Controller - This service is responsible for getting arguments in network blocks.</summary>
@@ -85,7 +85,7 @@
             </summary>
             <param name="manager">The manager.</param>
         </member>
-        <member name="M:Service.Controllers.ConfigController.CreateTomlConfig">
+        <member name="M:Service.Controllers.ConfigController.CreateTomlConfig(Business.Models.ConfigModel)">
             <summary>Creates the toml configuration.</summary>
             <returns>
               <br />

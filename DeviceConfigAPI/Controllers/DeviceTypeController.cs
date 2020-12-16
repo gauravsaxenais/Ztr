@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using Business.Parsers.Models;
     using Business.RequestHandlers.Interfaces;
     using EnsureThat;
     using Microsoft.AspNetCore.Http;
@@ -34,14 +35,11 @@
         /// </summary>
         /// <returns>status code and the output.</returns>
         [HttpGet(nameof(GetAllDevices))]
-        [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllDevices()
         {
             var result = await this.manager.GetAllDevicesAsync().ConfigureAwait(false);
 
-            return this.StatusCode(StatusCodes.Status200OK, result);
+            return Ok(result);
         }
 
         /// <summary>
@@ -49,13 +47,10 @@
         /// </summary>
         /// <returns>status code representing the result of the operation and the result.</returns>
         [HttpGet(nameof(GetAllFirmwareVersions))]
-        [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllFirmwareVersions()
         {
             var result = await this.manager.GetAllFirmwareVersionsAsync().ConfigureAwait(false);
-            return this.StatusCode(StatusCodes.Status200OK, result);
+            return Ok(result);
         }
     }
 }

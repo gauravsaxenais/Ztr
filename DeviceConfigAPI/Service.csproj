@@ -11,13 +11,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Logs\**" />
     <Compile Remove="tmp\**" />
-    <Content Remove="Logs\**" />
     <Content Remove="tmp\**" />
-    <EmbeddedResource Remove="Logs\**" />
     <EmbeddedResource Remove="tmp\**" />
-    <None Remove="Logs\**" />
     <None Remove="tmp\**" />
   </ItemGroup>
 
@@ -71,6 +67,16 @@
     <Content Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Logs\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="configsetting\convertconfig.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 

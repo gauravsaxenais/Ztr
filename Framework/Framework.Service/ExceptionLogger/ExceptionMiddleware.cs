@@ -1,7 +1,6 @@
 ﻿namespace ZTR.Framework.Service.ExceptionLogger
 {
     using System;
-    using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
     using ContentTypes;
@@ -11,6 +10,7 @@
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
     using Service;
+    using ZTR.Framework.Business;
 
     public class ExceptionMiddleware
     {
@@ -56,17 +56,14 @@
         private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             ExceptionResponse exceptionResponse = default;
-            LogError(exception);
+            _logger.LogCritical(exception, nameof(ExceptionMiddleware));
+
             ProblemDetails problemDetails = CreateProblemDetailsObject(exception);
             if (context.Request.Headers.TryGetValue("Accept", out var acceptContentTypes))
             {
                 if (acceptContentTypes.Contains(SupportedContentTypes.Json))
                 {
                     exceptionResponse = new JsonExceptionContentType().CreateExceptionResponse(problemDetails);
-                }
-                else if (acceptContentTypes.Contains(SupportedContentTypes.Xml))
-                {
-                    exceptionResponse = new XmlExceptionContentType().CreateExceptionResponse(problemDetails);
                 }
             }
 
@@ -78,7 +75,8 @@
             string errorDetail;
             if (_hostingEnvironment.IsDevelopment())
             {
-                errorDetail = exception.Demystify().ToString();
+                var error = new ErrorMessage<ErrorType>(ErrorType.ServerError, exception);
+                errorDetail = error.ToString();
             }
             else
             {
@@ -92,11 +90,6 @@
                 Detail = errorDetail,
                 Instance = $"urn:MyOrganization:error:{Guid.NewGuid()}"
             };
-        }
-
-        private void LogError(Exception exception)
-        {
-            _logger.LogCritical(exception, nameof(ExceptionMiddleware));
         }
     }
 }

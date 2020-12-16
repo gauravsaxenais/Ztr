@@ -1,5 +1,6 @@
 ﻿namespace Business.RequestHandlers.Interfaces
 {
+    using Business.Models;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -12,6 +13,8 @@
         /// <returns>
         ///   <br />
         /// </returns>
-        Task<string> CreateConfigAsync(string jsonContent);
+        Task<string> CreateConfigAsync(ConfigModel jsonContent);
+
+        Task<bool> UpdateTomlConfig(string properties);
     }
 }
