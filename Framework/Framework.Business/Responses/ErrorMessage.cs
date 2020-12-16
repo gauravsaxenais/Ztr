@@ -64,6 +64,10 @@
             Message = validationFailure.ErrorMessage;
         }
 
+        protected ErrorMessage()
+        {
+        }
+
         /// <summary>
         /// Gets the error code.
         /// </summary>
@@ -78,7 +82,7 @@
         /// <value>
         /// The message.
         /// </value>
-        public string Message { get; private set; }
+        public string Message { get; set; }
 
         /// <summary>
         /// Gets the exception detail.
@@ -86,7 +90,7 @@
         /// <value>
         /// The message.
         /// </value>
-        public string Detail { get; private set; }
+        public string Detail { get; set; }
 
         /// <summary>
         /// Gets the Unique Identifier.
@@ -94,7 +98,7 @@
         /// <value>
         /// The message.
         /// </value>
-        public string ID { get; private set; }
+        public string ID { get; set; }
 
         /// <summary>
         /// Gets the name of the property.
@@ -102,7 +106,7 @@
         /// <value>
         /// The name of the property.
         /// </value>
-        public string PropertyName { get; private set; }
+        public string PropertyName { get; set; }
 
         /// <summary>
         /// Gets or sets the attempted value.
@@ -110,7 +114,7 @@
         /// <value>
         /// The attempted value.
         /// </value>
-        public object AttemptedValue { get; private set; }
+        public object AttemptedValue { get; set; }
 
         internal string ToFormattedString()
         {
@@ -122,7 +126,7 @@
             return $"ID: {ID}, {ErrorCode} - Property: '{PropertyName}' with value '{AttemptedValue}'. {Message} and Detail: {Detail}";
         }
 
-        public string Exception { get; private set; }
+        public string Exception { get; set; }
         private static string GenerateMessageFromException(Exception exception)
         {
             var strBuilder = new StringBuilder();
