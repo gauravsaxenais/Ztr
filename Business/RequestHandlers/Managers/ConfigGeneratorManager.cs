@@ -14,27 +14,32 @@
     using System.Linq;
     using Business.Models;
     using Newtonsoft.Json.Converters;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     ///   <br />
     /// </summary>
     public class ConfigGeneratorManager : IConfigGeneratorManager
     {
+        private ILogger<ConfigGeneratorManager> _logger ;
         private static object _syncRoot = new object();
         private string[] _properties;
         const string _skipConfigFolder = "configsetting";
         const string _skipConfigFile = "convertconfig.txt";
         private IEnumerable<ConfigConvertRule> _rules;
 
-        public ConfigGeneratorManager()
+        public ConfigGeneratorManager(ILogger<ConfigGeneratorManager> logger)
         {
+            _logger = logger;
             InitiateRule();
         }
         
         private void RemoveProperties<T>(T input) where T : IDictionary<string, object>
         {
+            _logger.LogInformation($"Properties : {_properties.Count()}");
             foreach (var item in input)
             {
+                _logger.LogInformation($"Removing : {item.Key}");
                 if (_properties.Contains(item.Key.ToLower()))
                 {
                     input.Remove(item);
