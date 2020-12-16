@@ -94,7 +94,7 @@
                 formattedMessage.Name = messages[temp].Name;
 
                 var jsonModel = moduleParser.GetJsonFromDefaultValueAndProtoFile(defaultValueFromTomlFile, tomlSettings, formattedMessage);
-
+                
                 var module = listOfModules.Where(p => p.Name?.IndexOf(formattedMessage.Name, StringComparison.OrdinalIgnoreCase) >= 0).FirstOrDefault();
 
                 if (module != null)
@@ -110,8 +110,7 @@
         {
             var tasks = new List<Task<CustomMessage>>();
             var result = new List<CustomMessage>();
-
-           
+                       
             foreach (var filePath in protoFilePaths)
             {
                 var fileName = Path.GetFileName(filePath.Value);

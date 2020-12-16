@@ -13,7 +13,6 @@
     using System.Linq;
     using System.Reflection;
     using System.Runtime.InteropServices;
-    using System.Threading;
     using System.Threading.Tasks;
     using ZTR.Framework.Business.File.FileReaders;
 
@@ -62,10 +61,13 @@
                 try
                 {
                     if (!string.IsNullOrEmpty(outputFolder))
+                    {
                         Directory.Delete(outputFolder, true);
+                    }
                 }
-                catch (Exception ex) {
-                    _logger.LogError("Deletion error Tmp", ex);
+                catch (Exception ex)
+                {
+                    _logger.LogError("Error", ex);
                 }
             }
         }

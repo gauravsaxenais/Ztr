@@ -11,36 +11,6 @@
 
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddAutoMapper(this IServiceCollection services, IEnumerable<Assembly> assemblies)
-        {
-            EnsureArg.IsNotNull(services, nameof(services));
-            EnsureArg.IsNotNull(assemblies, nameof(assemblies));
-
-            var updatedServices = AutoMapper.ServiceCollectionExtensions.AddAutoMapper(
-                services,
-                (config) =>
-                    {
-                        config.DisableConstructorMapping();
-                    },
-                assemblies);
-
-            if (ApplicationConfiguration.IsDevelopment)
-            {
-                var mapperConfiguration = updatedServices.BuildServiceProvider().GetRequiredService<AutoMapper.IConfigurationProvider>();
-                mapperConfiguration.AssertConfigurationIsValid();
-            }
-
-            return updatedServices;
-        }
-
-        public static IServiceCollection AddAutoMapper(this IServiceCollection services, Assembly assembly)
-        {
-            EnsureArg.IsNotNull(services, nameof(services));
-            EnsureArg.IsNotNull(assembly, nameof(assembly));
-
-            return AddAutoMapper(services, new[] { assembly });
-        }
-
         public static IServiceCollection AddManagers(this IServiceCollection services, IEnumerable<Assembly> assemblies, ServiceLifetime serviceLifetime = ServiceLifetime.Scoped)
         {
             EnsureArg.IsNotNull(services, nameof(services));
