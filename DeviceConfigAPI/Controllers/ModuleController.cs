@@ -20,7 +20,7 @@
     [Produces(SupportedContentTypes.Json, SupportedContentTypes.Xml)]
     [Consumes(SupportedContentTypes.Json, SupportedContentTypes.Xml)]
     [QueryRoute]
-    public class ModuleController : ControllerBase
+    public class ModuleController : ApiControllerBase
     {
         private readonly IModuleManager manager;
 

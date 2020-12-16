@@ -1,7 +1,5 @@
 ﻿namespace Business.RequestHandlers.Interfaces
 {
-    using Business.Models;
-    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -15,6 +13,6 @@
         /// </summary>
         /// <param name="configTomlFile">The firmware version.</param>
         /// <returns></returns>
-        Task<IEnumerable<ModuleReadModel>> GenerateConfigTomlModelAsync(string configTomlFile);
+        Task GenerateConfigTomlModelAsync(string configTomlFile);
     }
 }
