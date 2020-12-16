@@ -11,56 +11,42 @@
     public class ErrorMessage<TErrorCode>
         where TErrorCode : Enum
     {
-
-        private TErrorCode _errorcode ;
-        public ErrorMessage(TErrorCode errorCode, string message, Exception exception)
+        public ErrorMessage(string propertyName, TErrorCode errorCode, string message, object attemptedValue, Exception exception)
         {
+            EnsureArg.IsNotNull(propertyName, nameof(propertyName));
             EnsureArg.IsNotNullOrWhiteSpace(message, nameof(message));
 
-            PropertyName = null;
-            AttemptedValue = null;
-            _errorcode = errorCode;
+            PropertyName = propertyName;
+            ErrorCode = errorCode;
+            Message = message;
+            AttemptedValue = attemptedValue;
+
             ID = Guid.NewGuid().ToString("n");
             Message = message;
-            if(exception != null)
+
+            if (exception != null)
             {
                 Detail = GenerateMessageFromException(exception);
             }
+        }
 
+        public ErrorMessage(TErrorCode errorCode, string message, Exception exception) : this(string.Empty, errorCode, message, null, exception)
+        {
         }
 
         public ErrorMessage(TErrorCode errorCode, Exception exception) :
             this(errorCode, exception.Message, exception)
         {
-           
         }
+
         public ErrorMessage(TErrorCode errorCode, string message) :
             this(errorCode, message, null)
         {
         }
-        public ErrorMessage(string propertyName, TErrorCode errorCode, string message, object attemptedValue) :
-            this(errorCode, message, null)
-        {             
-        }
-        public ErrorMessage(ValidationFailure error)           
-        {
 
-        }
         public ErrorMessage(Exception exception)
         {
-
         }
-
-        //public ErrorMessage(string propertyName, TErrorCode errorCode, string message, object attemptedValue)
-        //{
-        //    EnsureArg.IsNotNull(propertyName, nameof(propertyName));
-        //    EnsureArg.IsNotNullOrWhiteSpace(message, nameof(message));
-
-        //    PropertyName = propertyName;
-        //    ErrorCode = errorCode;
-        //    Message = message;
-        //    AttemptedValue = attemptedValue;
-        //}
 
         public ErrorMessage(ErrorType validationError, ValidationFailure validationFailure)
         {
@@ -70,7 +56,7 @@
 
             if (Enum.TryParse(typeof(TErrorCode), validationFailure.ErrorCode, out object errorCode))
             {
-                _errorcode = (TErrorCode)errorCode;
+                ErrorCode = (TErrorCode)errorCode;
             }
             else
             {
@@ -81,17 +67,14 @@
             Message = validationFailure.ErrorMessage;
         }
 
-
         /// <summary>
         /// Gets the error code.
         /// </summary>
         /// <value>
         /// The error code.
         /// </value>
-        public string Code => _errorcode.ToString();
+        public TErrorCode ErrorCode { get; set; }
 
-        public TErrorCode ErrorCode => _errorcode;
-        
         /// <summary>
         /// Gets the message.
         /// </summary>
@@ -134,14 +117,19 @@
 
         internal string ToFormattedString()
         {
-            return $"{_errorcode.ToString()} - Property: '{PropertyName}' with value '{AttemptedValue}'. {Message}";
+            return $"{ErrorCode} - Property: '{PropertyName}' with value '{AttemptedValue}'. {Message}";
+        }
+
+        public override string ToString()
+        {
+            return $"ID: {ID}, {ErrorCode} - Property: '{PropertyName}' with value '{AttemptedValue}'. {Message} and Detail: {Detail}";
         }
 
         private static string GenerateMessageFromException(Exception exception)
         {
-            string message = null;
-            StringBuilder strBuilder = new StringBuilder();
+            var strBuilder = new StringBuilder();
 
+            string message;
             if (ApplicationConfiguration.IsDevelopment)
             {
                 message = exception.Demystify().ToString();
@@ -161,7 +149,6 @@
 
         private static string BuildErrorMessageFromException(Exception exception)
         {
-
             var sb = new StringBuilder();
 
             var resultProperty = exception.GetType().GetProperty("Result");
@@ -176,7 +163,6 @@
             }
 
             return sb.ToString();
-
         }
     }
 }

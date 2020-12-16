@@ -1,7 +1,6 @@
 ﻿namespace ZTR.Framework.Service.ExceptionLogger
 {
     using System;
-    using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
     using ContentTypes;
@@ -42,13 +41,15 @@
             }
         }
 
-        private static async Task WriteResponse(HttpContext context, ExceptionResponse exceptionResponse, ApiResponse problemDetails)
+        private static async Task WriteResponse(HttpContext context, ExceptionResponse exceptionResponse, ProblemDetails problemDetails)
         {
-            context.Response.StatusCode = StatusCodes.Status200OK;
-            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+            context.Response.ContentType = exceptionResponse == null
+                ? SupportedContentTypes.TextPlain
+                : exceptionResponse.ResponseContentType;
             await context.Response
                 .WriteAsync(exceptionResponse == null
-                    ? problemDetails.ToString()
+                    ? problemDetails.ToFormattedString()
                     : exceptionResponse.ResponseText).ConfigureAwait(false);
         }
 
@@ -56,12 +57,39 @@
         {
             ExceptionResponse exceptionResponse = default;
             _logger.LogCritical(exception, nameof(ExceptionMiddleware));
-            var error = new ErrorMessage<ErrorType>(ErrorType.ServerError, exception);
-            var response = new ApiResponse { Success = false, Error = error };
 
-            await WriteResponse(context, exceptionResponse, response);
+            ProblemDetails problemDetails = CreateProblemDetailsObject(exception);
+            if (context.Request.Headers.TryGetValue("Accept", out var acceptContentTypes))
+            {
+                if (acceptContentTypes.Contains(SupportedContentTypes.Json))
+                {
+                    exceptionResponse = new JsonExceptionContentType().CreateExceptionResponse(problemDetails);
+                }
+            }
+
+            await WriteResponse(context, exceptionResponse, problemDetails).ConfigureAwait(false);
         }
 
-       
+        private ProblemDetails CreateProblemDetailsObject(Exception exception)
+        {
+            string errorDetail;
+            if (_hostingEnvironment.IsDevelopment())
+            {
+                var error = new ErrorMessage<ErrorType>(ErrorType.ServerError, exception);
+                errorDetail = error.ToString();
+            }
+            else
+            {
+                errorDetail = "An error occurred please contact administrator";
+            }
+
+            return new ProblemDetails
+            {
+                Title = ProblemTitle,
+                Status = StatusCodes.Status400BadRequest,
+                Detail = errorDetail,
+                Instance = $"urn:MyOrganization:error:{Guid.NewGuid()}"
+            };
+        }
     }
 }
