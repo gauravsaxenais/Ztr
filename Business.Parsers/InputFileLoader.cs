@@ -148,13 +148,12 @@
 
         private string GetProtoCompilerPath()
         {
-            string name = "protoc";
-            
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                name += ".exe";
+                return "protoc";
             }
-            
+
+            string name = "protoc.exe";
             string path = $"{Global.WebRoot}/{name}";
             
             if (!File.Exists(path) && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
