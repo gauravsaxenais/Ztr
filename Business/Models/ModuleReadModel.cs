@@ -54,7 +54,7 @@
         /// </returns>
         public override string ToString()
         {
-            return $"ModuleReadModel(${this.Name} {this.UUID} {this.Config})";
+            return $"ModuleReadModel($ {this.Id} {this.Name} {this.UUID} {this.Config})";
         }
     }
 }

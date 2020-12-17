@@ -24,7 +24,7 @@
         private string[] _properties;
         private readonly string _skipConfigFolder = "configsetting";
         private readonly string _skipConfigFile = "convertconfig.txt";
-        private IEnumerable<ConfigConvertRule> _rules;
+        private IEnumerable<ConfigConvertRuleReadModel> _rules;
 
         public ConfigGeneratorManager(ILogger<ConfigGeneratorManager> logger)
         {
@@ -97,10 +97,10 @@
             _rules = tags.Where(o => o.StartsWith("Rule:")).Select(o =>
             {
                 var ruleConfig = o.Split(':');
-                var rule = new ConfigConvertRule
+                var rule = new ConfigConvertRuleReadModel
                 {
                     Property = ruleConfig[1],
-                    Schema = new List<ConfigConvertObject> { new ConfigConvertObject
+                    Schema = new List<ConfigConvertObjectReadModel> { new ConfigConvertObjectReadModel
                          {
                               Name = ruleConfig[2],
                               Value= ruleConfig[3]
@@ -117,9 +117,9 @@
         /// <returns>
         ///   <br />
         /// </returns>
-        public async Task<string> CreateConfigAsync(ConfigModel model)
+        public async Task<string> CreateConfigAsync(ConfigReadModel model)
         {
-            //EnsureArg.IsNotEmptyOrWhiteSpace(model.Module);
+            EnsureArg.IsNotNull(model);
             EnsureArg.IsNotEmptyOrWhiteSpace(model.Block);
 
             var jsonContent = model.Block;

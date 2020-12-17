@@ -26,9 +26,11 @@
             services.AddScoped<IGitRepositoryManager, GitRepositoryManager>();
 
             services.AddScoped<IDeviceTypeManager, DeviceTypeManager>();
+            services.AddScoped<IModuleManager, ModuleManager>();
             services.AddScoped<IDefaultValueManager, DefaultValueManager>();
             services.AddScoped<IBlockManager, BlockManager>();
             services.AddScoped<IConfigGeneratorManager, ConfigGeneratorManager>();
+            services.AddScoped<IConfigCreateFromManager, ConfigCreateFromManager>();
 
             return services;
         }

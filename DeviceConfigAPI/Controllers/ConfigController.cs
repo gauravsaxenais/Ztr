@@ -9,7 +9,6 @@
 
     /// <summary>Config Controller - This service is responsible for generating the config toml.</summary>
     [System.ComponentModel.Description("Config Controller Service")]
-    [ApiController]
     [Produces(SupportedContentTypes.Json, SupportedContentTypes.Xml)]
     [Consumes(SupportedContentTypes.Json, SupportedContentTypes.Xml)]
     [QueryRoute]
@@ -33,7 +32,7 @@
         ///   <br />
         /// </returns>
         [HttpPost(nameof(CreateTomlConfig))]
-        public async Task<IActionResult> CreateTomlConfig([FromBody] ConfigModel json)
+        public async Task<IActionResult> CreateTomlConfig([FromBody] ConfigReadModel json)
         {
             var result = await manager.CreateConfigAsync(json).ConfigureAwait(false);
             return Ok(result);
