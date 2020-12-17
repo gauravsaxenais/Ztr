@@ -88,7 +88,9 @@
 
             // Use routing first, then Cors second.
             app.UseRouting();
-            logger = app.ApplicationServices.GetRequiredService<ILoggerFactory>().CreateLogger(nameof(Program));
+            var serviceProviderBuilt = app.ApplicationServices;
+
+            logger = serviceProviderBuilt.GetRequiredService<ILoggerFactory>().CreateLogger(nameof(Program));
 
             // Use Exception middleware.
             app.UseMiddleware<ExceptionMiddleware>();
@@ -100,8 +102,11 @@
             var securityOptions = app.ApplicationServices.GetRequiredService<SecurityOptions>();
 
             // Cors needs to be before MVC and Swagger. Otherwise typescript clients throw cors related exceptions.
-            app.UseCors(ApiConstants.ApiAllowAllOriginsPolicy);
-            
+            if (securityOptions.AllowAllOrigins)
+            {
+                app.UseCors(ApiConstants.ApiAllowAllOriginsPolicy);
+            }
+
             app.UseSwagger(new[]
             {
                 new SwaggerConfigurationModel(ApiConstants.ApiVersion, ApiConstants.ApiName, true),

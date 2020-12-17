@@ -19,11 +19,11 @@
     /// </summary>
     public class ConfigGeneratorManager : IConfigGeneratorManager
     {
-        private ILogger<ConfigGeneratorManager> _logger;
+        private readonly ILogger<ConfigGeneratorManager> _logger;
         private static object _syncRoot = new object();
         private string[] _properties;
-        const string _skipConfigFolder = "configsetting";
-        const string _skipConfigFile = "convertconfig.txt";
+        private readonly string _skipConfigFolder = "configsetting";
+        private readonly string _skipConfigFile = "convertconfig.txt";
         private IEnumerable<ConfigConvertRule> _rules;
 
         public ConfigGeneratorManager(ILogger<ConfigGeneratorManager> logger)
@@ -109,8 +109,11 @@
                 return rule;
             });
         }
-        /// <summary>Creates the configuration asynchronous.</summary>
-        /// <param name="jsonContent">Content of the json.</param>
+
+        /// <summary>
+        /// Creates the configuration asynchronous.
+        /// </summary>
+        /// <param name="model"></param>
         /// <returns>
         ///   <br />
         /// </returns>
@@ -119,10 +122,8 @@
             //EnsureArg.IsNotEmptyOrWhiteSpace(model.Module);
             EnsureArg.IsNotEmptyOrWhiteSpace(model.Block);
 
-
             var jsonContent = model.Block;
             // File.ReadAllText($"{Global.WebRoot}/test/block.json");
-
 
             var configurationObject = JsonConvert.DeserializeObject(jsonContent);
             var dictionary = (Dictionary<string, object>)ToDictionary(configurationObject);
@@ -131,7 +132,6 @@
             changeKeys = new List<KeyValuePair<string, IDictionary<string, string>>>();
             ConvertCompatibleJson(dictionary);
             //var json = JsonConvert.SerializeObject(dictionary);
-
 
             string contents = Toml.WriteString(dictionary);
 
@@ -202,8 +202,8 @@
                 values.ForEach(o => file.WriteLine(o));
                 file.Flush();
                 file.Close();
-            }
 
+            }
             return await Task.FromResult(true);
         }
     }

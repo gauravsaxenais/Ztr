@@ -8,6 +8,8 @@
     using ZTR.Framework.Service;
 
     /// <summary>Config Controller - This service is responsible for generating the config toml.</summary>
+    [System.ComponentModel.Description("Config Controller Service")]
+    [ApiController]
     [Produces(SupportedContentTypes.Json, SupportedContentTypes.Xml)]
     [Consumes(SupportedContentTypes.Json, SupportedContentTypes.Xml)]
     [QueryRoute]

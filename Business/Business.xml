@@ -511,8 +511,10 @@
             </summary>
         </member>
         <member name="M:Business.RequestHandlers.Managers.ConfigGeneratorManager.CreateConfigAsync(Business.Models.ConfigModel)">
-            <summary>Creates the configuration asynchronous.</summary>
-            <param name="jsonContent">Content of the json.</param>
+            <summary>
+            Creates the configuration asynchronous.
+            </summary>
+            <param name="model"></param>
             <returns>
               <br />
             </returns>
