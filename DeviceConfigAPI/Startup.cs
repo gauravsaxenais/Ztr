@@ -42,11 +42,6 @@
         {
             services.AddControllers();
 
-            services.AddMvc()
-                .AddNewtonsoftJson(options => options.SerializerSettings.Converters.Add(new StringEnumConverter()))
-                .AddXmlSerializerFormatters()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
-
             var swaggerAssemblies = new[]
             {
                 typeof(Program).Assembly,
@@ -57,6 +52,7 @@
 
             // we add our custom services here.
             services.AddCustomServices();
+
         }
 
         /// <summary>

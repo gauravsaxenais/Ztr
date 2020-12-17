@@ -74,7 +74,7 @@
         /// <value>
         /// The error code.
         /// </value>
-        public TErrorCode ErrorCode { get; set; }
+        public TErrorCode ErrorCode { get; private set; }
 
         /// <summary>
         /// Gets the message.
@@ -82,7 +82,7 @@
         /// <value>
         /// The message.
         /// </value>
-        public string Message { get; set; }
+        public string Message { get; private set; }
 
         /// <summary>
         /// Gets the exception detail.
@@ -90,7 +90,7 @@
         /// <value>
         /// The message.
         /// </value>
-        public string Detail { get; set; }
+        public string Detail { get; private set; }
 
         /// <summary>
         /// Gets the Unique Identifier.
@@ -98,7 +98,7 @@
         /// <value>
         /// The message.
         /// </value>
-        public string ID { get; set; }
+        public string ID { get; private set; }
 
         /// <summary>
         /// Gets the name of the property.
@@ -106,7 +106,7 @@
         /// <value>
         /// The name of the property.
         /// </value>
-        public string PropertyName { get; set; }
+        public string PropertyName { get; private set; }
 
         /// <summary>
         /// Gets or sets the attempted value.
@@ -114,7 +114,7 @@
         /// <value>
         /// The attempted value.
         /// </value>
-        public object AttemptedValue { get; set; }
+        public object AttemptedValue { get; private set; }
 
         internal string ToFormattedString()
         {
@@ -126,7 +126,7 @@
             return $"ID: {ID}, {ErrorCode} - Property: '{PropertyName}' with value '{AttemptedValue}'. {Message} and Detail: {Detail}";
         }
 
-        public string Exception { get; set; }
+        public string Exception { get; private set; }
         private static string GenerateMessageFromException(Exception exception)
         {
             var strBuilder = new StringBuilder();
