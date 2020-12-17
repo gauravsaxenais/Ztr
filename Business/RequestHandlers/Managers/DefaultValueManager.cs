@@ -39,7 +39,7 @@
         /// <param name="gitRepoManager">The git repo manager.</param>
         /// <param name="deviceGitConnectionOptions">The device git connection options.</param>
         /// /// <param name="inputFileLoader">File loader which reads a proto file as input and gives out custom message.</param>
-        public DefaultValueManager(ILogger<ModuleManager> logger, IGitRepositoryManager gitRepoManager, DeviceGitConnectionOptions deviceGitConnectionOptions, InputFileLoader inputFileLoader) : base(logger)
+        public DefaultValueManager(ILogger<DefaultValueManager> logger, IGitRepositoryManager gitRepoManager, DeviceGitConnectionOptions deviceGitConnectionOptions, InputFileLoader inputFileLoader) : base(logger)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
             EnsureArg.IsNotNull(deviceGitConnectionOptions, nameof(deviceGitConnectionOptions));
@@ -93,7 +93,9 @@
                 var formattedMessage = customMessageParser.Format(messages[temp].Message);
                 formattedMessage.Name = messages[temp].Name;
 
-                var jsonModels = moduleParser.GetJsonFromDefaultValueAndProtoFile(defaultValueFromTomlFile, tomlSettings, formattedMessage);
+                var jsonModels = new List<JsonModel>();
+
+                jsonModels = moduleParser.GetJsonFromDefaultValueAndProtoFile(defaultValueFromTomlFile, tomlSettings, formattedMessage);
                 
                 var module = listOfModules.Where(p => p.Name?.IndexOf(formattedMessage.Name, StringComparison.OrdinalIgnoreCase) >= 0).FirstOrDefault();
 
@@ -130,7 +132,6 @@
                     result.Add(taskResult);
                 }
             }
-
           
             return result;
         }

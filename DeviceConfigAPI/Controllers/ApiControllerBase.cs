@@ -1,6 +1,5 @@
 ﻿namespace Service.Controllers
 {
-    using Microsoft.AspNetCore.Cors;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -8,7 +7,6 @@
 
     /// <summary>Base controller implementing Base shared methods.</summary>
     [ApiController]
-    [EnableCors(ApiConstants.ApiAllowAllOriginsPolicy)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status200OK)]
     public class ApiControllerBase : ControllerBase
     {

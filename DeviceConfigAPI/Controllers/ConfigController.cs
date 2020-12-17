@@ -1,12 +1,10 @@
 ﻿namespace Service.Controllers
 {
-    using System.Threading.Tasks;
     using Business.Models;
-    using Business.Parsers.Models;
     using Business.RequestHandlers.Interfaces;
     using EnsureThat;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using System.Threading.Tasks;
     using ZTR.Framework.Service;
 
     /// <summary>Config Controller - This service is responsible for generating the config toml.</summary>
