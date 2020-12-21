@@ -1,37 +1,39 @@
 ﻿namespace Business.RequestHandlers.Managers
 {
-    using Business.Core;
-    using Business.Models;
     using Business.RequestHandlers.Interfaces;
-    using EnsureThat;
-    using Microsoft.Extensions.Logging;
     using Nett;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
+    using System.Text;
     using System.Threading.Tasks;
+    using EnsureThat;
+    using Business.Core;
+    using System.Linq;
+    using Business.Models;
+    using Newtonsoft.Json.Converters;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     ///   <br />
     /// </summary>
     public class ConfigGeneratorManager : IConfigGeneratorManager
     {
-        private readonly ILogger<ConfigGeneratorManager> _logger;
+        private ILogger<ConfigGeneratorManager> _logger ;
         private static object _syncRoot = new object();
         private string[] _properties;
-        private readonly string _skipConfigFolder = "configsetting";
-        private readonly string _skipConfigFile = "convertconfig.txt";
-        private IEnumerable<ConfigConvertRuleReadModel> _rules;
+        const string _skipConfigFolder = "configsetting";
+        const string _skipConfigFile = "convertconfig.txt";
+        private IEnumerable<ConfigConvertRule> _rules;
 
         public ConfigGeneratorManager(ILogger<ConfigGeneratorManager> logger)
         {
             _logger = logger;
             InitiateRule();
         }
-
+        
         private void RemoveProperties<T>(T input) where T : IDictionary<string, object>
         {
             _logger.LogInformation($"Properties : {_properties.Count()}");
@@ -48,15 +50,16 @@
                 {
                     ((object[])item.Value).ToList().ForEach(o => RemoveProperties((T)o));
                 }
-                if (item.Value is T)
+                if (item.Value is T )
                 {
                     RemoveProperties((T)item.Value);
                 }
-
+               
             }
         }
         private object ToDictionary(object configObject)
         {
+          
             if (configObject == null)
             {
                 return null;
@@ -65,10 +68,10 @@
             {
                 return ((JValue)configObject).ToString();
             }
-
+                
             if (configObject is JArray)
             {
-                return ((JArray)configObject).Select(o => ToDictionary(o)).ToArray();
+               return ((JArray)configObject).Select(o => ToDictionary(o)).ToArray();
             }
 
             var dictionary = new Dictionary<string, object>();
@@ -79,7 +82,7 @@
                     dictionary.Add(o.Key, ToDictionary(o.Value));
                 }
             }
-
+            
             return dictionary;
 
         }
@@ -91,16 +94,15 @@
             {
                 setting = File.ReadAllText(_path);
             }
-
             var tags = setting.Split(Environment.NewLine);
             _properties = tags.Where(o => !o.StartsWith("Rule:")).ToArray();
             _rules = tags.Where(o => o.StartsWith("Rule:")).Select(o =>
             {
                 var ruleConfig = o.Split(':');
-                var rule = new ConfigConvertRuleReadModel
+                var rule = new ConfigConvertRule
                 {
                     Property = ruleConfig[1],
-                    Schema = new List<ConfigConvertObjectReadModel> { new ConfigConvertObjectReadModel
+                    Schema = new List<ConfigConvertObject> { new ConfigConvertObject
                          {
                               Name = ruleConfig[2],
                               Value= ruleConfig[3]
@@ -109,31 +111,31 @@
                 return rule;
             });
         }
-
-        /// <summary>
-        /// Creates the configuration asynchronous.
-        /// </summary>
-        /// <param name="model"></param>
+        /// <summary>Creates the configuration asynchronous.</summary>
+        /// <param name="jsonContent">Content of the json.</param>
         /// <returns>
         ///   <br />
         /// </returns>
-        public async Task<string> CreateConfigAsync(ConfigReadModel model)
+        public async Task<string> CreateConfigAsync(ConfigModel model)
         {
-            EnsureArg.IsNotNull(model);
+            //EnsureArg.IsNotEmptyOrWhiteSpace(model.Module);
             EnsureArg.IsNotEmptyOrWhiteSpace(model.Block);
 
-            var jsonContent = model.Block;
-            // File.ReadAllText($"{Global.WebRoot}/test/block.json");
 
-            var configurationObject = JsonConvert.DeserializeObject(jsonContent);
-            var dictionary = (Dictionary<string, object>)ToDictionary(configurationObject);
+            var jsonContent = model.Block;
+                // File.ReadAllText($"{Global.WebRoot}/test/block.json");
+
+           
+            var configurationObject = JsonConvert.DeserializeObject(jsonContent);           
+            var dictionary = (Dictionary<string,object>)ToDictionary(configurationObject);
             RemoveProperties(dictionary);
 
             changeKeys = new List<KeyValuePair<string, IDictionary<string, string>>>();
             ConvertCompatibleJson(dictionary);
             //var json = JsonConvert.SerializeObject(dictionary);
 
-            string contents = Toml.WriteString(dictionary);
+
+            string contents = Toml.WriteString(dictionary);           
 
             return contents;
         }
@@ -152,18 +154,18 @@
                     {
                         var o = (IDictionary<string, object>)x;
                         rule.Schema.ToList().ForEach(u =>
-                        {
+                        {                           
                             dict.Add(o[u.Name].ToString(), o.ContainsKey(u.Value) ? o[u.Value].ToString() : string.Empty);
                         });
-
+                       
                     });
 
-                    if (dict != null)
+                    if(dict != null)
                     {
-                        newKey = new KeyValuePair<string, Dictionary<string, string>>(item.Key, dict);
+                       newKey = new KeyValuePair<string, Dictionary<string, string>>(item.Key, dict);
                     }
                     //input.Remove(item.Key);
-
+                   
                     continue;
                 }
 
@@ -175,13 +177,14 @@
                 {
                     RemoveProperties((T)item.Value);
                 }
+
             }
 
-            if (newKey.Key != null)
+            if(newKey.Key != null)
             {
                 input[newKey.Key] = newKey.Value;
             }
-
+           
         }
         private string _path => $"{Global.WebRoot}/{_skipConfigFolder}/{_skipConfigFile}";
         public async Task<bool> UpdateTomlConfig(string properties)

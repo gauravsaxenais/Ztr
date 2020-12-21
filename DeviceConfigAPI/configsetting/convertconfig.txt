@@ -3,4 +3,5 @@ label
 description
 min
 datatype
-Rule:args:name:max
+configured
+Rule:args:name:value

@@ -5,6 +5,7 @@ namespace Service
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Hosting;
+    using Serilog;
     using Service.Configuration;
     using ZTR.Framework.Configuration;
     using ZTR.Framework.Security;
@@ -24,6 +25,12 @@ namespace Service
         public static void Main(string[] args)
         {
             Console.Title = ApiConstants.ApiName;
+
+            Log.Logger = new LoggerConfiguration()
+                           .WriteTo.Console()
+                           .WriteTo.File("Logs/Log-.txt", rollingInterval: RollingInterval.Hour)
+                           .CreateLogger();
+
             CreateHostBuilder(args).Build().Run();
         }
 
@@ -35,7 +42,8 @@ namespace Service
         public static IHostBuilder CreateHostBuilder(string[] args)
         {
             return Host.CreateDefaultBuilder(args)
-            .DefaultAppConfiguration(
+                .UseSerilog()
+                .DefaultAppConfiguration(
                 new[]
                 {
                     typeof(ApplicationOptions).Assembly,

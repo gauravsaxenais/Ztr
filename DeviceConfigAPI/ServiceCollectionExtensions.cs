@@ -5,6 +5,7 @@
     using Business.RequestHandlers.Managers;
     using EnsureThat;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Services Collections Extensions.

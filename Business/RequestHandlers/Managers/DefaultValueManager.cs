@@ -123,17 +123,17 @@
                 tasks.Add(_inputFileLoader.GenerateCodeFiles(moduleName, fileName, protoDirectory));
             }
             
-            var taskResults = await Task.WhenAll(tasks);
+            Task.WaitAll(tasks.ToArray());
 
-            foreach (var taskResult in taskResults)
+            foreach (var taskResult in tasks)
             {
                 if (taskResult != null)
                 {
-                    result.Add(taskResult);
+                    result.Add(taskResult.Result);
                 }
             }
           
-            return result;
+            return await Task.FromResult(result);
         }
 
         /// <summary>
