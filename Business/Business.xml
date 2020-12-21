@@ -58,12 +58,20 @@
             <param name="gitRepositoryUrl">The git repository URL.</param>
             <param name="tomlConfiguration">The toml configuration.</param>
         </member>
-        <member name="P:Business.Configuration.DeviceGitConnectionOptions.TomlConfiguration">
+        <member name="P:Business.Configuration.DeviceGitConnectionOptions.DefaultTomlConfiguration">
             <summary>
             Gets or sets the toml configuration.
             </summary>
             <value>
             The toml configuration.
+            </value>
+        </member>
+        <member name="P:Business.Configuration.DeviceGitConnectionOptions.ModulesConfig">
+            <summary>
+            Gets or sets the modules configuration folder.
+            </summary>
+            <value>
+            The modules configuration.
             </value>
         </member>
         <member name="M:Business.Configuration.DeviceGitConnectionOptions.ToString">
@@ -594,6 +602,14 @@
             Returns the list of all modules and blocks from config.toml.
             </summary>
             <param name="configTomlFile">config.toml as string.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.ConfigCreateFromManager.GetProtoFiles(System.String,System.Collections.Generic.IEnumerable{Business.Models.ModuleReadModel})">
+            <summary>
+            Gets the proto file path.
+            </summary>
+            <param name="moduleFilePath">The module file path.</param>
+            <param name="listOfModules">The list of modules.</param>
             <returns></returns>
         </member>
         <member name="M:Business.RequestHandlers.Managers.ConfigCreateFromManager.GetTomlData(System.String)">

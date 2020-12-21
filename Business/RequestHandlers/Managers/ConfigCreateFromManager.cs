@@ -9,6 +9,7 @@
     using Business.Models;
     using System.Collections.Generic;
     using System.Linq;
+    using System.IO;
 
     /// <summary>
     /// This manager takes config.toml as input and returns
@@ -27,7 +28,7 @@
         /// </summary>
         /// <param name="configTomlFile">config.toml as string.</param>
         /// <returns></returns>
-        public async Task<string> GenerateConfigTomlModelAsync(string configTomlFile)
+        public async Task<List<ModuleReadModel>> GenerateConfigTomlModelAsync(string configTomlFile)
         {
             EnsureArg.IsNotEmptyOrWhiteSpace(configTomlFile);
 
@@ -39,8 +40,41 @@
 
             listOfModules = listOfModules.Select((module, index) => new ModuleReadModel { Id = index, Config = module.Config, Name = module.Name, UUID = module.UUID }).ToList();
 
-            //return listOfModules;
-            return string.Empty;
+            return listOfModules;
+        }
+
+        /// <summary>
+        /// Gets the proto file path.
+        /// </summary>
+        /// <param name="moduleFilePath">The module file path.</param>
+        /// <param name="listOfModules">The list of modules.</param>
+        /// <returns></returns>
+        private Dictionary<string, string> GetProtoFiles(string moduleFilePath, IEnumerable<ModuleReadModel> listOfModules)
+        {
+            EnsureArg.IsNotNullOrWhiteSpace(moduleFilePath);
+            EnsureArg.IsNotNull(listOfModules);
+
+            var protoFilePath = new Dictionary<string, string>();
+
+            if (listOfModules.Any())
+            {
+                foreach (var moduleName in listOfModules)
+                {
+                    var moduleFolder = FileReaderExtensions.GetSubDirectoryPath(moduleFilePath, moduleName.Name);
+
+                    if (!string.IsNullOrWhiteSpace(moduleFolder))
+                    {
+                        var uuidFolder = FileReaderExtensions.GetSubDirectoryPath(moduleFolder, moduleName.UUID);
+
+                        foreach (string file in Directory.EnumerateFiles(uuidFolder, ""))
+                        {
+                            protoFilePath.Add(moduleName.Name, file);
+                        }
+                    }
+                }
+            }
+
+            return protoFilePath;
         }
 
         /// <summary>

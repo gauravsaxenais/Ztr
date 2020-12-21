@@ -37,6 +37,14 @@
         public TomlConfigurationFile DefaultTomlConfiguration { get; set; }
 
         /// <summary>
+        /// Gets or sets the modules configuration folder.
+        /// </summary>
+        /// <value>
+        /// The modules configuration.
+        /// </value>
+        public string ModulesConfig { get; set; }
+
+        /// <summary>
         /// Converts to string.
         /// </summary>
         /// <returns>

@@ -53,6 +53,7 @@
 
             _deviceGitConnectionOptions.GitLocalFolder = Path.Combine(currentDirectory, _deviceGitConnectionOptions.GitLocalFolder);
             _deviceGitConnectionOptions.DefaultTomlConfiguration.DeviceFolder = Path.Combine(_deviceGitConnectionOptions.GitLocalFolder, _deviceGitConnectionOptions.DefaultTomlConfiguration.DeviceFolder);
+            _deviceGitConnectionOptions.ModulesConfig = Path.Combine(currentDirectory, _deviceGitConnectionOptions.GitLocalFolder, _deviceGitConnectionOptions.ModulesConfig);
 
             _gitRepoManager.SetConnectionOptions(_deviceGitConnectionOptions);
         }
@@ -199,10 +200,10 @@
         {
             var listOfModules = new List<ModuleReadModel>();
 
-            var fileContent = await GetDeviceDataFromFirmwareVersionAsync(firmwareVersion, deviceType);
-            if (!string.IsNullOrWhiteSpace(fileContent))
+            var deviceTomlFileContent = await GetDeviceDataFromFirmwareVersionAsync(firmwareVersion, deviceType);
+            if (!string.IsNullOrWhiteSpace(deviceTomlFileContent))
             {
-                var data = GetTomlData(fileContent);
+                var data = GetTomlData(deviceTomlFileContent);
 
                 listOfModules = data.Module;
             }
