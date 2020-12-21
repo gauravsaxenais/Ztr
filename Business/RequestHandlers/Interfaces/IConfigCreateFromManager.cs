@@ -13,6 +13,6 @@
         /// </summary>
         /// <param name="configTomlFile">The firmware version.</param>
         /// <returns></returns>
-        Task GenerateConfigTomlModelAsync(string configTomlFile);
+        Task<string> GenerateConfigTomlModelAsync(string configTomlFile);
     }
 }

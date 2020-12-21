@@ -1,15 +1,14 @@
 ﻿namespace Service.Controllers
 {
-    using System.Threading.Tasks;
     using Business.Models;
-    using Business.Parsers.Models;
     using Business.RequestHandlers.Interfaces;
     using EnsureThat;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using System.Threading.Tasks;
     using ZTR.Framework.Service;
 
     /// <summary>Config Controller - This service is responsible for generating the config toml.</summary>
+    [System.ComponentModel.Description("Config Controller Service")]
     [Produces(SupportedContentTypes.Json, SupportedContentTypes.Xml)]
     [Consumes(SupportedContentTypes.Json, SupportedContentTypes.Xml)]
     [QueryRoute]
@@ -33,16 +32,16 @@
         ///   <br />
         /// </returns>
         [HttpPost(nameof(CreateTomlConfig))]
-        public async Task<IActionResult> CreateTomlConfig([FromBody] ConfigModel json)
+        public async Task<IActionResult> CreateTomlConfig([FromBody] ConfigReadModel json)
         {
-            var result = await manager.CreateConfigAsync(json);
+            var result = await manager.CreateConfigAsync(json).ConfigureAwait(false);
             return Ok(result);
         }
 
         [HttpGet(nameof(ConfigRule))]
         public async Task<IActionResult> ConfigRule(string properties)
         {
-            var result = await manager.UpdateTomlConfig(properties);
+            var result = await manager.UpdateTomlConfig(properties).ConfigureAwait(false);
             return Ok(result);
         }
     }

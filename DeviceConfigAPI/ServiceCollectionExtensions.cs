@@ -26,21 +26,30 @@
 
             services.AddScoped<IGitRepositoryManager, GitRepositoryManager>();
 
-            services.AddScoped<IModuleManager, ModuleManager>();
             services.AddScoped<IDeviceTypeManager, DeviceTypeManager>();
+            services.AddScoped<IModuleManager, ModuleManager>();
             services.AddScoped<IDefaultValueManager, DefaultValueManager>();
             services.AddScoped<IBlockManager, BlockManager>();
             services.AddScoped<IConfigGeneratorManager, ConfigGeneratorManager>();
+            services.AddScoped<IConfigCreateFromManager, ConfigCreateFromManager>();
 
-            // Add cors here.
+            return services;
+        }
+
+        /// <summary>
+        /// Add CORS policy for the project.
+        /// </summary>
+        /// <param name="services">services collection.</param>
+        public static void AddAllowAllOriginsCorsPolicy(this IServiceCollection services)
+        {
+            // Setup CORS
             services.AddCors(o => o.AddPolicy(ApiConstants.ApiAllowAllOriginsPolicy, builder =>
             {
                 builder.AllowAnyOrigin()
-                       .AllowAnyMethod()
-                       .AllowAnyHeader();
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials();
             }));
-
-            return services;
         }
     }
 }

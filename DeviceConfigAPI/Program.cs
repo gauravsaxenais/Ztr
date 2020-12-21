@@ -42,7 +42,6 @@ namespace Service
         public static IHostBuilder CreateHostBuilder(string[] args)
         {
             return Host.CreateDefaultBuilder(args)
-                .UseSerilog()
                 .DefaultAppConfiguration(
                 new[]
                 {

@@ -94,7 +94,7 @@
             </summary>
             <param name="manager">The manager.</param>
         </member>
-        <member name="M:Service.Controllers.ConfigController.CreateTomlConfig(Business.Models.ConfigModel)">
+        <member name="M:Service.Controllers.ConfigController.CreateTomlConfig(Business.Models.ConfigReadModel)">
             <summary>Creates the toml configuration.</summary>
             <returns>
               <br />
@@ -108,19 +108,18 @@
             </summary>
             <seealso cref="T:Microsoft.AspNetCore.Mvc.ControllerBase" />
         </member>
-        <member name="M:Service.Controllers.ConfigCreateFromController.#ctor(Business.RequestHandlers.Interfaces.IDefaultValueManager)">
+        <member name="M:Service.Controllers.ConfigCreateFromController.#ctor(Business.RequestHandlers.Interfaces.IConfigCreateFromManager)">
             <summary>
             Initializes a new instance of the <see cref="T:Service.Controllers.ConfigCreateFromController"/> class.
             </summary>
             <param name="manager">interface of the 'backend' manager which does all the work.</param>
         </member>
-        <member name="M:Service.Controllers.ConfigCreateFromController.GetAllDefaultValues(System.String,System.String)">
+        <member name="M:Service.Controllers.ConfigCreateFromController.GetAllDefaultValues(System.String)">
             <summary>
             Gets default values for all the modules.
             </summary>
             <returns>A <see cref="T:System.Collections.Generic.IEnumerable`1"/> representing the result of the operation.</returns>
-            <param name="firmwareVersion">firmware version.</param>
-            <param name="deviceType">device type.</param>
+            <param name="configTomlString">configtoml as string.</param>
         </member>
         <member name="T:Service.Controllers.DefaultValuesController">
             <summary>
@@ -188,24 +187,6 @@
             <param name="deviceType">device type e.g. M3, M7.</param>
             <returns><see cref="T:System.Collections.Generic.IEnumerable`1"/> representing the result of the operation.</returns>
         </member>
-        <member name="M:Service.Controllers.ModuleController.GetModuleByName(System.String,System.String,System.String)">
-            <summary>
-            Get the module information by name.
-            </summary>
-            <param name="name">name of the module.</param>
-            <param name="firmwareVersion">firmware version.</param>
-            <param name="deviceType">device type.</param>
-            <returns>A <see cref="T:System.Collections.Generic.IEnumerable`1"/> representing the result of the operation.</returns>
-        </member>
-        <member name="M:Service.Controllers.ModuleController.GetModuleByNames(System.String,System.String,System.Collections.Generic.IEnumerable{System.String})">
-            <summary>
-            Gets the list of modules by names.
-            </summary>
-            <param name="firmwareVersion">firmware version.</param>
-            <param name="deviceType">evice type.</param>
-            <param name="names">names of the modules.</param>
-            <returns>A <see cref="T:System.Collections.Generic.IEnumerable`1"/> representing the result of the operation.</returns>
-        </member>
         <member name="T:Service.Program">
             <summary>
               Entry point of the application.
@@ -237,6 +218,12 @@
               <br />
             </returns>
         </member>
+        <member name="M:Service.ServiceCollectionExtensions.AddAllowAllOriginsCorsPolicy(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Add CORS policy for the project.
+            </summary>
+            <param name="services">services collection.</param>
+        </member>
         <member name="T:Service.Startup">
             <summary>
               Added Startup class.
@@ -267,15 +254,6 @@
             This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
             </summary>
             <param name="app">application builder.</param>
-        </member>
-        <member name="T:ZTR.Framework.Service.ApplicationBuilderExtensions">
-            <summary>ApplicationBuilder.</summary>
-        </member>
-        <member name="M:ZTR.Framework.Service.ApplicationBuilderExtensions.AddAppCustomBuild(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
-            <summary>
-            Adds the application custom build.
-            </summary>
-            <param name="app">The application.</param>
         </member>
     </members>
 </doc>

@@ -195,6 +195,69 @@
             A <see cref="T:System.String" /> that represents this instance.
             </returns>
         </member>
+        <member name="T:Business.Models.ConfigConvertObjectReadModel">
+            <summary>
+            ConfigConvertObjectReadModel.
+            </summary>
+        </member>
+        <member name="P:Business.Models.ConfigConvertObjectReadModel.Name">
+            <summary>
+            Gets or sets the name.
+            </summary>
+            <value>
+            The name.
+            </value>
+        </member>
+        <member name="P:Business.Models.ConfigConvertObjectReadModel.Value">
+            <summary>
+            Gets or sets the value.
+            </summary>
+            <value>
+            The value.
+            </value>
+        </member>
+        <member name="T:Business.Models.ConfigConvertRuleReadModel">
+            <summary>
+            Config Convert Model
+            </summary>
+        </member>
+        <member name="P:Business.Models.ConfigConvertRuleReadModel.Property">
+            <summary>
+            Gets or sets the property.
+            </summary>
+            <value>
+            The property.
+            </value>
+        </member>
+        <member name="P:Business.Models.ConfigConvertRuleReadModel.Schema">
+            <summary>
+            Gets or sets the schema.
+            </summary>
+            <value>
+            The schema.
+            </value>
+        </member>
+        <member name="T:Business.Models.ConfigReadModel">
+            <summary>
+            Config Read Model.
+            </summary>
+        </member>
+        <member name="P:Business.Models.ConfigReadModel.Module">
+            <summary>
+            Gets or sets the module.
+            </summary>
+            <value>
+            The module.
+            </value>
+        </member>
+        <member name="P:Business.Models.ConfigReadModel.Block">
+            <summary>
+            Gets or sets the block.
+            </summary>
+            <value>
+            The block.
+            </value>
+        </member>
         <member name="T:Business.Models.ConfigurationReadModel">
             <summary>
             ConfigurationReadModel - This class maps to toml file.
@@ -404,7 +467,7 @@
             Config Generator interface methods.
             </summary>
         </member>
-        <member name="M:Business.RequestHandlers.Interfaces.IConfigGeneratorManager.CreateConfigAsync(Business.Models.ConfigModel)">
+        <member name="M:Business.RequestHandlers.Interfaces.IConfigGeneratorManager.CreateConfigAsync(Business.Models.ConfigReadModel)">
             <summary>Creates the configuration asynchronous.</summary>
             <param name="jsonContent">Content of the json.</param>
             <returns>
@@ -492,25 +555,6 @@
             <param name="deviceType">Type of the device.</param>
             <returns></returns>
         </member>
-        <member name="M:Business.RequestHandlers.Interfaces.IModuleManager.GetModelByNameAsync(System.String,System.String,System.Collections.Generic.IEnumerable{System.String})">
-            <summary>
-            Gets the model by name asynchronous.
-            </summary>
-            <param name="firmwareVersion">The firmware version.</param>
-            <param name="deviceType">Type of the device.</param>
-            <param name="names">The names.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.RequestHandlers.Interfaces.IModuleManager.GetModuleByNameAsync(System.String,System.String,System.String,System.String[])">
-            <summary>
-            Gets the module by name asynchronous.
-            </summary>
-            <param name="name">The name.</param>
-            <param name="firmwareVersion">The firmware version.</param>
-            <param name="deviceType">Type of the device.</param>
-            <param name="names">The names.</param>
-            <returns></returns>
-        </member>
         <member name="T:Business.RequestHandlers.Managers.BlockManager">
             <summary>
             Parses a toml file and returns arguments for a block
@@ -519,7 +563,7 @@
             <seealso cref="T:ZTR.Framework.Business.Manager" />
             <seealso cref="T:Business.RequestHandlers.Interfaces.IBlockManager" />
         </member>
-        <member name="M:Business.RequestHandlers.Managers.BlockManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.ModuleManager},Business.RequestHandlers.Interfaces.IGitRepositoryManager,Business.Configuration.BlockGitConnectionOptions)">
+        <member name="M:Business.RequestHandlers.Managers.BlockManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.BlockManager},Business.RequestHandlers.Interfaces.IGitRepositoryManager,Business.Configuration.BlockGitConnectionOptions)">
             <summary>
             Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.BlockManager"/> class.
             </summary>
@@ -533,21 +577,58 @@
             </summary>
             <returns>list of blocks.</returns>
         </member>
+        <member name="T:Business.RequestHandlers.Managers.ConfigCreateFromManager">
+            <summary>
+            This manager takes config.toml as input and returns
+            list of modules and blocks.
+            </summary>
+            <seealso cref="T:ZTR.Framework.Business.Manager" />
+            <seealso cref="T:Business.RequestHandlers.Interfaces.IConfigCreateFromManager" />
+        </member>
         <member name="M:Business.RequestHandlers.Managers.ConfigCreateFromManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.ConfigCreateFromManager})">
             <summary>Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.ConfigCreateFromManager" /> class.</summary>
             <param name="logger">The logger.</param>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.ConfigCreateFromManager.GenerateConfigTomlModelAsync(System.String)">
+            <summary>
+            Returns the list of all modules and blocks from config.toml.
+            </summary>
+            <param name="configTomlFile">config.toml as string.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.ConfigCreateFromManager.GetTomlData(System.String)">
+            <summary>
+            Gets the toml data.
+            </summary>
+            <param name="fileContent">Content of the file.</param>
+            <returns></returns>
         </member>
         <member name="T:Business.RequestHandlers.Managers.ConfigGeneratorManager">
             <summary>
               <br />
             </summary>
         </member>
-        <member name="M:Business.RequestHandlers.Managers.ConfigGeneratorManager.CreateConfigAsync(Business.Models.ConfigModel)">
-            <summary>Creates the configuration asynchronous.</summary>
-            <param name="jsonContent">Content of the json.</param>
+        <member name="M:Business.RequestHandlers.Managers.ConfigGeneratorManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.ConfigGeneratorManager})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.ConfigGeneratorManager"/> class.
+            </summary>
+            <param name="logger">The logger.</param>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.ConfigGeneratorManager.CreateConfigAsync(Business.Models.ConfigReadModel)">
+            <summary>
+            Creates the configuration asynchronous.
+            </summary>
+            <param name="model"></param>
             <returns>
               <br />
             </returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.ConfigGeneratorManager.UpdateTomlConfig(System.String)">
+            <summary>
+            Updates the toml configuration.
+            </summary>
+            <param name="properties">The properties.</param>
+            <returns></returns>
         </member>
         <member name="T:Business.RequestHandlers.Managers.DefaultValueManager">
             <summary>
@@ -561,7 +642,7 @@
             <seealso cref="T:ZTR.Framework.Business.Manager" />
             <seealso cref="T:Business.RequestHandlers.Interfaces.IDefaultValueManager" />
         </member>
-        <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.ModuleManager},Business.RequestHandlers.Interfaces.IGitRepositoryManager,Business.Configuration.DeviceGitConnectionOptions,Business.Parsers.InputFileLoader)">
+        <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DefaultValueManager},Business.RequestHandlers.Interfaces.IGitRepositoryManager,Business.Configuration.DeviceGitConnectionOptions,Business.Parsers.InputFileLoader)">
             <summary>
             Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.DefaultValueManager"/> class.
             </summary>
@@ -743,25 +824,6 @@
             </summary>
             <param name="firmwareVersion">The firmware version.</param>
             <param name="deviceType">Type of the device.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.RequestHandlers.Managers.ModuleManager.GetModelByNameAsync(System.String,System.String,System.Collections.Generic.IEnumerable{System.String})">
-            <summary>
-            Gets the model by name asynchronous.
-            </summary>
-            <param name="firmwareVersion">The firmware version.</param>
-            <param name="deviceType">Type of the device.</param>
-            <param name="names">The names.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.RequestHandlers.Managers.ModuleManager.GetModuleByNameAsync(System.String,System.String,System.String,System.String[])">
-            <summary>
-            Gets the module by name asynchronous.
-            </summary>
-            <param name="name">The name.</param>
-            <param name="firmwareVersion">The firmware version.</param>
-            <param name="deviceType">Type of the device.</param>
-            <param name="names">The names.</param>
             <returns></returns>
         </member>
     </members>

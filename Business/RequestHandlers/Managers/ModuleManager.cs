@@ -16,8 +16,8 @@
     /// <summary>
     /// Returns list of all the modules.
     /// </summary>
-    /// <seealso cref="ZTR.Framework.Business.Manager" />
-    /// <seealso cref="Business.RequestHandlers.Interfaces.IModuleManager" />
+    /// <seealso cref="Manager" />
+    /// <seealso cref="IModuleManager" />
     public class ModuleManager : Manager, IModuleManager
     {
         private readonly IGitRepositoryManager _gitRepoManager;
@@ -36,11 +36,6 @@
 
             _gitRepoManager = gitRepoManager;
             _moduleGitConnectionOptions = moduleGitConnectionOptions;
-
-            var currentDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-
-            _moduleGitConnectionOptions.GitLocalFolder = Path.Combine(currentDirectory, _moduleGitConnectionOptions.GitLocalFolder);
-            gitRepoManager.SetConnectionOptions(_moduleGitConnectionOptions);
         }
 
         /// <summary>
@@ -49,47 +44,40 @@
         /// <param name="firmwareVersion">The firmware version.</param>
         /// <param name="deviceType">Type of the device.</param>
         /// <returns></returns>
-        public async Task<IEnumerable<ModuleReadModel>> GetAllModulesAsync(string firmwareVersion, string deviceType)
+        public async Task<ApiResponse> GetAllModulesAsync(string firmwareVersion, string deviceType)
         {
-            var listOfModules = await GetListOfModulesAsync(firmwareVersion, deviceType);
+            var prefix = nameof(ModuleManager);
+            ApiResponse apiResponse = null;
 
-            return listOfModules;
-        }
+            var listOfModules = new List<ModuleReadModel>();
 
-        /// <summary>
-        /// Gets the model by name asynchronous.
-        /// </summary>
-        /// <param name="firmwareVersion">The firmware version.</param>
-        /// <param name="deviceType">Type of the device.</param>
-        /// <param name="names">The names.</param>
-        /// <returns></returns>
-        public async Task<IEnumerable<ModuleReadModel>> GetModelByNameAsync(string firmwareVersion, string deviceType, IEnumerable<string> names)
-        {
-            var listOfModules = await GetListOfModulesAsync(firmwareVersion, deviceType);
-
-            if (listOfModules != null && listOfModules.Any())
+            try
             {
-                listOfModules = listOfModules.Where(x => names.Contains(x.Name)).ToList();
+                Logger.LogInformation($"{prefix}: Getting list of modules for firmware version: {firmwareVersion} and device type: {deviceType}");
+
+                SetGitRepoConnections();
+
+                listOfModules = await GetListOfModulesAsync(firmwareVersion, deviceType);
+                apiResponse = new ApiResponse(status: true, data: listOfModules);
+            }
+            catch(Exception exception)
+            {
+                Logger.LogCritical(exception, $"{prefix}: Error occured while getting list of modules for firmware version: {firmwareVersion} and device type: {deviceType}");
+                apiResponse = new ApiResponse(ErrorType.BusinessError, exception);
             }
 
-            return listOfModules;
+            return apiResponse;
         }
 
-        /// <summary>
-        /// Gets the module by name asynchronous.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        /// <param name="firmwareVersion">The firmware version.</param>
-        /// <param name="deviceType">Type of the device.</param>
-        /// <param name="names">The names.</param>
-        /// <returns></returns>
-        public async Task<IEnumerable<ModuleReadModel>> GetModuleByNameAsync(string name, string firmwareVersion, string deviceType,  params string[] names)
+        private void SetGitRepoConnections()
         {
-            EnsureArg.IsNotNull(name, nameof(name));
-            return await GetModelByNameAsync(firmwareVersion, deviceType, names.Prepend(name)).ConfigureAwait(false);
+            var currentDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+
+            _moduleGitConnectionOptions.GitLocalFolder = Path.Combine(currentDirectory, _moduleGitConnectionOptions.GitLocalFolder);
+            _gitRepoManager.SetConnectionOptions(_moduleGitConnectionOptions);
         }
 
-        private async Task<IEnumerable<ModuleReadModel>> GetListOfModulesAsync(string firmwareVersion, string deviceType)
+        private async Task<List<ModuleReadModel>> GetListOfModulesAsync(string firmwareVersion, string deviceType)
         {
             var listOfModules = new List<ModuleReadModel>();
 
@@ -108,7 +96,6 @@
         private ConfigurationReadModel GetTomlData(string fileContent)
         {
             var tomlSettings = TomlFileReader.LoadLowerCaseTomlSettingsWithMappingForDefaultValues();
-
             var tomlData = TomlFileReader.ReadDataFromString<ConfigurationReadModel>(data: fileContent, settings: tomlSettings);
 
             return tomlData;

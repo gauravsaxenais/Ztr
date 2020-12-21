@@ -33,7 +33,7 @@
         /// <param name="logger">The logger.</param>
         /// <param name="gitRepoManager">The git repo manager.</param>
         /// <param name="blockGitConnectionOptions">The block git connection options.</param>
-        public BlockManager(ILogger<ModuleManager> logger, IGitRepositoryManager gitRepoManager, BlockGitConnectionOptions blockGitConnectionOptions) : base(logger)
+        public BlockManager(ILogger<BlockManager> logger, IGitRepositoryManager gitRepoManager, BlockGitConnectionOptions blockGitConnectionOptions) : base(logger)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
             EnsureArg.IsNotNull(blockGitConnectionOptions, nameof(blockGitConnectionOptions));

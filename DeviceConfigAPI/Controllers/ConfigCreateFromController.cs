@@ -8,6 +8,7 @@
     using EnsureThat;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using ZTR.Framework.Business;
     using ZTR.Framework.Service;
 
     /// <summary>
@@ -16,18 +17,19 @@
     /// only the attributes are returned.
     /// </summary>
     /// <seealso cref="ControllerBase" />
+    [System.ComponentModel.Description("Config Create From Controller Service")]
     [Produces(SupportedContentTypes.Json, SupportedContentTypes.Xml)]
     [Consumes(SupportedContentTypes.Json, SupportedContentTypes.Xml)]
     [QueryRoute]
     public class ConfigCreateFromController : ApiControllerBase
     {
-        private readonly IDefaultValueManager manager;
+        private readonly IConfigCreateFromManager manager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigCreateFromController"/> class.
         /// </summary>
         /// <param name="manager">interface of the 'backend' manager which does all the work.</param>
-        public ConfigCreateFromController(IDefaultValueManager manager)
+        public ConfigCreateFromController(IConfigCreateFromManager manager)
         {
             EnsureArg.IsNotNull(manager, nameof(manager));
 
@@ -38,17 +40,16 @@
         /// Gets default values for all the modules.
         /// </summary>
         /// <returns>A <see cref="IEnumerable{ModuleReadModel}"/> representing the result of the operation.</returns>
-        /// <param name="firmwareVersion">firmware version.</param>
-        /// <param name="deviceType">device type.</param>
+        /// <param name="configTomlString">configtoml as string.</param>
         [HttpGet(nameof(GetAllDefaultValues))]
         [ProducesResponseType(typeof(IEnumerable<ModuleReadModel>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetAllDefaultValues([Required, FromQuery] string firmwareVersion, [Required, FromQuery] string deviceType)
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetAllDefaultValues([Required, FromQuery] string configTomlString)
         {
-            var result = await this.manager.GetDefaultValuesAllModulesAsync(firmwareVersion, deviceType).ConfigureAwait(false);
+            var result = await this.manager.GenerateConfigTomlModelAsync(configTomlString).ConfigureAwait(false);
 
-            return this.StatusCode(StatusCodes.Status200OK, result);
+            return Ok(result);
         }
     }
 }

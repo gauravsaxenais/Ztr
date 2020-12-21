@@ -32,7 +32,7 @@
             EnsureArg.IsNotEmptyOrWhiteSpace(protoFileName);
             EnsureArg.IsNotEmptyOrWhiteSpace(protoFilePath);
 
-            string outputFolder= string.Empty;
+            string outputFolder = string.Empty;
             try
             {
                 protoFilePath = CombinePathFromAppRoot(protoFilePath);
@@ -99,24 +99,24 @@
             psi.WorkingDirectory = Global.WebRoot;
             psi.UseShellExecute = false;
             psi.RedirectStandardOutput = psi.RedirectStandardError = true;
-            
+
             _logger.LogInformation("Starting Proto compiler");
             _logger.LogInformation(inputs);
             var proc = Process.Start(psi);
-        
+
             var result = proc.StandardOutput.ReadToEnd();
             result += " " + proc.StandardError.ReadToEnd();
-            proc.WaitForExit();           
-            
+            proc.WaitForExit();
+
             _logger.LogInformation(result);
-            
+
             if (proc.ExitCode != 0)
             {
                 if (HasByteOrderMark(fileName))
                 {
                     //stderr.WriteLine("The input file should be UTF8 without a byte-order-mark (in Visual Studio use \"File\" -> \"Advanced Save Options...\" to rectify)");
                 }
-                
+
                 throw new ApplicationException("Protoc in linux error" + fileName);
             }
 
@@ -155,7 +155,7 @@
 
             string name = "protoc.exe";
             string path = $"{Global.WebRoot}/{name}";
-            
+
             if (!File.Exists(path) && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 // look inside ourselves...

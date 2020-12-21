@@ -11,33 +11,41 @@
 
     public class ModuleParser
     {
-        public List<JsonModel> GetJsonFromDefaultValueAndProtoFile(string fileContent, TomlSettings settings, ProtoParsedMessage protoParserMessage)
+        public List<Dictionary<string, object>> GetListOfModulesFromTomlFile(string fileContent, TomlSettings settings)
         {
             EnsureArg.IsNotEmptyOrWhiteSpace(fileContent, (nameof(fileContent)));
 
-            var jsonModel = new List<JsonModel>();
+            var jsonModels = new List<JsonModel>();
 
             var fileData = Toml.ReadString(fileContent, settings);
 
             var dictionary = fileData.ToDictionary();
-            var module = (Dictionary<string, object>[])dictionary["module"];
+            var modules = (Dictionary<string, object>[])dictionary["module"];
+
+            return modules.ToList();
+        }
+
+        public List<JsonModel> GetJsonFromTomlAndProtoFile(string fileContent, TomlSettings settings, ProtoParsedMessage protoParserMessage)
+        {
+            var jsonModels = new List<JsonModel>();
+            var listOfModules = GetListOfModulesFromTomlFile(fileContent, settings);
 
             // here message.name means Power, j1939 etc.
-            var moduleDetail = module.Where(dic => dic.Values.Contains(protoParserMessage.Name.ToLower())).FirstOrDefault();
+            var module = listOfModules.Where(dic => dic.Values.Contains(protoParserMessage.Name.ToLower())).FirstOrDefault();
 
-            if (moduleDetail != null)
+            if (module != null)
             {
                 var configValues = new Dictionary<string, object>();
 
-                if (moduleDetail.ContainsKey("config"))
+                if (module.ContainsKey("config"))
                 {
-                    configValues = (Dictionary<string, object>)moduleDetail["config"];
+                    configValues = (Dictionary<string, object>)module["config"];
                 }
 
-                jsonModel = MergeTomlWithProtoMessage(configValues, protoParserMessage);
+                jsonModels = MergeTomlWithProtoMessage(configValues, protoParserMessage);
             }
 
-            return jsonModel;
+            return jsonModels;
         }
 
         public List<JsonModel> MergeTomlWithProtoMessage(Dictionary<string, object> configValues, ProtoParsedMessage protoParsedMessage)
@@ -52,7 +60,7 @@
 
                 var field = listOfData.Where(x => string.Equals(x.Name, tempItem.KeyValue.Key, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
                 var repeatedMessage = messages.Where(x => string.Equals(x.Name, tempItem.KeyValue.Key, StringComparison.OrdinalIgnoreCase) && x.IsRepeated).FirstOrDefault();
-                
+
                 // its a field
                 if (field != null)
                 {
@@ -71,6 +79,8 @@
                 }
             }
 
+            // fix the indexes.
+            listOfData.Select((item, index) => { item.Id = index; return item; }).ToList();
             return listOfData;
         }
 
@@ -104,46 +114,35 @@
                         var repeatedSubMessage = repeatedMessage.Messages.Where(x => string.Equals(x.Name, dicItem.Kvp.Key, StringComparison.OrdinalIgnoreCase) && x.IsRepeated).FirstOrDefault();
                         var nonRepeatedSubMessage = repeatedMessage.Messages.Where(x => string.Equals(x.Name, dicItem.Kvp.Key, StringComparison.OrdinalIgnoreCase) && !x.IsRepeated).FirstOrDefault();
 
+                        var tempJsonModel = new JsonModel
+                        {
+                            Id = dicItem.Index,
+                        };
+
                         if (repeatedSubMessage != null)
                         {
-                            if (dicItem.Kvp.Value is Dictionary<string, object>[] tempValue)
+                            tempJsonModel.Name = repeatedSubMessage.Name;
+                            if (dicItem.Kvp.Value is Dictionary<string, object>[] repeatedValues)
                             {
-                                var tempJsonModel = new JsonModel
-                                {
-                                    Id = dicItem.Index,
-                                    Name = repeatedSubMessage.Name
-                                };
-
-                                ProcessRepeatedMessage(repeatedSubMessage, tempValue);
-
-                                listOfData.Add(tempJsonModel);
+                                var subArrayData = ProcessRepeatedMessage(repeatedSubMessage, repeatedValues);
+                                tempJsonModel.Arrays.AddRange(subArrayData);
                             }
                         }
 
                         else if (nonRepeatedSubMessage != null)
                         {
-                            if (dicItem.Kvp.Value is Dictionary<string, object> tempValue)
+                            tempJsonModel.Name = nonRepeatedSubMessage.Name;
+
+                            if (dicItem.Kvp.Value is Dictionary<string, object> nonRepeatedValues)
                             {
-                                var tempJsonModel = new JsonModel
-                                {
-                                    Id = dicItem.Index,
-                                    Name = nonRepeatedSubMessage.Name
-                                };
+                                var subArrayData = ProcessRepeatedMessage(nonRepeatedSubMessage, new Dictionary<string, object>[] { nonRepeatedValues });
 
-                                foreach (var tempDict in tempValue.Select((TempKvp, TempIndex) => new { TempKvp, TempIndex }))
-                                {
-                                    if (HasFieldData(nonRepeatedSubMessage, tempDict.TempKvp))
-                                    {
-                                        var fieldsWithData = GetFieldsData(nonRepeatedSubMessage, tempDict.TempKvp);
-
-                                        fieldsWithData.Id = dicItem.Index;
-                                        tempJsonModel.Fields.Add(fieldsWithData);
-                                    }
-                                }
-
-                                listOfData.Add(tempJsonModel);
+                                var fields = subArrayData.FirstOrDefault();
+                                tempJsonModel.Fields.AddRange(fields);
                             }
                         }
+
+                        listOfData.Add(tempJsonModel);
                     }
                 }
 

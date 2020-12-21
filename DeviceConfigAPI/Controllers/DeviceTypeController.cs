@@ -6,11 +6,13 @@
     using EnsureThat;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using ZTR.Framework.Business;
     using ZTR.Framework.Service;
 
     /// <summary>
     /// This service returns the device information.
     /// </summary>
+    [System.ComponentModel.Description("Device Type Controller Service")]
     [Produces(SupportedContentTypes.Json, SupportedContentTypes.Xml)]
     [Consumes(SupportedContentTypes.Json, SupportedContentTypes.Xml)]
     [QueryRoute]
@@ -35,8 +37,8 @@
         /// <returns>all devices.</returns>
         [HttpGet(nameof(GetAllDevices))]
         [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllDevices()
         {
             var result = await this.manager.GetAllDevicesAsync().ConfigureAwait(false);
@@ -50,8 +52,8 @@
         /// <returns>status code representing the result of the operation and the result.</returns>
         [HttpGet(nameof(GetAllFirmwareVersions))]
         [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllFirmwareVersions()
         {
             var result = await this.manager.GetAllFirmwareVersionsAsync().ConfigureAwait(false);
