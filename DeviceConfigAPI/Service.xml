@@ -114,12 +114,12 @@
             </summary>
             <param name="manager">interface of the 'backend' manager which does all the work.</param>
         </member>
-        <member name="M:Service.Controllers.ConfigCreateFromController.GetAllDefaultValues(System.String)">
+        <member name="M:Service.Controllers.ConfigCreateFromController.GetConfigTomlValues(Microsoft.AspNetCore.Http.IFormFile)">
             <summary>
-            Gets default values for all the modules.
+            Gets the configuration toml values.
             </summary>
-            <returns>A <see cref="T:System.Collections.Generic.IEnumerable`1"/> representing the result of the operation.</returns>
-            <param name="configTomlString">configtoml as string.</param>
+            <param name="configTomlFile">The configuration toml file.</param>
+            <returns></returns>
         </member>
         <member name="T:Service.Controllers.DefaultValuesController">
             <summary>
@@ -218,12 +218,6 @@
               <br />
             </returns>
         </member>
-        <member name="M:Service.ServiceCollectionExtensions.AddAllowAllOriginsCorsPolicy(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
-            <summary>
-            Add CORS policy for the project.
-            </summary>
-            <param name="services">services collection.</param>
-        </member>
         <member name="T:Service.Startup">
             <summary>
               Added Startup class.
@@ -254,6 +248,15 @@
             This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
             </summary>
             <param name="app">application builder.</param>
+        </member>
+        <member name="T:ZTR.Framework.Service.ApplicationBuilderExtensions">
+            <summary>ApplicationBuilder.</summary>
+        </member>
+        <member name="M:ZTR.Framework.Service.ApplicationBuilderExtensions.AddAppCustomBuild(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            Adds the application custom build.
+            </summary>
+            <param name="app">The application.</param>
         </member>
     </members>
 </doc>

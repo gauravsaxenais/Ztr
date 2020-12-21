@@ -37,17 +37,17 @@
         }
 
         /// <summary>
-        /// Gets default values for all the modules.
+        /// Gets the configuration toml values.
         /// </summary>
-        /// <returns>A <see cref="IEnumerable{ModuleReadModel}"/> representing the result of the operation.</returns>
-        /// <param name="configTomlString">configtoml as string.</param>
-        [HttpGet(nameof(GetAllDefaultValues))]
+        /// <param name="configTomlFile">The configuration toml file.</param>
+        /// <returns></returns>
+        [HttpGet(nameof(GetConfigTomlValues))]
         [ProducesResponseType(typeof(IEnumerable<ModuleReadModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetAllDefaultValues([Required, FromQuery] string configTomlString)
+        public async Task<IActionResult> GetConfigTomlValues([Required, FromForm(Name = "config.toml")] IFormFile configTomlFile)
         {
-            var result = await this.manager.GenerateConfigTomlModelAsync(configTomlString).ConfigureAwait(false);
+            var result = await this.manager.GenerateConfigTomlModelAsync(configTomlFile).ConfigureAwait(false);
 
             return Ok(result);
         }

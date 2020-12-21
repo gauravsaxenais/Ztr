@@ -37,7 +37,7 @@
             var currentDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
 
             _deviceGitConnectionOptions.GitLocalFolder = Path.Combine(currentDirectory, _deviceGitConnectionOptions.GitLocalFolder);
-            _deviceGitConnectionOptions.TomlConfiguration.DeviceFolder = Path.Combine(_deviceGitConnectionOptions.GitLocalFolder, _deviceGitConnectionOptions.TomlConfiguration.DeviceFolder);
+            _deviceGitConnectionOptions.DefaultTomlConfiguration.DeviceFolder = Path.Combine(_deviceGitConnectionOptions.GitLocalFolder, _deviceGitConnectionOptions.DefaultTomlConfiguration.DeviceFolder);
 
             _repoManager.SetConnectionOptions(_deviceGitConnectionOptions);
         }
@@ -55,7 +55,7 @@
 
             if (deviceGitConnection != null)
             {
-                listOfDevices = FileReaderExtensions.GetDirectories(deviceGitConnection.TomlConfiguration.DeviceFolder);
+                listOfDevices = FileReaderExtensions.GetDirectories(deviceGitConnection.DefaultTomlConfiguration.DeviceFolder);
                 listOfDevices = listOfDevices.ConvertAll(item => item.ToUpper());
             }
 

@@ -25,7 +25,7 @@
         public DeviceGitConnectionOptions(string gitLocalFolder, string userName, string password, string gitRepositoryUrl, TomlConfigurationFile tomlConfiguration) :
             base(gitLocalFolder, userName, password, gitRepositoryUrl)
         {
-            TomlConfiguration = tomlConfiguration;
+            DefaultTomlConfiguration = tomlConfiguration;
         }
 
         /// <summary>
@@ -34,7 +34,15 @@
         /// <value>
         /// The toml configuration.
         /// </value>
-        public TomlConfigurationFile TomlConfiguration { get; set; }
+        public TomlConfigurationFile DefaultTomlConfiguration { get; set; }
+
+        /// <summary>
+        /// Gets or sets the modules configuration folder.
+        /// </summary>
+        /// <value>
+        /// The modules configuration.
+        /// </value>
+        public string ModulesConfig { get; set; }
 
         /// <summary>
         /// Converts to string.
@@ -44,7 +52,7 @@
         /// </returns>
         public override string ToString()
         {
-            return $"DeviceGitConnectionOptions($ GitLocalFolder: {this.GitLocalFolder} GitRepoUrl: {this.GitRepositoryUrl} TomlConfiguration: {this.TomlConfiguration})";
+            return $"DeviceGitConnectionOptions($ GitLocalFolder: {this.GitLocalFolder} GitRepoUrl: {this.GitRepositoryUrl} TomlConfiguration: {this.DefaultTomlConfiguration})";
         }
     }
 }

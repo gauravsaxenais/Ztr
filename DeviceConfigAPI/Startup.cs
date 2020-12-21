@@ -45,15 +45,10 @@
         public void ConfigureServices(IServiceCollection services)
 #pragma warning restore CA1822 // Mark members as static
         {
-            services.AddControllers();
+            services.AddControllers()
+                .AddNewtonsoftJson(options => options.SerializerSettings.Converters.Add(new StringEnumConverter()));
 
-            services.AddAllowAllOriginsCorsPolicy();
-
-            services.AddMvc()
-                .AddNewtonsoftJson(options => options.SerializerSettings.Converters.Add(new StringEnumConverter()))
-                .AddXmlSerializerFormatters()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
-
+          
             var swaggerAssemblies = new[]
             {
                 typeof(Program).Assembly,
@@ -88,24 +83,7 @@
 
             // Use routing first, then Cors second.
             app.UseRouting();
-            var serviceProviderBuilt = app.ApplicationServices;
-
-            logger = serviceProviderBuilt.GetRequiredService<ILoggerFactory>().CreateLogger(nameof(Program));
-
-            // Use Exception middleware.
-            app.UseMiddleware<ExceptionMiddleware>();
-
-            // Cors needs to be before MVC and Swagger. Otherwise typescript clients throw cors related exceptions.
-            logger.LogWarning($"AllowAllOrigins true, so all origins are allowed");
-            logger.LogWarning("Caution: Use this setting in DEVELOPMENT only. In production, grant access to specific origins (websites) that you control and trust to access the API.");
-
-            var securityOptions = app.ApplicationServices.GetRequiredService<SecurityOptions>();
-
-            // Cors needs to be before MVC and Swagger. Otherwise typescript clients throw cors related exceptions.
-            if (securityOptions.AllowAllOrigins)
-            {
-                app.UseCors(ApiConstants.ApiAllowAllOriginsPolicy);
-            }
+            app.AddAppCustomBuild();
 
             app.UseSwagger(new[]
             {

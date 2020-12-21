@@ -58,12 +58,20 @@
             <param name="gitRepositoryUrl">The git repository URL.</param>
             <param name="tomlConfiguration">The toml configuration.</param>
         </member>
-        <member name="P:Business.Configuration.DeviceGitConnectionOptions.TomlConfiguration">
+        <member name="P:Business.Configuration.DeviceGitConnectionOptions.DefaultTomlConfiguration">
             <summary>
             Gets or sets the toml configuration.
             </summary>
             <value>
             The toml configuration.
+            </value>
+        </member>
+        <member name="P:Business.Configuration.DeviceGitConnectionOptions.ModulesConfig">
+            <summary>
+            Gets or sets the modules configuration folder.
+            </summary>
+            <value>
+            The modules configuration.
             </value>
         </member>
         <member name="M:Business.Configuration.DeviceGitConnectionOptions.ToString">
@@ -455,7 +463,7 @@
             and generates a model for the config.toml.
             </summary>
         </member>
-        <member name="M:Business.RequestHandlers.Interfaces.IConfigCreateFromManager.GenerateConfigTomlModelAsync(System.String)">
+        <member name="M:Business.RequestHandlers.Interfaces.IConfigCreateFromManager.GenerateConfigTomlModelAsync(Microsoft.AspNetCore.Http.IFormFile)">
             <summary>
             Gets the default values all modules asynchronous.
             </summary>
@@ -585,15 +593,28 @@
             <seealso cref="T:ZTR.Framework.Business.Manager" />
             <seealso cref="T:Business.RequestHandlers.Interfaces.IConfigCreateFromManager" />
         </member>
-        <member name="M:Business.RequestHandlers.Managers.ConfigCreateFromManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.ConfigCreateFromManager})">
-            <summary>Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.ConfigCreateFromManager" /> class.</summary>
+        <member name="M:Business.RequestHandlers.Managers.ConfigCreateFromManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DefaultValueManager},Business.RequestHandlers.Interfaces.IGitRepositoryManager,Business.Configuration.DeviceGitConnectionOptions,Business.Parsers.InputFileLoader)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.ConfigCreateFromManager"/> class.
+            </summary>
             <param name="logger">The logger.</param>
+            <param name="gitRepoManager">The git repo manager.</param>
+            <param name="deviceGitConnectionOptions">The device git connection options.</param>
+            <param name="inputFileLoader">The input file loader.</param>
         </member>
-        <member name="M:Business.RequestHandlers.Managers.ConfigCreateFromManager.GenerateConfigTomlModelAsync(System.String)">
+        <member name="M:Business.RequestHandlers.Managers.ConfigCreateFromManager.GenerateConfigTomlModelAsync(Microsoft.AspNetCore.Http.IFormFile)">
             <summary>
             Returns the list of all modules and blocks from config.toml.
             </summary>
             <param name="configTomlFile">config.toml as string.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.ConfigCreateFromManager.GetProtoFiles(System.String,System.Collections.Generic.IEnumerable{Business.Models.ModuleReadModel})">
+            <summary>
+            Gets the proto file path.
+            </summary>
+            <param name="moduleFilePath">The module file path.</param>
+            <param name="listOfModules">The list of modules.</param>
             <returns></returns>
         </member>
         <member name="M:Business.RequestHandlers.Managers.ConfigCreateFromManager.GetTomlData(System.String)">
@@ -601,6 +622,27 @@
             Gets the toml data.
             </summary>
             <param name="fileContent">Content of the file.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.ConfigCreateFromManager.GetValuesFromTomlFileAsync(System.String)">
+            <summary>
+            Gets the default values all modules asynchronous.
+            </summary>
+            <param name="configTomlFile">The configuration toml file.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.ConfigCreateFromManager.GetListOfModules(System.String)">
+            <summary>
+            Gets the list of modules.
+            </summary>
+            <param name="configTomlFile">The configuration toml file.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.ConfigCreateFromManager.GetCustomMessages(System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Gets the custom messages.
+            </summary>
+            <param name="protoFilePaths">The proto file paths.</param>
             <returns></returns>
         </member>
         <member name="T:Business.RequestHandlers.Managers.ConfigGeneratorManager">
