@@ -47,8 +47,7 @@
             {
                 builder.AllowAnyOrigin()
                         .AllowAnyMethod()
-                        .AllowAnyHeader()
-                        .AllowCredentials();
+                        .AllowAnyHeader();
             }));
         }
     }

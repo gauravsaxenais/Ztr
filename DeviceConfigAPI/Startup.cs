@@ -45,14 +45,9 @@
         public void ConfigureServices(IServiceCollection services)
 #pragma warning restore CA1822 // Mark members as static
         {
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.Converters.Add(new StringEnumConverter()));
 
             services.AddAllowAllOriginsCorsPolicy();
-
-            services.AddMvc()
-                .AddNewtonsoftJson(options => options.SerializerSettings.Converters.Add(new StringEnumConverter()))
-                .AddXmlSerializerFormatters()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             var swaggerAssemblies = new[]
             {
