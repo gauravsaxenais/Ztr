@@ -187,24 +187,6 @@
             <param name="deviceType">device type e.g. M3, M7.</param>
             <returns><see cref="T:System.Collections.Generic.IEnumerable`1"/> representing the result of the operation.</returns>
         </member>
-        <member name="M:Service.Controllers.ModuleController.GetModuleByName(System.String,System.String,System.String)">
-            <summary>
-            Get the module information by name.
-            </summary>
-            <param name="name">name of the module.</param>
-            <param name="firmwareVersion">firmware version.</param>
-            <param name="deviceType">device type.</param>
-            <returns>A <see cref="T:System.Collections.Generic.IEnumerable`1"/> representing the result of the operation.</returns>
-        </member>
-        <member name="M:Service.Controllers.ModuleController.GetModuleByNames(System.String,System.String,System.Collections.Generic.IEnumerable{System.String})">
-            <summary>
-            Gets the list of modules by names.
-            </summary>
-            <param name="firmwareVersion">firmware version.</param>
-            <param name="deviceType">evice type.</param>
-            <param name="names">names of the modules.</param>
-            <returns>A <see cref="T:System.Collections.Generic.IEnumerable`1"/> representing the result of the operation.</returns>
-        </member>
         <member name="T:Service.Program">
             <summary>
               Entry point of the application.

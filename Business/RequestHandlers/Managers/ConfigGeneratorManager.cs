@@ -26,8 +26,12 @@
         private string[] _properties;
         const string _skipConfigFolder = "configsetting";
         const string _skipConfigFile = "convertconfig.txt";
-        private IEnumerable<ConfigConvertRule> _rules;
+        private IEnumerable<ConfigConvertRuleReadModel> _rules;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConfigGeneratorManager"/> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
         public ConfigGeneratorManager(ILogger<ConfigGeneratorManager> logger)
         {
             _logger = logger;
@@ -99,10 +103,10 @@
             _rules = tags.Where(o => o.StartsWith("Rule:")).Select(o =>
             {
                 var ruleConfig = o.Split(':');
-                var rule = new ConfigConvertRule
+                var rule = new ConfigConvertRuleReadModel
                 {
                     Property = ruleConfig[1],
-                    Schema = new List<ConfigConvertObject> { new ConfigConvertObject
+                    Schema = new List<ConfigConvertObjectReadModel> { new ConfigConvertObjectReadModel
                          {
                               Name = ruleConfig[2],
                               Value= ruleConfig[3]
@@ -111,30 +115,28 @@
                 return rule;
             });
         }
-        /// <summary>Creates the configuration asynchronous.</summary>
-        /// <param name="jsonContent">Content of the json.</param>
+
+        /// <summary>
+        /// Creates the configuration asynchronous.
+        /// </summary>
+        /// <param name="model"></param>
         /// <returns>
         ///   <br />
         /// </returns>
-        public async Task<string> CreateConfigAsync(ConfigModel model)
+        public async Task<string> CreateConfigAsync(ConfigReadModel model)
         {
-            //EnsureArg.IsNotEmptyOrWhiteSpace(model.Module);
+            EnsureArg.IsNotNull(model);
             EnsureArg.IsNotEmptyOrWhiteSpace(model.Block);
 
-
             var jsonContent = model.Block;
-                // File.ReadAllText($"{Global.WebRoot}/test/block.json");
-
-           
+            
             var configurationObject = JsonConvert.DeserializeObject(jsonContent);           
             var dictionary = (Dictionary<string,object>)ToDictionary(configurationObject);
             RemoveProperties(dictionary);
 
             changeKeys = new List<KeyValuePair<string, IDictionary<string, string>>>();
             ConvertCompatibleJson(dictionary);
-            //var json = JsonConvert.SerializeObject(dictionary);
-
-
+           
             string contents = Toml.WriteString(dictionary);           
 
             return contents;
@@ -187,6 +189,12 @@
            
         }
         private string _path => $"{Global.WebRoot}/{_skipConfigFolder}/{_skipConfigFile}";
+
+        /// <summary>
+        /// Updates the toml configuration.
+        /// </summary>
+        /// <param name="properties">The properties.</param>
+        /// <returns></returns>
         public async Task<bool> UpdateTomlConfig(string properties)
         {
             var path = $"{Global.WebRoot}/{_skipConfigFolder}";
