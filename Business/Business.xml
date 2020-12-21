@@ -203,69 +203,6 @@
             A <see cref="T:System.String" /> that represents this instance.
             </returns>
         </member>
-        <member name="T:Business.Models.ConfigConvertObjectReadModel">
-            <summary>
-            ConfigConvertObjectReadModel.
-            </summary>
-        </member>
-        <member name="P:Business.Models.ConfigConvertObjectReadModel.Name">
-            <summary>
-            Gets or sets the name.
-            </summary>
-            <value>
-            The name.
-            </value>
-        </member>
-        <member name="P:Business.Models.ConfigConvertObjectReadModel.Value">
-            <summary>
-            Gets or sets the value.
-            </summary>
-            <value>
-            The value.
-            </value>
-        </member>
-        <member name="T:Business.Models.ConfigConvertRuleReadModel">
-            <summary>
-            Config Convert Model
-            </summary>
-        </member>
-        <member name="P:Business.Models.ConfigConvertRuleReadModel.Property">
-            <summary>
-            Gets or sets the property.
-            </summary>
-            <value>
-            The property.
-            </value>
-        </member>
-        <member name="P:Business.Models.ConfigConvertRuleReadModel.Schema">
-            <summary>
-            Gets or sets the schema.
-            </summary>
-            <value>
-            The schema.
-            </value>
-        </member>
-        <member name="T:Business.Models.ConfigReadModel">
-            <summary>
-            Config Read Model.
-            </summary>
-        </member>
-        <member name="P:Business.Models.ConfigReadModel.Module">
-            <summary>
-            Gets or sets the module.
-            </summary>
-            <value>
-            The module.
-            </value>
-        </member>
-        <member name="P:Business.Models.ConfigReadModel.Block">
-            <summary>
-            Gets or sets the block.
-            </summary>
-            <value>
-            The block.
-            </value>
-        </member>
         <member name="T:Business.Models.ConfigurationReadModel">
             <summary>
             ConfigurationReadModel - This class maps to toml file.
@@ -475,7 +412,7 @@
             Config Generator interface methods.
             </summary>
         </member>
-        <member name="M:Business.RequestHandlers.Interfaces.IConfigGeneratorManager.CreateConfigAsync(Business.Models.ConfigReadModel)">
+        <member name="M:Business.RequestHandlers.Interfaces.IConfigGeneratorManager.CreateConfigAsync(Business.Parsers.Models.ConfigReadModel)">
             <summary>Creates the configuration asynchronous.</summary>
             <param name="jsonContent">Content of the json.</param>
             <returns>
@@ -650,13 +587,7 @@
               <br />
             </summary>
         </member>
-        <member name="M:Business.RequestHandlers.Managers.ConfigGeneratorManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.ConfigGeneratorManager})">
-            <summary>
-            Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.ConfigGeneratorManager"/> class.
-            </summary>
-            <param name="logger">The logger.</param>
-        </member>
-        <member name="M:Business.RequestHandlers.Managers.ConfigGeneratorManager.CreateConfigAsync(Business.Models.ConfigReadModel)">
+        <member name="M:Business.RequestHandlers.Managers.ConfigGeneratorManager.CreateConfigAsync(Business.Parsers.Models.ConfigReadModel)">
             <summary>
             Creates the configuration asynchronous.
             </summary>

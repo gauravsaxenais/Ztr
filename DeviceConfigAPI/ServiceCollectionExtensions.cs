@@ -1,6 +1,7 @@
 ﻿namespace Service
 {
     using Business.Parsers;
+    using Business.Parsers.Core;
     using Business.RequestHandlers.Interfaces;
     using Business.RequestHandlers.Managers;
     using EnsureThat;
@@ -23,9 +24,10 @@
             EnsureArg.IsNotNull(services, nameof(services));
 
             services.AddSingleton<InputFileLoader>();
+            services.AddScoped<ConverterService>();
+            
 
             services.AddScoped<IGitRepositoryManager, GitRepositoryManager>();
-
             services.AddScoped<IDeviceTypeManager, DeviceTypeManager>();
             services.AddScoped<IModuleManager, ModuleManager>();
             services.AddScoped<IDefaultValueManager, DefaultValueManager>();
