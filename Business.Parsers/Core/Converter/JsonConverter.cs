@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Business.Parsers.Core.Converter
 {
-    public class JsonConverter : IJsonParser
+    public class JsonConverter : IJsonConverter
     {
         private ConvertConfig _config;
         public JsonConverter(ConvertConfig config)
@@ -26,9 +26,6 @@ namespace Business.Parsers.Core.Converter
                     input.Remove(item);
                     continue;
                 }
-
-
-
                 if (item.Value is Array)
                 {
                     ((object[])item.Value).ToList().ForEach(o => {
@@ -94,15 +91,7 @@ namespace Business.Parsers.Core.Converter
 
             return string.IsNullOrEmpty(value.ToString());
         }
-        bool CanConvert(object value)
-        {
-            bool result = false;
-            if (value is object[] v && v.Length > 0 && v[0] is IDictionary<string, object> dictinary)
-            {
-                result = dictinary.Values.ToList().Any(o => o.GetType() == typeof(string));
-            }
-            return result;
-        }
+       
         object Extractvalue<T>(T dictionary) where T : Dictionary<string, object>
         {
             object value = null;
@@ -130,7 +119,7 @@ namespace Business.Parsers.Core.Converter
                 }).ToArray();
             }
 
-            return value;
+            return value == null ? string.Empty : value;
         }
         void ConvertArray(object[] array)
         {
@@ -146,7 +135,7 @@ namespace Business.Parsers.Core.Converter
                     {
                         return;
                     }
-                    ConvertCompatibleJson((Dictionary<string, object>)o, 1);
+                    ConvertCompatibleJson((Dictionary<string, object>)o);
                 }
 
             });
@@ -167,34 +156,31 @@ namespace Business.Parsers.Core.Converter
             return (T)dict;
         }
 
-
         #endregion private helper functions
 
-        private T ConvertCompatibleJson<T>(T input, int loop) where T : Dictionary<string, object>
+        private T ConvertCompatibleJson<T>(T input) where T : Dictionary<string, object>
         {
             KeyValuePair<string, object> newKey = default;
-            var dictionaryArray = new List<Dictionary<string, object>>();
+            T dictionary = null;          
             foreach (var item in input)
             {
                 if (item.Value is Array)
                 {
                     if (_config.rules.Any(o => o.Property == item.Key.ToLower()))
                     {
+                        // ********* Do not delete this line *******************
+                        //
                         //((object[])item.Value).ToList().ForEach(x =>
                         //{ 
-                        //    AddNewObject((T)x);
+                        //    Convert((T)x);
                         //});
-                        dictionaryArray.Add(Convert<T>((object[])item.Value));
+                        dictionary = Convert<T>((object[])item.Value);
 
                     }
 
-                    if (dictionaryArray.Count > 0)
+                    if (dictionary != null)
                     {
-
-                        newKey = dictionaryArray.Count == 1
-                                ? new KeyValuePair<string, object>(item.Key, dictionaryArray.First())
-                                : new KeyValuePair<string, object>(item.Key, dictionaryArray.ToArray());
-                        continue;
+                        newKey = new KeyValuePair<string, object>(item.Key, dictionary);                        
                     }
                     else
                     {
@@ -210,7 +196,6 @@ namespace Business.Parsers.Core.Converter
             {
                 input[newKey.Key] = newKey.Value;
             }
-
             return input;
         }
 
@@ -220,8 +205,7 @@ namespace Business.Parsers.Core.Converter
             var configurationObject = JsonConvert.DeserializeObject(json);
             var dictionary = (Dictionary<string, object>)ToDictionary(configurationObject);
             RemoveProperties(dictionary);
-
-            return ConvertCompatibleJson(dictionary, 0);
+            return ConvertCompatibleJson(dictionary);
         }
 
         public string ToJson(string json)

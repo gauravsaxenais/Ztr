@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Business.Parsers.Core.Converter
 {
-    public interface IJsonParser :IParser<IDictionary<string, object>>
+    public interface IJsonConverter :IConverter<IDictionary<string, object>>
     {
        
     }

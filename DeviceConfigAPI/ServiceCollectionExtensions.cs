@@ -50,8 +50,8 @@
 
         private static void AddConverters(IServiceCollection services)
         {
-            services.AddSingleton<ConverterService>();
-            services.AddScoped<IJsonParser,JsonConverter>();
+            services.AddScoped<ConverterService>();
+            services.AddScoped<IJsonConverter, JsonConverter>();
             services.AddSingleton<IBuilder<IDictionary<string, object>>, TomlBuilder>();
 
             services.AddScoped<ConvertConfig>();

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Business.Parsers.Core.Converter
 {
-    public interface IParser<T>
+    public interface IConverter<T>
     {
         T ToConverted(string json);
 

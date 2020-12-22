@@ -18,14 +18,14 @@ namespace Business.Parsers.Core
     {
         private ILogger<ConverterService> _logger;
         private ConvertConfig _config;
-        private IJsonParser _parser;
+        private IJsonConverter _parser;
         private IBuilder<IDictionary<string, object>> _builder;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigGeneratorManager"/> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
-        public ConverterService(ILogger<ConverterService> logger,IJsonParser parser, IBuilder<IDictionary<string, object>> builder, ConvertConfig config)
+        public ConverterService(ILogger<ConverterService> logger, IJsonConverter parser, IBuilder<IDictionary<string, object>> builder, ConvertConfig config)
         {
             _logger = logger;
             _config = config;

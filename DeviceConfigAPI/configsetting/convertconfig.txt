@@ -12,6 +12,6 @@ defaultvalue
 configured
 Rule:args:name:value
 Rule:config:name:value
-Rule:arrays:name:value
+
 
 
