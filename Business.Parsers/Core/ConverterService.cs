@@ -15,6 +15,8 @@ namespace Business.Parsers.Core
 {
     public class ConverterService
     {
+        private const string _value = "value";
+        private const string _name = "name";
         private ILogger<ConverterService> _logger;
         private static object _syncRoot = new object();
         private string[] _properties;
@@ -59,16 +61,8 @@ namespace Business.Parsers.Core
                             ((object[])o).ToList().ForEach(u => RemoveProperties((T)u));                            
                         }
                         else
-                        {
-                            try
-                            {
-                                RemoveProperties((T)o);
-                            }
-                            catch (Exception ex)
-                            {
-                                var i = o;
-                            }
-
+                        {                          
+                          RemoveProperties((T)o);                          
                         }                                               
                     });
                 }
@@ -80,7 +74,9 @@ namespace Business.Parsers.Core
 
             }
         }
-        private object ToDictionary(object configObject)
+
+        #region private helper functions
+        object ToDictionary(object configObject)
         {
 
             if (configObject == null)
@@ -109,8 +105,7 @@ namespace Business.Parsers.Core
             return dictionary;
 
         }
-
-        private void InitiateRule()
+        void InitiateRule()
         {
             string setting = string.Empty;
             if (File.Exists(_path))
@@ -134,54 +129,112 @@ namespace Business.Parsers.Core
                 return rule;
             });
         }
-
-
-        private List<KeyValuePair<string, IDictionary<string, string>>> changeKeys;
-        private void ConvertCompatibleJson<T>(T input) where T : IDictionary<string, object>
+        bool IsValueEmpty(object value)
         {
-            KeyValuePair<string, Dictionary<string, string>> newKey = default;
-            foreach (var item in input)
+            if (value == null)
+                return true;
+            
+            return string.IsNullOrEmpty(value.ToString());
+        }
+        bool CanConvert(object value)
+        {
+            bool result = false;
+            if(value is object[] v && v.Length > 0 && v[0] is IDictionary<string, object> dictinary)
             {
-               // var rule = _rules.FirstOrDefault(o => o.Property == item.Key.ToLower());
-                if (item.Value is object[])
+                result = dictinary.Values.ToList().Any(o => o.GetType() == typeof(string));
+            }
+            return result;
+        }
+        object Extractvalue<T>(T dictionary) where T : Dictionary<string, object>
+        {
+            object value = null;
+
+            if (dictionary.ContainsKey(_value))
+            {
+                value = dictionary[_value];
+            }
+
+            if (IsValueEmpty(value) && dictionary.ContainsKey("arrays"))
+            {
+                value = ((object[])dictionary["arrays"]).ToList().Select(o =>
+                           {
+                               if (o is object[] v)
+                               {
+                                   return v.ToList().Select(u => ConvertCompatibleJson((T)u,1)).ToArray();
+                               }
+                               return null;
+                           }).ToArray();
+            }
+
+            return value;
+        }
+        void ConvertArray(object[] array)
+        {
+            array.ToList().ForEach(o =>
+            {
+                if (o is object[] v)
                 {
-                    var dict = new Dictionary<string, string>();
-                    ((object[])item.Value).ToList().ForEach(x =>
+                    ConvertArray(v);
+                }
+                else
+                {
+                    if (o is string)
                     {
-                        if (x is object[])
+                        return;
+                    }
+                    ConvertCompatibleJson((Dictionary<string, object>)o,1);
+                }
+
+            });
+        }
+        private T Convert<T>(T input, T dictionary, int loop) where T : Dictionary<string, object>
+        {           
+            if (loop > 0)
+            {
+                var o = (T)input;
+                if (o.ContainsKey(_name))
+                {
+                    dictionary.Add(o[_name].ToString(), Extractvalue(o));
+                }
+                
+            }
+            return dictionary;
+        }
+        #endregion private helper functions
+
+        private T ConvertCompatibleJson<T>(T input,int loop) where T : Dictionary<string, object>
+        {
+            KeyValuePair<string, Dictionary<string, object>> newKey = default;
+            var dict = new Dictionary<string, object>();
+            if (input is T)
+            {
+                dict = Convert(input, dict, ++loop);
+            }
+
+            foreach (var item in input)
+            {                
+                if (item.Value is Array )
+                {
+                   
+                   // if (CanConvert(item.Value))
+                    {
+                        ((object[])item.Value).ToList().ForEach(x =>
                         {
-                            ((object[])x).ToList().ForEach(z => ConvertCompatibleJson((T)z));
-                        }
-                        else
-                        {
-                            var o = (IDictionary<string, object>)x;
-                            if(!o.ContainsKey("name"))
-                            {
-                                return;
-                            }
-                            //rule.Schema.ToList().ForEach(u =>
-                            //{
-                            dict.Add(o["name"].ToString(), o.ContainsKey("value") ? o["value"].ToString() : string.Empty);
-                            //});
-                        }
-                    });
+                            dict = Convert((Dictionary<string, object>)x, dict,++loop);
+                        });
+
+                    }
+
+
+                    ConvertArray((object[])item.Value);
 
                     if (dict.Count > 0)
                     {
-                        newKey = new KeyValuePair<string, Dictionary<string, string>>(item.Key, dict);
+                        newKey = new KeyValuePair<string, Dictionary<string, object>>(item.Key, dict);
                         continue;
                     }
                    
-                }
-                if (item.Value is Array)
-                {
-                    ((object[])item.Value).ToList().ForEach(o => ConvertCompatibleJson((T)o));
-                }
-
-                if (item.Value is T)
-                {
-                    ConvertCompatibleJson((T)item.Value);
-                }
+                }               
 
             }
 
@@ -190,6 +243,7 @@ namespace Business.Parsers.Core
                 input[newKey.Key] = newKey.Value;
             }
 
+            return input;
         }
         private string _path => $"{Global.WebRoot}/{_skipConfigFolder}/{_skipConfigFile}";
         /// <summary>
@@ -214,7 +268,7 @@ namespace Business.Parsers.Core
             var dictionary = (Dictionary<string, object>)ToDictionary(configurationObject);
             RemoveProperties(dictionary);
 
-            ConvertCompatibleJson(dictionary);
+            ConvertCompatibleJson(dictionary,0);
 
             string contents = Toml.WriteString(dictionary);
             return contents;
