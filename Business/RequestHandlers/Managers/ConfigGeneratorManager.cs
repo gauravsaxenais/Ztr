@@ -30,7 +30,7 @@
             EnsureArg.IsNotEmptyOrWhiteSpace(model.Block);
             EnsureArg.IsNotEmptyOrWhiteSpace(model.Module);
 
-            return await _service.CreateConfigAsync(model);
+            return await _service.CreateConfigTomlAsync(model);
         }
 
         /// <summary>
@@ -41,7 +41,7 @@
         public async Task<bool> UpdateTomlConfig(string properties)
         {
             EnsureArg.IsNotEmptyOrWhiteSpace(properties);
-            return await _service.UpdateTomlConfig(properties);
+            return await _service.UpdateConfig(properties);
         }
     }
 }
