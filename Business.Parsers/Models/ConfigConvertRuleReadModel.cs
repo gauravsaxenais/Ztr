@@ -1,4 +1,4 @@
-﻿namespace Business.Models
+﻿namespace Business.Parsers.Models
 {
     using System.Collections.Generic;
 

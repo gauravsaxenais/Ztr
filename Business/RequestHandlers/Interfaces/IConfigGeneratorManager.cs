@@ -1,6 +1,7 @@
 ﻿namespace Business.RequestHandlers.Interfaces
 {
     using Business.Models;
+    using Business.Parsers.Models;
     using System.Threading.Tasks;
 
     /// <summary>

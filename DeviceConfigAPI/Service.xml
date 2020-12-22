@@ -94,7 +94,7 @@
             </summary>
             <param name="manager">The manager.</param>
         </member>
-        <member name="M:Service.Controllers.ConfigController.CreateTomlConfig(Business.Models.ConfigReadModel)">
+        <member name="M:Service.Controllers.ConfigController.CreateTomlConfig(Business.Parsers.Models.ConfigReadModel)">
             <summary>Creates the toml configuration.</summary>
             <returns>
               <br />

@@ -2,6 +2,16 @@ id
 label
 description
 min
+max
+configured
+isconfigure
+d
+originalid
 datatype
+defaultvalue
 configured
 Rule:args:name:value
+Rule:config:name:value
+
+
+
