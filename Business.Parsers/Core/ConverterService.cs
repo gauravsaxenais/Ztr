@@ -193,16 +193,7 @@ namespace Business.Parsers.Core
 
             });
         }
-        private T Convert<T>(T input, T dictionary, int loop) where T : Dictionary<string, object>
-        {
-            dictionary.Clear();
-            var o = (T)input;
-            if (o.ContainsKey(_name))
-            {
-                dictionary.Add(o[_name].ToString(), Extractvalue(o));
-            }
-            return dictionary;
-        }
+       
         private T Convert<T>(object[] input) where T : Dictionary<string, object>
         {
             var dict = new Dictionary<string, object>();
@@ -224,40 +215,21 @@ namespace Business.Parsers.Core
         private T ConvertCompatibleJson<T>(T input,int loop) where T : Dictionary<string, object>
         {
             KeyValuePair<string, object> newKey = default;
-            var dictionaryArray = new List<Dictionary<string, object>>();
-            var dictionary = new Dictionary<string, object>();
-            void AddNewObject(T obj)
-            {
-                dictionary = Convert(obj, dictionary, loop);
-                if (dictionary.Count > 0)
-                    dictionaryArray.Add(dictionary);
-            }
-
+            var dictionaryArray = new List<Dictionary<string, object>>();           
             foreach (var item in input)
             { 
                 if (item.Value is Array)
                 {
                     if (_rules.Any(o => o.Property == item.Key.ToLower()))
                     {
-                        ((object[])item.Value).ToList().ForEach(x =>
-                        {
-                            if (x is object[] v)
-                            {
-                                v.ToList().ForEach(u =>
-                                {
-                                    AddNewObject((T)u);
-                                });
-                                return;
-                            }
+                        //((object[])item.Value).ToList().ForEach(x =>
+                        //{ 
+                        //    AddNewObject((T)x);
+                        //});
+                        dictionaryArray.Add(Convert<T>((object[])item.Value));
 
-                            AddNewObject((T)x);
-                        });
-
-                        continue;
                     }
 
-                    ConvertArray((object[])item.Value);
-                  
                     if (dictionaryArray.Count > 0)
                     {
 
@@ -265,6 +237,10 @@ namespace Business.Parsers.Core
                                 ? new KeyValuePair<string, object>(item.Key, dictionaryArray.First())
                                 : new KeyValuePair<string, object>(item.Key, dictionaryArray.ToArray());
                         continue;
+                    }
+                    else
+                    {
+                        ConvertArray((object[])item.Value);
                     }
 
                 }
@@ -290,7 +266,7 @@ namespace Business.Parsers.Core
         public async Task<string> CreateConfigAsync(ConfigReadModel model)
         {
             string contents = GenerateConfigToml(model.Module);
-            //contents += Environment.NewLine + GenerateConfigToml(model.Module);
+            contents += Environment.NewLine + GenerateConfigToml(model.Block);
 
             return await Task.FromResult(contents);
 
