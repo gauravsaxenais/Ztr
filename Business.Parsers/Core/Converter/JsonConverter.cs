@@ -1,15 +1,14 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Business.Parsers.Core.Converter
+﻿namespace Business.Parsers.Core.Converter
 {
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
     public class JsonConverter : IJsonConverter
     {
-        private ConvertConfig _config;
+        private readonly ConvertConfig _config;
         public JsonConverter(ConvertConfig config)
         {
             _config = config;
@@ -26,7 +25,7 @@ namespace Business.Parsers.Core.Converter
             //_logger.LogInformation($"Properties : {_properties.Count()}");
             foreach (var item in input)
             {
-                if (_config.properties.Contains(item.Key.ToLower()))
+                if (_config.Properties.Contains(item.Key.ToLower()))
                 {
                     input.Remove(item);
                     continue;
@@ -40,9 +39,9 @@ namespace Business.Parsers.Core.Converter
                             return;
                         }
 
-                        if (o is object[])
+                        if (o is object[] v)
                         {
-                            ((object[])o).ToList().ForEach(u => RemoveProperties((T)u));
+                            v.ToList().ForEach(u => RemoveProperties((T)u));
                         }
                         else
                         {
@@ -51,9 +50,9 @@ namespace Business.Parsers.Core.Converter
                     });
                 }
 
-                if (item.Value is T)
+                if (item.Value is T t)
                 {
-                    RemoveProperties((T)item.Value);
+                    RemoveProperties(t);
                 }
 
             }
@@ -61,25 +60,24 @@ namespace Business.Parsers.Core.Converter
 
         private object ToDictionary(object configObject)
         {
-
             if (configObject == null)
             {
                 return null;
             }
-            if (configObject is JValue)
+            if (configObject is JValue value)
             {
-                return ((JValue)configObject).ToString();
+                return value.ToString();
             }
 
-            if (configObject is JArray)
+            if (configObject is JArray array)
             {
-                return ((JArray)configObject).Select(o => ToDictionary(o)).ToArray();
+                return array.Select(o => ToDictionary(o)).ToArray();
             }
 
             var dictionary = new Dictionary<string, object>();
-            if (configObject is JObject)
+            if (configObject is JObject @object)
             {
-                foreach (var o in (JObject)configObject)
+                foreach (var o in @object)
                 {
                     dictionary.Add(o.Key, ToDictionary(o.Value));
                 }
@@ -117,7 +115,7 @@ namespace Business.Parsers.Core.Converter
             {
                 if (item.Value is Array)
                 {
-                    if (_config.rules.Any(o => o.Property == item.Key.ToLower()))
+                    if (_config.Rules.Any(o => o.Property == item.Key.ToLower()))
                     {
                         // ********* Do not delete this line *******************
                         //
@@ -150,8 +148,6 @@ namespace Business.Parsers.Core.Converter
             return input;
         }
         #endregion private helper functions
-
-
 
         public IDictionary<string, object> ToConverted(string json)
         {

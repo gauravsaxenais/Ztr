@@ -1,29 +1,27 @@
-﻿using Business.Core;
-using Business.Parsers.Models;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Business.Parsers.Core.Converter
+﻿namespace Business.Parsers.Core.Converter
 {
+    using Business.Core;
+    using Business.Parsers.Models;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Threading.Tasks;
+
     public class ConvertConfig
     {
-        internal string value => "value";
-        internal string name => "name";
+        internal string Value => "value";
+        internal string Name => "name";
         internal string Fields => "fields";
         internal string Arrays => "arrays";
 
-        private static object _syncRoot = new object();
-        internal string[] properties { get; set; }
+        private static readonly object _syncRoot = new object();
+        internal string[] Properties { get; set; }
         const string _skipConfigFolder = "configsetting";
         const string _skipConfigFile = "convertconfig.txt";
-        internal IEnumerable<ConfigConvertRuleReadModel> rules { get; set; }
+        internal IEnumerable<ConfigConvertRuleReadModel> Rules { get; set; }
 
-        private string _path => $"{Global.WebRoot}/{_skipConfigFolder}/{_skipConfigFile}";
+        private string Path => $"{Global.WebRoot}/{_skipConfigFolder}/{_skipConfigFile}";
 
         public ConvertConfig()
         {
@@ -33,13 +31,13 @@ namespace Business.Parsers.Core.Converter
         void InitiateRule()
         {
             string setting = string.Empty;
-            if (File.Exists(_path))
+            if (File.Exists(Path))
             {
-                setting = File.ReadAllText(_path);
+                setting = File.ReadAllText(Path);
             }
             var tags = setting.Split(Environment.NewLine);
-            properties = tags.Where(o => !o.StartsWith("Rule:")).ToArray();
-            rules = tags.Where(o => o.StartsWith("Rule:")).Select(o =>
+            Properties = tags.Where(o => !o.StartsWith("Rule:")).ToArray();
+            Rules = tags.Where(o => o.StartsWith("Rule:")).Select(o =>
             {
                 var ruleConfig = o.Split(':');
                 var rule = new ConfigConvertRuleReadModel
@@ -68,7 +66,7 @@ namespace Business.Parsers.Core.Converter
             //Thread-safe operation .....
             lock (_syncRoot)
             {
-                using var file = File.AppendText(_path);
+                using var file = File.AppendText(Path);
                 values.ForEach(o => file.WriteLine(o));
                 file.Flush();
                 file.Close();

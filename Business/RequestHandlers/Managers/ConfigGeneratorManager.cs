@@ -11,8 +11,12 @@
     /// </summary>
     public class ConfigGeneratorManager : IConfigGeneratorManager
     {
-
         private readonly ConverterService _service;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConfigGeneratorManager"/> class.
+        /// </summary>
+        /// <param name="service">The service.</param>
         public ConfigGeneratorManager(ConverterService service)
         {
             _service = service;

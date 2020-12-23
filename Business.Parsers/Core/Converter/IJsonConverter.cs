@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Business.Parsers.Core.Converter
+﻿namespace Business.Parsers.Core.Converter
 {
+    using System.Collections.Generic;
     public interface IJsonConverter :IConverter<IDictionary<string, object>>
-    {
-       
+    { 
     }
 }
