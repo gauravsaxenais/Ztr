@@ -13,7 +13,10 @@ namespace Business.Parsers.Core.Converter
     public class ConvertConfig
     {
         internal string value => "value";
-        internal string name => "name";       
+        internal string name => "name";
+        internal string Fields => "fields";
+        internal string Arrays => "arrays";
+
         private static object _syncRoot = new object();
         internal string[] properties { get; set; }
         const string _skipConfigFolder = "configsetting";

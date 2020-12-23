@@ -43,21 +43,9 @@
             }));
 
 
-            AddConverters(services);
+            services.AddConverters();
 
             return services;
         }
-
-        private static void AddConverters(IServiceCollection services)
-        {
-            services.AddScoped<ConverterService>();
-            services.AddScoped<IJsonConverter, JsonConverter>();
-            services.AddSingleton<IBuilder<IDictionary<string, object>>, TomlBuilder>();
-
-            services.AddScoped<ConvertConfig>();
-           
-        }
-
-
     }
 }

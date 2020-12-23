@@ -16,6 +16,11 @@ namespace Business.Parsers.Core.Converter
         }
 
         #region private helper functions
+        private IExtractor<T> GetExtractor<T>()
+        {
+            return (IExtractor<T>)new Extractor(_config);
+        }
+
         private void RemoveProperties<T>(T input) where T : IDictionary<string, object>
         {
             //_logger.LogInformation($"Properties : {_properties.Count()}");
@@ -54,7 +59,7 @@ namespace Business.Parsers.Core.Converter
             }
         }
 
-        object ToDictionary(object configObject)
+        private object ToDictionary(object configObject)
         {
 
             if (configObject == null)
@@ -84,44 +89,7 @@ namespace Business.Parsers.Core.Converter
 
         }
        
-        bool IsValueEmpty(object value)
-        {
-            if (value == null)
-                return true;
-
-            return string.IsNullOrEmpty(value.ToString());
-        }
-       
-        object Extractvalue<T>(T dictionary) where T : Dictionary<string, object>
-        {
-            object value = null;
-            var dict = new Dictionary<string, object>();
-            if (dictionary.ContainsKey(_config.value))
-            {
-                value = dictionary[_config.value];
-            }
-            if (IsValueEmpty(value) && dictionary.ContainsKey("fields"))
-            {
-                dict = Convert<T>((object[])dictionary["fields"]);
-                if (dict.Count > 0)
-                    value = dict;
-            }
-            if (IsValueEmpty(value) && dictionary.ContainsKey("arrays"))
-            {
-                value = ((object[])dictionary["arrays"]).ToList().Select(o =>
-                {
-                    if (o is object[] v)
-                    {
-                        var res = Convert<T>(v);
-                        return res;
-                    }
-                    return null;
-                }).ToArray();
-            }
-
-            return value == null ? string.Empty : value;
-        }
-        void ConvertArray(object[] array)
+        private void ConvertArray(object[] array)
         {
             array.ToList().ForEach(o =>
             {
@@ -141,27 +109,10 @@ namespace Business.Parsers.Core.Converter
             });
         }
 
-        private T Convert<T>(object[] input) where T : Dictionary<string, object>
-        {
-            var dict = new Dictionary<string, object>();
-            input.ToList().ForEach(u =>
-            {
-                var o = (T)u;
-                if (o.ContainsKey(_config.name))
-                {
-                    dict.Add(o[_config.name].ToString(), Extractvalue(o));
-                }
-
-            });
-            return (T)dict;
-        }
-
-        #endregion private helper functions
-
         private T ConvertCompatibleJson<T>(T input) where T : Dictionary<string, object>
         {
             KeyValuePair<string, object> newKey = default;
-            T dictionary = null;          
+            T dictionary = null;
             foreach (var item in input)
             {
                 if (item.Value is Array)
@@ -174,13 +125,13 @@ namespace Business.Parsers.Core.Converter
                         //{ 
                         //    Convert((T)x);
                         //});
-                        dictionary = Convert<T>((object[])item.Value);
+                        dictionary = GetExtractor<T>().Convert((object[])item.Value);
 
                     }
 
                     if (dictionary != null)
                     {
-                        newKey = new KeyValuePair<string, object>(item.Key, dictionary);                        
+                        newKey = new KeyValuePair<string, object>(item.Key, dictionary);
                     }
                     else
                     {
@@ -198,6 +149,8 @@ namespace Business.Parsers.Core.Converter
             }
             return input;
         }
+        #endregion private helper functions
+
 
 
         public IDictionary<string, object> ToConverted(string json)
