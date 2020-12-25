@@ -1,9 +1,7 @@
 ﻿namespace Business.Parsers.Core.Converter
 {
     using Microsoft.Extensions.DependencyInjection;
-    using System;
     using System.Collections.Generic;
-    using System.Text;
 
     public static class Inject
     {
@@ -14,7 +12,6 @@
             services.AddSingleton<IBuilder<IDictionary<string, object>>, TomlBuilder>();
 
             services.AddScoped<ConvertConfig>();
-           
         }
     }
 }
