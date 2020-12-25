@@ -17,7 +17,6 @@
     /// </summary>
     public class Startup
     {
-        private static ILogger logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Startup"/> class.

@@ -36,7 +36,7 @@
         }
 
         public ErrorMessage(TErrorCode errorCode, Exception exception) :
-            this(errorCode, exception.Message, exception)
+            this(errorCode, "An unexpected error occurred", exception)
         {
         }
 

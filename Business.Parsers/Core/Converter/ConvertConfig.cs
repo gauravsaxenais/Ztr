@@ -2,6 +2,7 @@
 {
     using Business.Core;
     using Business.Parsers.Models;
+    using Microsoft.Extensions.Logging;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -14,7 +15,7 @@
         internal string Name => "name";
         internal string Fields => "fields";
         internal string Arrays => "arrays";
-
+        private readonly ILogger<ConverterService> _logger;
         private static readonly object _syncRoot = new object();
         internal string[] Properties { get; set; }
         const string _skipConfigFolder = "configsetting";
@@ -23,8 +24,9 @@
 
         private string Path => $"{Global.WebRoot}/{_skipConfigFolder}/{_skipConfigFile}";
 
-        public ConvertConfig()
+        public ConvertConfig(ILogger<ConverterService> logger)
         {
+            _logger = logger;
             InitiateRule();
         }
 
@@ -35,7 +37,7 @@
             {
                 setting = File.ReadAllText(Path);
             }
-            var tags = setting.Split(Environment.NewLine);
+            var tags = setting.Replace("\r", string.Empty).Split(Environment.NewLine);
             Properties = tags.Where(o => !o.StartsWith("Rule:")).ToArray();
             Rules = tags.Where(o => o.StartsWith("Rule:")).Select(o =>
             {
@@ -51,6 +53,7 @@
                 };
                 return rule;
             });
+          
         }
 
         internal async Task<bool> UpdateConfiguration(string properties)

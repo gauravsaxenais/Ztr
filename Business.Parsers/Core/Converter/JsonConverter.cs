@@ -1,5 +1,6 @@
 ﻿namespace Business.Parsers.Core.Converter
 {
+    using Microsoft.Extensions.Logging;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using System;
@@ -8,10 +9,12 @@
 
     public class JsonConverter : IJsonConverter
     {
+        private readonly ILogger<JsonConverter> _logger;
         private readonly ConvertConfig _config;
-        public JsonConverter(ConvertConfig config)
+        public JsonConverter(ILogger<JsonConverter> logger, ConvertConfig config)
         {
             _config = config;
+            _logger = logger;
         }
 
         #region private helper functions
@@ -22,11 +25,11 @@
 
         private void RemoveProperties<T>(T input) where T : IDictionary<string, object>
         {
-            //_logger.LogInformation($"Properties : {_properties.Count()}");
+            
             foreach (var item in input)
             {
                 if (_config.Properties.Contains(item.Key.ToLower()))
-                {
+                {                   
                     input.Remove(item);
                     continue;
                 }
