@@ -3,10 +3,12 @@
     using System;
     using System.Diagnostics;
     using System.Text;
-    using ZTR.Framework.Configuration;
     using EnsureThat;
     using FluentValidation.Results;
     using Newtonsoft.Json;
+    using ZTR.Framework.Business.Models;
+    using ZTR.Framework.Configuration;
+    using ZTR.Framework.Configuration.Content;
 
     public class ErrorMessage<TErrorCode>
         where TErrorCode : Enum
@@ -36,8 +38,8 @@
         }
 
         public ErrorMessage(TErrorCode errorCode, Exception exception) :
-            this(errorCode, "An unexpected error occurred", exception)
-        {
+            this(errorCode, exception is IApplicationException ? exception.Message : Resource.ExceptionMessage, exception)
+        {         
         }
 
         public ErrorMessage(TErrorCode errorCode, string message) :

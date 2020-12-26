@@ -5,6 +5,8 @@
     using System.Linq;
     using EnsureThat;
     using Nett;
+    using ZTR.Framework.Business.Models;
+    using ZTR.Framework.Configuration.Content;
 
     public static class TomlFileReader
     {
@@ -20,7 +22,7 @@
             }
             catch (Exception)
             {
-                throw new ArgumentException("An error occurred while parsing Toml file.");
+                throw new CustomArgumentException(Resource.TomlParsingError);
             }
 
             return fileData;
@@ -39,7 +41,7 @@
             }
             catch (Exception)
             {
-                throw new ArgumentException("An error occurred while parsing Toml file.");
+                throw new CustomArgumentException(Resource.TomlParsingError);
             }
 
             return fileData;
