@@ -12,6 +12,6 @@
         /// Parses the toml files asynchronous.
         /// </summary>
         /// <returns></returns>
-        Task<object> ParseTomlFilesAsync();
+        Task<object> GetBlocksAsync();
     }
 }

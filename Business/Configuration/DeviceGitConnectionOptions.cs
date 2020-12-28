@@ -45,6 +45,14 @@
         public string ModulesConfig { get; set; }
 
         /// <summary>
+        /// Gets or sets the block configuration.
+        /// </summary>
+        /// <value>
+        /// The block configuration.
+        /// </value>
+        public string BlockConfig { get; set; }
+
+        /// <summary>
         /// Converts to string.
         /// </summary>
         /// <returns>

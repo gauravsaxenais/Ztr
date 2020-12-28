@@ -60,7 +60,5 @@
 
             await WriteResponse(context, exceptionResponse, response);
         }
-
-
     }
 }

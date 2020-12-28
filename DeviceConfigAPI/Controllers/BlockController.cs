@@ -32,7 +32,7 @@
         [HttpGet(nameof(GetAllBlocks))]
         public async Task<IActionResult> GetAllBlocks()
         {
-            var result = await this.manager.ParseTomlFilesAsync().ConfigureAwait(false);
+            var result = await this.manager.GetBlocksAsync().ConfigureAwait(false);
 
             return Ok(result);
         }

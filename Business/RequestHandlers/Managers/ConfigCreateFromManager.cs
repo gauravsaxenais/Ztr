@@ -27,21 +27,28 @@
         private readonly IGitRepositoryManager _gitRepoManager;
         private readonly DeviceGitConnectionOptions _deviceGitConnectionOptions;
         private readonly IDefaultValueManager _defaultValueManager;
+        private readonly IBlockManager _blockManager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigCreateFromManager"/> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
         /// <param name="gitRepoManager">The git repo manager.</param>
+        /// <param name="defaultValueManager">The default value manager.</param>
+        /// <param name="blockManager">The block manager.</param>
         /// <param name="deviceGitConnectionOptions">The device git connection options.</param>
-        /// <param name="defaultValueManager">reusing the default value manager.</param>
-        public ConfigCreateFromManager(ILogger<DefaultValueManager> logger, IGitRepositoryManager gitRepoManager, DeviceGitConnectionOptions deviceGitConnectionOptions, IDefaultValueManager defaultValueManager) : base(logger)
+        public ConfigCreateFromManager(ILogger<DefaultValueManager> logger, IGitRepositoryManager gitRepoManager, IDefaultValueManager defaultValueManager, IBlockManager blockManager, DeviceGitConnectionOptions deviceGitConnectionOptions) : base(logger)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
+            EnsureArg.IsNotNull(gitRepoManager, nameof(gitRepoManager));
+            EnsureArg.IsNotNull(defaultValueManager, nameof(defaultValueManager));
+            EnsureArg.IsNotNull(blockManager, nameof(blockManager));
+
             EnsureArg.IsNotNull(deviceGitConnectionOptions, nameof(deviceGitConnectionOptions));
             EnsureArg.IsNotNull(deviceGitConnectionOptions.DefaultTomlConfiguration, nameof(deviceGitConnectionOptions.DefaultTomlConfiguration));
 
             _defaultValueManager = defaultValueManager;
+            _blockManager = blockManager;
             _gitRepoManager = gitRepoManager;
             _deviceGitConnectionOptions = deviceGitConnectionOptions;
         }
@@ -72,7 +79,8 @@
 
                 await _defaultValueManager.MergeDefaultValuesWithModules(configTomlFileContent, modules, _deviceGitConnectionOptions.ModulesConfig);
 
-                apiResponse = new ApiResponse(status: true, data: new { modules });
+                var blocks = await _blockManager.GetBlocksAsync().ConfigureAwait(false);
+                apiResponse = new ApiResponse(status: true, data: new { modules, blocks });
             }
             catch (Exception exception)
             {

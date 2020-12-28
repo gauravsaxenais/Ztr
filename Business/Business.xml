@@ -4,40 +4,6 @@
         <name>Business</name>
     </assembly>
     <members>
-        <member name="T:Business.Configuration.BlockGitConnectionOptions">
-            <summary>
-            This class maps to the connection options in appsettings.json file.
-            </summary>
-            <seealso cref="T:ZTR.Framework.Business.File.GitConnectionOptions" />
-        </member>
-        <member name="M:Business.Configuration.BlockGitConnectionOptions.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:Business.Configuration.BlockGitConnectionOptions"/> class.
-            </summary>
-        </member>
-        <member name="M:Business.Configuration.BlockGitConnectionOptions.#ctor(System.String,System.String,System.String,System.String)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Business.Configuration.BlockGitConnectionOptions"/> class.
-            </summary>
-            <param name="gitLocalFolder">The git local folder.</param>
-            <param name="userName">Name of the user.</param>
-            <param name="password">The password.</param>
-            <param name="gitRepositoryUrl">The git repository URL.</param>
-        </member>
-        <member name="P:Business.Configuration.BlockGitConnectionOptions.BlockConfig">
-            <summary>
-            Gets or sets the block configuration.
-            </summary>
-            <value>
-            The block configuration.
-            </value>
-        </member>
-        <member name="M:Business.Configuration.BlockGitConnectionOptions.ToString">
-            <summary>
-            Converts to string.
-            </summary>
-            <returns></returns>
-        </member>
         <member name="T:Business.Configuration.DeviceGitConnectionOptions">
             <summary>
             This class maps to the connection options in appsettings.json file.
@@ -72,6 +38,14 @@
             </summary>
             <value>
             The modules configuration.
+            </value>
+        </member>
+        <member name="P:Business.Configuration.DeviceGitConnectionOptions.BlockConfig">
+            <summary>
+            Gets or sets the block configuration.
+            </summary>
+            <value>
+            The block configuration.
             </value>
         </member>
         <member name="M:Business.Configuration.DeviceGitConnectionOptions.ToString">
@@ -388,7 +362,7 @@
             and responsible for parsing toml files.
             </summary>
         </member>
-        <member name="M:Business.RequestHandlers.Interfaces.IBlockManager.ParseTomlFilesAsync">
+        <member name="M:Business.RequestHandlers.Interfaces.IBlockManager.GetBlocksAsync">
             <summary>
             Parses the toml files asynchronous.
             </summary>
@@ -524,15 +498,15 @@
             <seealso cref="T:ZTR.Framework.Business.Manager" />
             <seealso cref="T:Business.RequestHandlers.Interfaces.IBlockManager" />
         </member>
-        <member name="M:Business.RequestHandlers.Managers.BlockManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.BlockManager},Business.RequestHandlers.Interfaces.IGitRepositoryManager,Business.Configuration.BlockGitConnectionOptions)">
+        <member name="M:Business.RequestHandlers.Managers.BlockManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.BlockManager},Business.RequestHandlers.Interfaces.IGitRepositoryManager,Business.Configuration.DeviceGitConnectionOptions)">
             <summary>
             Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.BlockManager"/> class.
             </summary>
             <param name="logger">The logger.</param>
             <param name="gitRepoManager">The git repo manager.</param>
-            <param name="blockGitConnectionOptions">The block git connection options.</param>
+            <param name="deviceGitConnectionOptions">The device git connection options.</param>
         </member>
-        <member name="M:Business.RequestHandlers.Managers.BlockManager.ParseTomlFilesAsync">
+        <member name="M:Business.RequestHandlers.Managers.BlockManager.GetBlocksAsync">
             <summary>
             Parses the toml files asynchronous.
             </summary>
@@ -546,14 +520,15 @@
             <seealso cref="T:ZTR.Framework.Business.Manager" />
             <seealso cref="T:Business.RequestHandlers.Interfaces.IConfigCreateFromManager" />
         </member>
-        <member name="M:Business.RequestHandlers.Managers.ConfigCreateFromManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DefaultValueManager},Business.RequestHandlers.Interfaces.IGitRepositoryManager,Business.Configuration.DeviceGitConnectionOptions,Business.RequestHandlers.Interfaces.IDefaultValueManager)">
+        <member name="M:Business.RequestHandlers.Managers.ConfigCreateFromManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DefaultValueManager},Business.RequestHandlers.Interfaces.IGitRepositoryManager,Business.RequestHandlers.Interfaces.IDefaultValueManager,Business.RequestHandlers.Interfaces.IBlockManager,Business.Configuration.DeviceGitConnectionOptions)">
             <summary>
             Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.ConfigCreateFromManager"/> class.
             </summary>
             <param name="logger">The logger.</param>
             <param name="gitRepoManager">The git repo manager.</param>
+            <param name="defaultValueManager">The default value manager.</param>
+            <param name="blockManager">The block manager.</param>
             <param name="deviceGitConnectionOptions">The device git connection options.</param>
-            <param name="defaultValueManager">reusing the default value manager.</param>
         </member>
         <member name="M:Business.RequestHandlers.Managers.ConfigCreateFromManager.GenerateConfigTomlModelAsync(Microsoft.AspNetCore.Http.IFormFile)">
             <summary>

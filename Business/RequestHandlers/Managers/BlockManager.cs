@@ -23,29 +23,30 @@
     {
         #region Private Variables
         private readonly IGitRepositoryManager _repoManager;
-        private readonly BlockGitConnectionOptions _blockGitConnectionOptions;
+        private readonly DeviceGitConnectionOptions _deviceGitConnectionOptions;
         #endregion
 
-        #region Constructors        
+        #region Constructors                        
         /// <summary>
         /// Initializes a new instance of the <see cref="BlockManager"/> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
         /// <param name="gitRepoManager">The git repo manager.</param>
-        /// <param name="blockGitConnectionOptions">The block git connection options.</param>
-        public BlockManager(ILogger<BlockManager> logger, IGitRepositoryManager gitRepoManager, BlockGitConnectionOptions blockGitConnectionOptions) : base(logger)
+        /// <param name="deviceGitConnectionOptions">The device git connection options.</param>
+        public BlockManager(ILogger<BlockManager> logger, IGitRepositoryManager gitRepoManager, DeviceGitConnectionOptions deviceGitConnectionOptions) : base(logger)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
-            EnsureArg.IsNotNull(blockGitConnectionOptions, nameof(blockGitConnectionOptions));
+            EnsureArg.IsNotNull(gitRepoManager, nameof(gitRepoManager));
+            EnsureArg.IsNotNull(deviceGitConnectionOptions, nameof(deviceGitConnectionOptions));
 
             _repoManager = gitRepoManager;
-            _blockGitConnectionOptions = blockGitConnectionOptions;
+            _deviceGitConnectionOptions = deviceGitConnectionOptions;
 
             var currentDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
 
-            _blockGitConnectionOptions.GitLocalFolder = Path.Combine(currentDirectory, _blockGitConnectionOptions.GitLocalFolder);
-            _blockGitConnectionOptions.BlockConfig = Path.Combine(currentDirectory, _blockGitConnectionOptions.GitLocalFolder, _blockGitConnectionOptions.BlockConfig);
-            _repoManager.SetConnectionOptions(_blockGitConnectionOptions);
+            _deviceGitConnectionOptions.GitLocalFolder = Path.Combine(currentDirectory, _deviceGitConnectionOptions.GitLocalFolder);
+            _deviceGitConnectionOptions.BlockConfig = Path.Combine(currentDirectory, _deviceGitConnectionOptions.GitLocalFolder, _deviceGitConnectionOptions.BlockConfig);
+            _repoManager.SetConnectionOptions(_deviceGitConnectionOptions);
         }
         #endregion
 
@@ -55,9 +56,9 @@
         /// Parses the toml files asynchronous.
         /// </summary>
         /// <returns>list of blocks.</returns>
-        public async Task<object> ParseTomlFilesAsync()
+        public async Task<object> GetBlocksAsync()
         {
-            var gitConnectionOptions = (BlockGitConnectionOptions)_repoManager.GetConnectionOptions();
+            var gitConnectionOptions = (DeviceGitConnectionOptions)_repoManager.GetConnectionOptions();
             
             await _repoManager.CloneRepositoryAsync();
 
