@@ -13,16 +13,14 @@
 
     public class TomlBuilder : IBuilder<IDictionary<string,object>>
     {
-        private readonly ILogger<DictionaryConverter> _logger;
         private readonly ConvertConfig _config;
         private HashSet<string> _formatters = new HashSet<string>();
         private JsonSerializerSettings _settings = new JsonSerializerSettings
         {         
             Formatting = Formatting.Indented
         };
-        public TomlBuilder(ILogger<DictionaryConverter> logger, ConvertConfig config)
+        public TomlBuilder(ConvertConfig config)
         {
-            _logger = logger;
             _config = config;           
         }
         public string ToTOML(IDictionary<string, object> content)
