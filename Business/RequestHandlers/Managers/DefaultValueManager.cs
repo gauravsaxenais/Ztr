@@ -101,7 +101,7 @@
                 var formattedMessage = customMessageParser.Format(messages[temp].Message);
                 formattedMessage.Name = messages[temp].Name;
 
-                var jsonModels = new List<JsonModel>();
+                var jsonModels = new List<JsonField>();
 
                 jsonModels = moduleParser.GetJsonFromTomlAndProtoFile(defaultValueFromTomlFile, formattedMessage);
 

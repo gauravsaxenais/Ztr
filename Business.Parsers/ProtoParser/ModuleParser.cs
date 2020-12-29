@@ -24,10 +24,10 @@
             return modules.ToList();
         }
 
-        public List<JsonModel> GetJsonFromTomlAndProtoFile(string fileContent, ProtoParsedMessage protoParserMessage)
+        public List<JsonField> GetJsonFromTomlAndProtoFile(string fileContent, ProtoParsedMessage protoParserMessage)
         {
             var tomlSettings = TomlFileReader.LoadLowerCaseTomlSettingsWithMappingForDefaultValues();
-            var jsonModels = new List<JsonModel>();
+            var jsonModels = new List<JsonField>();
             var listOfModules = GetListOfModulesFromTomlFile(fileContent, tomlSettings);
 
             // here message.name means Power, j1939 etc.
@@ -48,9 +48,9 @@
             return jsonModels;
         }
 
-        public List<JsonModel> MergeTomlWithProtoMessage(Dictionary<string, object> configValues, ProtoParsedMessage protoParsedMessage)
+        public List<JsonField> MergeTomlWithProtoMessage(Dictionary<string, object> configValues, ProtoParsedMessage protoParsedMessage)
         {
-            var listOfData = new List<JsonModel>();
+            var listOfData = new List<JsonField>();
             listOfData.AddRange(AddFieldsToJsonModel(protoParsedMessage));
 
             foreach (var tempItem in configValues.Select((KeyValue, Index) => new { KeyValue, Index }))
@@ -69,7 +69,7 @@
 
                 else if (repeatedMessage != null)
                 {
-                    var jsonModel = new JsonModel()
+                    var jsonModel = new JsonField()
                     {
                         Name = repeatedMessage.Name
                     };
@@ -84,9 +84,9 @@
             return listOfData;
         }
 
-        private List<List<JsonModel>> ProcessRepeatedMessage(ProtoParsedMessage repeatedMessage, object value)
+        private List<List<JsonField>> ProcessRepeatedMessage(ProtoParsedMessage repeatedMessage, object value)
         {
-            var arrayData = new List<List<JsonModel>>();
+            var arrayData = new List<List<JsonField>>();
             var values = new List<Dictionary<string, object>>();
 
             if (value is Dictionary<string, object>[] v)
@@ -96,7 +96,7 @@
 
             for (int temp = 0; temp < values.Count(); temp++)
             {
-                var listOfData = new List<JsonModel>();
+                var listOfData = new List<JsonField>();
 
                 foreach (var dicItem in values[temp].Select((Kvp, Index) => new { Kvp, Index }))
                 {
@@ -114,7 +114,7 @@
                         var repeatedSubMessage = repeatedMessage.Messages.Where(x => string.Equals(x.Name, dicItem.Kvp.Key, StringComparison.OrdinalIgnoreCase) && x.IsRepeated).FirstOrDefault();
                         var nonRepeatedSubMessage = repeatedMessage.Messages.Where(x => string.Equals(x.Name, dicItem.Kvp.Key, StringComparison.OrdinalIgnoreCase) && !x.IsRepeated).FirstOrDefault();
 
-                        var tempJsonModel = new JsonModel
+                        var tempJsonModel = new JsonField
                         {
                             Id = dicItem.Index,
                         };
@@ -152,16 +152,16 @@
             return arrayData;
         }
 
-        private List<JsonModel> AddFieldsToJsonModel(ProtoParsedMessage protoParsedMessage)
+        private List<JsonField> AddFieldsToJsonModel(ProtoParsedMessage protoParsedMessage)
         {
             EnsureArg.IsNotNull(protoParsedMessage);
 
-            var listOfFields = new List<JsonModel>();
+            var listOfFields = new List<JsonField>();
             for (int tempIndex = 0; tempIndex < protoParsedMessage.Fields.Count; tempIndex++)
             {
                 var newField = (Field)protoParsedMessage.Fields[tempIndex].Clone();
 
-                var jsonModel = new JsonModel
+                var jsonModel = new JsonField
                 {
                     Name = newField.Name,
                     Value = newField.Value,
@@ -229,7 +229,7 @@
             return result;
         }
 
-        private JsonModel GetFieldsData(ProtoParsedMessage message, KeyValuePair<string, object> values)
+        private JsonField GetFieldsData(ProtoParsedMessage message, KeyValuePair<string, object> values)
         {
             var fields = message.Fields;
 
@@ -242,7 +242,7 @@
             {
                 if (values.Key.Equals(fields[tempIndex].Name))
                 {
-                    var tempField = new JsonModel
+                    var tempField = new JsonField
                     {
                         Max = fields[tempIndex].Max,
                         Min = fields[tempIndex].Min,
