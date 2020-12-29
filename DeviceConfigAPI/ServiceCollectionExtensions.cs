@@ -1,7 +1,7 @@
 ﻿namespace Service
 {
-    using Business.Parsers;
-    using Business.Parsers.Core.Converter;
+    using Business.Parsers.ProtoParser;
+    using Business.Parsers.TomlParser.Core.Converter;
     using Business.RequestHandlers.Interfaces;
     using Business.RequestHandlers.Managers;
     using EnsureThat;

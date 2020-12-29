@@ -599,7 +599,7 @@
               <br />
             </summary>
         </member>
-        <member name="M:Business.RequestHandlers.Managers.ConfigGeneratorManager.#ctor(Business.Parsers.Core.ConverterService)">
+        <member name="M:Business.RequestHandlers.Managers.ConfigGeneratorManager.#ctor(Business.Parsers.TomlParser.Core.Converter.ConverterService)">
             <summary>
             Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.ConfigGeneratorManager"/> class.
             </summary>
@@ -633,7 +633,7 @@
             <seealso cref="T:ZTR.Framework.Business.Manager" />
             <seealso cref="T:Business.RequestHandlers.Interfaces.IDefaultValueManager" />
         </member>
-        <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DefaultValueManager},Business.RequestHandlers.Interfaces.IGitRepositoryManager,Business.Configuration.DeviceGitConnectionOptions,Business.Parsers.InputFileLoader)">
+        <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DefaultValueManager},Business.RequestHandlers.Interfaces.IGitRepositoryManager,Business.Configuration.DeviceGitConnectionOptions,Business.Parsers.ProtoParser.InputFileLoader)">
             <summary>
             Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.DefaultValueManager"/> class.
             </summary>

@@ -1,4 +1,4 @@
-﻿namespace Business.Core
+﻿namespace Business.Parsers
 {
     using System;
 

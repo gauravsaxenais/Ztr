@@ -1,7 +1,7 @@
 ﻿namespace Business.RequestHandlers.Managers
 {
-    using Business.Parsers.Core;
     using Business.Parsers.Models;
+    using Business.Parsers.TomlParser.Core.Converter;
     using Business.RequestHandlers.Interfaces;
     using EnsureThat;
     using System.Threading.Tasks;

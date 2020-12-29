@@ -4,6 +4,8 @@
     using Business.Models;
     using Business.Parsers;
     using Business.Parsers.Models;
+    using Business.Parsers.ProtoParser;
+    using Business.Parsers.ProtoParser.Models;
     using Business.RequestHandlers.Interfaces;
     using EnsureThat;
     using Microsoft.Extensions.Logging;

@@ -1,4 +1,4 @@
-﻿namespace Business.Parsers.Core.Converter
+﻿namespace Business.Parsers.TomlParser.Core.Converter
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -20,6 +20,7 @@
                 if (dict.Count > 0)
                     value = dict;
             }
+
             return value;
         }
         private object ExtractArray<T>(object value, T dictionary) where T : Dictionary<string, object>

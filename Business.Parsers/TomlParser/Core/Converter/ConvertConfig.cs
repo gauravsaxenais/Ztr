@@ -1,6 +1,5 @@
-﻿namespace Business.Parsers.Core.Converter
+﻿namespace Business.Parsers.TomlParser.Core.Converter
 {
-    using Business.Core;
     using Business.Parsers.Models;
     using Microsoft.Extensions.Logging;
     using System;

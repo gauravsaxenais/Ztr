@@ -1,6 +1,6 @@
-﻿namespace Business.Parsers
+﻿namespace Business.Parsers.ProtoParser
 {
-    using Business.Parsers.Models;
+    using Business.Parsers.ProtoParser.Models;
     using EnsureThat;
     using Nett;
     using System;
@@ -15,8 +15,6 @@
         public List<Dictionary<string, object>> GetListOfModulesFromTomlFile(string fileContent, TomlSettings settings)
         {
             EnsureArg.IsNotEmptyOrWhiteSpace(fileContent, (nameof(fileContent)));
-
-            var jsonModels = new List<JsonModel>();
 
             var fileData = Toml.ReadString(fileContent, settings);
 

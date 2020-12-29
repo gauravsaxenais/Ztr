@@ -1,6 +1,5 @@
-﻿namespace Business.Parsers.Core.Converter
+﻿namespace Business.Parsers.TomlParser.Core.Converter
 {
-    using Microsoft.Extensions.Logging;
     using Nett;
     using Newtonsoft.Json;
     using System;
@@ -10,11 +9,9 @@
 
     public class TomlBuilder : IBuilder<IDictionary<string,object>>
     {
-        private readonly ILogger<DictionaryConverter> _logger;
         private readonly ConvertConfig _config;
-        public TomlBuilder(ILogger<DictionaryConverter> logger, ConvertConfig config)
+        public TomlBuilder(ConvertConfig config)
         {
-            _logger = logger;
             _config = config;
         }
         public string ToTOML(IDictionary<string, object> content)

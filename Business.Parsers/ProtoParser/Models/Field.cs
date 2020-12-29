@@ -1,4 +1,4 @@
-﻿namespace Business.Parsers.Models
+﻿namespace Business.Parsers.ProtoParser.Models
 {
     using System;
 

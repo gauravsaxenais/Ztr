@@ -1,7 +1,6 @@
-﻿namespace Business.Parsers
+﻿namespace Business.Parsers.ProtoParser
 {
-    using Business.Core;
-    using Business.Parsers.Models;
+    using Business.Parsers.ProtoParser.Models;
     using EnsureThat;
     using Google.Protobuf;
     using Microsoft.CodeAnalysis;
@@ -33,6 +32,8 @@
             EnsureArg.IsNotEmptyOrWhiteSpace(protoFilePath);
 
             string outputFolder = string.Empty;
+            var prefix = nameof(InputFileLoader);
+
             try
             {
                 protoFilePath = CombinePathFromAppRoot(protoFilePath);
@@ -67,7 +68,7 @@
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError("Error", ex);
+                    _logger.LogError($"{prefix} Error while deleting the output folder: {outputFolder}.", ex);
                 }
             }
         }
@@ -192,6 +193,7 @@
         private async Task<string> GenerateDllFromCsFileAsync(string fileName, string outputFolderPath)
         {
             fileName = char.ToUpper(fileName[0]) + fileName.Substring(1);
+
             string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
             string filePath = outputFolderPath + fileNameWithoutExtension;
             string csFilePath = filePath + csFileExtension;

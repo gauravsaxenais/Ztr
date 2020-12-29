@@ -1,6 +1,5 @@
-﻿namespace Business.Parsers.Core.Converter
+﻿namespace Business.Parsers.TomlParser.Core.Converter
 {
-    using Microsoft.Extensions.Logging;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using System;
@@ -9,15 +8,13 @@
 
     public class DictionaryConverter : IJsonConverter
     {
-        private readonly ILogger<DictionaryConverter> _logger;
         private readonly ConvertConfig _config;
-        public DictionaryConverter(ILogger<DictionaryConverter> logger, ConvertConfig config)
+        public DictionaryConverter(ConvertConfig config)
         {
             _config = config;
-            _logger = logger;
         }
 
-        #region private helper functions
+        #region Private Helper methods
         private IExtractor<T> GetExtractor<T>()
         {
             return (IExtractor<T>)new Extractor(_config);
@@ -25,7 +22,6 @@
 
         private void RemoveProperties<T>(T input) where T : IDictionary<string, object>
         {
-            
             foreach (var item in input)
             {
                 if (_config.Properties.Contains(item.Key.ToLower()))
@@ -33,6 +29,7 @@
                     input.Remove(item);
                     continue;
                 }
+
                 if (item.Value is Array)
                 {
                     ((object[])item.Value).ToList().ForEach(o => {
@@ -127,7 +124,6 @@
                         //    Convert((T)x);
                         //});
                         dictionary = GetExtractor<T>().Convert((object[])item.Value);
-
                     }
 
                     if (dictionary != null)
@@ -143,11 +139,11 @@
 
             }
 
-
             if (newKey.Key != null)
             {
                 input[newKey.Key] = newKey.Value;
             }
+
             return input;
         }
         #endregion private helper functions
