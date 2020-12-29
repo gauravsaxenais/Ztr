@@ -129,7 +129,7 @@
         /// Loads the tag names asynchronous.
         /// </summary>
         /// <returns></returns>
-        public async Task<string[]> LoadTagNamesAsync()
+        public async Task<string[]> GetAllTagsAsync()
         {
             string[] tagNames;
             var tags = new List<Tag>();

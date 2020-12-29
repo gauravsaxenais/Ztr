@@ -68,7 +68,7 @@
         /// <returns></returns>
         public async Task<IEnumerable<string>> GetAllFirmwareVersionsAsync()
         {
-            var listFirmwareVersions = await _repoManager.LoadTagNamesAsync();
+            var listFirmwareVersions = await _repoManager.GetAllTagsAsync();
 
             return listFirmwareVersions;
         }
