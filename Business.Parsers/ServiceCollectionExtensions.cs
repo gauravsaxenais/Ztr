@@ -1,5 +1,6 @@
-﻿namespace Business.Parsers.TomlParser.Core.Converter
+﻿namespace Business.Parsers
 {
+    using Business.Parsers.TomlParser.Core.Converter;
     using Microsoft.Extensions.DependencyInjection;
     using System.Collections.Generic;
 
