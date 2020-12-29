@@ -7,7 +7,7 @@
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
-    using ZTR.Framework.Business.Models;
+    using ZTR.Framework.Business;
 
     public class ConvertConfig
     {
