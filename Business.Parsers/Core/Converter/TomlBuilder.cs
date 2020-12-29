@@ -8,16 +8,12 @@
     using System.Linq;
     using System.Text;
     using System.Text.RegularExpressions;
-    using ZTR.Framework.Business.Models;
+    using ZTR.Framework.Business;
 
     public class TomlBuilder : IBuilder<IDictionary<string,object>>
     {
         private readonly ConvertConfig _config;
-        private HashSet<string> _formatters = new HashSet<string>();
-        private JsonSerializerSettings _settings = new JsonSerializerSettings
-        {         
-            Formatting = Formatting.Indented
-        };
+        private HashSet<string> _formatters = new HashSet<string>();       
         public TomlBuilder(ConvertConfig config)
         {
             _config = config;           
