@@ -51,7 +51,9 @@
 
         public static string RemoveNewline(this string input)
         {
-            return input.Replace("\r", string.Empty);
+            return input
+                .Replace("\n", string.Empty)
+                .Replace("\r", string.Empty);
         }
     }
 }
