@@ -121,14 +121,6 @@
             The default toml file.
             </value>
         </member>
-        <member name="P:Business.Configuration.TomlConfigurationFile.ModulesProtoFolder">
-            <summary>
-            Gets or sets the modules proto folder.
-            </summary>
-            <value>
-            The modules proto folder.
-            </value>
-        </member>
         <member name="M:Business.Configuration.TomlConfigurationFile.ToString">
             <summary>
             Converts to string.
@@ -375,6 +367,18 @@
             <param name="blockConfigDirectory">The block configuration directory.</param>
             <returns></returns>
         </member>
+        <member name="T:Business.RequestHandlers.Interfaces.ICompatibleFirmwareVersionManager">
+            <summary>
+            This Manager returns a list of all compatible firmware versions.
+            </summary>
+        </member>
+        <member name="M:Business.RequestHandlers.Interfaces.ICompatibleFirmwareVersionManager.GetCompatibleFirmwareVersionsAsync(System.String)">
+            <summary>
+            Generates the configuration toml model asynchronous.
+            </summary>
+            <param name="firmwareVersion">The firmware version.</param>
+            <returns>ApiResponse - success: true/false. data: array of compatible firmware versions. </returns>
+        </member>
         <member name="T:Business.RequestHandlers.Interfaces.IConfigCreateFromManager">
             <summary>
             This module takes config.toml as input 
@@ -470,7 +474,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Business.RequestHandlers.Interfaces.IGitRepositoryManager.LoadTagNamesAsync">
+        <member name="M:Business.RequestHandlers.Interfaces.IGitRepositoryManager.GetAllTagsAsync">
             <summary>
             Loads the tag names asynchronous.
             </summary>
@@ -525,6 +529,31 @@
             </summary>
             <param name="blockConfigDirectory">The block configuration directory.</param>
             <returns></returns>
+        </member>
+        <member name="T:Business.RequestHandlers.Managers.CompatibleFirmwareVersionManager">
+            <summary>
+            This manager takes input of firmware version
+            and returns list of firmware versions as an array.
+            </summary>
+            <seealso cref="T:ZTR.Framework.Business.Manager" />
+            <seealso cref="T:Business.RequestHandlers.Interfaces.ICompatibleFirmwareVersionManager" />
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.CompatibleFirmwareVersionManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DefaultValueManager},Business.RequestHandlers.Interfaces.IGitRepositoryManager,Business.Configuration.DeviceGitConnectionOptions)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.ConfigCreateFromManager"/> class.
+            </summary>
+            <param name="logger">The logger.</param>
+            <param name="gitRepoManager">The git repo manager.</param>
+            <param name="deviceGitConnectionOptions">The device git connection options.</param>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.CompatibleFirmwareVersionManager.GetCompatibleFirmwareVersionsAsync(System.String)">
+            <summary>
+            Generates the configuration toml model asynchronous.
+            </summary>
+            <param name="firmwareVersion">The firmware version.</param>
+            <returns>
+            ApiResponse - success: true/false. data: array of compatible firmware versions.
+            </returns>
         </member>
         <member name="T:Business.RequestHandlers.Managers.ConfigCreateFromManager">
             <summary>
@@ -723,7 +752,7 @@
             Not found: The repository was not found
             </exception>
         </member>
-        <member name="M:Business.RequestHandlers.Managers.GitRepositoryManager.LoadTagNamesAsync">
+        <member name="M:Business.RequestHandlers.Managers.GitRepositoryManager.GetAllTagsAsync">
             <summary>
             Loads the tag names asynchronous.
             </summary>

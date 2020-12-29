@@ -31,7 +31,7 @@
         /// Loads the tag names asynchronous.
         /// </summary>
         /// <returns></returns>
-        Task<string[]> LoadTagNamesAsync();
+        Task<string[]> GetAllTagsAsync();
 
         /// <summary>
         /// Gets the file data from tag asynchronous.

@@ -3,7 +3,7 @@
     using Microsoft.Extensions.DependencyInjection;
     using System.Collections.Generic;
 
-    public static class Inject
+    public static class ServiceCollectionExtensions
     {
         public static void AddConverters(this IServiceCollection services)
         {

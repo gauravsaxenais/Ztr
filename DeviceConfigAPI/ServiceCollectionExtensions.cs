@@ -39,7 +39,6 @@
                         .AllowAnyHeader();
             }));
 
-
             services.AddConverters();
 
             return services;

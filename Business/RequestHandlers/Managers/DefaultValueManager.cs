@@ -64,7 +64,7 @@
             // 2. get protofile paths based on firmware version and device type.
             // 3. create custom message for each of protofiles.
             // 4. get list of modules and their custom messages.
-            var modulesProtoFolder = Path.Combine(_deviceGitConnectionOptions.DefaultTomlConfiguration.DeviceFolder, deviceType, _deviceGitConnectionOptions.DefaultTomlConfiguration.ModulesProtoFolder);
+            var modulesProtoFolder = _deviceGitConnectionOptions.ModulesConfig;
 
             // read default values from toml file defaults.toml
             var defaultValueFromTomlFile = await GetDefaultValues(firmwareVersion, deviceType);

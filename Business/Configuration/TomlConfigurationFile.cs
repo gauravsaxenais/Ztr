@@ -38,20 +38,12 @@
         public string DefaultTomlFile { get; set; }
 
         /// <summary>
-        /// Gets or sets the modules proto folder.
-        /// </summary>
-        /// <value>
-        /// The modules proto folder.
-        /// </value>
-        public string ModulesProtoFolder { get; set; }
-
-        /// <summary>
         /// Converts to string.
         /// </summary>
         /// <returns></returns>
         public override string ToString()
         {
-            return $"TomlConfigurationFile($ {this.DeviceFolder} {this.TomlConfigFolder} {this.DeviceTomlFile} {this.DeviceFolder} {this.ModulesProtoFolder})";
+            return $"TomlConfigurationFile($ {this.DeviceFolder} {this.TomlConfigFolder} {this.DeviceTomlFile} {this.DeviceFolder})";
         }
     }
 }

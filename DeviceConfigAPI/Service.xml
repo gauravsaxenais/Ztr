@@ -85,6 +85,26 @@
               list of blocks.
             </returns>
         </member>
+        <member name="T:Service.Controllers.CompatibleFirmwareVersionController">
+            <summary>
+            This controller returns the list of compatible firmware versions.
+            It takes input a firmware version and returns an array of firmware versions.
+            </summary>
+            <seealso cref="T:Service.Controllers.ApiControllerBase" />
+        </member>
+        <member name="M:Service.Controllers.CompatibleFirmwareVersionController.#ctor(Business.RequestHandlers.Interfaces.ICompatibleFirmwareVersionManager)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Service.Controllers.CompatibleFirmwareVersionController"/> class.
+            </summary>
+            <param name="manager">interface of the 'backend' manager which does all the work.</param>
+        </member>
+        <member name="M:Service.Controllers.CompatibleFirmwareVersionController.GetConfigTomlValues(System.String)">
+            <summary>
+            Gets the configuration toml values.
+            </summary>
+            <param name="firmwareVersion">The firmware version.</param>
+            <returns></returns>
+        </member>
         <member name="T:Service.Controllers.ConfigController">
             <summary>Config Controller - This service is responsible for generating the config toml.</summary>
         </member>
