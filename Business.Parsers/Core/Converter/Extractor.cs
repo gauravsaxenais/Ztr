@@ -17,6 +17,7 @@
             {
                 Dictionary<string, object> dict;
                 dict = Convert((object[])dictionary[_config.Fields]);
+                
                 if (dict.Count > 0)
                     value = dict;
             }

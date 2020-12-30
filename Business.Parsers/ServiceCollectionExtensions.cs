@@ -1,5 +1,6 @@
 ﻿namespace Business.Parsers
 {
+    using Business.Parsers.ProtoParser.Parser;
     using Business.Parsers.TomlParser.Core.Converter;
     using Microsoft.Extensions.DependencyInjection;
     using System.Collections.Generic;
@@ -11,6 +12,7 @@
             services.AddScoped<ConverterService>();
             services.AddScoped<IJsonConverter, DictionaryConverter>();
             services.AddScoped<IBuilder<IDictionary<string, object>>, TomlBuilder>();
+            services.AddScoped<IProtoMessageParser, ProtoMessageParser>();
 
             services.AddScoped<ConvertConfig>();
         }

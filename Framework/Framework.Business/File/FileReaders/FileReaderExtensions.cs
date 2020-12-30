@@ -161,7 +161,7 @@
 
             foreach (var directory in subDirectoryList)
             {
-                var subDirectoryFolder = directory.Substring(directory.LastIndexOf(Path.DirectorySeparatorChar) + 1);
+                var subDirectoryFolder = directory[(directory.LastIndexOf(Path.DirectorySeparatorChar) + 1)..];
                 if (string.Equals(folderNameToSearch, subDirectoryFolder, StringComparison.OrdinalIgnoreCase))
                 {
                     return directory;

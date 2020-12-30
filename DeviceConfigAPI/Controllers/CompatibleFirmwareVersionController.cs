@@ -36,17 +36,17 @@
         }
 
         /// <summary>
-        /// Gets the configuration toml values.
+        /// Gets the compatible firmware versions.
         /// </summary>
-        /// <param name="firmwareVersion">The firmware version.</param>
+        /// <param name="module">The module.</param>
         /// <returns></returns>
-        [HttpPost(nameof(GetConfigTomlValues))]
+        [HttpPost(nameof(GetCompatibleFirmwareVersions))]
         [ProducesResponseType(typeof(IEnumerable<ModuleReadModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetConfigTomlValues([Required] string firmwareVersion)
+        public async Task<IActionResult> GetCompatibleFirmwareVersions([Required, FromBody] CompatibleFirmwareVersionReadModel module)
         {
-            var result = await manager.GetCompatibleFirmwareVersionsAsync(firmwareVersion).ConfigureAwait(false);
+            var result = await manager.GetCompatibleFirmwareVersionsAsync(module).ConfigureAwait(false);
 
             return Ok(result);
         }

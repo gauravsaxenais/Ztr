@@ -2,10 +2,8 @@
 {
     using Business.Configuration;
     using Business.Models;
-    using Business.Parsers;
-    using Business.Parsers.Models;
-    using Business.Parsers.ProtoParser;
     using Business.Parsers.ProtoParser.Models;
+    using Business.Parsers.ProtoParser.Parser;
     using Business.RequestHandlers.Interfaces;
     using EnsureThat;
     using Microsoft.Extensions.Logging;
@@ -32,7 +30,7 @@
         private readonly IGitRepositoryManager _gitRepoManager;
         private readonly DeviceGitConnectionOptions _deviceGitConnectionOptions;
         private readonly string protoFileName = "module.proto";
-        private readonly InputFileLoader _inputFileLoader;
+        private readonly IProtoMessageParser _protoParser;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DefaultValueManager"/> class.
@@ -40,14 +38,14 @@
         /// <param name="logger">The logger.</param>
         /// <param name="gitRepoManager">The git repo manager.</param>
         /// <param name="deviceGitConnectionOptions">The device git connection options.</param>
-        /// /// <param name="inputFileLoader">File loader which reads a proto file as input and gives out custom message.</param>
-        public DefaultValueManager(ILogger<DefaultValueManager> logger, IGitRepositoryManager gitRepoManager, DeviceGitConnectionOptions deviceGitConnectionOptions, InputFileLoader inputFileLoader) : base(logger)
+        /// /// <param name="protoParser">File loader which reads a proto file as input and gives out custom message.</param>
+        public DefaultValueManager(ILogger<DefaultValueManager> logger, IGitRepositoryManager gitRepoManager, DeviceGitConnectionOptions deviceGitConnectionOptions, IProtoMessageParser protoParser) : base(logger)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
             EnsureArg.IsNotNull(deviceGitConnectionOptions, nameof(deviceGitConnectionOptions));
             EnsureArg.IsNotNull(deviceGitConnectionOptions.DefaultTomlConfiguration, nameof(deviceGitConnectionOptions.DefaultTomlConfiguration));
 
-            _inputFileLoader = inputFileLoader;
+            _protoParser = protoParser;
             _gitRepoManager = gitRepoManager;
             _deviceGitConnectionOptions = deviceGitConnectionOptions;
         }
@@ -101,7 +99,7 @@
                 var formattedMessage = customMessageParser.Format(messages[temp].Message);
                 formattedMessage.Name = messages[temp].Name;
 
-                var jsonModels = new List<JsonModel>();
+                var jsonModels = new List<JsonField>();
 
                 jsonModels = moduleParser.GetJsonFromTomlAndProtoFile(defaultValueFromTomlFile, formattedMessage);
 
@@ -137,7 +135,7 @@
 
                 string protoDirectory = new FileInfo(filePath.Value).Directory.FullName;
 
-                tasks.Add(_inputFileLoader.GenerateCodeFiles(moduleName, fileName, protoDirectory));
+                tasks.Add(_protoParser.GetProtoParsedMessage(moduleName, fileName, protoDirectory));
             }
 
             Task.WaitAll(tasks.ToArray());
@@ -188,7 +186,8 @@
         {
             var gitConnectionOptions = (DeviceGitConnectionOptions)_gitRepoManager.GetConnectionOptions();
 
-            var listOfFiles = await _gitRepoManager.GetFileDataFromTagAsync(firmwareVersion, gitConnectionOptions.DefaultTomlConfiguration.DefaultTomlFile);
+            var listOfFiles = await _gitRepoManager.GetFileDataFromTagAsync(firmwareVersion, gitConnectionOptions.DefaultTomlConfiguration.DefaultTomlFile)
+                                                   .ConfigureAwait(false);
 
             // case insensitive search.
             var deviceTypeFile = listOfFiles.Where(p => p.FileName?.IndexOf(deviceType, StringComparison.OrdinalIgnoreCase) >= 0).FirstOrDefault();
@@ -250,7 +249,8 @@
         {
             var gitConnectionOptions = (DeviceGitConnectionOptions)_gitRepoManager.GetConnectionOptions();
 
-            var listOfFiles = await _gitRepoManager.GetFileDataFromTagAsync(firmwareVersion, gitConnectionOptions.DefaultTomlConfiguration.DeviceTomlFile);
+            var listOfFiles = await _gitRepoManager.GetFileDataFromTagAsync(firmwareVersion, gitConnectionOptions.DefaultTomlConfiguration.DeviceTomlFile)
+                                                   .ConfigureAwait(false);
 
             // case insensitive search.
             var deviceTypeFile = listOfFiles.Where(p => p.FileName?.IndexOf(deviceType, StringComparison.OrdinalIgnoreCase) >= 0).FirstOrDefault();

@@ -98,11 +98,11 @@
             </summary>
             <param name="manager">interface of the 'backend' manager which does all the work.</param>
         </member>
-        <member name="M:Service.Controllers.CompatibleFirmwareVersionController.GetConfigTomlValues(System.String)">
+        <member name="M:Service.Controllers.CompatibleFirmwareVersionController.GetCompatibleFirmwareVersions(Business.Models.CompatibleFirmwareVersionReadModel)">
             <summary>
-            Gets the configuration toml values.
+            Gets the compatible firmware versions.
             </summary>
-            <param name="firmwareVersion">The firmware version.</param>
+            <param name="module">The module.</param>
             <returns></returns>
         </member>
         <member name="T:Service.Controllers.ConfigController">

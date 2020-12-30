@@ -69,7 +69,7 @@
 
                 SetGitRepoConnections();
 
-                await _gitRepoManager.CloneRepositoryAsync();
+                await _gitRepoManager.CloneRepositoryAsync().ConfigureAwait(false);
 
                 var configTomlFileContent = ReadAsString(configTomlFile);
 

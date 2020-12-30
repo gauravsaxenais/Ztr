@@ -46,13 +46,13 @@
             return fileData;
         }
 
-        public static List<T> ReadDataAsListFromFile<T>(string filePath, TomlSettings settings, string fieldToRead) where T : class, new()
+        public static List<Dictionary<string, object>> ReadDataFromFile(string filePath, TomlSettings settings, string fieldToRead)
         {
             EnsureArg.IsNotEmptyOrWhiteSpace(filePath, (nameof(filePath)));
             EnsureArg.IsNotNull(settings, nameof(settings));
             EnsureArg.IsNotEmptyOrWhiteSpace(fieldToRead, nameof(fieldToRead));
 
-            var items = new List<T>();
+            var items = new List<Dictionary<string, object>>();
 
             try
             {
@@ -66,7 +66,7 @@
                 {
                     var dictionary = tempItem.Rows.ToDictionary(t => t.Key, t => (object)t.Value.ToString());
 
-                    items.Add(DictionaryExtensions.ToObject<T>(dictionary));
+                    items.Add(dictionary);
                 }
             }
             catch (Exception exception)
@@ -77,13 +77,13 @@
             return items;
         }
 
-        public static List<T> ReadDataAsListFromString<T>(string data, string fieldToRead, TomlSettings settings) where T : class, new()
+        public static List<Dictionary<string, object>> ReadDataFromString(string data, string fieldToRead, TomlSettings settings)
         {
             EnsureArg.IsNotEmptyOrWhiteSpace(data, nameof(data));
             EnsureArg.IsNotNull(settings, nameof(settings));
             EnsureArg.IsNotEmptyOrWhiteSpace(fieldToRead, nameof(fieldToRead));
 
-            var items = new List<T>();
+            var items = new List<Dictionary<string, object>>();
 
             try
             {
@@ -97,7 +97,7 @@
                 {
                     var dictionary = tempItem.Rows.ToDictionary(t => t.Key, t => (object)t.Value.ToString());
 
-                    items.Add(DictionaryExtensions.ToObject<T>(dictionary));
+                    items.Add(dictionary);
                 }
             }
             catch (Exception exception)

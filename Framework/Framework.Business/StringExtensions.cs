@@ -47,12 +47,13 @@
                 firstChar = (char)(firstChar + 32);
             }
 
-            return firstChar + input.Substring(1);
+            return firstChar + input[1..];
         }
 
         public static string RemoveNewline(this string input)
         {
-            input  = input
+            EnsureArg.IsNotNullOrWhiteSpace(input, nameof(input));
+            return input
                 .Replace("\n", string.Empty)
                 .Replace("\r", string.Empty);
 

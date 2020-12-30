@@ -6,7 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="protoc.exe" />
+    <EmbeddedResource Include="protoc.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>

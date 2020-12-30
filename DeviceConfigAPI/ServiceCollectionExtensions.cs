@@ -22,8 +22,6 @@
         {
             EnsureArg.IsNotNull(services, nameof(services));
 
-            services.AddSingleton<InputFileLoader>();
-
             services.AddScoped<IGitRepositoryManager, GitRepositoryManager>();
             services.AddScoped<IDeviceTypeManager, DeviceTypeManager>();
             services.AddScoped<IModuleManager, ModuleManager>();
@@ -31,6 +29,7 @@
             services.AddScoped<IBlockManager, BlockManager>();
             services.AddScoped<IConfigGeneratorManager, ConfigGeneratorManager>();
             services.AddScoped<IConfigCreateFromManager, ConfigCreateFromManager>();
+            services.AddScoped<ICompatibleFirmwareVersionManager, CompatibleFirmwareVersionManager>();
 
             services.AddCors(o => o.AddPolicy(ApiConstants.ApiAllowAllOriginsPolicy, builder =>
             {

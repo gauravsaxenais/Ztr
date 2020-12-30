@@ -54,7 +54,6 @@
                 {
                     RemoveProperties(t);
                 }
-
             }
         }
 
@@ -84,7 +83,6 @@
             }
 
             return dictionary;
-
         }
        
         private void ConvertArray(object[] array)
@@ -101,9 +99,9 @@
                     {
                         return;
                     }
+
                     ConvertCompatibleJson((Dictionary<string, object>)o);
                 }
-
             });
         }
 
@@ -134,9 +132,7 @@
                     {
                         ConvertArray((object[])item.Value);
                     }
-
                 }
-
             }
 
             if (newKey.Key != null)
@@ -152,6 +148,7 @@
         {
             var configurationObject = JsonConvert.DeserializeObject(json);
             var dictionary = (Dictionary<string, object>)ToDictionary(configurationObject);
+
             RemoveProperties(dictionary);
             return ConvertCompatibleJson(dictionary);
         }

@@ -38,6 +38,7 @@
             {
                 setting = File.ReadAllText(Path);
             }
+
             var tags = setting.Split(Environment.NewLine);
             Properties = tags.Where(o => o.StartsWith("rm:")).Select(o => o.Replace("rm:", string.Empty).RemoveNewline()).ToArray();
             JsonProperties = tags.Where(o => o.StartsWith("json:")).Select(o => o.Replace("json:", string.Empty).RemoveNewline()).ToArray();

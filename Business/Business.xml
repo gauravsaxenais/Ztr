@@ -169,6 +169,35 @@
             A <see cref="T:System.String" /> that represents this instance.
             </returns>
         </member>
+        <member name="T:Business.Models.CompatibleFirmwareVersionReadModel">
+            <summary>
+            Compatible Firmware version Information.
+            </summary>
+        </member>
+        <member name="P:Business.Models.CompatibleFirmwareVersionReadModel.FirmwareVersion">
+            <summary>
+            Gets or sets the firmware version.
+            </summary>
+            <value>
+            The firmware version.
+            </value>
+        </member>
+        <member name="P:Business.Models.CompatibleFirmwareVersionReadModel.DeviceType">
+            <summary>
+            Gets or sets the type of the device.
+            </summary>
+            <value>
+            The type of the device.
+            </value>
+        </member>
+        <member name="P:Business.Models.CompatibleFirmwareVersionReadModel.Modules">
+            <summary>
+            Gets or sets the modules.
+            </summary>
+            <value>
+            The modules.
+            </value>
+        </member>
         <member name="T:Business.Models.ConfigurationReadModel">
             <summary>
             ConfigurationReadModel - This class maps to toml file.
@@ -315,6 +344,30 @@
             A <see cref="T:System.String" /> that represents this instance.
             </returns>
         </member>
+        <member name="T:Business.Models.ModuleReadModelComparer">
+            <summary>
+            Checks whether the two modulereadmodels are equal or not.
+            </summary>
+        </member>
+        <member name="M:Business.Models.ModuleReadModelComparer.Equals(Business.Models.ModuleReadModel,Business.Models.ModuleReadModel)">
+            <summary>
+            Determines whether the specified objects are equal.
+            </summary>
+            <param name="x">The first object of type <paramref name="x" /> to compare.</param>
+            <param name="y">The second object of type <paramref name="y" /> to compare.</param>
+            <returns>
+              <see langword="true" /> if the specified objects are equal; otherwise, <see langword="false" />.
+            </returns>
+        </member>
+        <member name="M:Business.Models.ModuleReadModelComparer.GetHashCode(Business.Models.ModuleReadModel)">
+            <summary>
+            Returns a hash code for this instance.
+            </summary>
+            <param name="obj">The object.</param>
+            <returns>
+            A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+            </returns>
+        </member>
         <member name="T:Business.Models.NetworkArgumentReadModel">
             <summary>
               <br />
@@ -372,12 +425,12 @@
             This Manager returns a list of all compatible firmware versions.
             </summary>
         </member>
-        <member name="M:Business.RequestHandlers.Interfaces.ICompatibleFirmwareVersionManager.GetCompatibleFirmwareVersionsAsync(System.String)">
+        <member name="M:Business.RequestHandlers.Interfaces.ICompatibleFirmwareVersionManager.GetCompatibleFirmwareVersionsAsync(Business.Models.CompatibleFirmwareVersionReadModel)">
             <summary>
-            Generates the configuration toml model asynchronous.
+            Gets the compatible firmware versions asynchronous.
             </summary>
-            <param name="firmwareVersion">The firmware version.</param>
-            <returns>ApiResponse - success: true/false. data: array of compatible firmware versions. </returns>
+            <param name="module">The module.</param>
+            <returns></returns>
         </member>
         <member name="T:Business.RequestHandlers.Interfaces.IConfigCreateFromManager">
             <summary>
@@ -474,10 +527,17 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Business.RequestHandlers.Interfaces.IGitRepositoryManager.GetAllTagsAsync">
+        <member name="M:Business.RequestHandlers.Interfaces.IGitRepositoryManager.GetAllTagNamesAsync">
             <summary>
             Loads the tag names asynchronous.
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Interfaces.IGitRepositoryManager.GetTagsEarlierThanThisTagAsync(System.String)">
+            <summary>
+            Gets the tags earlier than this tag asynchronous.
+            </summary>
+            <param name="tagName">Name of the tag.</param>
             <returns></returns>
         </member>
         <member name="M:Business.RequestHandlers.Interfaces.IGitRepositoryManager.GetFileDataFromTagAsync(System.String,System.String)">
@@ -496,6 +556,14 @@
         <member name="M:Business.RequestHandlers.Interfaces.IModuleManager.GetAllModulesAsync(System.String,System.String)">
             <summary>
             Gets all modules asynchronous.
+            </summary>
+            <param name="firmwareVersion">The firmware version.</param>
+            <param name="deviceType">Type of the device.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Interfaces.IModuleManager.GetListOfModulesAsync(System.String,System.String)">
+            <summary>
+            Gets the list of modules asynchronous.
             </summary>
             <param name="firmwareVersion">The firmware version.</param>
             <param name="deviceType">Type of the device.</param>
@@ -538,22 +606,21 @@
             <seealso cref="T:ZTR.Framework.Business.Manager" />
             <seealso cref="T:Business.RequestHandlers.Interfaces.ICompatibleFirmwareVersionManager" />
         </member>
-        <member name="M:Business.RequestHandlers.Managers.CompatibleFirmwareVersionManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DefaultValueManager},Business.RequestHandlers.Interfaces.IGitRepositoryManager,Business.Configuration.DeviceGitConnectionOptions)">
+        <member name="M:Business.RequestHandlers.Managers.CompatibleFirmwareVersionManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DefaultValueManager},Business.RequestHandlers.Interfaces.IGitRepositoryManager,Business.RequestHandlers.Interfaces.IModuleManager,Business.Configuration.DeviceGitConnectionOptions)">
             <summary>
-            Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.ConfigCreateFromManager"/> class.
+            Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.CompatibleFirmwareVersionManager"/> class.
             </summary>
             <param name="logger">The logger.</param>
             <param name="gitRepoManager">The git repo manager.</param>
+            <param name="moduleManager">The module manager.</param>
             <param name="deviceGitConnectionOptions">The device git connection options.</param>
         </member>
-        <member name="M:Business.RequestHandlers.Managers.CompatibleFirmwareVersionManager.GetCompatibleFirmwareVersionsAsync(System.String)">
+        <member name="M:Business.RequestHandlers.Managers.CompatibleFirmwareVersionManager.GetCompatibleFirmwareVersionsAsync(Business.Models.CompatibleFirmwareVersionReadModel)">
             <summary>
-            Generates the configuration toml model asynchronous.
+            Gets the compatible firmware versions asynchronous.
             </summary>
-            <param name="firmwareVersion">The firmware version.</param>
-            <returns>
-            ApiResponse - success: true/false. data: array of compatible firmware versions.
-            </returns>
+            <param name="module">The module.</param>
+            <returns></returns>
         </member>
         <member name="T:Business.RequestHandlers.Managers.ConfigCreateFromManager">
             <summary>
@@ -633,14 +700,14 @@
             <seealso cref="T:ZTR.Framework.Business.Manager" />
             <seealso cref="T:Business.RequestHandlers.Interfaces.IDefaultValueManager" />
         </member>
-        <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DefaultValueManager},Business.RequestHandlers.Interfaces.IGitRepositoryManager,Business.Configuration.DeviceGitConnectionOptions,Business.Parsers.ProtoParser.InputFileLoader)">
+        <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DefaultValueManager},Business.RequestHandlers.Interfaces.IGitRepositoryManager,Business.Configuration.DeviceGitConnectionOptions,Business.Parsers.ProtoParser.Parser.IProtoMessageParser)">
             <summary>
             Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.DefaultValueManager"/> class.
             </summary>
             <param name="logger">The logger.</param>
             <param name="gitRepoManager">The git repo manager.</param>
             <param name="deviceGitConnectionOptions">The device git connection options.</param>
-            /// <param name="inputFileLoader">File loader which reads a proto file as input and gives out custom message.</param>
+            /// <param name="protoParser">File loader which reads a proto file as input and gives out custom message.</param>
         </member>
         <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.GetDefaultValuesAllModulesAsync(System.String,System.String)">
             <summary>
@@ -752,10 +819,17 @@
             Not found: The repository was not found
             </exception>
         </member>
-        <member name="M:Business.RequestHandlers.Managers.GitRepositoryManager.GetAllTagsAsync">
+        <member name="M:Business.RequestHandlers.Managers.GitRepositoryManager.GetAllTagNamesAsync">
             <summary>
             Loads the tag names asynchronous.
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.GitRepositoryManager.GetTagsEarlierThanThisTagAsync(System.String)">
+            <summary>
+            Gets the tags earlier than this tag asynchronous.
+            </summary>
+            <param name="tagName">Name of the tag.</param>
             <returns></returns>
         </member>
         <member name="M:Business.RequestHandlers.Managers.GitRepositoryManager.GetFileDataFromTagAsync(System.String,System.String)">
@@ -775,6 +849,17 @@
             <param name="tree">The GIT tree</param>
             <param name="fileName">The file name</param>
             <returns>true if file exists</returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.GitRepositoryManager.SortTags``1(System.Collections.Generic.IEnumerable{LibGit2Sharp.Tag},System.Func{LibGit2Sharp.Tag,System.Object},System.Func{LibGit2Sharp.Tag,``0},System.Func{LibGit2Sharp.Tag,System.Boolean})">
+            <summary>
+            Sorts the tags.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="tags">The tags.</param>
+            <param name="order">The order.</param>
+            <param name="selector">The selector.</param>
+            <param name="where">The where.</param>
+            <returns></returns>
         </member>
         <member name="M:Business.RequestHandlers.Managers.GitRepositoryManager.IsExistsContentRepositoryDirectory">
             <summary>
@@ -820,6 +905,14 @@
         <member name="M:Business.RequestHandlers.Managers.ModuleManager.GetAllModulesAsync(System.String,System.String)">
             <summary>
             Gets all modules asynchronous.
+            </summary>
+            <param name="firmwareVersion">The firmware version.</param>
+            <param name="deviceType">Type of the device.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.ModuleManager.GetListOfModulesAsync(System.String,System.String)">
+            <summary>
+            Gets the list of modules asynchronous.
             </summary>
             <param name="firmwareVersion">The firmware version.</param>
             <param name="deviceType">Type of the device.</param>

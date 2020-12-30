@@ -60,7 +60,7 @@
         {
             var gitConnectionOptions = (DeviceGitConnectionOptions)_repoManager.GetConnectionOptions();
             
-            await _repoManager.CloneRepositoryAsync();
+            await _repoManager.CloneRepositoryAsync().ConfigureAwait(false);
 
             var directory = new DirectoryInfo(gitConnectionOptions.BlockConfig);
             var blocks = GetListOfBlocks(directory);

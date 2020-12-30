@@ -1,5 +1,7 @@
 ﻿namespace Business.RequestHandlers.Interfaces
 {
+    using Business.Models;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using ZTR.Framework.Business;
 
@@ -9,10 +11,10 @@
     public interface ICompatibleFirmwareVersionManager
     {
         /// <summary>
-        /// Generates the configuration toml model asynchronous.
+        /// Gets the compatible firmware versions asynchronous.
         /// </summary>
-        /// <param name="firmwareVersion">The firmware version.</param>
-        /// <returns>ApiResponse - success: true/false. data: array of compatible firmware versions. </returns>
-        Task<ApiResponse> GetCompatibleFirmwareVersionsAsync(string firmwareVersion);
+        /// <param name="module">The module.</param>
+        /// <returns></returns>
+        Task<ApiResponse> GetCompatibleFirmwareVersionsAsync(CompatibleFirmwareVersionReadModel module);
     }
 }

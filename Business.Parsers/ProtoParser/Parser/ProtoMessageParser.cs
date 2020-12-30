@@ -1,4 +1,4 @@
-﻿namespace Business.Parsers.ProtoParser
+﻿namespace Business.Parsers.ProtoParser.Parser
 {
     using Business.Parsers.ProtoParser.Models;
     using EnsureThat;
@@ -15,24 +15,24 @@
     using System.Threading.Tasks;
     using ZTR.Framework.Business.File.FileReaders;
 
-    public class InputFileLoader
+    public class ProtoMessageParser : IProtoMessageParser
     {
-        private readonly ILogger<InputFileLoader> _logger;
+        private readonly ILogger<ProtoMessageParser> _logger;
         private readonly string csFileExtension = ".cs", dllExtension = ".dll", fileDescriptorExtension = ".desc";
 
-        public InputFileLoader(ILogger<InputFileLoader> logger)
+        public ProtoMessageParser(ILogger<ProtoMessageParser> logger)
         {
             _logger = logger;
         }
 
-        public async Task<CustomMessage> GenerateCodeFiles(string moduleName, string protoFileName, string protoFilePath, params string[] args)
+        public async Task<CustomMessage> GetProtoParsedMessage(string moduleName, string protoFileName, string protoFilePath, params string[] args)
         {
             EnsureArg.IsNotEmptyOrWhiteSpace(moduleName);
             EnsureArg.IsNotEmptyOrWhiteSpace(protoFileName);
             EnsureArg.IsNotEmptyOrWhiteSpace(protoFilePath);
 
             string outputFolder = string.Empty;
-            var prefix = nameof(InputFileLoader);
+            var prefix = nameof(ProtoMessageParser);
 
             try
             {
@@ -155,13 +155,13 @@
             }
 
             string name = "protoc.exe";
-            string path = $"{Global.WebRoot}/{name}";
-
+            string path = FileReaderExtensions.ToSafeFullPath(Global.WebRoot, name);
+            
             if (!File.Exists(path) && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 // look inside ourselves...
                 using (Stream resStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(
-                    typeof(InputFileLoader).Namespace + "." + name))
+                    typeof(ProtoMessageParser).Namespace + "." + name))
                 using (Stream outFile = File.OpenWrite(path))
                 {
                     long len = 0;
@@ -192,7 +192,7 @@
 
         private async Task<string> GenerateDllFromCsFileAsync(string fileName, string outputFolderPath)
         {
-            fileName = char.ToUpper(fileName[0]) + fileName.Substring(1);
+            fileName = char.ToUpper(fileName[0]) + fileName[1..];
 
             string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
             string filePath = outputFolderPath + fileNameWithoutExtension;
@@ -256,13 +256,9 @@
             }
             if (loaderPath.StartsWith(@"file:\"))
             {
-                loaderPath = loaderPath.Substring(6);
+                loaderPath = loaderPath[6..];
             }
             return Path.Combine(Path.GetDirectoryName(loaderPath), path);
         }
-    }
-    public sealed class ProtoParseException : Exception
-    {
-        public ProtoParseException(string file) : base("An error occurred parsing " + file) { }
     }
 }

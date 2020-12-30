@@ -129,36 +129,28 @@
         /// Loads the tag names asynchronous.
         /// </summary>
         /// <returns></returns>
-        public async Task<string[]> GetAllTagsAsync()
+        public async Task<List<string>> GetAllTagNamesAsync()
         {
-            string[] tagNames;
-            var tags = new List<Tag>();
+            var tags = new List<(string, DateTimeOffset)>();
+            tags = await GetAllTagsAsync().ConfigureAwait(false);
 
-            if (!IsExistsContentRepositoryDirectory())
-            {
-                await CloneRepositoryAsync();
-            }
+            return tags.Select(x => x.Item1).ToList();
+        }
 
-            using (var repo = new Repository(_gitConnection.GitLocalFolder))
-            {
-                // Add new tags.
-                foreach (var tag in repo.Tags)
-                {
-                    GitObject peeledTarget = tag.PeeledTarget;
+        /// <summary>
+        /// Gets the tags earlier than this tag asynchronous.
+        /// </summary>
+        /// <param name="tagName">Name of the tag.</param>
+        /// <returns></returns>
+        public async Task<List<string>> GetTagsEarlierThanThisTagAsync(string tagName)
+        {
+            var tags = new List<(string, DateTimeOffset)>();
+            tags = await GetAllTagsAsync().ConfigureAwait(false);
 
-                    if (peeledTarget is Commit temp)
-                    {
-                        var date = temp.Author.When;
+            var tag = tags.Where(x => x.Item1 == tagName).FirstOrDefault();
 
-                        // We're not interested by Tags pointing at Blobs or Trees
-                        // only interested in tags for a commit.
-                        tags.Add(tag);
-                    }
-                }
-
-                tagNames = SortedTags(tags: tags, order: t => ((Commit)t.PeeledTarget).Author.When,
-                                        selector: t => t.FriendlyName);
-            }
+            var tagNames = new List<string>();
+            tagNames = tags.Where(x => x.Item2 < tag.Item2).Select(x => x.Item1).ToList();
 
             return tagNames;
         }
@@ -253,9 +245,53 @@
             }
         }
 
-        private static T[] SortedTags<T>(IEnumerable<Tag> tags, Func<Tag, object> order, Func<Tag, T> selector)
+        private async Task<List<(string, DateTimeOffset)>> GetAllTagsAsync()
         {
-            return tags.OrderByDescending(order).Select(selector).ToArray();
+            var tags = new List<Tag>();
+            var tagNames = new List<(string, DateTimeOffset)>();
+
+            if (!IsExistsContentRepositoryDirectory())
+            {
+                await CloneRepositoryAsync();
+            }
+
+            using (var repo = new Repository(_gitConnection.GitLocalFolder))
+            {
+                // Add new tags.
+                foreach (var tag in repo.Tags)
+                {
+                    GitObject peeledTarget = tag.PeeledTarget;
+
+                    if (peeledTarget is Commit temp)
+                    {
+                        var date = temp.Author.When;
+
+                        // We're not interested by Tags pointing at Blobs or Trees
+                        // only interested in tags for a commit.
+                        tags.Add(tag);
+                    }
+                }
+
+                tagNames = SortTags(tags: tags, order: t => ((Commit)t.PeeledTarget).Author.When,
+                                        selector: t => (t.FriendlyName, ((Commit)t.PeeledTarget).Author.When));
+            }
+
+            return tagNames;
+        }
+
+        /// <summary>
+        /// Sorts the tags.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="tags">The tags.</param>
+        /// <param name="order">The order.</param>
+        /// <param name="selector">The selector.</param>
+        /// <param name="where">The where.</param>
+        /// <returns></returns>
+        private static List<T> SortTags<T>(IEnumerable<Tag> tags, Func<Tag, object> order, Func<Tag, T> selector, Func<Tag, bool> where = null)
+        {
+            return where == null ? tags.OrderByDescending(order).Select(selector).ToList() :
+                tags.Where(where).OrderByDescending(order).Select(selector).ToList();
         }
 
         private string GetBlobFromFile(TreeEntry treeEntry)

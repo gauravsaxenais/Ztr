@@ -1,4 +1,4 @@
-﻿namespace Business.Parsers.ProtoParser
+﻿namespace Business.Parsers.ProtoParser.Parser
 {
     using Business.Parsers.ProtoParser.Models;
     using EnsureThat;
@@ -31,22 +31,13 @@
         /// <returns>The formatted message.</returns>
         public void Format(IMessage message, ProtoParsedMessage protoParserMessage)
         {
-            ProtoPreconditions.CheckNotNull(message, nameof(message));
+            EnsureArg.IsNotNull(message, nameof(message));
+            EnsureArg.IsNotNull(protoParserMessage, nameof(protoParserMessage));
 
-            WriteMessage(protoParserMessage, message);
+            ProcessMessageFields(protoParserMessage, message);
         }
 
-        private void WriteMessage(ProtoParsedMessage protoParserMessage, IMessage message)
-        {
-            if (message == null)
-            {
-                return;
-            }
-
-            WriteMessageFields(protoParserMessage, message);
-        }
-
-        private void WriteMessageFields(ProtoParsedMessage protoParserMessage, IMessage message)
+        private void ProcessMessageFields(ProtoParsedMessage protoParserMessage, IMessage message)
         {
             var fieldCollection = message.Descriptor.Fields.InFieldNumberOrder();
             for (int tempIndex = 0; tempIndex < fieldCollection.Count; tempIndex++)
@@ -63,7 +54,7 @@
                     protoParserMessage.Messages.Add(temp);
 
                     IMessage cleanSubmessage = fieldCollection[tempIndex].MessageType.Parser.ParseFrom(ByteString.Empty);
-                    WriteMessageFields(temp, cleanSubmessage);
+                    ProcessMessageFields(temp, cleanSubmessage);
                 }
                 else
                 {

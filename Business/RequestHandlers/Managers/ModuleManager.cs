@@ -55,9 +55,14 @@
             {
                 Logger.LogInformation($"{prefix}: Getting list of modules for firmware version: {firmwareVersion} and device type: {deviceType}");
 
-                SetGitRepoConnections();
+                SetGitRepoConnection();
+                await _gitRepoManager.CloneRepositoryAsync().ConfigureAwait(false);
 
                 listOfModules = await GetListOfModulesAsync(firmwareVersion, deviceType);
+
+                // fix the indexes.
+                listOfModules.Select((item, index) => { item.Id = index; return item; }).ToList();
+
                 apiResponse = new ApiResponse(status: true, data: listOfModules);
             }
             catch(Exception exception)
@@ -69,7 +74,7 @@
             return apiResponse;
         }
 
-        private void SetGitRepoConnections()
+        private void SetGitRepoConnection()
         {
             var currentDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
 
@@ -77,7 +82,13 @@
             _gitRepoManager.SetConnectionOptions(_moduleGitConnectionOptions);
         }
 
-        private async Task<List<ModuleReadModel>> GetListOfModulesAsync(string firmwareVersion, string deviceType)
+        /// <summary>
+        /// Gets the list of modules asynchronous.
+        /// </summary>
+        /// <param name="firmwareVersion">The firmware version.</param>
+        /// <param name="deviceType">Type of the device.</param>
+        /// <returns></returns>
+        public async Task<List<ModuleReadModel>> GetListOfModulesAsync(string firmwareVersion, string deviceType)
         {
             var listOfModules = new List<ModuleReadModel>();
 
@@ -105,7 +116,7 @@
         {
             var gitConnectionOptions = (DeviceGitConnectionOptions)_gitRepoManager.GetConnectionOptions();
 
-            var listOfFiles = await _gitRepoManager.GetFileDataFromTagAsync(firmwareVersion, gitConnectionOptions.DefaultTomlConfiguration.DeviceTomlFile);
+            var listOfFiles = await _gitRepoManager.GetFileDataFromTagAsync(firmwareVersion, gitConnectionOptions.DefaultTomlConfiguration.DeviceTomlFile).ConfigureAwait(false);
 
             // case insensitive search.
             var deviceTypeFile = listOfFiles.Where(p => p.FileName?.IndexOf(deviceType, StringComparison.OrdinalIgnoreCase) >= 0).FirstOrDefault();
