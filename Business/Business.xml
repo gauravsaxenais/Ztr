@@ -478,9 +478,9 @@
             <param name="deviceType">Type of the device.</param>
             <returns></returns>
         </member>
-        <member name="M:Business.RequestHandlers.Interfaces.IDefaultValueManager.MergeDefaultValuesWithModules(System.String,System.Collections.Generic.IEnumerable{Business.Models.ModuleReadModel},System.String)">
+        <member name="M:Business.RequestHandlers.Interfaces.IDefaultValueManager.MergeValuesWithModulesAsync(System.String,System.Collections.Generic.IEnumerable{Business.Models.ModuleReadModel},System.String)">
             <summary>
-            Merges the default values with modules.
+            Merges the values with modules asynchronous.
             </summary>
             <param name="defaultValueFromTomlFile">The default value from toml file.</param>
             <param name="listOfModules">The list of modules.</param>
@@ -717,20 +717,20 @@
             <param name="deviceType">Type of the device.</param>
             <returns></returns>
         </member>
-        <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.MergeDefaultValuesWithModules(System.String,System.Collections.Generic.IEnumerable{Business.Models.ModuleReadModel},System.String)">
+        <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.MergeValuesWithModulesAsync(System.String,System.Collections.Generic.IEnumerable{Business.Models.ModuleReadModel},System.String)">
             <summary>
-            Merges the default values with modules.
+            Merges the values with modules asynchronous.
             </summary>
             <param name="defaultValueFromTomlFile">The default value from toml file.</param>
             <param name="listOfModules">The list of modules.</param>
             <param name="modulesProtoFolder">The modules proto folder.</param>
         </member>
-        <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.GetProtoFiles(System.String,System.Collections.Generic.IEnumerable{Business.Models.ModuleReadModel})">
+        <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.GetProtoFiles(System.String,Business.Models.ModuleReadModel)">
             <summary>
-            Gets the proto file path.
+            Gets the proto files.
             </summary>
             <param name="moduleFilePath">The module file path.</param>
-            <param name="listOfModules">The list of modules.</param>
+            <param name="moduleName">Name of the module.</param>
             <returns></returns>
         </member>
         <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.GetListOfModulesAsync(System.String,System.String)">

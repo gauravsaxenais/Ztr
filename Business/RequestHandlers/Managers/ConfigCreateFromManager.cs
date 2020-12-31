@@ -75,8 +75,9 @@
 
                 // get list of all modules.
                 var modules = GetListOfModules(configTomlFileContent);
-                await _defaultValueManager.MergeDefaultValuesWithModules(configTomlFileContent, modules, _deviceGitConnectionOptions.ModulesConfig);
 
+                await _defaultValueManager.MergeValuesWithModulesAsync(configTomlFileContent, modules, _deviceGitConnectionOptions.ModulesConfig);
+                
                 var blocksDirectory = new DirectoryInfo(_deviceGitConnectionOptions.BlockConfig);
                 var blocks = _blockManager.GetListOfBlocks(blocksDirectory);
 

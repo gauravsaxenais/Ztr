@@ -8,6 +8,7 @@
     using EnsureThat;
     using Microsoft.Extensions.Logging;
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -72,44 +73,45 @@
             // get list of all modules.
             var listOfModules = await GetListOfModulesAsync(firmwareVersion, deviceType);
 
-            await MergeDefaultValuesWithModules(defaultValueFromTomlFile, listOfModules, modulesProtoFolder);
+            await MergeValuesWithModulesAsync(defaultValueFromTomlFile, listOfModules, modulesProtoFolder);
 
             return listOfModules;
         }
 
         /// <summary>
-        /// Merges the default values with modules.
+        /// Merges the values with modules asynchronous.
         /// </summary>
         /// <param name="defaultValueFromTomlFile">The default value from toml file.</param>
         /// <param name="listOfModules">The list of modules.</param>
         /// <param name="modulesProtoFolder">The modules proto folder.</param>
-        public async Task MergeDefaultValuesWithModules(string defaultValueFromTomlFile, IEnumerable<ModuleReadModel> listOfModules, string modulesProtoFolder)
+        public async Task MergeValuesWithModulesAsync(string defaultValueFromTomlFile, IEnumerable<ModuleReadModel> listOfModules, string modulesProtoFolder)
+        {
+            await Task.WhenAll(
+                from partition in Partitioner.Create(listOfModules).GetPartitions(10)
+                select Task.Run(async delegate
+                {
+                    using (partition)
+                        while (partition.MoveNext())
+                            await MergeDefaultValuesWithModules(defaultValueFromTomlFile, partition.Current, modulesProtoFolder);
+                }));
+        }
+
+        private async Task MergeDefaultValuesWithModules(string defaultValueFromTomlFile, ModuleReadModel module, string modulesProtoFolder)
         {
             var customMessageParser = new CustomMessageParser();
             var moduleParser = new ModuleParser();
 
             // get proto files for corresponding module and their uuid
-            var protoFilePaths = GetProtoFiles(modulesProtoFolder, listOfModules);
+            var protoFilePaths = GetProtoFiles(modulesProtoFolder, module);
 
             // get protoparsed messages from the proto files.
-            var messages = await GetCustomMessages(protoFilePaths).ConfigureAwait(false);
+            var message = await GetCustomMessages(protoFilePaths).ConfigureAwait(false);
 
-            for (int temp = 0; temp < messages.Count; temp++)
-            {
-                var formattedMessage = customMessageParser.Format(messages[temp].Message);
-                formattedMessage.Name = messages[temp].Name;
+            var formattedMessage = customMessageParser.Format(message.Message);
+            formattedMessage.Name = module.Name;
 
-                var jsonModels = new List<JsonField>();
-
-                jsonModels = moduleParser.GetJsonFromTomlAndProtoFile(defaultValueFromTomlFile, formattedMessage);
-
-                var module = listOfModules.Where(p => p.Name?.IndexOf(formattedMessage.Name, StringComparison.OrdinalIgnoreCase) >= 0).FirstOrDefault();
-
-                if (module != null)
-                {
-                    module.Config = jsonModels;
-                }
-            }
+            var jsonModels = moduleParser.GetJsonFromTomlAndProtoFile(defaultValueFromTomlFile, formattedMessage);
+            module.Config = jsonModels;
         }
 
         private void SetConnection()
@@ -123,63 +125,40 @@
             _gitRepoManager.SetConnectionOptions(_deviceGitConnectionOptions);
         }
 
-        private async Task<List<CustomMessage>> GetCustomMessages(Dictionary<string, string> protoFilePaths)
+        private async Task<CustomMessage> GetCustomMessages(string filePath)
         {
-            var tasks = new List<Task<CustomMessage>>();
-            var result = new List<CustomMessage>();
+            var fileName = Path.GetFileName(filePath);
 
-            foreach (var filePath in protoFilePaths)
-            {
-                var fileName = Path.GetFileName(filePath.Value);
-                var moduleName = filePath.Key;
+            string protoDirectory = new FileInfo(filePath).Directory.FullName;
 
-                string protoDirectory = new FileInfo(filePath.Value).Directory.FullName;
+            var result = await _protoParser.GetProtoParsedMessage(fileName, protoDirectory).ConfigureAwait(false);
 
-                tasks.Add(_protoParser.GetProtoParsedMessage(moduleName, fileName, protoDirectory));
-            }
-
-            Task.WaitAll(tasks.ToArray());
-
-            foreach (var taskResult in tasks)
-            {
-                if (taskResult != null)
-                {
-                    result.Add(taskResult.Result);
-                }
-            }
-
-            return await Task.FromResult(result);
+            return result;
         }
 
         /// <summary>
-        /// Gets the proto file path.
+        /// Gets the proto files.
         /// </summary>
         /// <param name="moduleFilePath">The module file path.</param>
-        /// <param name="listOfModules">The list of modules.</param>
+        /// <param name="moduleName">Name of the module.</param>
         /// <returns></returns>
-        private Dictionary<string, string> GetProtoFiles(string moduleFilePath, IEnumerable<ModuleReadModel> listOfModules)
+        private string GetProtoFiles(string moduleFilePath, ModuleReadModel moduleName)
         {
             EnsureArg.IsNotNullOrWhiteSpace(moduleFilePath);
-            EnsureArg.IsNotNull(listOfModules);
 
-            var protoFilePath = new Dictionary<string, string>();
+            var moduleFolder = FileReaderExtensions.GetSubDirectoryPath(moduleFilePath, moduleName.Name);
 
-            foreach (var moduleName in listOfModules)
+            if (!string.IsNullOrWhiteSpace(moduleFolder))
             {
-                var moduleFolder = FileReaderExtensions.GetSubDirectoryPath(moduleFilePath, moduleName.Name);
+                var uuidFolder = FileReaderExtensions.GetSubDirectoryPath(moduleFolder, moduleName.UUID);
 
-                if (!string.IsNullOrWhiteSpace(moduleFolder))
+                foreach (string file in Directory.EnumerateFiles(uuidFolder, protoFileName))
                 {
-                    var uuidFolder = FileReaderExtensions.GetSubDirectoryPath(moduleFolder, moduleName.UUID);
-
-                    foreach (string file in Directory.EnumerateFiles(uuidFolder, protoFileName))
-                    {
-                        protoFilePath.Add(moduleName.Name, file);
-                    }
+                    return file;
                 }
             }
 
-            return protoFilePath;
+            return string.Empty;
         }
 
         private async Task<string> GetDefaultValues(string firmwareVersion, string deviceType)
@@ -220,6 +199,7 @@
                 listOfModules = data.Module;
             }
 
+            // fix the indexes.
             listOfModules = listOfModules.Select((module, index) => new ModuleReadModel { Id = index, Config = module.Config, Name = module.Name, UUID = module.UUID }).ToList();
 
             return listOfModules;

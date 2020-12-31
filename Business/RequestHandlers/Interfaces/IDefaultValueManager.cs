@@ -19,12 +19,12 @@
         Task<IEnumerable<ModuleReadModel>> GetDefaultValuesAllModulesAsync(string firmwareVersion, string deviceType);
 
         /// <summary>
-        /// Merges the default values with modules.
+        /// Merges the values with modules asynchronous.
         /// </summary>
         /// <param name="defaultValueFromTomlFile">The default value from toml file.</param>
         /// <param name="listOfModules">The list of modules.</param>
         /// <param name="modulesProtoFolder">The modules proto folder.</param>
         /// <returns></returns>
-        Task MergeDefaultValuesWithModules(string defaultValueFromTomlFile, IEnumerable<ModuleReadModel> listOfModules, string modulesProtoFolder);
+        Task MergeValuesWithModulesAsync(string defaultValueFromTomlFile, IEnumerable<ModuleReadModel> listOfModules, string modulesProtoFolder);
     }
 }

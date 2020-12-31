@@ -25,9 +25,8 @@
             _logger = logger;
         }
 
-        public async Task<CustomMessage> GetProtoParsedMessage(string moduleName, string protoFileName, string protoFilePath, params string[] args)
+        public async Task<CustomMessage> GetProtoParsedMessage(string protoFileName, string protoFilePath, params string[] args)
         {
-            EnsureArg.IsNotEmptyOrWhiteSpace(moduleName);
             EnsureArg.IsNotEmptyOrWhiteSpace(protoFileName);
             EnsureArg.IsNotEmptyOrWhiteSpace(protoFilePath);
 
@@ -48,7 +47,7 @@
                 {
                     var message = GetIMessage(dllPath);
 
-                    return new CustomMessage() { Message = message, Name = moduleName };
+                    return new CustomMessage() { Message = message };
                 }
 
                 return null;
