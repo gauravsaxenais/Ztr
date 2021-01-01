@@ -20,6 +20,6 @@
         /// Gets the list of blocks.
         /// </summary>
         /// <returns></returns>
-        List<BlockJsonModel> GetListOfBlocks();
+        Task<List<BlockJsonModel>> GetListOfBlocksAsync();
     }
 }

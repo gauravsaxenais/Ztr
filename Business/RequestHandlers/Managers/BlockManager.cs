@@ -55,12 +55,10 @@
         /// <summary>
         /// Parses the toml files asynchronous.
         /// </summary>
-        /// <returns>list of blocks.</returns>
+        /// <returns></returns>
         public async Task<object> GetBlocksAsObjectAsync()
         {
-            await _repoManager.CloneRepositoryAsync().ConfigureAwait(false);
-
-            var blocks = GetListOfBlocks();
+            var blocks = await GetListOfBlocksAsync().ConfigureAwait(false);
 
             return new { blocks };
         }
@@ -69,18 +67,24 @@
         /// Gets the list of blocks.
         /// </summary>
         /// <returns></returns>
-        public List<BlockJsonModel> GetListOfBlocks()
+        public async Task<List<BlockJsonModel>> GetListOfBlocksAsync()
+        {
+            var blockConfigDirectory = new DirectoryInfo(_deviceGitConnectionOptions.BlockConfig);
+            var filesInDirectory = blockConfigDirectory.EnumerateFiles();
+
+            var data = await BatchProcessBlockFiles(filesInDirectory).ConfigureAwait(false);
+            
+            return data.ToList();
+        }
+
+        private async Task<List<BlockJsonModel>> ProcessBlockFileAsync(IEnumerable<FileInfo> filesInDirectory)
         {
             var blocks = new List<BlockJsonModel>();
             var tomlSettings = TomlFileReader.LoadLowerCaseTomlSettingsWithMappingForDefaultValues();
 
-            var blockConfigDirectory = new DirectoryInfo(_deviceGitConnectionOptions.BlockConfig);
-            var filesInDirectory = blockConfigDirectory.EnumerateFiles();
-            int index = 1;
-
             for (int lIndex = 0; lIndex < filesInDirectory.Count(); lIndex++)
             {
-                string content = File.ReadAllText(filesInDirectory.ElementAt(lIndex).FullName);
+                string content = await File.ReadAllTextAsync(filesInDirectory.ElementAt(lIndex).FullName);
 
                 var arguments = Toml.ReadString<BlockReadModel>(content, tomlSettings);
                 var name = Path.GetFileNameWithoutExtension(filesInDirectory.ElementAt(lIndex).Name);
@@ -98,14 +102,31 @@
                         Max = args.Max
                     }).ToList();
 
-                    var jsonMdoel = new BlockJsonModel() { Id = index, Type = name, Tag = string.Empty, Args = args };
-                    blocks.Add(jsonMdoel);
-
-                    index++;
+                    var jsonModel = new BlockJsonModel() { Type = name, Tag = string.Empty, Args = args };
+                    blocks.Add(jsonModel);
                 }
             }
 
             return blocks;
+        }
+
+        private async Task<IEnumerable<BlockJsonModel>> BatchProcessBlockFiles(IEnumerable<FileInfo> models)
+        {
+            var batchSize = 4;
+            var listOfRequests = new List<Task<List<BlockJsonModel>>>();
+
+            for (var skip = 0; skip <= models.Count(); skip += batchSize)
+            {
+                var model = models.Skip(skip).Take(batchSize);
+                listOfRequests.Add(ProcessBlockFileAsync(model));
+            }
+
+            // This will run all the calls in parallel to gain some performance
+            var allFinishedTasks = await Task.WhenAll(listOfRequests).ConfigureAwait(false);
+
+            var data = allFinishedTasks.SelectMany(x => x);
+
+            return data;
         }
 
         #endregion

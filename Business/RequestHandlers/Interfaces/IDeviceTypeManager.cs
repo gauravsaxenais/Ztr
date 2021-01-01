@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using ZTR.Framework.Business;
 
     /// <summary>
     /// Gets all the devices e.g. M3, M7, M9 etc.
@@ -12,12 +13,12 @@
         /// Gets all devices asynchronous.
         /// </summary>
         /// <returns></returns>
-        Task<IEnumerable<string>> GetAllDevicesAsync();
+        Task<ApiResponse> GetAllDevicesAsync();
 
         /// <summary>
         /// Gets all firmware versions asynchronous.
         /// </summary>
         /// <returns></returns>
-        Task<IEnumerable<string>> GetAllFirmwareVersionsAsync();
+        Task<ApiResponse> GetAllFirmwareVersionsAsync();
     }
 }

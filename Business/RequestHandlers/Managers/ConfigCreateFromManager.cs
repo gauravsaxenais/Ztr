@@ -67,7 +67,7 @@
 
                 await _defaultValueManager.MergeValuesWithModulesAsync(configTomlFileContent, modules);
                 
-                var blocks = _blockManager.GetListOfBlocks();
+                var blocks = _blockManager.GetListOfBlocksAsync();
 
                 apiResponse = new ApiResponse(status: true, data: new { modules, blocks });
             }

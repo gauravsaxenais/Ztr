@@ -413,7 +413,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Business.RequestHandlers.Interfaces.IBlockManager.GetListOfBlocks">
+        <member name="M:Business.RequestHandlers.Interfaces.IBlockManager.GetListOfBlocksAsync">
             <summary>
             Gets the list of blocks.
             </summary>
@@ -626,9 +626,9 @@
             <summary>
             Parses the toml files asynchronous.
             </summary>
-            <returns>list of blocks.</returns>
+            <returns></returns>
         </member>
-        <member name="M:Business.RequestHandlers.Managers.BlockManager.GetListOfBlocks">
+        <member name="M:Business.RequestHandlers.Managers.BlockManager.GetListOfBlocksAsync">
             <summary>
             Gets the list of blocks.
             </summary>
