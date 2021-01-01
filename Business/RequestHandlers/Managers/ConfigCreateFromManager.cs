@@ -1,6 +1,5 @@
 ﻿namespace Business.RequestHandlers.Managers
 {
-    using Business.Configuration;
     using Business.Models;
     using Business.RequestHandlers.Interfaces;
     using EnsureThat;
@@ -23,8 +22,7 @@
     /// <seealso cref="IConfigCreateFromManager" />
     public class ConfigCreateFromManager : Manager, IConfigCreateFromManager
     {
-        private readonly IGitRepositoryManager _gitRepoManager;
-        private readonly DeviceGitConnectionOptions _deviceGitConnectionOptions;
+        private readonly IModuleServiceManager _moduleServiceManager;
         private readonly IDefaultValueManager _defaultValueManager;
         private readonly IBlockManager _blockManager;
 
@@ -32,24 +30,19 @@
         /// Initializes a new instance of the <see cref="ConfigCreateFromManager"/> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
-        /// <param name="gitRepoManager">The git repo manager.</param>
         /// <param name="defaultValueManager">The default value manager.</param>
+        /// <param name="moduleServiceManager">The module service manager.</param>
         /// <param name="blockManager">The block manager.</param>
-        /// <param name="deviceGitConnectionOptions">The device git connection options.</param>
-        public ConfigCreateFromManager(ILogger<DefaultValueManager> logger, IGitRepositoryManager gitRepoManager, IDefaultValueManager defaultValueManager, IBlockManager blockManager, DeviceGitConnectionOptions deviceGitConnectionOptions) : base(logger)
+        public ConfigCreateFromManager(ILogger<DefaultValueManager> logger, IDefaultValueManager defaultValueManager, IModuleServiceManager moduleServiceManager, IBlockManager blockManager) : base(logger)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
-            EnsureArg.IsNotNull(gitRepoManager, nameof(gitRepoManager));
             EnsureArg.IsNotNull(defaultValueManager, nameof(defaultValueManager));
+            EnsureArg.IsNotNull(moduleServiceManager, nameof(moduleServiceManager));
             EnsureArg.IsNotNull(blockManager, nameof(blockManager));
 
-            EnsureArg.IsNotNull(deviceGitConnectionOptions, nameof(deviceGitConnectionOptions));
-            EnsureArg.IsNotNull(deviceGitConnectionOptions.DefaultTomlConfiguration, nameof(deviceGitConnectionOptions.DefaultTomlConfiguration));
-
-            _defaultValueManager = defaultValueManager;
+            _moduleServiceManager = moduleServiceManager;
             _blockManager = blockManager;
-            _gitRepoManager = gitRepoManager;
-            _deviceGitConnectionOptions = deviceGitConnectionOptions;
+            _defaultValueManager = defaultValueManager;
         }
 
         /// <summary>
@@ -66,20 +59,15 @@
             try
             {
                 Logger.LogInformation($"{prefix}: Getting list of modules and blocks from config.toml file.");
-
-                SetGitRepoConnections();
-
-                await _gitRepoManager.CloneRepositoryAsync().ConfigureAwait(false);
-
+                
                 var configTomlFileContent = ReadAsString(configTomlFile);
 
                 // get list of all modules.
                 var modules = GetListOfModules(configTomlFileContent);
 
-                await _defaultValueManager.MergeValuesWithModulesAsync(configTomlFileContent, modules, _deviceGitConnectionOptions.ModulesConfig);
+                await _defaultValueManager.MergeValuesWithModulesAsync(configTomlFileContent, modules);
                 
-                var blocksDirectory = new DirectoryInfo(_deviceGitConnectionOptions.BlockConfig);
-                var blocks = _blockManager.GetListOfBlocks(blocksDirectory);
+                var blocks = _blockManager.GetListOfBlocks();
 
                 apiResponse = new ApiResponse(status: true, data: new { modules, blocks });
             }
@@ -104,16 +92,6 @@
             }
 
             return result.ToString();
-        }
-
-        private void SetGitRepoConnections()
-        {
-            var currentDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-
-            _deviceGitConnectionOptions.GitLocalFolder = Path.Combine(currentDirectory, _deviceGitConnectionOptions.GitLocalFolder);
-            _deviceGitConnectionOptions.ModulesConfig = Path.Combine(currentDirectory, _deviceGitConnectionOptions.GitLocalFolder, _deviceGitConnectionOptions.ModulesConfig);
-
-            _gitRepoManager.SetConnectionOptions(_deviceGitConnectionOptions);
         }
 
         /// <summary>

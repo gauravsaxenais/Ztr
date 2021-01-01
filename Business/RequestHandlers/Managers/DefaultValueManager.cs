@@ -1,6 +1,5 @@
 ﻿namespace Business.RequestHandlers.Managers
 {
-    using Business.Configuration;
     using Business.Models;
     using Business.Parsers.ProtoParser.Parser;
     using Business.RequestHandlers.Interfaces;
@@ -10,7 +9,6 @@
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
     using ZTR.Framework.Business;
@@ -28,9 +26,7 @@
     /// <seealso cref="IDefaultValueManager" />
     public class DefaultValueManager : Manager, IDefaultValueManager
     {
-        private readonly IGitRepositoryManager _gitRepoManager;
-        private readonly DeviceGitConnectionOptions _deviceGitConnectionOptions;
-        private readonly string protoFileName = "module.proto";
+        private readonly IModuleServiceManager _moduleServiceManager;
         private readonly IProtoMessageParser _protoParser;
         private readonly ICustomMessageParser _customMessageParser;
         private readonly IModuleParser _moduleParser;
@@ -39,31 +35,26 @@
         /// Initializes a new instance of the <see cref="DefaultValueManager"/> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
-        /// <param name="gitRepoManager">The git repo manager.</param>
-        /// <param name="deviceGitConnectionOptions">The device git connection options.</param>
+        /// <param name="moduleServiceManager">The module service manager.</param>
         /// <param name="protoParser">The proto parser.</param>
         /// <param name="customMessageParser">The custom message parser.</param>
         /// <param name="moduleParser">The module parser.</param>
         public DefaultValueManager(ILogger<DefaultValueManager> logger, 
-                                    IGitRepositoryManager gitRepoManager,
-                                    DeviceGitConnectionOptions deviceGitConnectionOptions, 
+                                    IModuleServiceManager moduleServiceManager,
                                     IProtoMessageParser protoParser,
                                     ICustomMessageParser customMessageParser,
                                     IModuleParser moduleParser) : base(logger)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
-            EnsureArg.IsNotNull(gitRepoManager, nameof(gitRepoManager));
-            EnsureArg.IsNotNull(deviceGitConnectionOptions, nameof(deviceGitConnectionOptions));
-            EnsureArg.IsNotNull(deviceGitConnectionOptions.DefaultTomlConfiguration, nameof(deviceGitConnectionOptions.DefaultTomlConfiguration));
+            EnsureArg.IsNotNull(moduleServiceManager, nameof(moduleServiceManager));
             EnsureArg.IsNotNull(protoParser, nameof(protoParser));
             EnsureArg.IsNotNull(customMessageParser, nameof(customMessageParser));
             EnsureArg.IsNotNull(moduleParser, nameof(moduleParser));
 
-            _gitRepoManager = gitRepoManager;
+            _moduleServiceManager = moduleServiceManager;
             _protoParser = protoParser;
             _customMessageParser = customMessageParser;
             _moduleParser = moduleParser;
-            _deviceGitConnectionOptions = deviceGitConnectionOptions;
         }
 
         /// <summary>
@@ -74,22 +65,13 @@
         /// <returns></returns>
         public async Task<IEnumerable<ModuleReadModel>> GetDefaultValuesAllModulesAsync(string firmwareVersion, string deviceType)
         {
-            SetConnection();
-
-            // 1. get list of modules based on their firmware version and device type.
-            // 2. get protofile paths based on firmware version and device type.
-            // 3. create custom message for each of protofiles.
-            // 4. get list of modules and their custom messages.
-            var modulesProtoFolder = _deviceGitConnectionOptions.ModulesConfig;
-
             // read default values from toml file defaults.toml
-            var defaultValueFromTomlFile = await GetFileContentFromPath(firmwareVersion, deviceType, _deviceGitConnectionOptions.DefaultTomlConfiguration.DefaultTomlFile);
-            var deviceDataFromTomlFile = await GetFileContentFromPath(firmwareVersion, deviceType, _deviceGitConnectionOptions.DefaultTomlConfiguration.DeviceTomlFile);
+            var defaultValueFromTomlFile = await _moduleServiceManager.GetDefaultTomlFileContent(firmwareVersion, deviceType);
 
             // get list of all modules.
-            var listOfModules = GetListOfModules(deviceDataFromTomlFile);
+            var listOfModules = await _moduleServiceManager.GetAllModulesAsync(firmwareVersion, deviceType);
 
-            await MergeValuesWithModulesAsync(defaultValueFromTomlFile, listOfModules, modulesProtoFolder);
+            await MergeValuesWithModulesAsync(defaultValueFromTomlFile, listOfModules);
 
             return listOfModules;
         }
@@ -99,8 +81,7 @@
         /// </summary>
         /// <param name="defaultValueFromTomlFile">The default value from toml file.</param>
         /// <param name="listOfModules">The list of modules.</param>
-        /// <param name="modulesProtoFolder">The modules proto folder.</param>
-        public async Task MergeValuesWithModulesAsync(string defaultValueFromTomlFile, IEnumerable<ModuleReadModel> listOfModules, string modulesProtoFolder)
+        public async Task MergeValuesWithModulesAsync(string defaultValueFromTomlFile, IEnumerable<ModuleReadModel> listOfModules)
         {
             var degreeOfParallelism = 10;
 
@@ -110,14 +91,14 @@
                 {
                     using (partition)
                         while (partition.MoveNext())
-                            await MergeDefaultValuesWithModules(defaultValueFromTomlFile, partition.Current, modulesProtoFolder);
+                            await MergeDefaultValuesWithModules(defaultValueFromTomlFile, partition.Current);
                 }));
         }
 
-        private async Task MergeDefaultValuesWithModules(string defaultValueFromTomlFile, ModuleReadModel module, string modulesProtoFolder)
+        private async Task MergeDefaultValuesWithModules(string defaultValueFromTomlFile, ModuleReadModel module)
         {
             // get proto files for corresponding module and their uuid
-            var protoFilePath = GetProtoFiles(modulesProtoFolder, module);
+            var protoFilePath = _moduleServiceManager.GetProtoFiles(module);
 
             if (!string.IsNullOrWhiteSpace(protoFilePath))
             {
@@ -159,101 +140,6 @@
             }
 
             return configValues;
-        }
-
-        private void SetConnection()
-        {
-            var currentDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-
-            _deviceGitConnectionOptions.GitLocalFolder = Path.Combine(currentDirectory, _deviceGitConnectionOptions.GitLocalFolder);
-            _deviceGitConnectionOptions.DefaultTomlConfiguration.DeviceFolder = Path.Combine(_deviceGitConnectionOptions.GitLocalFolder, _deviceGitConnectionOptions.DefaultTomlConfiguration.DeviceFolder);
-            _deviceGitConnectionOptions.ModulesConfig = Path.Combine(currentDirectory, _deviceGitConnectionOptions.GitLocalFolder, _deviceGitConnectionOptions.ModulesConfig);
-
-            _gitRepoManager.SetConnectionOptions(_deviceGitConnectionOptions);
-        }
-
-        /// <summary>
-        /// Gets the proto files.
-        /// </summary>
-        /// <param name="moduleFilePath">The module file path.</param>
-        /// <param name="moduleName">Name of the module.</param>
-        /// <returns></returns>
-        private string GetProtoFiles(string moduleFilePath, ModuleReadModel moduleName)
-        {
-            EnsureArg.IsNotNullOrWhiteSpace(moduleFilePath);
-
-            var moduleFolder = FileReaderExtensions.GetSubDirectoryPath(moduleFilePath, moduleName.Name);
-
-            if (!string.IsNullOrWhiteSpace(moduleFolder))
-            {
-                var uuidFolder = FileReaderExtensions.GetSubDirectoryPath(moduleFolder, moduleName.UUID);
-
-                if (!string.IsNullOrWhiteSpace(uuidFolder))
-                {
-                    foreach (string file in Directory.EnumerateFiles(uuidFolder, protoFileName))
-                    {
-                        return file;
-                    }
-                }
-            }
-
-            return string.Empty;
-        }
-
-        private async Task<string> GetFileContentFromPath(string firmwareVersion, string deviceType, string path)
-        {
-            var gitConnectionOptions = (DeviceGitConnectionOptions)_gitRepoManager.GetConnectionOptions();
-
-            var listOfFiles = await _gitRepoManager.GetFileDataFromTagAsync(firmwareVersion, path)
-                                                   .ConfigureAwait(false);
-
-            // case insensitive search.
-            var deviceTypeFile = listOfFiles.Where(p => p.FileName?.IndexOf(deviceType, StringComparison.OrdinalIgnoreCase) >= 0).FirstOrDefault();
-
-            var fileContent = string.Empty;
-
-            if (deviceTypeFile != null)
-            {
-                fileContent = System.Text.Encoding.UTF8.GetString(deviceTypeFile.Data);
-            }
-
-            return fileContent;
-        }
-
-        /// <summary>
-        /// Gets the list of modules.
-        /// </summary>
-        /// <param name="deviceTomlFileContent">Content of the device toml file.</param>
-        /// <returns></returns>
-        private IEnumerable<ModuleReadModel> GetListOfModules(string deviceTomlFileContent)
-        {
-            var listOfModules = new List<ModuleReadModel>();
-
-            if (!string.IsNullOrWhiteSpace(deviceTomlFileContent))
-            {
-                var data = GetTomlData(deviceTomlFileContent);
-
-                listOfModules = data.Module;
-            }
-
-            // fix the indexes.
-            listOfModules = listOfModules.Select((module, index) => new ModuleReadModel { Id = index, Config = module.Config, Name = module.Name, UUID = module.UUID }).ToList();
-
-            return listOfModules;
-        }
-
-        /// <summary>
-        /// Gets the toml data.
-        /// </summary>
-        /// <param name="fileContent">Content of the file.</param>
-        /// <returns></returns>
-        private ConfigurationReadModel GetTomlData(string fileContent)
-        {
-            var tomlSettings = TomlFileReader.LoadLowerCaseTomlSettingsWithMappingForDefaultValues();
-
-            var tomlData = TomlFileReader.ReadDataFromString<ConfigurationReadModel>(data: fileContent, settings: tomlSettings);
-
-            return tomlData;
         }
     }
 }

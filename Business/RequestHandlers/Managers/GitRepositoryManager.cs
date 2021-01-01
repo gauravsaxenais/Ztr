@@ -173,7 +173,7 @@
 
             if (!IsExistsContentRepositoryDirectory())
             {
-                await CloneRepositoryAsync();
+                await CloneRepositoryAsync().ConfigureAwait(false);
             }
 
             using (var repo = new Repository(_gitConnection.GitLocalFolder))
