@@ -58,6 +58,7 @@
         /// <returns></returns>
         public async Task<object> GetBlocksAsObjectAsync()
         {
+            await _repoManager.CloneRepositoryAsync().ConfigureAwait(false);
             var blocks = await GetListOfBlocksAsync().ConfigureAwait(false);
 
             return new { blocks };
@@ -125,6 +126,9 @@
             var allFinishedTasks = await Task.WhenAll(listOfRequests).ConfigureAwait(false);
 
             var data = allFinishedTasks.SelectMany(x => x);
+
+            // fix the indexes
+            data.Select((item, index) => { item.Id = index; return item; }).ToList();
 
             return data;
         }
