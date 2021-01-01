@@ -413,11 +413,10 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Business.RequestHandlers.Interfaces.IBlockManager.GetListOfBlocks(System.IO.DirectoryInfo)">
+        <member name="M:Business.RequestHandlers.Interfaces.IBlockManager.GetListOfBlocks">
             <summary>
             Gets the list of blocks.
             </summary>
-            <param name="blockConfigDirectory">The block configuration directory.</param>
             <returns></returns>
         </member>
         <member name="T:Business.RequestHandlers.Interfaces.ICompatibleFirmwareVersionManager">
@@ -478,13 +477,12 @@
             <param name="deviceType">Type of the device.</param>
             <returns></returns>
         </member>
-        <member name="M:Business.RequestHandlers.Interfaces.IDefaultValueManager.MergeValuesWithModulesAsync(System.String,System.Collections.Generic.IEnumerable{Business.Models.ModuleReadModel},System.String)">
+        <member name="M:Business.RequestHandlers.Interfaces.IDefaultValueManager.MergeValuesWithModulesAsync(System.String,System.Collections.Generic.IEnumerable{Business.Models.ModuleReadModel})">
             <summary>
             Merges the values with modules asynchronous.
             </summary>
             <param name="defaultValueFromTomlFile">The default value from toml file.</param>
             <param name="listOfModules">The list of modules.</param>
-            <param name="modulesProtoFolder">The modules proto folder.</param>
             <returns></returns>
         </member>
         <member name="T:Business.RequestHandlers.Interfaces.IDeviceTypeManager">
@@ -561,12 +559,51 @@
             <param name="deviceType">Type of the device.</param>
             <returns></returns>
         </member>
-        <member name="M:Business.RequestHandlers.Interfaces.IModuleManager.GetListOfModulesAsync(System.String,System.String)">
+        <member name="T:Business.RequestHandlers.Interfaces.IModuleServiceManager">
             <summary>
-            Gets the list of modules asynchronous.
+            Module service.
+            </summary>
+        </member>
+        <member name="M:Business.RequestHandlers.Interfaces.IModuleServiceManager.GetAllModulesAsync(System.String,System.String)">
+            <summary>
+            Gets all modules asynchronous.
             </summary>
             <param name="firmwareVersion">The firmware version.</param>
             <param name="deviceType">Type of the device.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Interfaces.IModuleServiceManager.GetTagsEarlierThanThisTagAsync(System.String)">
+            <summary>
+            Gets the tags earlier than this tag asynchronous.
+            </summary>
+            <param name="firmwareVersion">The firmware version.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Interfaces.IModuleServiceManager.GetDefaultTomlFileContent(System.String,System.String)">
+            <summary>
+            Gets the default content of the toml file.
+            </summary>
+            <param name="firmwareVersion">The firmware version.</param>
+            <param name="deviceType">Type of the device.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Interfaces.IModuleServiceManager.GetProtoFiles(Business.Models.ModuleReadModel)">
+            <summary>
+            Gets the proto files.
+            </summary>
+            <param name="module">The module.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Interfaces.IModuleServiceManager.GetAllFirmwareVersionsAsync">
+            <summary>
+            Gets all firmware versions asynchronous.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Interfaces.IModuleServiceManager.GetAllDevicesAsync">
+            <summary>
+            Gets all devices asynchronous.
+            </summary>
             <returns></returns>
         </member>
         <member name="T:Business.RequestHandlers.Managers.BlockManager">
@@ -591,11 +628,10 @@
             </summary>
             <returns>list of blocks.</returns>
         </member>
-        <member name="M:Business.RequestHandlers.Managers.BlockManager.GetListOfBlocks(System.IO.DirectoryInfo)">
+        <member name="M:Business.RequestHandlers.Managers.BlockManager.GetListOfBlocks">
             <summary>
             Gets the list of blocks.
             </summary>
-            <param name="blockConfigDirectory">The block configuration directory.</param>
             <returns></returns>
         </member>
         <member name="T:Business.RequestHandlers.Managers.CompatibleFirmwareVersionManager">
@@ -606,14 +642,12 @@
             <seealso cref="T:ZTR.Framework.Business.Manager" />
             <seealso cref="T:Business.RequestHandlers.Interfaces.ICompatibleFirmwareVersionManager" />
         </member>
-        <member name="M:Business.RequestHandlers.Managers.CompatibleFirmwareVersionManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DefaultValueManager},Business.RequestHandlers.Interfaces.IGitRepositoryManager,Business.RequestHandlers.Interfaces.IModuleManager,Business.Configuration.DeviceGitConnectionOptions)">
+        <member name="M:Business.RequestHandlers.Managers.CompatibleFirmwareVersionManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DefaultValueManager},Business.RequestHandlers.Interfaces.IModuleServiceManager)">
             <summary>
             Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.CompatibleFirmwareVersionManager"/> class.
             </summary>
             <param name="logger">The logger.</param>
-            <param name="gitRepoManager">The git repo manager.</param>
-            <param name="moduleManager">The module manager.</param>
-            <param name="deviceGitConnectionOptions">The device git connection options.</param>
+            <param name="moduleServiceManager">The module service manager.</param>
         </member>
         <member name="M:Business.RequestHandlers.Managers.CompatibleFirmwareVersionManager.GetCompatibleFirmwareVersionsAsync(Business.Models.CompatibleFirmwareVersionReadModel)">
             <summary>
@@ -630,15 +664,14 @@
             <seealso cref="T:ZTR.Framework.Business.Manager" />
             <seealso cref="T:Business.RequestHandlers.Interfaces.IConfigCreateFromManager" />
         </member>
-        <member name="M:Business.RequestHandlers.Managers.ConfigCreateFromManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DefaultValueManager},Business.RequestHandlers.Interfaces.IGitRepositoryManager,Business.RequestHandlers.Interfaces.IDefaultValueManager,Business.RequestHandlers.Interfaces.IBlockManager,Business.Configuration.DeviceGitConnectionOptions)">
+        <member name="M:Business.RequestHandlers.Managers.ConfigCreateFromManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DefaultValueManager},Business.RequestHandlers.Interfaces.IDefaultValueManager,Business.RequestHandlers.Interfaces.IModuleServiceManager,Business.RequestHandlers.Interfaces.IBlockManager)">
             <summary>
             Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.ConfigCreateFromManager"/> class.
             </summary>
             <param name="logger">The logger.</param>
-            <param name="gitRepoManager">The git repo manager.</param>
             <param name="defaultValueManager">The default value manager.</param>
+            <param name="moduleServiceManager">The module service manager.</param>
             <param name="blockManager">The block manager.</param>
-            <param name="deviceGitConnectionOptions">The device git connection options.</param>
         </member>
         <member name="M:Business.RequestHandlers.Managers.ConfigCreateFromManager.GenerateConfigTomlModelAsync(Microsoft.AspNetCore.Http.IFormFile)">
             <summary>
@@ -700,13 +733,12 @@
             <seealso cref="T:ZTR.Framework.Business.Manager" />
             <seealso cref="T:Business.RequestHandlers.Interfaces.IDefaultValueManager" />
         </member>
-        <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DefaultValueManager},Business.RequestHandlers.Interfaces.IGitRepositoryManager,Business.Configuration.DeviceGitConnectionOptions,Business.Parsers.ProtoParser.Parser.IProtoMessageParser,Business.Parsers.ProtoParser.Parser.ICustomMessageParser,Business.Parsers.ProtoParser.Parser.IModuleParser)">
+        <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DefaultValueManager},Business.RequestHandlers.Interfaces.IModuleServiceManager,Business.Parsers.ProtoParser.Parser.IProtoMessageParser,Business.Parsers.ProtoParser.Parser.ICustomMessageParser,Business.Parsers.ProtoParser.Parser.IModuleParser)">
             <summary>
             Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.DefaultValueManager"/> class.
             </summary>
             <param name="logger">The logger.</param>
-            <param name="gitRepoManager">The git repo manager.</param>
-            <param name="deviceGitConnectionOptions">The device git connection options.</param>
+            <param name="moduleServiceManager">The module service manager.</param>
             <param name="protoParser">The proto parser.</param>
             <param name="customMessageParser">The custom message parser.</param>
             <param name="moduleParser">The module parser.</param>
@@ -719,35 +751,12 @@
             <param name="deviceType">Type of the device.</param>
             <returns></returns>
         </member>
-        <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.MergeValuesWithModulesAsync(System.String,System.Collections.Generic.IEnumerable{Business.Models.ModuleReadModel},System.String)">
+        <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.MergeValuesWithModulesAsync(System.String,System.Collections.Generic.IEnumerable{Business.Models.ModuleReadModel})">
             <summary>
             Merges the values with modules asynchronous.
             </summary>
             <param name="defaultValueFromTomlFile">The default value from toml file.</param>
             <param name="listOfModules">The list of modules.</param>
-            <param name="modulesProtoFolder">The modules proto folder.</param>
-        </member>
-        <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.GetProtoFiles(System.String,Business.Models.ModuleReadModel)">
-            <summary>
-            Gets the proto files.
-            </summary>
-            <param name="moduleFilePath">The module file path.</param>
-            <param name="moduleName">Name of the module.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.GetListOfModules(System.String)">
-            <summary>
-            Gets the list of modules.
-            </summary>
-            <param name="deviceTomlFileContent">Content of the device toml file.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.GetTomlData(System.String)">
-            <summary>
-            Gets the toml data.
-            </summary>
-            <param name="fileContent">Content of the file.</param>
-            <returns></returns>
         </member>
         <member name="T:Business.RequestHandlers.Managers.DeviceTypeManager">
             <summary>
@@ -756,13 +765,12 @@
             <seealso cref="T:ZTR.Framework.Business.Manager" />
             <seealso cref="T:Business.RequestHandlers.Interfaces.IDeviceTypeManager" />
         </member>
-        <member name="M:Business.RequestHandlers.Managers.DeviceTypeManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DeviceTypeManager},Business.RequestHandlers.Interfaces.IGitRepositoryManager,Business.Configuration.DeviceGitConnectionOptions)">
+        <member name="M:Business.RequestHandlers.Managers.DeviceTypeManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DeviceTypeManager},Business.RequestHandlers.Interfaces.IModuleServiceManager)">
             <summary>
             Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.DeviceTypeManager"/> class.
             </summary>
             <param name="logger">The logger.</param>
-            <param name="gitRepoManager">The git repo manager.</param>
-            <param name="deviceGitConnectionOptions">The device git connection options.</param>
+            <param name="moduleServiceManager">The module service manager.</param>
         </member>
         <member name="M:Business.RequestHandlers.Managers.DeviceTypeManager.GetAllDevicesAsync">
             <summary>
@@ -887,13 +895,12 @@
             <seealso cref="T:ZTR.Framework.Business.Manager" />
             <seealso cref="T:Business.RequestHandlers.Interfaces.IModuleManager" />
         </member>
-        <member name="M:Business.RequestHandlers.Managers.ModuleManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.ModuleManager},Business.RequestHandlers.Interfaces.IGitRepositoryManager,Business.Configuration.DeviceGitConnectionOptions)">
+        <member name="M:Business.RequestHandlers.Managers.ModuleManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.ModuleManager},Business.RequestHandlers.Interfaces.IModuleServiceManager)">
             <summary>
             Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.ModuleManager"/> class.
             </summary>
             <param name="logger">The logger.</param>
-            <param name="gitRepoManager">The git repo manager.</param>
-            <param name="moduleGitConnectionOptions">The module git connection options.</param>
+            <param name="moduleServiceManager">The module service manager.</param>
         </member>
         <member name="M:Business.RequestHandlers.Managers.ModuleManager.GetAllModulesAsync(System.String,System.String)">
             <summary>
@@ -903,7 +910,66 @@
             <param name="deviceType">Type of the device.</param>
             <returns></returns>
         </member>
-        <member name="M:Business.RequestHandlers.Managers.ModuleManager.GetListOfModulesAsync(System.String,System.String)">
+        <member name="T:Business.RequestHandlers.Managers.ModuleServiceManager">
+            <summary>
+            Wrapper for GitRepoManager.
+            </summary>
+            <seealso cref="T:ZTR.Framework.Business.Manager" />
+            <seealso cref="T:Business.RequestHandlers.Interfaces.IModuleServiceManager" />
+            <seealso cref="T:ZTR.Framework.Business.Manager" />
+            <seealso cref="T:Business.RequestHandlers.Interfaces.IModuleServiceManager" />
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.ModuleServiceManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.ModuleServiceManager},Business.RequestHandlers.Interfaces.IGitRepositoryManager,Business.Configuration.DeviceGitConnectionOptions)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.ModuleManager"/> class.
+            </summary>
+            <param name="logger">The logger.</param>
+            <param name="gitRepoManager">The git repo manager.</param>
+            <param name="moduleGitConnectionOptions">The module git connection options.</param>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.ModuleServiceManager.GetAllModulesAsync(System.String,System.String)">
+            <summary>
+            Gets all modules asynchronous.
+            </summary>
+            <param name="firmwareVersion">The firmware version.</param>
+            <param name="deviceType">Type of the device.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.ModuleServiceManager.GetAllDevicesAsync">
+            <summary>
+            Gets all devices asynchronous.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.ModuleServiceManager.GetAllFirmwareVersionsAsync">
+            <summary>
+            Gets all firmware versions asynchronous.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.ModuleServiceManager.GetTagsEarlierThanThisTagAsync(System.String)">
+            <summary>
+            Gets the tags earlier than this tag asynchronous.
+            </summary>
+            <param name="firmwareVersion">The firmware version.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.ModuleServiceManager.GetDefaultTomlFileContent(System.String,System.String)">
+            <summary>
+            Gets the default content of the toml file.
+            </summary>
+            <param name="firmwareVersion">The firmware version.</param>
+            <param name="deviceType">Type of the device.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.ModuleServiceManager.GetProtoFiles(Business.Models.ModuleReadModel)">
+            <summary>
+            Gets the proto files.
+            </summary>
+            <param name="module">The module.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.ModuleServiceManager.GetListOfModulesAsync(System.String,System.String)">
             <summary>
             Gets the list of modules asynchronous.
             </summary>

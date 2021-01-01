@@ -30,6 +30,7 @@
             services.AddScoped<IConfigGeneratorManager, ConfigGeneratorManager>();
             services.AddScoped<IConfigCreateFromManager, ConfigCreateFromManager>();
             services.AddScoped<ICompatibleFirmwareVersionManager, CompatibleFirmwareVersionManager>();
+            services.AddScoped<IModuleServiceManager, ModuleServiceManager>();
 
             services.AddCors(o => o.AddPolicy(ApiConstants.ApiAllowAllOriginsPolicy, builder =>
             {

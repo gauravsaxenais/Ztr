@@ -1,14 +1,11 @@
 ﻿namespace Business.RequestHandlers.Managers
 {
-    using Business.Configuration;
     using Business.Models;
     using Business.RequestHandlers.Interfaces;
     using EnsureThat;
     using Microsoft.Extensions.Logging;
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
     using ZTR.Framework.Business;
@@ -21,29 +18,19 @@
     /// <seealso cref="ICompatibleFirmwareVersionManager" />
     public class CompatibleFirmwareVersionManager : Manager, ICompatibleFirmwareVersionManager
     {
-        private readonly IGitRepositoryManager _gitRepoManager;
-        private readonly IModuleManager _moduleManager;
-        private readonly DeviceGitConnectionOptions _deviceGitConnectionOptions;
+        private readonly IModuleServiceManager _moduleServiceManager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CompatibleFirmwareVersionManager"/> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
-        /// <param name="gitRepoManager">The git repo manager.</param>
-        /// <param name="moduleManager">The module manager.</param>
-        /// <param name="deviceGitConnectionOptions">The device git connection options.</param>
-        public CompatibleFirmwareVersionManager(ILogger<DefaultValueManager> logger, IGitRepositoryManager gitRepoManager, IModuleManager moduleManager, DeviceGitConnectionOptions deviceGitConnectionOptions) : base(logger)
+        /// <param name="moduleServiceManager">The module service manager.</param>
+        public CompatibleFirmwareVersionManager(ILogger<DefaultValueManager> logger, IModuleServiceManager moduleServiceManager) : base(logger)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
-            EnsureArg.IsNotNull(gitRepoManager, nameof(gitRepoManager));
-            EnsureArg.IsNotNull(moduleManager, nameof(moduleManager));
+            EnsureArg.IsNotNull(moduleServiceManager, nameof(moduleServiceManager));
 
-            EnsureArg.IsNotNull(deviceGitConnectionOptions, nameof(deviceGitConnectionOptions));
-            EnsureArg.IsNotNull(deviceGitConnectionOptions.DefaultTomlConfiguration, nameof(deviceGitConnectionOptions.DefaultTomlConfiguration));
-
-            _gitRepoManager = gitRepoManager;
-            _moduleManager = moduleManager;
-            _deviceGitConnectionOptions = deviceGitConnectionOptions;
+            _moduleServiceManager = moduleServiceManager;
         }
 
         /// <summary>
@@ -65,13 +52,12 @@
             try
             {
                 Logger.LogInformation($"{prefix}: Getting list of compatible firmware versions based on a firmware version.");
-                SetGitRepoConnections();
-
-                var listOfTags = await _gitRepoManager.GetTagsEarlierThanThisTagAsync(module.FirmwareVersion);
+                
+                var listOfTags = await _moduleServiceManager.GetTagsEarlierThanThisTagAsync(module.FirmwareVersion);
 
                 foreach(var tag in listOfTags)
                 {
-                    var moduleList = await _moduleManager.GetListOfModulesAsync(tag, module.DeviceType).ConfigureAwait(false);
+                    var moduleList = await _moduleServiceManager.GetAllModulesAsync(tag, module.DeviceType).ConfigureAwait(false);
 
                     var contained = module.Modules.Intersect(moduleList, new ModuleReadModelComparer()).Count() == module.Modules.Count();
 
@@ -92,16 +78,6 @@
             }
 
             return apiResponse;
-        }
-
-        private void SetGitRepoConnections()
-        {
-            var currentDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-
-            _deviceGitConnectionOptions.GitLocalFolder = Path.Combine(currentDirectory, _deviceGitConnectionOptions.GitLocalFolder);
-            _deviceGitConnectionOptions.ModulesConfig = Path.Combine(currentDirectory, _deviceGitConnectionOptions.GitLocalFolder, _deviceGitConnectionOptions.ModulesConfig);
-
-            _gitRepoManager.SetConnectionOptions(_deviceGitConnectionOptions);
         }
     }
 }

@@ -58,12 +58,9 @@
         /// <returns>list of blocks.</returns>
         public async Task<object> GetBlocksAsObjectAsync()
         {
-            var gitConnectionOptions = (DeviceGitConnectionOptions)_repoManager.GetConnectionOptions();
-            
             await _repoManager.CloneRepositoryAsync().ConfigureAwait(false);
 
-            var directory = new DirectoryInfo(gitConnectionOptions.BlockConfig);
-            var blocks = GetListOfBlocks(directory);
+            var blocks = GetListOfBlocks();
 
             return new { blocks };
         }
@@ -71,12 +68,13 @@
         /// <summary>
         /// Gets the list of blocks.
         /// </summary>
-        /// <param name="blockConfigDirectory">The block configuration directory.</param>
         /// <returns></returns>
-        public List<BlockJsonModel> GetListOfBlocks(DirectoryInfo blockConfigDirectory)
+        public List<BlockJsonModel> GetListOfBlocks()
         {
             var blocks = new List<BlockJsonModel>();
             var tomlSettings = TomlFileReader.LoadLowerCaseTomlSettingsWithMappingForDefaultValues();
+
+            var blockConfigDirectory = new DirectoryInfo(_deviceGitConnectionOptions.BlockConfig);
             var filesInDirectory = blockConfigDirectory.EnumerateFiles();
             int index = 1;
 

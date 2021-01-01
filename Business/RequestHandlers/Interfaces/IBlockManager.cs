@@ -2,7 +2,6 @@
 {
     using Business.Models;
     using System.Collections.Generic;
-    using System.IO;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -20,8 +19,7 @@
         /// <summary>
         /// Gets the list of blocks.
         /// </summary>
-        /// <param name="blockConfigDirectory">The block configuration directory.</param>
         /// <returns></returns>
-        List<BlockJsonModel> GetListOfBlocks(DirectoryInfo blockConfigDirectory);
+        List<BlockJsonModel> GetListOfBlocks();
     }
 }
