@@ -1,7 +1,7 @@
-﻿namespace Business.Parsers.Models
-{
-    using System.Collections.Generic;
+﻿using System;
 
+namespace Business.Parsers.Core.Models
+{
     /// <summary>
     /// Config Convert Model
     /// </summary>
@@ -21,6 +21,10 @@
         /// <value>
         /// The schema.
         /// </value>
-        public IList<ConfigConvertObjectReadModel> Schema { get; set; }
+        public ConversionScheme Schema { get; set; }
+        public static ConversionScheme TryScheme(string value)
+        {
+            return (ConversionScheme)Enum.Parse(typeof(ConversionScheme), value, true);
+        }
     }
 }

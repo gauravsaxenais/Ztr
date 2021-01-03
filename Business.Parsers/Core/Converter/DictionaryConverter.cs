@@ -1,5 +1,6 @@
 ﻿namespace Business.Parsers.TomlParser.Core.Converter
 {
+    using Business.Parsers.Core.Models;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using System;
@@ -9,9 +10,13 @@
     public class DictionaryConverter : IJsonConverter
     {
         private readonly ConvertConfig _config;
+        private readonly string[] _omitKeys;
         public DictionaryConverter(ConvertConfig config)
         {
             _config = config;
+            _omitKeys = _config.Rules.Where(o => o.Schema == ConversionScheme.Omit)
+                                      .Select(o => o.Property)
+                                      .ToArray();
         }
 
         #region Private Helper methods
@@ -20,8 +25,13 @@
             return (IExtractor<T>)new Extractor(_config);
         }
 
-        private void RemoveProperties<T>(T input) where T : IDictionary<string, object>
+        private bool RemoveProperties<T>(T input) where T : IDictionary<string, object>
         {
+            var isForOmit = _omitKeys.Any(o => input.Keys.Any(u => u.ToLower() == o.ToLower()));
+            if(isForOmit)
+            {
+                return true;
+            }
             foreach (var item in input)
             {
                 if (_config.Properties.Contains(item.Key.ToLower()))
@@ -41,20 +51,27 @@
 
                         if (o is object[] v)
                         {
-                            v.ToList().ForEach(u => RemoveProperties((T)u));
+                            v.ToList().ForEach(u =>
+                            {
+                                var omit = RemoveProperties((T)u);
+                                
+                            });
                         }
                         else
                         {
-                            RemoveProperties((T)o);
+                            var omit = RemoveProperties((T)o);                           
+                           
                         }
                     });
                 }
 
                 if (item.Value is T t)
                 {
-                    RemoveProperties(t);
+                    var omit = RemoveProperties(t);
+                   
                 }
             }
+            return false;
         }
 
         private object ToDictionary(object configObject)

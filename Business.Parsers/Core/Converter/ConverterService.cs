@@ -1,6 +1,6 @@
 ﻿namespace Business.Parsers.TomlParser.Core.Converter
 {
-    using Business.Parsers.Models;
+    using Business.Parsers.Core.Models;
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;

@@ -1,4 +1,4 @@
-﻿namespace Business.Parsers.Models
+﻿namespace Business.Parsers.Core.Models
 {
     /// <summary>
     /// Config Read Model.

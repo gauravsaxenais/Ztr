@@ -1,6 +1,6 @@
 ﻿namespace Business.Parsers.TomlParser.Core.Converter
 {
-    using Business.Parsers.Models;
+    using Business.Parsers.Core.Models;
     using Microsoft.Extensions.Logging;
     using System;
     using System.Collections.Generic;
@@ -18,7 +18,7 @@
         private readonly ILogger<ConverterService> _logger;
         private static readonly object _syncRoot = new object();
         internal string[] Properties { get; private set; }
-        internal string[] JsonProperties { get; private set; }
+        internal IEnumerable<ConfigConvertRuleReadModel> JsonProperties { get; private set; }
         private const string _skipConfigFolder = "configsetting";
         private const string _skipConfigFile = "convertconfig.txt";
         internal IEnumerable<ConfigConvertRuleReadModel> Rules { get; set; }
@@ -41,21 +41,19 @@
 
             var tags = setting.Split(Environment.NewLine);
             Properties = tags.Where(o => o.StartsWith("rm:")).Select(o => o.Replace("rm:", string.Empty).RemoveNewline()).ToArray();
-            JsonProperties = tags.Where(o => o.StartsWith("json:")).Select(o => o.Replace("json:", string.Empty).RemoveNewline()).ToArray();
-            Rules = tags.Where(o => o.StartsWith("rule:")).Select(o =>
+            JsonProperties = tags.Where(o => o.StartsWith("json:")).Select(o => MapConfig(o));
+            Rules = tags.Where(o => o.StartsWith("rule:")).Select(o => MapConfig(o));            
+
+            static ConfigConvertRuleReadModel MapConfig(string o)
             {
                 var ruleConfig = o.Split(':');
                 var rule = new ConfigConvertRuleReadModel
                 {
                     Property = ruleConfig[1],
-                    Schema = new List<ConfigConvertObjectReadModel> { new ConfigConvertObjectReadModel
-                         {
-                              Name = ruleConfig[2],
-                              Value= ruleConfig[3]
-                         } }
+                    Schema = ConfigConvertRuleReadModel.TryScheme(ruleConfig[2])
                 };
                 return rule;
-            });
+            }
         }
 
         internal async Task<bool> UpdateConfiguration(string properties)

@@ -1,6 +1,6 @@
 ﻿namespace Service.Controllers
 {
-    using Business.Parsers.Models;
+    using Business.Parsers.Core.Models;
     using Business.RequestHandlers.Interfaces;
     using EnsureThat;
     using Microsoft.AspNetCore.Mvc;

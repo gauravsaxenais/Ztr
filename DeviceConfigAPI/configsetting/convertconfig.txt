@@ -11,10 +11,11 @@ rm:originalid
 rm:datatype
 rm:defaultvalue
 rm:configured
-rule:args:name:value
-rule:config:name:value
-json:config
-json:blocks
+rule:args:object
+rule:config:object
+rule:isvisible:omit
+json:config:inline
+json:blocks:object
 
 
 

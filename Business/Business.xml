@@ -449,7 +449,7 @@
             Config Generator interface methods.
             </summary>
         </member>
-        <member name="M:Business.RequestHandlers.Interfaces.IConfigGeneratorManager.CreateConfigAsync(Business.Parsers.Models.ConfigReadModel)">
+        <member name="M:Business.RequestHandlers.Interfaces.IConfigGeneratorManager.CreateConfigAsync(Business.Parsers.Core.Models.ConfigReadModel)">
             <summary>
             Creates the configuration asynchronous.
             </summary>
@@ -630,7 +630,7 @@
         </member>
         <member name="M:Business.RequestHandlers.Managers.BlockManager.GetListOfBlocksAsync">
             <summary>
-            Gets the list of blocks.
+            Gets the list of blocks asynchronous.
             </summary>
             <returns></returns>
         </member>
@@ -705,7 +705,7 @@
             </summary>
             <param name="service">The service.</param>
         </member>
-        <member name="M:Business.RequestHandlers.Managers.ConfigGeneratorManager.CreateConfigAsync(Business.Parsers.Models.ConfigReadModel)">
+        <member name="M:Business.RequestHandlers.Managers.ConfigGeneratorManager.CreateConfigAsync(Business.Parsers.Core.Models.ConfigReadModel)">
             <summary>
             Creates the configuration asynchronous.
             </summary>
