@@ -1,6 +1,6 @@
 ﻿namespace Business.Parsers.ProtoParser.Parser
 {
-    using Business.Parsers.ProtoParser.Models;
+    using Models;
     using EnsureThat;
     using Google.Protobuf;
     using Microsoft.CodeAnalysis;
@@ -18,7 +18,9 @@
     public class ProtoMessageParser : IProtoMessageParser
     {
         private readonly ILogger<ProtoMessageParser> _logger;
-        private readonly string csFileExtension = ".cs", dllExtension = ".dll", fileDescriptorExtension = ".desc";
+        private const string csFileExtension = ".cs";
+        private const string dllExtension = ".dll";
+        private const string fileDescriptorExtension = ".desc";
 
         public ProtoMessageParser(ILogger<ProtoMessageParser> logger)
         {
@@ -91,9 +93,7 @@
 
         public string GenerateCSharpFile(string fileName, string protoFilePath, params string[] args)
         {
-            string tmpOutputFolder;
-
-            tmpOutputFolder = Path.Combine($"{Global.WebRoot}tmp", Guid.NewGuid().ToString("n"));
+            var tmpOutputFolder = Path.Combine($"{Global.WebRoot}tmp", Guid.NewGuid().ToString("n"));
             Directory.CreateDirectory(tmpOutputFolder);
 
             string protocPath = GetProtoCompilerPath();
@@ -183,7 +183,7 @@
                     long len = 0;
                     int bytesRead;
                     byte[] buffer = new byte[4096];
-                    while ((bytesRead = resStream.Read(buffer, 0, buffer.Length)) > 0)
+                    while (resStream != null && (bytesRead = resStream.Read(buffer, 0, buffer.Length)) > 0)
                     {
                         outFile.Write(buffer, 0, bytesRead);
                         len += bytesRead;
@@ -199,7 +199,7 @@
         // Called by method to ask if this object can serialize
         // an object of a given type.
         // </summary>
-        // <returns>True if the objectType is a Protocol Message.</returns>
+        // <returns>True if the objectType is a Protocol ProtoParsedMessage.</returns>
         private bool CanConvertToMessageType(Type objectType)
         {
             return typeof(IMessage)

@@ -1,8 +1,8 @@
 ﻿namespace Business.RequestHandlers.Managers
 {
-    using Business.Configuration;
-    using Business.Models;
-    using Business.RequestHandlers.Interfaces;
+    using Configuration;
+    using Models;
+    using Interfaces;
     using EnsureThat;
     using Microsoft.Extensions.Logging;
     using Nett;
@@ -83,12 +83,13 @@
             var blocks = new List<BlockJsonModel>();
             var tomlSettings = TomlFileReader.LoadLowerCaseTomlSettingsWithMappingForDefaultValues();
 
-            for (int lIndex = 0; lIndex < filesInDirectory.Count(); lIndex++)
+            var inDirectory = filesInDirectory as FileInfo[] ?? filesInDirectory.ToArray();
+            for (int lIndex = 0; lIndex < inDirectory.Count(); lIndex++)
             {
-                string content = await File.ReadAllTextAsync(filesInDirectory.ElementAt(lIndex).FullName);
+                var content = await File.ReadAllTextAsync(inDirectory.ElementAt(lIndex).FullName);
 
                 var arguments = Toml.ReadString<BlockReadModel>(content, tomlSettings);
-                var name = Path.GetFileNameWithoutExtension(filesInDirectory.ElementAt(lIndex).Name);
+                var name = Path.GetFileNameWithoutExtension(inDirectory.ElementAt(lIndex).Name);
 
                 if (arguments != null && arguments.Arguments != null && arguments.Arguments.Any())
                 {

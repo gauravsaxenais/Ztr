@@ -1,6 +1,6 @@
 ﻿namespace Business.Parsers.ProtoParser.Parser
 {
-    using Business.Parsers.ProtoParser.Models;
+    using Models;
     using EnsureThat;
     using System;
     using System.Collections;
@@ -13,11 +13,23 @@
         public List<JsonField> MergeTomlWithProtoMessage<T>(T configValues, ProtoParsedMessage protoParsedMessage) where T : Dictionary<string, object>
         {
             var listOfData = new List<JsonField>();
-            listOfData.AddRange(GetFieldsFromProtoMessage(protoParsedMessage));
 
-            foreach (var dicItem in configValues.Select((Kvp, Index) => new { Kvp, Index }))
+            // add fields, repeated and non-repeated messages to the list
+            // in case there is no data, just return fields, repeated and non-repeated messages
+            // as basic data.
+            listOfData.AddRange(AddEmptyMessage(protoParsedMessage));
+
+            if (configValues.Any())
             {
-                var field = listOfData.Where(x => string.Equals(x.Name, dicItem.Kvp.Key, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+                // remove repeated and non-repeated messages from the list
+                // and keep fields only.
+                RemoveEmptyArrays(listOfData);
+            }
+
+            foreach (var dicItem in configValues.Select((kvp, index) => new { Kvp = kvp, Index = index }))
+            {
+                var field = listOfData.FirstOrDefault(x =>
+                     string.Equals(x.Name, dicItem.Kvp.Key, StringComparison.OrdinalIgnoreCase));
 
                 if (field != null)
                 {
@@ -25,59 +37,81 @@
                     field.IsVisible = true;
                 }
 
-                // we have a repeated / non repeated message.
+                // we have a repeated / non repeated protoParsedMessage.
                 else
                 {
-                    var repeatedMessage = protoParsedMessage.Messages.Where(x => string.Equals(x.Name, dicItem.Kvp.Key, StringComparison.OrdinalIgnoreCase) && x.IsRepeated).FirstOrDefault();
-                    var nonRepeatedMessage = protoParsedMessage.Messages.Where(x => string.Equals(x.Name, dicItem.Kvp.Key, StringComparison.OrdinalIgnoreCase) && !x.IsRepeated).FirstOrDefault();
-
-                    var tempJsonModel = new JsonField();
-
-                    if (repeatedMessage != null)
+                    foreach (var message in protoParsedMessage.Messages)
                     {
-                        tempJsonModel.Name = repeatedMessage.Name;
-                        tempJsonModel.IsVisible = true;
-
-                        if (dicItem.Kvp.Value is T[] repeatedValues)
+                        if (string.Equals(message.Name, dicItem.Kvp.Key, StringComparison.OrdinalIgnoreCase))
                         {
-                            repeatedValues.ToList().ForEach(item => tempJsonModel.Arrays.Add(MergeTomlWithProtoMessage(item, repeatedMessage)));
+                            var tempJsonModel = new JsonField
+                            {
+                                Name = message.Name,
+                                IsVisible = true,
+                                DataType = "array"
+                            };
+
+                            if (dicItem.Kvp.Value is T[] repeatedValues)
+                            {
+                                repeatedValues.ToList().ForEach(item =>
+                                    tempJsonModel.Arrays.Add(MergeTomlWithProtoMessage(item, message)));
+                            }
+
+                            else if (dicItem.Kvp.Value is T nonRepeatedValues)
+                            {
+                                var subArrayData = MergeTomlWithProtoMessage(nonRepeatedValues, message);
+                                tempJsonModel.Fields.AddRange(subArrayData);
+                            }
+
+                            listOfData.Add(tempJsonModel);
                         }
                     }
-
-                    else if (nonRepeatedMessage != null)
-                    {
-                        tempJsonModel.Name = nonRepeatedMessage.Name;
-                        tempJsonModel.IsVisible = true;
-
-                        if (dicItem.Kvp.Value is T nonRepeatedValues)
-                        {
-                            var subArrayData = MergeTomlWithProtoMessage(nonRepeatedValues, nonRepeatedMessage);
-
-                            var fields = subArrayData.FirstOrDefault();
-                            tempJsonModel.Fields.Add(fields);
-                        }
-                    }
-
-                    listOfData.Add(tempJsonModel);
                 }
             }
 
             // fix the indexes
-            listOfData.Select((item, index) => { item.Id = index; return item; }).ToList();
+            FixIndex((listOfData));
 
             return listOfData;
         }
 
-        private List<JsonField> GetFieldsFromProtoMessage(ProtoParsedMessage protoParsedMessage)
+        #region Private methods
+        private List<JsonField> AddEmptyMessage(ProtoParsedMessage protoParsedMessage)
+        {
+            var listOfData = new List<JsonField>();
+            listOfData.AddRange(GetFieldsFromProtoMessage(protoParsedMessage));
+
+            foreach (var message in protoParsedMessage.Messages)
+            {
+                var tempJsonModel = new JsonField
+                {
+                    Name = message.Name,
+                    IsVisible = false,
+                    DataType = "array"
+                };
+
+                if (message.IsRepeated)
+                {
+                    tempJsonModel.Arrays.Add(AddEmptyMessage(message));
+                }
+
+                else tempJsonModel.Fields.AddRange(AddEmptyMessage(message));
+
+                listOfData.Add(tempJsonModel);
+            }
+
+            // fix the indexes
+            FixIndex(listOfData);
+
+            return listOfData;
+        }
+
+        private IEnumerable<JsonField> GetFieldsFromProtoMessage(ProtoParsedMessage protoParsedMessage)
         {
             EnsureArg.IsNotNull(protoParsedMessage);
 
-            var listOfFields = new List<JsonField>();
-            for (int tempIndex = 0; tempIndex < protoParsedMessage.Fields.Count; tempIndex++)
-            {
-                var newField = (Field)protoParsedMessage.Fields[tempIndex].Clone();
-
-                var jsonModel = new JsonField
+            return protoParsedMessage.Fields.Select(field => (Field)field.Clone())
+                .Select(newField => new JsonField
                 {
                     Name = newField.Name,
                     Value = newField.Value,
@@ -86,23 +120,38 @@
                     DataType = newField.DataType,
                     DefaultValue = newField.DefaultValue,
                     IsVisible = false
-                };
+                })
+                .ToList();
+        }
+        #endregion
 
-                listOfFields.Add(jsonModel);
+        #region Private helper methods
+
+        private void FixIndex(IReadOnlyList<JsonField> listOfData)
+        {
+            for (var index = 0; index < listOfData.Count(); index++)
+            {
+                listOfData[index].Id = index;
             }
+        }
 
-            return listOfFields;
+        private void RemoveEmptyArrays(List<JsonField> listOfData)
+        {
+            if (listOfData != null && listOfData.Count > 0)
+            {
+                listOfData.RemoveAll(x => x.Arrays.Any() || x.Fields.Any());
+            }
         }
 
         private bool IsValueType(object obj)
         {
             var objType = obj.GetType();
-            return obj != null && objType.GetTypeInfo().IsValueType;
+            return objType.GetTypeInfo().IsValueType;
         }
 
         private object GetFieldValue(object field)
         {
-            object result = new object();
+            object result;
 
             var stringType = typeof(string);
             var fieldType = field.GetType();
@@ -114,7 +163,7 @@
 
                 if (IsValueType(element))
                 {
-                    IEnumerable fields = field as IEnumerable;
+                    var fields = (IEnumerable)field;
 
                     foreach (var tempItem in fields)
                     {
@@ -124,9 +173,9 @@
                     arrayResult += arrayResult.TrimEnd(',');
                 }
 
-                else if (stringType.IsAssignableFrom(element.GetType()))
+                else if (stringType.IsInstanceOfType(element))
                 {
-                    string[] stringFields = ((IEnumerable)field).Cast<object>()
+                    var stringFields = ((IEnumerable)field).Cast<object>()
                                                                 .Select(x => x.ToString())
                                                                 .ToArray();
 
@@ -145,5 +194,6 @@
 
             return result;
         }
+        #endregion
     }
 }

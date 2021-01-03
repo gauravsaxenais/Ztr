@@ -1,6 +1,6 @@
 ﻿namespace Business.Parsers.ProtoParser.Parser
 {
-    using Business.Parsers.ProtoParser.Models;
+    using Models;
     using EnsureThat;
     using Google.Protobuf;
     using Google.Protobuf.Reflection;
@@ -9,10 +9,10 @@
     public class CustomMessageParser : ICustomMessageParser
     {
         /// <summary>
-        /// Formats the specified message as JSON.
+        /// Formats the specified protoParsedMessage as JSON.
         /// </summary>
-        /// <param name="message">The message to format.</param>
-        /// <returns>The formatted message.</returns>
+        /// <param name="message">The protoParsedMessage to format.</param>
+        /// <returns>The formatted protoParsedMessage.</returns>
         public ProtoParsedMessage Format(IMessage message)
         {
             EnsureArg.IsNotNull(message);
@@ -24,24 +24,24 @@
         }
 
         /// <summary>
-        /// Formats the specified message as Protoparser message.
+        /// Formats the specified protoParsedMessage as Protoparser protoParsedMessage.
         /// </summary>
-        /// <param name="message">The message to format.</param>
-        /// <param name="protoParserMessage">The field to parse the formatted message to.</param>
-        /// <returns>The formatted message.</returns>
-        public ProtoParsedMessage Format(IMessage message, ProtoParsedMessage protoParserMessage)
+        /// <param name="message">The protoParsedMessage to format.</param>
+        /// <param name="protoParserProtoParsedMessage">The field to parse the formatted protoParsedMessage to.</param>
+        /// <returns>The formatted protoParsedMessage.</returns>
+        public ProtoParsedMessage Format(IMessage message, ProtoParsedMessage protoParserProtoParsedMessage)
         {
             EnsureArg.IsNotNull(message, nameof(message));
-            EnsureArg.IsNotNull(protoParserMessage, nameof(protoParserMessage));
+            EnsureArg.IsNotNull(protoParserProtoParsedMessage, nameof(protoParserProtoParsedMessage));
 
-            ProcessMessageFields(protoParserMessage, message);
-            return protoParserMessage;
+            ProcessMessageFields(protoParserProtoParsedMessage, message);
+            return protoParserProtoParsedMessage;
         }
 
-        private void ProcessMessageFields(ProtoParsedMessage protoParserMessage, IMessage message)
+        private void ProcessMessageFields(ProtoParsedMessage protoParserProtoParsedMessage, IMessage message)
         {
             var fieldCollection = message.Descriptor.Fields.InFieldNumberOrder();
-            for (int tempIndex = 0; tempIndex < fieldCollection.Count; tempIndex++)
+            for (var tempIndex = 0; tempIndex < fieldCollection.Count; tempIndex++)
             {
                 if (fieldCollection[tempIndex].FieldType == FieldType.Message)
                 {
@@ -52,10 +52,10 @@
                         IsRepeated = fieldCollection[tempIndex].IsRepeated
                     };
 
-                    protoParserMessage.Messages.Add(temp);
+                    protoParserProtoParsedMessage.Messages.Add(temp);
 
-                    IMessage cleanSubmessage = fieldCollection[tempIndex].MessageType.Parser.ParseFrom(ByteString.Empty);
-                    ProcessMessageFields(temp, cleanSubmessage);
+                    IMessage cleanSubMessage = fieldCollection[tempIndex].MessageType.Parser.ParseFrom(ByteString.Empty);
+                    ProcessMessageFields(temp, cleanSubMessage);
                 }
                 else
                 {
@@ -75,7 +75,7 @@
                             field.Max = lastValue.Number;
                         }
 
-                        protoParserMessage.Fields.Add(field);
+                        protoParserProtoParsedMessage.Fields.Add(field);
                     }
                 }
             }

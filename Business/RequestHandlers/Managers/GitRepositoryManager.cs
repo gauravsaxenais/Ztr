@@ -1,6 +1,6 @@
 ﻿namespace Business.RequestHandlers.Managers
 {
-    using Business.RequestHandlers.Interfaces;
+    using Interfaces;
     using EnsureThat;
     using LibGit2Sharp;
     using LibGit2Sharp.Handlers;
@@ -18,7 +18,7 @@
     /// Git repo manager is responsible for cloning a git repo,
     /// gets all the tags.
     /// </summary>
-    /// <seealso cref="Business.RequestHandlers.Interfaces.IGitRepositoryManager" />
+    /// <seealso cref="IGitRepositoryManager" />
     public class GitRepositoryManager : IGitRepositoryManager
     {
         #region Fields
@@ -83,9 +83,9 @@
         /// Clones the repository asynchronous.
         /// </summary>
         /// <exception cref="Exception">
-        /// Unauthorised: Incorrect username/password
+        /// Unauthorized: Incorrect username/password
         /// or
-        /// Forbidden: Possbily Incorrect username/password
+        /// Forbidden: Possibly Incorrect username/password
         /// or
         /// Not found: The repository was not found
         /// </exception>
@@ -110,11 +110,11 @@
                 var message = ex.Message;
                 if (message.Contains("401"))
                 {
-                    throw new CustomArgumentException("Unauthorised: Incorrect username/password");
+                    throw new CustomArgumentException("Unauthorized: Incorrect username/password");
                 }
                 if (message.Contains("403"))
                 {
-                    throw new CustomArgumentException("Forbidden: Possbily Incorrect username/password");
+                    throw new CustomArgumentException("Forbidden: Possibly Incorrect username/password");
                 }
                 if (message.Contains("404"))
                 {
@@ -147,10 +147,9 @@
             var tags = new List<(string, DateTimeOffset)>();
             tags = await GetAllTagsAsync().ConfigureAwait(false);
 
-            var tag = tags.Where(x => x.Item1 == tagName).FirstOrDefault();
+            var tag = tags.FirstOrDefault(x => x.Item1 == tagName);
 
-            var tagNames = new List<string>();
-            tagNames = tags.Where(x => x.Item2 < tag.Item2).Select(x => x.Item1).ToList();
+            var tagNames = tags.Where(x => x.Item2 < tag.Item2).Select(x => x.Item1).ToList();
 
             return tagNames;
         }
@@ -214,14 +213,12 @@
             {
                 return true;
             }
-            else
+
+            foreach (TreeEntry branch in tree.Where(x => x.TargetType == TreeEntryTargetType.Tree))
             {
-                foreach (TreeEntry branch in tree.Where(x => x.TargetType == TreeEntryTargetType.Tree))
+                if (this.TreeContainsFile((Tree)branch.Target, fileName))
                 {
-                    if (this.TreeContainsFile((Tree)branch.Target, fileName))
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
 
@@ -300,7 +297,7 @@
         private string GetBlobFromFile(TreeEntry treeEntry)
         {
             var blob = (Blob)treeEntry?.Target;
-            string content = blob?.GetContentText();
+            var content = blob?.GetContentText();
 
             // strip BOM (U+FEFF) if present
             if (!string.IsNullOrWhiteSpace(content))

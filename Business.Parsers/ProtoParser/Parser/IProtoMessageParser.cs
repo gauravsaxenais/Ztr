@@ -1,6 +1,6 @@
 ﻿namespace Business.Parsers.ProtoParser.Parser
 {
-    using Business.Parsers.ProtoParser.Models;
+    using Models;
     using System.Threading.Tasks;
 
     public interface IProtoMessageParser

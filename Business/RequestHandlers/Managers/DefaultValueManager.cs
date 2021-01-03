@@ -1,12 +1,11 @@
 ﻿namespace Business.RequestHandlers.Managers
 {
-    using Business.Models;
-    using Business.Parsers.ProtoParser.Parser;
-    using Business.RequestHandlers.Interfaces;
     using EnsureThat;
+    using Interfaces;
     using Microsoft.Extensions.Logging;
+    using Models;
     using Nett;
-    using System;
+    using Parsers.ProtoParser.Parser;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
@@ -39,7 +38,7 @@
         /// <param name="protoParser">The proto parser.</param>
         /// <param name="customMessageParser">The custom message parser.</param>
         /// <param name="moduleParser">The module parser.</param>
-        public DefaultValueManager(ILogger<DefaultValueManager> logger, 
+        public DefaultValueManager(ILogger<DefaultValueManager> logger,
                                     IModuleServiceManager moduleServiceManager,
                                     IProtoMessageParser protoParser,
                                     ICustomMessageParser customMessageParser,
@@ -66,7 +65,8 @@
         public async Task<IEnumerable<ModuleReadModel>> GetDefaultValuesAllModulesAsync(string firmwareVersion, string deviceType)
         {
             // read default values from toml file defaults.toml
-            var defaultValueFromTomlFile = await _moduleServiceManager.GetDefaultTomlFileContent(firmwareVersion, deviceType);
+            var defaultValueFromTomlFile =
+                await _moduleServiceManager.GetDefaultTomlFileContent(firmwareVersion, deviceType);
 
             // get list of all modules.
             var listOfModules = await _moduleServiceManager.GetAllModulesAsync(firmwareVersion, deviceType);
@@ -110,11 +110,8 @@
 
                 var configValues = GetConfigValues(defaultValueFromTomlFile, module.Name);
 
-                if (configValues != null && configValues.Any())
-                {
-                    var jsonModels = _moduleParser.MergeTomlWithProtoMessage(configValues, formattedMessage);
-                    module.Config = jsonModels;
-                }
+                var jsonModels = _moduleParser.MergeTomlWithProtoMessage(configValues, formattedMessage);
+                module.Config = jsonModels;
             }
         }
 
@@ -127,16 +124,13 @@
             var listOfModules = (Dictionary<string, object>[])dictionary["module"];
 
             // here message.name means Power, j1939 etc.
-            var module = listOfModules.Where(dic => dic.Values.Contains(moduleName)).FirstOrDefault();
+            var module = listOfModules.FirstOrDefault(dic => dic.Values.Contains<object>(moduleName));
 
             var configValues = new Dictionary<string, object>();
 
-            if (module != null)
+            if (module?.ContainsKey("config") == true)
             {
-                if (module.ContainsKey("config"))
-                {
-                    configValues = (Dictionary<string, object>)module["config"];
-                }
+                configValues = (Dictionary<string, object>)module["config"];
             }
 
             return configValues;

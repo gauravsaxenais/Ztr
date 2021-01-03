@@ -630,7 +630,7 @@
         </member>
         <member name="M:Business.RequestHandlers.Managers.BlockManager.GetListOfBlocksAsync">
             <summary>
-            Gets the list of blocks.
+            Gets the list of blocks asynchronous.
             </summary>
             <returns></returns>
         </member>
@@ -813,9 +813,9 @@
             Clones the repository asynchronous.
             </summary>
             <exception cref="T:System.Exception">
-            Unauthorised: Incorrect username/password
+            Unauthorized: Incorrect username/password
             or
-            Forbidden: Possbily Incorrect username/password
+            Forbidden: Possibly Incorrect username/password
             or
             Not found: The repository was not found
             </exception>

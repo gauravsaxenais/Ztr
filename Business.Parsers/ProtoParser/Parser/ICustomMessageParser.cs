@@ -1,23 +1,23 @@
 ﻿namespace Business.Parsers.ProtoParser.Parser
 {
-    using Business.Parsers.ProtoParser.Models;
+    using Models;
     using Google.Protobuf;
 
     public interface ICustomMessageParser
     {
         /// <summary>
-        /// Formats the specified message.
+        /// Formats the specified protoParsedMessage.
         /// </summary>
-        /// <param name="message">The message.</param>
-        /// <returns>Proto parsed message.</returns>
+        /// <param name="message">The protoParsedMessage.</param>
+        /// <returns>Proto parsed protoParsedMessage.</returns>
         ProtoParsedMessage Format(IMessage message);
 
         /// <summary>
-        /// Formats the specified message.
+        /// Formats the specified protoParsedMessage.
         /// </summary>
-        /// <param name="message">The message.</param>
-        /// <param name="protoParserMessage">The proto parser message.</param>
-        /// <returns>Proto parsed message.</returns>
-        ProtoParsedMessage Format(IMessage message, ProtoParsedMessage protoParserMessage);
+        /// <param name="message">The protoParsedMessage.</param>
+        /// <param name="protoParserProtoParsedMessage">The proto parser protoParsedMessage.</param>
+        /// <returns>Proto parsed protoParsedMessage.</returns>
+        ProtoParsedMessage Format(IMessage message, ProtoParsedMessage protoParserProtoParsedMessage);
     }
 }
