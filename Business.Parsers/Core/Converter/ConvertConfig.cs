@@ -50,7 +50,8 @@
                 var rule = new ConfigConvertRuleReadModel
                 {
                     Property = ruleConfig[1],
-                    Schema = ConfigConvertRuleReadModel.TryScheme(ruleConfig[2])
+                    Schema = ConfigConvertRuleReadModel.TryScheme(ruleConfig[2]),
+                    Value = ruleConfig.Length > 3 ? ruleConfig[3] : string.Empty
                 };
                 return rule;
             }

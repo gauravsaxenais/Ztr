@@ -12,13 +12,15 @@
 
     public class TomlBuilder : IBuilder<IDictionary<string,object>>
     {
-        private readonly ConvertConfig _config;       
+        private readonly ConvertConfig _config;
+        private ValueScheme _scheme;
         public TomlBuilder(ConvertConfig config)
         {
             _config = config;           
         }
-        public string ToTOML(IDictionary<string, object> content)
-        { 
+        public string ToTOML(IDictionary<string, object> content, ValueScheme scheme)
+        {
+            _scheme = scheme;
             Process(content, ConversionScheme.Object);
             var toml = Neutralize(Toml.WriteString(content));
             return toml;
@@ -128,6 +130,10 @@
             //     InArray(m.Groups[1].Value),
             //     RegexOptions.Singleline | RegexOptions.IgnoreCase);
 
+            if(_scheme == ValueScheme.UnQuoted)
+            {
+              // to do
+            }
             return input;
         }
         private string Neutralize(string input)

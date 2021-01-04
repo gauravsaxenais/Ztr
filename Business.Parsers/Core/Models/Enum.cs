@@ -10,4 +10,9 @@ namespace Business.Parsers.Core.Models
         Inline,
         Omit
     }
+    public enum ValueScheme
+    {
+        Quoted,
+        UnQuoted
+    }
 }

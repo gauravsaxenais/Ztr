@@ -14,7 +14,7 @@ namespace Business.Parsers.Core.Models
         /// The property.
         /// </value>
         public string Property { get; set; }
-
+        public string Value { get; set; }
         /// <summary>
         /// Gets or sets the schema.
         /// </summary>

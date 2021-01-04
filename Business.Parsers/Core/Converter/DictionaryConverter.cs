@@ -10,13 +10,11 @@
     public class DictionaryConverter : IJsonConverter
     {
         private readonly ConvertConfig _config;
-        private readonly string[] _omitKeys;
+        private readonly ICollection<ConfigConvertRuleReadModel>_omitKeys;
         public DictionaryConverter(ConvertConfig config)
         {
             _config = config;
-            _omitKeys = _config.Rules.Where(o => o.Schema == ConversionScheme.Omit)
-                                      .Select(o => o.Property)
-                                      .ToArray();
+            _omitKeys = _config.Rules.Where(o => o.Schema == ConversionScheme.Omit).ToList();                                     
         }
 
         #region Private Helper methods
@@ -25,16 +23,23 @@
             return (IExtractor<T>)new Extractor(_config);
         }
 
+         
         private bool RemoveProperties<T>(T input) where T : IDictionary<string, object>
         {
-            var isForOmit = _omitKeys.Any(o => input.Keys.Any(u => u.ToLower() == o.ToLower()));
-            if(isForOmit)
+
+            var isForOmit = _omitKeys.Any(o => input.Any(u => 
+                                                            u.Key.ToLower() == o.Property.ToLower() &&
+                                                            u.Value.ToString().ToLower() == o.Value.ToLower()
+                                                         ));
+            if (isForOmit)
             {
                 return true;
             }
+
+            Dictionary<string, object> dictionary = new Dictionary<string, object>();
             foreach (var item in input)
-            {
-                if (_config.Properties.Contains(item.Key.ToLower()))
+            {                
+                if (_config.Properties.Contains(item.Key.ToLower()) )
                 {                   
                     input.Remove(item);
                     continue;
@@ -42,8 +47,9 @@
 
                 if (item.Value is Array)
                 {
-                    ((object[])item.Value).ToList().ForEach(o => {
-
+                    IList<object> objects = new List<object>();
+                    ((object[])item.Value).ToList().ForEach(o =>
+                    {
                         if (o is string)
                         {
                             return;
@@ -51,26 +57,37 @@
 
                         if (o is object[] v)
                         {
+                            IList<object> objectinternal = new List<object>();
                             v.ToList().ForEach(u =>
                             {
                                 var omit = RemoveProperties((T)u);
-                                
+                                if (!omit) objectinternal.Add(u);
                             });
+
+                            objects.Add(objectinternal.ToArray());
                         }
                         else
                         {
-                            var omit = RemoveProperties((T)o);                           
-                           
+                            var omit = RemoveProperties((T)o);
+                            if (!omit) objects.Add(o);
                         }
                     });
+                   
+                    dictionary.Add(item.Key, objects.ToArray());
                 }
 
                 if (item.Value is T t)
                 {
                     var omit = RemoveProperties(t);
-                   
+                    if (!omit) dictionary.Add(item.Key, t);
                 }
             }
+
+            foreach (var item in dictionary)
+            {
+                input[item.Key] = dictionary[item.Key];
+            }
+
             return false;
         }
 
@@ -172,7 +189,7 @@
             var configurationObject = JsonConvert.DeserializeObject(json);
             var dictionary = (Dictionary<string, object>)ToDictionary(configurationObject);
 
-            RemoveProperties(dictionary);
+            RemoveProperties(dictionary);           
             return ConvertCompatibleJson(dictionary);
         }
 

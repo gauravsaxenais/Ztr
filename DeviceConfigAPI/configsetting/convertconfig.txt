@@ -13,7 +13,7 @@ rm:defaultvalue
 rm:configured
 rule:args:object
 rule:config:object
-rule:isvisible:omit
+rule:isvisible:omit:false
 json:config:inline
 json:blocks:object
 

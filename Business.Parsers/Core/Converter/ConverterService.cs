@@ -24,16 +24,16 @@
 
         public async Task<string> CreateConfigTomlAsync(ConfigReadModel model)
         {
-            string contents = GenerateToml(model.Module);
-            contents += Environment.NewLine + GenerateToml(model.Block);
+            string contents = GenerateToml(model.Module, ValueScheme.UnQuoted);
+            contents += Environment.NewLine + GenerateToml(model.Block, ValueScheme.Quoted);
 
             return await Task.FromResult(contents);            
         }
 
-        string GenerateToml(string jsonContent)
+        string GenerateToml(string jsonContent, ValueScheme scheme)
         {
             var dictionary = _parser.ToConverted(jsonContent);
-            string contents = _builder.ToTOML(dictionary);
+            string contents = _builder.ToTOML(dictionary, scheme);
             
             return contents;
         }
