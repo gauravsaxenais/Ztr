@@ -12,7 +12,7 @@
     [QueryRoute]
     public class BlockController : ApiControllerBase
     {
-        private readonly IBlockManager manager;
+        private readonly IBlockManager _manager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BlockController"/> class.
@@ -22,7 +22,7 @@
         {
             EnsureArg.IsNotNull(manager, nameof(manager));
 
-            this.manager = manager;
+            _manager = manager;
         }
 
         /// <summary>Gets all blocks.</summary>
@@ -32,7 +32,7 @@
         [HttpGet(nameof(GetAllBlocks))]
         public async Task<IActionResult> GetAllBlocks()
         {
-            var result = await this.manager.GetBlocksAsObjectAsync().ConfigureAwait(false);
+            var result = await this._manager.GetBlocksAsObjectAsync().ConfigureAwait(false);
 
             return Ok(result);
         }

@@ -1,11 +1,9 @@
 ﻿namespace Business.RequestHandlers.Managers
 {
-    using Models;
-    using Interfaces;
     using EnsureThat;
+    using Interfaces;
     using Microsoft.Extensions.Logging;
     using System;
-    using System.Collections.Generic;
     using System.Threading.Tasks;
     using ZTR.Framework.Business;
 
