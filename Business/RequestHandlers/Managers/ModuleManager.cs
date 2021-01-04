@@ -1,7 +1,7 @@
 ﻿namespace Business.RequestHandlers.Managers
 {
-    using Business.Models;
-    using Business.RequestHandlers.Interfaces;
+    using Models;
+    using Interfaces;
     using EnsureThat;
     using Microsoft.Extensions.Logging;
     using System;
@@ -42,19 +42,17 @@
             var prefix = nameof(ModuleManager);
             ApiResponse apiResponse = null;
 
-            var listOfModules = new List<ModuleReadModel>();
-
             try
             {
                 Logger.LogInformation($"{prefix}: Getting list of modules for firmware version: {firmwareVersion} and device type: {deviceType}");
 
-                listOfModules = await _moduleServiceManager.GetAllModulesAsync(firmwareVersion, deviceType);
+                var listOfModules = await _moduleServiceManager.GetAllModulesAsync(firmwareVersion, deviceType);
 
                 apiResponse = new ApiResponse(status: true, data: listOfModules);
             }
             catch(Exception exception)
             {
-                Logger.LogCritical(exception, $"{prefix}: Error occured while getting list of modules for firmware version: {firmwareVersion} and device type: {deviceType}");
+                Logger.LogCritical(exception, $"{prefix}: Error occurred while getting list of modules for firmware version: {firmwareVersion} and device type: {deviceType}");
                 apiResponse = new ApiResponse(ErrorType.BusinessError, exception);
             }
 

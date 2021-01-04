@@ -110,8 +110,11 @@
 
                 var configValues = GetConfigValues(defaultValueFromTomlFile, module.Name);
 
-                var jsonModels = _moduleParser.MergeTomlWithProtoMessage(configValues, formattedMessage);
-                module.Config = jsonModels;
+                if (module.Name == "j1939")
+                {
+                    var jsonModels = _moduleParser.MergeTomlWithProtoMessage(configValues, formattedMessage);
+                    module.Config = jsonModels;
+                }
             }
         }
 
