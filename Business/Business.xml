@@ -606,6 +606,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Business.RequestHandlers.Interfaces.IModuleServiceManager.GetAllBlockFiles">
+            <summary>
+            Gets all block files.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:Business.RequestHandlers.Managers.BlockManager">
             <summary>
             Parses a toml file and returns arguments for a block
@@ -614,13 +620,12 @@
             <seealso cref="T:ZTR.Framework.Business.Manager" />
             <seealso cref="T:Business.RequestHandlers.Interfaces.IBlockManager" />
         </member>
-        <member name="M:Business.RequestHandlers.Managers.BlockManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.BlockManager},Business.RequestHandlers.Interfaces.IGitRepositoryManager,Business.Configuration.DeviceGitConnectionOptions)">
+        <member name="M:Business.RequestHandlers.Managers.BlockManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.BlockManager},Business.RequestHandlers.Interfaces.IModuleServiceManager)">
             <summary>
             Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.BlockManager"/> class.
             </summary>
             <param name="logger">The logger.</param>
-            <param name="gitRepoManager">The git repo manager.</param>
-            <param name="deviceGitConnectionOptions">The device git connection options.</param>
+            <param name="moduleServiceManager">The module service manager.</param>
         </member>
         <member name="M:Business.RequestHandlers.Managers.BlockManager.GetBlocksAsObjectAsync">
             <summary>
@@ -933,6 +938,12 @@
             </summary>
             <param name="firmwareVersion">The firmware version.</param>
             <param name="deviceType">Type of the device.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.ModuleServiceManager.GetAllBlockFiles">
+            <summary>
+            Gets all block files.
+            </summary>
             <returns></returns>
         </member>
         <member name="M:Business.RequestHandlers.Managers.ModuleServiceManager.GetAllDevicesAsync">

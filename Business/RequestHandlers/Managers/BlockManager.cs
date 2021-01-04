@@ -71,14 +71,14 @@
             var tomlSettings = TomlFileReader.LoadLowerCaseTomlSettingsWithMappingForDefaultValues();
 
             var inDirectory = filesInDirectory as FileInfo[] ?? filesInDirectory.ToArray();
-            for (int lIndex = 0; lIndex < inDirectory.Count(); lIndex++)
+            for (var lIndex = 0; lIndex < inDirectory.Count(); lIndex++)
             {
                 var content = await File.ReadAllTextAsync(inDirectory.ElementAt(lIndex).FullName);
 
                 var arguments = Toml.ReadString<BlockReadModel>(content, tomlSettings);
                 var name = Path.GetFileNameWithoutExtension(inDirectory.ElementAt(lIndex).Name);
 
-                if (arguments != null && arguments.Arguments != null && arguments.Arguments.Any())
+                if (arguments?.Arguments != null && arguments.Arguments.Any())
                 {
                     var args = arguments.Arguments.Select((args, index) => new NetworkArgumentReadModel
                     {

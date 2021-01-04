@@ -63,6 +63,19 @@
                                 tempJsonModel.Fields.AddRange(subArrayData);
                             }
 
+                            else
+                            {
+                                if (message.IsRepeated)
+                                {
+                                    tempJsonModel.Arrays.Add(MergeTomlWithProtoMessage(new Dictionary<string, object>(), message));
+                                }
+
+                                else
+                                {
+                                    tempJsonModel.Fields.AddRange(MergeTomlWithProtoMessage(new Dictionary<string, object>(), message));
+                                }
+                            }
+
                             listOfData.Add(tempJsonModel);
                         }
                     }
