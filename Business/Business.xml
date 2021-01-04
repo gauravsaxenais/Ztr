@@ -731,7 +731,7 @@
             This class returns all the modules, their name and uuid information.
             It also returns of the default values for all the modules.
             It integrates with module parser to parse a proto file,
-            recieves all the default values from default.toml and 
+            receives all the default values from default.toml and 
             receives the module.proto from corresponding module name
             and uuid folder.
             </summary>

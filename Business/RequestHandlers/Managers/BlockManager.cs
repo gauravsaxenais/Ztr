@@ -1,5 +1,6 @@
 ﻿namespace Business.RequestHandlers.Managers
 {
+    using System;
     using EnsureThat;
     using Interfaces;
     using Microsoft.Extensions.Logging;
@@ -45,11 +46,25 @@
         /// Parses the toml files asynchronous.
         /// </summary>
         /// <returns></returns>
-        public async Task<object> GetBlocksAsObjectAsync()
+        public async Task<ApiResponse> GetBlocksAsObjectAsync()
         {
-            var blocks = await GetListOfBlocksAsync().ConfigureAwait(false);
+            var prefix = nameof(BlockManager);
+            ApiResponse apiResponse = null;
 
-            return new { blocks };
+            try
+            {
+                Logger.LogInformation($"{prefix}: Getting list of blocks.");
+                var blocks = await GetListOfBlocksAsync().ConfigureAwait(false);
+
+                apiResponse = new ApiResponse(status: true, data: new {blocks});
+            }
+            catch (Exception exception)
+            {
+                Logger.LogCritical(exception, $"{prefix}: Error occurred while getting list of blocks.");
+                apiResponse = new ApiResponse(false, exception.Message, ErrorType.BusinessError, exception);
+            }
+
+            return apiResponse;
         }
 
         /// <summary>

@@ -73,7 +73,7 @@
             }
             catch (Exception exception)
             {
-                Logger.LogCritical(exception, $"{prefix}: Error occured while getting list of compatible firmware versions based on a firmware version.");
+                Logger.LogCritical(exception, $"{prefix}: Error occurred while getting list of compatible firmware versions based on a firmware version.");
                 apiResponse = new ApiResponse(false, exception.Message, ErrorType.BusinessError, exception);
             }
 

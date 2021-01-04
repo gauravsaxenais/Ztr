@@ -1,7 +1,7 @@
 ﻿namespace Business.RequestHandlers.Managers
 {
-    using Business.Models;
-    using Business.RequestHandlers.Interfaces;
+    using Models;
+    using Interfaces;
     using EnsureThat;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Logging;
@@ -103,11 +103,9 @@
         {
             EnsureArg.IsNotEmptyOrWhiteSpace(configTomlFile);
 
-            var listOfModules = new List<ModuleReadModel>();
-
             var data = GetTomlData(configTomlFile);
 
-            listOfModules = data.Module;
+            var listOfModules = data.Module;
 
             listOfModules = listOfModules.Select((module, index) => new ModuleReadModel { Id = index, Config = module.Config, Name = module.Name, UUID = module.UUID }).ToList();
 
