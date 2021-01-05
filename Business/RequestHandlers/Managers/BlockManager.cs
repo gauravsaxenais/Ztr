@@ -95,15 +95,15 @@
 
                 if (arguments?.Arguments != null && arguments.Arguments.Any())
                 {
-                    var args = arguments.Arguments.Select((args, index) => new NetworkArgumentReadModel
+                    var args = arguments.Arguments.Select((data, index) => new NetworkArgumentReadModel
                     {
                         Id = index + 1,
-                        Name = args.Name,
-                        Label = args.Label,
-                        Description = args.Description,
-                        DataType = args.DataType,
-                        Min = args.Min,
-                        Max = args.Max
+                        Name = data.Name,
+                        Label = data.Label,
+                        Description = data.Description,
+                        DataType = data.DataType,
+                        Min = data.Min,
+                        Max = data.Max
                     }).ToList();
 
                     var jsonModel = new BlockJsonModel() { Type = name, Tag = string.Empty, Args = args };
