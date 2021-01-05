@@ -24,7 +24,9 @@
 
         public async Task<string> CreateConfigTomlAsync(ConfigReadModel model)
         {
-            string contents = GenerateToml(model.Module, ValueScheme.UnQuoted);
+            
+            string contents = GenerateToml(model.Version, ValueScheme.UnQuoted);
+            contents += GenerateToml(model.Module, ValueScheme.UnQuoted);
             contents += Environment.NewLine + GenerateToml(model.Block, ValueScheme.Quoted);
 
             return await Task.FromResult(contents);            
