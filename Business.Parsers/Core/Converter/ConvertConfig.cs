@@ -46,7 +46,7 @@
 
             static ConfigConvertRuleReadModel MapConfig(string o)
             {
-                var ruleConfig = o.Split(':');
+                var ruleConfig = o.RemoveNewline().Split(':');
                 var rule = new ConfigConvertRuleReadModel
                 {
                     Property = ruleConfig[1],
