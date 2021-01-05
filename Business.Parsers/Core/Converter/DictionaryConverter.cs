@@ -1,5 +1,6 @@
 ﻿namespace Business.Parsers.TomlParser.Core.Converter
 {
+    using Business.Parsers.Core.Converter;
     using Business.Parsers.Core.Models;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
@@ -24,9 +25,9 @@
         }
 
          
-        private bool RemoveProperties<T>(T input) where T : IDictionary<string, object>
+        private bool RemoveProperties<T>(T input) where T : ITree , new()
         {
-
+           
             var isForOmit = _omitKeys.Any(o => input.Any(u => 
                                                             u.Key.ToLower() == o.Property.ToLower() &&
                                                             u.Value.ToString().ToLower() == o.Value.ToLower()
@@ -36,10 +37,11 @@
                 return true;
             }
 
-            Dictionary<string, object> dictionary = new Dictionary<string, object>();
+            T dictionary = new T();
             foreach (var item in input)
             {                
-                if (_config.Properties.Contains(item.Key.ToLower()) )
+               
+                if (string.IsNullOrEmpty(item.Value.ToString()) || _config.Properties.Contains(item.Key.ToLower()) )
                 {                   
                     input.Remove(item);
                     continue;
@@ -52,6 +54,7 @@
                     {
                         if (o is string)
                         {
+                            objects.Add(o);
                             return;
                         }
 
@@ -107,7 +110,7 @@
                 return array.Select(o => ToDictionary(o)).ToArray();
             }
 
-            var dictionary = new Dictionary<string, object>();
+            var dictionary = new Tree();
             if (configObject is JObject @object)
             {
                 foreach (var o in @object)
@@ -134,15 +137,15 @@
                         return;
                     }
 
-                    ConvertCompatibleJson((Dictionary<string, object>)o);
+                    ConvertCompatibleJson((ITree)o);
                 }
             });
         }
 
-        private T ConvertCompatibleJson<T>(T input) where T : Dictionary<string, object>
+        private T ConvertCompatibleJson<T>(T input) where T : ITree
         {
             KeyValuePair<string, object> newKey = default;
-            T dictionary = null;
+            T dictionary = default;
             foreach (var item in input)
             {
                 if (item.Value is Array)
@@ -184,13 +187,13 @@
         }
         #endregion private helper functions
 
-        public IDictionary<string, object> ToConverted(string json)
+        public ITree ToConverted(string json)
         {
             var configurationObject = JsonConvert.DeserializeObject(json);
-            var dictionary = (Dictionary<string, object>)ToDictionary(configurationObject);
+            var dictionary = (Tree)ToDictionary(configurationObject);
 
             RemoveProperties(dictionary);           
-            return ConvertCompatibleJson(dictionary);
+            return ConvertCompatibleJson((ITree)dictionary);
         }
 
         public string ToJson(string json)

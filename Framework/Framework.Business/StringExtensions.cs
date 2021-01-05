@@ -61,5 +61,18 @@
             input = regex.Replace(input, " ");
             return input;
         }
+        public static bool IsNumber(this string input)
+        {
+            EnsureArg.IsNotNullOrWhiteSpace(input, nameof(input));
+            decimal result;
+            return decimal.TryParse(input, out result);
+        }
+        public static string RemoveQuotes(this string input)
+        {
+            return input.Replace(@"""", string.Empty);
+        }
+        
+
+
     }
 }

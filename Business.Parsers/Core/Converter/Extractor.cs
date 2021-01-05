@@ -1,9 +1,10 @@
 ﻿namespace Business.Parsers.TomlParser.Core.Converter
 {
+    using Business.Parsers.Core.Converter;
     using System.Collections.Generic;
     using System.Linq;
 
-    internal class Extractor : IExtractor<Dictionary<string, object>>
+    internal class Extractor : IExtractor<ITree>
     {
         private readonly ConvertConfig _config;
         public Extractor(ConvertConfig config)
@@ -11,12 +12,12 @@
             _config = config;
         }
 
-        private object ExtractFields<T>(object value , T dictionary) where T : Dictionary<string, object>
+        private object ExtractFields<T>(object value , T dictionary) where T : IDictionary<string, object>
         {
             if (IsValueEmpty(value) && dictionary.ContainsKey(_config.Fields))
             {
-                Dictionary<string, object> dict;
-                dict = Convert((object[])dictionary[_config.Fields]);
+                T dict;
+                dict = (T)Convert((object[])dictionary[_config.Fields]);
                 
                 if (dict.Count > 0)
                     value = dict;
@@ -24,7 +25,7 @@
 
             return value;
         }
-        private object ExtractArray<T>(object value, T dictionary) where T : Dictionary<string, object>
+        private object ExtractArray<T>(object value, T dictionary) where T : IDictionary<string, object>
         {
             if (IsValueEmpty(value) && dictionary.ContainsKey(_config.Arrays))
             {
@@ -60,12 +61,12 @@
             return string.IsNullOrEmpty(value.ToString());
         }
 
-        public Dictionary<string, object> Convert(object[] input) 
+        public ITree Convert(object[] input) 
         {
-            var dict = new Dictionary<string, object>();
+            var dict = new Tree();
             input.ToList().ForEach(u =>
             {
-                var o = (Dictionary<string, object>)u;
+                var o = (Tree)u;
                 if (o.ContainsKey(_config.Name))
                 {
                     dict.Add(o[_config.Name].ToString(), Extractvalue(o));

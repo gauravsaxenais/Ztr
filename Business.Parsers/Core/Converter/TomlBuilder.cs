@@ -97,10 +97,23 @@
                 return s;
             }
         }
+        private string UnQuote(string s)
+        {
+            if (_scheme == ValueScheme.UnQuoted)
+            {
+                s = Regex.Replace(s, @"(""[^""]*"")", m =>
+                {
+                    string value = m.Groups[1].Value;
+                    value = (value.RemoveQuotes().IsNumber() ? value.RemoveQuotes() : value);
+                    return value;
+                },
+                RegexOptions.Singleline | RegexOptions.IgnoreCase);
+            }
+            return s;
+        }
         private string UnEscape(string input)
         {
-            string pattern = @"^[^{}]*(((?'Open'\{)[^{}]*)+((?'Close-Open'\})[^{}]*)+)*(?(Open)(?!))$";
-
+            string pattern = @"^[^{}]*(((?'Open'\{)[^{}]*)+((?'Close-Open'\})[^{}]*)+)*(?(Open)(?!))$";            
             string InArray(string s)
             {
                 var match = Regex.Matches(s, pattern);
@@ -110,7 +123,7 @@
                         {
                             Regex.Replace(o.Value, @"(\{.*\})", n =>
                             {
-                                s = s.Replace(n.Groups[1].Value, n.Groups[1].Value.RemoveNewline());
+                                s = s.Replace(n.Groups[1].Value, UnQuote(n.Groups[1].Value.RemoveNewline()));
                                 return string.Empty;
 
                             }, RegexOptions.Singleline | RegexOptions.IgnoreCase);
@@ -130,15 +143,14 @@
             //     InArray(m.Groups[1].Value),
             //     RegexOptions.Singleline | RegexOptions.IgnoreCase);
 
-            if(_scheme == ValueScheme.UnQuoted)
-            {
-              // to do
-            }
+           
             return input;
         }
         private string Neutralize(string input)
         {
-            return input
+            input = input                
+                .Replace($"{Environment.NewLine}[", "[")
+                .Replace("[[", $"{Environment.NewLine}{Environment.NewLine}[[")
                 .Replace(":", " =")
                 .Replace("\\\"", @"""")
                 .Replace("\"{", "{")
@@ -147,6 +159,7 @@
                 .Replace("]\"", "]")
                 .Replace("\\r\\n", Environment.NewLine)
                 .Replace("\\n", Environment.NewLine);
+            return UnQuote(input);
         }
     }
 }
