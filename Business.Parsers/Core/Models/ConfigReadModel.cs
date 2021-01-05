@@ -20,5 +20,6 @@
         /// The block.
         /// </value>
         public string Block { get; set; }
+        public string Version { get; set; }
     }
 }
