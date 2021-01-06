@@ -144,7 +144,7 @@
         <member name="T:Service.Controllers.DefaultValuesController">
             <summary>
             This service returns all the modules and their default values.
-            If any module doesnt have any default values, then
+            If any module doesn't have any default values, then
             only the attributes are returned.
             </summary>
             <seealso cref="T:Microsoft.AspNetCore.Mvc.ControllerBase" />
@@ -153,7 +153,7 @@
             <summary>
             Initializes a new instance of the <see cref="T:Service.Controllers.DefaultValuesController"/> class.
             </summary>
-            <param name="manager">interface of the 'backend' manager which does all the work.</param>
+            <param name="manager">interface of the 'backend' _manager which does all the work.</param>
         </member>
         <member name="M:Service.Controllers.DefaultValuesController.GetAllDefaultValues(System.String,System.String)">
             <summary>

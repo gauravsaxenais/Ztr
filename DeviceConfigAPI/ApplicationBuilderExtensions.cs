@@ -5,7 +5,7 @@
     using Microsoft.AspNetCore.Builder;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
-    using ZTR.Framework.Service.ExceptionLogger;
+    using ExceptionLogger;
 
     /// <summary>ApplicationBuilder.</summary>
     public static class ApplicationBuilderExtensions

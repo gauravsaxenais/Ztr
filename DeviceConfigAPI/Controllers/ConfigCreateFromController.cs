@@ -23,17 +23,17 @@
     [QueryRoute]
     public class ConfigCreateFromController : ApiControllerBase
     {
-        private readonly IConfigCreateFromManager manager;
+        private readonly IConfigCreateFromManager _manager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigCreateFromController"/> class.
         /// </summary>
-        /// <param name="manager">interface of the 'backend' manager which does all the work.</param>
+        /// <param name="manager">interface of the 'backend' _manager which does all the work.</param>
         public ConfigCreateFromController(IConfigCreateFromManager manager)
         {
             EnsureArg.IsNotNull(manager, nameof(manager));
 
-            this.manager = manager;
+            _manager = manager;
         }
 
         /// <summary>
@@ -47,7 +47,7 @@
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetConfigTomlValues([Required] IFormFile configTomlFile)
         {
-            var result = await this.manager.GenerateConfigTomlModelAsync(configTomlFile).ConfigureAwait(false);
+            var result = await _manager.GenerateConfigTomlModelAsync(configTomlFile).ConfigureAwait(false);
 
             return Ok(result);
         }

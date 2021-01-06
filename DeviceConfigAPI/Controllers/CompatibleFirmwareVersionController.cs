@@ -22,17 +22,17 @@
     [QueryRoute]
     public class CompatibleFirmwareVersionController : ApiControllerBase
     {
-        private readonly ICompatibleFirmwareVersionManager manager;
+        private readonly ICompatibleFirmwareVersionManager _manager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CompatibleFirmwareVersionController"/> class.
         /// </summary>
-        /// <param name="manager">interface of the 'backend' manager which does all the work.</param>
+        /// <param name="manager">interface of the 'backend' _manager which does all the work.</param>
         public CompatibleFirmwareVersionController(ICompatibleFirmwareVersionManager manager)
         {
             EnsureArg.IsNotNull(manager, nameof(manager));
 
-            this.manager = manager;
+            _manager = manager;
         }
 
         /// <summary>
@@ -46,7 +46,7 @@
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetCompatibleFirmwareVersions([Required, FromBody] CompatibleFirmwareVersionReadModel module)
         {
-            var result = await manager.GetCompatibleFirmwareVersionsAsync(module).ConfigureAwait(false);
+            var result = await _manager.GetCompatibleFirmwareVersionsAsync(module).ConfigureAwait(false);
 
             return Ok(result);
         }

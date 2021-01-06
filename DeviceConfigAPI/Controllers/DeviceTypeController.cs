@@ -18,17 +18,17 @@
     [QueryRoute]
     public class DeviceTypeController : ApiControllerBase
     {
-        private readonly IDeviceTypeManager manager;
+        private readonly IDeviceTypeManager _manager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DeviceTypeController"/> class.
         /// </summary>
-        /// <param name="manager">The manager.</param>
+        /// <param name="manager">The _manager.</param>
         public DeviceTypeController(IDeviceTypeManager manager)
         {
             EnsureArg.IsNotNull(manager, nameof(manager));
 
-            this.manager = manager;
+            this._manager = manager;
         }
 
         /// <summary>
@@ -41,7 +41,7 @@
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllDevices()
         {
-            var result = await this.manager.GetAllDevicesAsync().ConfigureAwait(false);
+            var result = await _manager.GetAllDevicesAsync().ConfigureAwait(false);
 
             return this.Ok(result);
         }
@@ -56,7 +56,7 @@
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllFirmwareVersions()
         {
-            var result = await this.manager.GetAllFirmwareVersionsAsync().ConfigureAwait(false);
+            var result = await _manager.GetAllFirmwareVersionsAsync().ConfigureAwait(false);
             return this.Ok(result);
         }
     }

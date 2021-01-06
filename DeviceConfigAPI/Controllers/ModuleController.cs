@@ -22,17 +22,17 @@
     [QueryRoute]
     public class ModuleController : ApiControllerBase
     {
-        private readonly IModuleManager manager;
+        private readonly IModuleManager _manager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ModuleController"/> class.
         /// </summary>
-        /// <param name="manager">The manager.</param>
+        /// <param name="manager">The _manager.</param>
         public ModuleController(IModuleManager manager)
         {
             EnsureArg.IsNotNull(manager, nameof(manager));
 
-            this.manager = manager;
+            _manager = manager;
         }
 
         /// <summary>
@@ -47,7 +47,7 @@
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllModules([Required, FromQuery] string firmwareVersion, [Required, FromQuery] string deviceType)
         {
-            var result = await this.manager.GetAllModulesAsync(firmwareVersion, deviceType).ConfigureAwait(false);
+            var result = await _manager.GetAllModulesAsync(firmwareVersion, deviceType).ConfigureAwait(false);
 
             return Ok(result);
         }

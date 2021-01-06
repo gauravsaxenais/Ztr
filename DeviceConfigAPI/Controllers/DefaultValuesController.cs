@@ -13,7 +13,7 @@
 
     /// <summary>
     /// This service returns all the modules and their default values.
-    /// If any module doesnt have any default values, then
+    /// If any module doesn't have any default values, then
     /// only the attributes are returned.
     /// </summary>
     /// <seealso cref="ControllerBase" />
@@ -23,17 +23,17 @@
     [QueryRoute]
     public class DefaultValuesController : ApiControllerBase
     {
-        private readonly IDefaultValueManager manager;
+        private readonly IDefaultValueManager _manager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DefaultValuesController"/> class.
         /// </summary>
-        /// <param name="manager">interface of the 'backend' manager which does all the work.</param>
+        /// <param name="manager">interface of the 'backend' _manager which does all the work.</param>
         public DefaultValuesController(IDefaultValueManager manager)
         {
             EnsureArg.IsNotNull(manager, nameof(manager));
 
-            this.manager = manager;
+            _manager = manager;
         }
 
         /// <summary>
@@ -48,7 +48,7 @@
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllDefaultValues([Required, FromQuery] string firmwareVersion, [Required, FromQuery] string deviceType)
         {
-            var result = await this.manager.GetDefaultValuesAllModulesAsync(firmwareVersion, deviceType).ConfigureAwait(false);
+            var result = await _manager.GetDefaultValuesAllModulesAsync(firmwareVersion, deviceType).ConfigureAwait(false);
 
             return this.Ok(result);
         }

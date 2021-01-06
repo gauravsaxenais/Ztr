@@ -14,17 +14,17 @@
     [QueryRoute]
     public class ConfigController : ApiControllerBase
     {
-        private readonly IConfigGeneratorManager manager;
+        private readonly IConfigGeneratorManager _manager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigController"/> class.
         /// </summary>
-        /// <param name="manager">The manager.</param>
+        /// <param name="manager">The _manager.</param>
         public ConfigController(IConfigGeneratorManager manager)
         {
             EnsureArg.IsNotNull(manager, nameof(manager));
 
-            this.manager = manager;
+            _manager = manager;
         }
 
         /// <summary>Creates the toml configuration.</summary>
@@ -34,7 +34,7 @@
         [HttpPost(nameof(CreateTomlConfig))]
         public async Task<IActionResult> CreateTomlConfig([FromBody] ConfigReadModel json)
         {
-            var result = await manager.CreateConfigAsync(json).ConfigureAwait(false);
+            var result = await _manager.CreateConfigAsync(json).ConfigureAwait(false);
             return Ok(result);
         }
     }
