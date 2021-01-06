@@ -20,9 +20,9 @@ namespace Business.Parsers.ProtoParser.Parser
     public class ProtoMessageParser : IProtoMessageParser
     {
         private readonly ILogger<ProtoMessageParser> _logger;
-        private const string csFileExtension = ".cs";
-        private const string dllExtension = ".dll";
-        private const string fileDescriptorExtension = ".desc";
+        private const string CsExtension = ".cs";
+        private const string DllExtension = ".dll";
+        private const string FileDescriptorExtension = ".desc";
 
         public ProtoMessageParser(ILogger<ProtoMessageParser> logger)
         {
@@ -102,7 +102,7 @@ namespace Business.Parsers.ProtoParser.Parser
             Directory.CreateDirectory(tmpOutputFolder);
 
             string protocPath = GetProtoCompilerPath();
-            string tmpDescriptorFile = Path.Combine(tmpOutputFolder, fileName + fileDescriptorExtension);
+            string tmpDescriptorFile = Path.Combine(tmpOutputFolder, fileName + FileDescriptorExtension);
             string inputs = $" --descriptor_set_out={tmpDescriptorFile} --include_imports --proto_path={protoFilePath} --csharp_out={tmpOutputFolder}  --error_format=gcc {fileName} {string.Join(" ", args)}";
 
             var psi = new ProcessStartInfo(
@@ -217,8 +217,8 @@ namespace Business.Parsers.ProtoParser.Parser
 
             string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
             string filePath = outputFolderPath + fileNameWithoutExtension;
-            string csFilePath = filePath + csFileExtension;
-            string dllFilePath = filePath + dllExtension;
+            string csFilePath = filePath + CsExtension;
+            string dllFilePath = filePath + DllExtension;
 
             string localDllFolder = FileReaderExtensions.NormalizeFolderPath(CombinePathFromAppRoot(string.Empty));
 
