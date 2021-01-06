@@ -58,12 +58,7 @@
                 
                 var configTomlFileContent = ReadAsString(configTomlFile);
 
-                // get list of all modules.
-                var modules = GetListOfModules(configTomlFileContent).ToList();
-
-                await _defaultValueManager.MergeValuesWithModulesAsync(configTomlFileContent, modules).ConfigureAwait(false);
-                
-                var blocks = await _blockManager.GetListOfBlocksAsync().ConfigureAwait(false);
+                var (modules, blocks) = await GetModulesAndBlocks(configTomlFileContent);
 
                 apiResponse = new ApiResponse(status: true, data: new { modules, blocks });
             }
@@ -74,6 +69,19 @@
             }
 
             return apiResponse;
+        }
+
+        private async Task<(IEnumerable<ModuleReadModel>, IEnumerable<BlockJsonModel>)> GetModulesAndBlocks(string configTomlFileContent)
+        {
+            EnsureArg.IsNotEmptyOrWhiteSpace(configTomlFileContent);
+
+            // get list of all modules.
+            var modules = GetListOfModules(configTomlFileContent).ToList();
+
+            await _defaultValueManager.MergeValuesWithModulesAsync(configTomlFileContent, modules).ConfigureAwait(false);
+
+            var blocks = await _blockManager.GetListOfBlocksAsync().ConfigureAwait(false);
+            return (modules, blocks);
         }
 
         private string ReadAsString(IFormFile file)
