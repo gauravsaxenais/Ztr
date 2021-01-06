@@ -1,4 +1,6 @@
-﻿namespace Business.Parsers.Core.Converter
+﻿using EnsureThat;
+
+namespace Business.Parsers.Core.Converter
 {
     using System;
     using System.Collections.Generic;
@@ -27,6 +29,8 @@
 
         public ConvertConfig(ILogger<ConverterService> logger)
         {
+            EnsureArg.IsNotNull(logger, nameof(logger));
+
             _logger = logger;
             InitiateRule();
         }

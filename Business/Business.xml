@@ -717,7 +717,7 @@
               <br />
             </summary>
         </member>
-        <member name="M:Business.RequestHandlers.Managers.ConfigGeneratorManager.#ctor(Business.Parsers.TomlParser.Core.Converter.ConverterService)">
+        <member name="M:Business.RequestHandlers.Managers.ConfigGeneratorManager.#ctor(Business.Parsers.Core.Converter.ConverterService)">
             <summary>
             Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.ConfigGeneratorManager"/> class.
             </summary>

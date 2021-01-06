@@ -1,4 +1,6 @@
-﻿namespace Business.Parsers.ProtoParser.Parser
+﻿using Business.Parsers.Core;
+
+namespace Business.Parsers.ProtoParser.Parser
 {
     using Models;
     using EnsureThat;
@@ -18,9 +20,9 @@
     public class ProtoMessageParser : IProtoMessageParser
     {
         private readonly ILogger<ProtoMessageParser> _logger;
-        private const string csFileExtension = ".cs";
-        private const string dllExtension = ".dll";
-        private const string fileDescriptorExtension = ".desc";
+        private const string CsExtension = ".cs";
+        private const string DllExtension = ".dll";
+        private const string FileDescriptorExtension = ".desc";
 
         public ProtoMessageParser(ILogger<ProtoMessageParser> logger)
         {
@@ -38,11 +40,18 @@
         {
             var fileName = Path.GetFileName(protoFilePath);
 
-            string protoDirectory = new FileInfo(protoFilePath).Directory.FullName;
+            var info = new FileInfo(protoFilePath).Directory;
 
-            var result = await GetProtoParsedMessage(fileName, protoDirectory).ConfigureAwait(false);
+            if (info != null)
+            {
+                var protoDirectory = info.FullName;
 
-            return result;
+                var result = await GetProtoParsedMessage(fileName, protoDirectory).ConfigureAwait(false);
+
+                return result;
+            }
+
+            return null;
         }
 
         private async Task<CustomMessage> GetProtoParsedMessage(string protoFileName, string protoFilePath, params string[] args)
@@ -71,10 +80,6 @@
 
                 return null;
             }
-            catch
-            {
-                throw;
-            }
             finally
             {
                 try
@@ -97,7 +102,7 @@
             Directory.CreateDirectory(tmpOutputFolder);
 
             string protocPath = GetProtoCompilerPath();
-            string tmpDescriptorFile = Path.Combine(tmpOutputFolder, fileName + fileDescriptorExtension);
+            string tmpDescriptorFile = Path.Combine(tmpOutputFolder, fileName + FileDescriptorExtension);
             string inputs = $" --descriptor_set_out={tmpDescriptorFile} --include_imports --proto_path={protoFilePath} --csharp_out={tmpOutputFolder}  --error_format=gcc {fileName} {string.Join(" ", args)}";
 
             var psi = new ProcessStartInfo(
@@ -212,8 +217,8 @@
 
             string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
             string filePath = outputFolderPath + fileNameWithoutExtension;
-            string csFilePath = filePath + csFileExtension;
-            string dllFilePath = filePath + dllExtension;
+            string csFilePath = filePath + CsExtension;
+            string dllFilePath = filePath + DllExtension;
 
             string localDllFolder = FileReaderExtensions.NormalizeFolderPath(CombinePathFromAppRoot(string.Empty));
 
