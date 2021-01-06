@@ -83,7 +83,7 @@
         private async Task<List<BlockJsonModel>> ProcessBlockFileAsync(IEnumerable<FileInfo> filesInDirectory)
         {
             var blocks = new List<BlockJsonModel>();
-            var tomlSettings = TomlFileReader.LoadLowerCaseTomlSettingsWithMappingForDefaultValues();
+            var tomlSettings = TomlFileReader.LoadLowerCaseTomlSettings();
 
             var inDirectory = filesInDirectory as FileInfo[] ?? filesInDirectory.ToArray();
             for (var lIndex = 0; lIndex < inDirectory.Count(); lIndex++)

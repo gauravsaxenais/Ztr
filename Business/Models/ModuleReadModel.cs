@@ -37,6 +37,14 @@
         public string UUID { get; set; }
 
         /// <summary>
+        /// Gets or sets the icon URL.
+        /// </summary>
+        /// <value>
+        /// The icon URL.
+        /// </value>
+        public string IconUrl { get; set; }
+
+        /// <summary>
         /// Gets or sets the attributes.
         /// </summary>
         /// <value>
@@ -52,7 +60,7 @@
         /// </returns>
         public override string ToString()
         {
-            return $"ModuleReadModel($ {this.Id} {this.Name} {this.UUID} {this.Config})";
+            return $"ModuleReadModel($ {this.Id} {this.Name} {this.UUID} {this.IconUrl} {this.Config})";
         }
     }
 }

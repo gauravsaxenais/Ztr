@@ -133,7 +133,7 @@
 
         private Dictionary<string, object> GetConfigValues(string fileContent, string moduleName)
         {
-            var tomlSettings = TomlFileReader.LoadLowerCaseTomlSettingsWithMappingForDefaultValues();
+            var tomlSettings = TomlFileReader.LoadLowerCaseTomlSettings();
             var fileData = Toml.ReadString(fileContent, tomlSettings);
 
             var configValues = new Dictionary<string, object>();

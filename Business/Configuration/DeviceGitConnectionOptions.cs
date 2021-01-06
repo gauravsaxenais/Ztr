@@ -53,6 +53,14 @@
         public string BlockConfig { get; set; }
 
         /// <summary>
+        /// Gets or sets the meta toml.
+        /// </summary>
+        /// <value>
+        /// The meta toml.
+        /// </value>
+        public string MetaToml { get; set; }
+
+        /// <summary>
         /// Converts to string.
         /// </summary>
         /// <returns>
@@ -60,7 +68,7 @@
         /// </returns>
         public override string ToString()
         {
-            return $"DeviceGitConnectionOptions($ GitLocalFolder: {this.GitLocalFolder} GitRepoUrl: {this.GitRepositoryUrl} TomlConfiguration: {this.DefaultTomlConfiguration})";
+            return $"DeviceGitConnectionOptions($ GitLocalFolder: {this.GitLocalFolder} GitRepoUrl: {this.GitRepositoryUrl} ModulesConfig: {this.ModulesConfig} BlockConfig: {this.BlockConfig} TomlConfiguration: {this.DefaultTomlConfiguration} MetaFile: {this.MetaToml} )";
         }
     }
 }

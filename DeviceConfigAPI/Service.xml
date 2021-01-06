@@ -263,11 +263,12 @@
             </summary>
             <param name="services">service collection.</param>
         </member>
-        <member name="M:Service.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+        <member name="M:Service.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
             <summary>
-            This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+            Configures the specified application.
             </summary>
-            <param name="app">application builder.</param>
+            <param name="app">The application.</param>
+            <param name="webHostEnvironment">The web host environment.</param>
         </member>
         <member name="T:ZTR.Framework.Service.ApplicationBuilderExtensions">
             <summary>ApplicationBuilder.</summary>

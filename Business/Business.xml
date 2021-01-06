@@ -48,6 +48,14 @@
             The block configuration.
             </value>
         </member>
+        <member name="P:Business.Configuration.DeviceGitConnectionOptions.MetaToml">
+            <summary>
+            Gets or sets the meta toml.
+            </summary>
+            <value>
+            The meta toml.
+            </value>
+        </member>
         <member name="M:Business.Configuration.DeviceGitConnectionOptions.ToString">
             <summary>
             Converts to string.
@@ -305,8 +313,6 @@
         <member name="P:Business.Models.ModuleReadModel.Id">
             <summary>
             Gets or sets the identifier.
-            This identifier starts from 0 and
-            autoincrements for every new model.
             </summary>
             <value>
             The identifier.
@@ -326,6 +332,14 @@
             </summary>
             <value>
             The UUID.
+            </value>
+        </member>
+        <member name="P:Business.Models.ModuleReadModel.IconUrl">
+            <summary>
+            Gets or sets the icon URL.
+            </summary>
+            <value>
+            The icon URL.
             </value>
         </member>
         <member name="P:Business.Models.ModuleReadModel.Config">
@@ -924,7 +938,7 @@
             <seealso cref="T:ZTR.Framework.Business.Manager" />
             <seealso cref="T:Business.RequestHandlers.Interfaces.IModuleServiceManager" />
         </member>
-        <member name="M:Business.RequestHandlers.Managers.ModuleServiceManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.ModuleServiceManager},Business.RequestHandlers.Interfaces.IGitRepositoryManager,Business.Configuration.DeviceGitConnectionOptions)">
+        <member name="M:Business.RequestHandlers.Managers.ModuleServiceManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.ModuleServiceManager},Business.RequestHandlers.Interfaces.IGitRepositoryManager,Microsoft.AspNetCore.Hosting.IWebHostEnvironment,Business.Configuration.DeviceGitConnectionOptions)">
             <summary>
             Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.ModuleManager"/> class.
             </summary>
@@ -971,6 +985,13 @@
             </summary>
             <param name="firmwareVersion">The firmware version.</param>
             <param name="deviceType">Type of the device.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.ModuleServiceManager.GetModuleIconUrl(Business.Models.ModuleReadModel)">
+            <summary>
+            Gets the module icon URL.
+            </summary>
+            <param name="module">The module.</param>
             <returns></returns>
         </member>
         <member name="M:Business.RequestHandlers.Managers.ModuleServiceManager.GetProtoFiles(Business.Models.ModuleReadModel)">

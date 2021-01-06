@@ -119,7 +119,7 @@
         /// <returns></returns>
         private ConfigurationReadModel GetTomlData(string fileContent)
         {
-            var tomlSettings = TomlFileReader.LoadLowerCaseTomlSettingsWithMappingForDefaultValues();
+            var tomlSettings = TomlFileReader.LoadLowerCaseTomlSettings();
 
             var tomlData = TomlFileReader.ReadDataFromString<ConfigurationReadModel>(data: fileContent, settings: tomlSettings);
 

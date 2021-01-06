@@ -1,18 +1,20 @@
 ﻿namespace Business.RequestHandlers.Managers
 {
     using Configuration;
-    using Models;
-    using Interfaces;
     using EnsureThat;
+    using Interfaces;
+    using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Logging;
+    using Models;
+    using Nett;
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
     using ZTR.Framework.Business;
-    using ZTR.Framework.Business.Models;
     using ZTR.Framework.Business.File.FileReaders;
+    using ZTR.Framework.Business.Models;
 
     /// <summary>
     /// Wrapper for GitRepoManager.
@@ -25,6 +27,7 @@
     {
         private readonly string protoFileName = "module.proto";
         private readonly IGitRepositoryManager _gitRepoManager;
+        private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly DeviceGitConnectionOptions _moduleGitConnectionOptions;
 
         /// <summary>
@@ -33,13 +36,16 @@
         /// <param name="logger">The logger.</param>
         /// <param name="gitRepoManager">The git repo manager.</param>
         /// <param name="moduleGitConnectionOptions">The module git connection options.</param>
-        public ModuleServiceManager(ILogger<ModuleServiceManager> logger, IGitRepositoryManager gitRepoManager, DeviceGitConnectionOptions moduleGitConnectionOptions) : base(logger)
+        public ModuleServiceManager(ILogger<ModuleServiceManager> logger, IGitRepositoryManager gitRepoManager, IWebHostEnvironment webHostEnvironment, DeviceGitConnectionOptions moduleGitConnectionOptions) : base(logger)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
+            EnsureArg.IsNotNull(gitRepoManager, nameof(gitRepoManager));
+            EnsureArg.IsNotNull(webHostEnvironment, nameof(webHostEnvironment));
             EnsureArg.IsNotNull(moduleGitConnectionOptions, nameof(moduleGitConnectionOptions));
 
             _gitRepoManager = gitRepoManager;
             _moduleGitConnectionOptions = moduleGitConnectionOptions;
+            _webHostEnvironment = webHostEnvironment;
 
             SetGitRepoConnection();
         }
@@ -70,6 +76,11 @@
         public async Task<List<ModuleReadModel>> GetAllModulesAsync(string firmwareVersion, string deviceType)
         {
             var listOfModules = await GetListOfModulesAsync(firmwareVersion, deviceType);
+
+            foreach (var module in listOfModules)
+            {
+                module.IconUrl = GetModuleIconUrl(module);
+            }
 
             // fix the indexes.
             listOfModules.Select((item, index) => { item.Id = index; return item; }).ToList();
@@ -139,6 +150,58 @@
         }
 
         /// <summary>
+        /// Gets the module icon URL.
+        /// </summary>
+        /// <param name="module">The module.</param>
+        /// <returns></returns>
+        private string GetModuleIconUrl(ModuleReadModel module)
+        {
+            EnsureArg.IsNotNull(module);
+            var iconUrl = string.Empty;
+            var moduleFilePath = _moduleGitConnectionOptions.ModulesConfig;
+
+            var moduleFolder = FileReaderExtensions.GetSubDirectoryPath(moduleFilePath, module.Name);
+
+            if (string.IsNullOrWhiteSpace(moduleFolder))
+            {
+                return string.Empty;
+            }
+
+            var metaTomlFile = Path.Combine(moduleFolder, _moduleGitConnectionOptions.MetaToml);
+
+            try
+            {
+                if (File.Exists(metaTomlFile))
+                {
+                    var tml = Toml.ReadFile(metaTomlFile, TomlFileReader.LoadLowerCaseTomlSettings());
+
+                    var dict = tml.ToDictionary();
+                    var moduleValues = dict["module"];
+
+                    if (moduleValues is Dictionary<string, object>)
+                    {
+                        var moduleFromToml = (Dictionary<string, object>)dict["module"];
+                        if (moduleFromToml != null && (string) moduleFromToml["name"] == module.Name)
+                        {
+                            iconUrl = moduleFromToml["iconUrl"].ToString();
+
+                            if (!iconUrl.IsPathUrl())
+                            {
+                                return string.Empty;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                iconUrl = string.Empty;
+            }
+
+            return iconUrl;
+        }
+
+        /// <summary>
         /// Gets the proto files.
         /// </summary>
         /// <param name="module">The module.</param>
@@ -192,7 +255,7 @@
 
         private ConfigurationReadModel GetTomlData(string fileContent)
         {
-            var tomlSettings = TomlFileReader.LoadLowerCaseTomlSettingsWithMappingForDefaultValues();
+            var tomlSettings = TomlFileReader.LoadLowerCaseTomlSettings();
             var tomlData = TomlFileReader.ReadDataFromString<ConfigurationReadModel>(data: fileContent, settings: tomlSettings);
 
             return tomlData;

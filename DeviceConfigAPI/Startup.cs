@@ -1,5 +1,6 @@
 ﻿namespace Service
 {
+    using Microsoft.AspNetCore.Hosting;
     using EnsureThat;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.Extensions.Configuration;
@@ -58,9 +59,9 @@
         }
 
         /// <summary>
-        /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// Configures the specified application.
         /// </summary>
-        /// <param name="app">application builder.</param>
+        /// <param name="app">The application.</param>
         public void Configure(IApplicationBuilder app)
         {
             EnsureArg.IsNotNull(app);
@@ -74,7 +75,7 @@
                 app.UseMiddleware<ForceHttpsMiddleware>();
                 app.UseHttpsRedirection();
             }
-
+            
             // Use routing first, then Cors second.
             app.UseRouting();
             app.AddAppCustomBuild();

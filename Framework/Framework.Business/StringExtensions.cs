@@ -57,22 +57,39 @@
                 .Replace("\n", string.Empty)
                 .Replace("\r", string.Empty);
 
-            Regex regex = new Regex("[ ]{2,}", RegexOptions.None);
+            var regex = new Regex("[ ]{2,}", RegexOptions.None);
             input = regex.Replace(input, " ");
             return input;
         }
         public static bool IsNumber(this string input)
         {
             EnsureArg.IsNotNullOrWhiteSpace(input, nameof(input));
-            decimal result;
-            return decimal.TryParse(input, out result);
+            return decimal.TryParse(input, out _);
         }
         public static string RemoveQuotes(this string input)
         {
+            EnsureArg.IsNotNullOrWhiteSpace(input, nameof(input));
             return input.Replace(@"""", string.Empty);
         }
-        
 
+        public static bool IsPathUrl(this string path)
+        {
+            EnsureArg.IsNotEmptyOrWhiteSpace(path);
 
+            if (System.IO.File.Exists(path))
+            {
+                return false;
+            }
+
+            try
+            {
+                var uri = new Uri(path);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
     }
 }
