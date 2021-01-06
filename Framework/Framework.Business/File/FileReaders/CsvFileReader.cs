@@ -7,7 +7,6 @@
     using System.Linq;
     using CsvHelper;
     using CsvHelper.Configuration;
-    using ICSharpCode.SharpZipLib.Zip;
 
     /// <summary>
     /// A helper class for reading files
@@ -117,50 +116,6 @@
 
             return rawData;
         }
-
-        /// <summary>
-        /// This function will unzip a file and export it's parsed files of TModel.
-        /// </summary>
-        /// <typeparam name="TModel">The model you're looking for.</typeparam>
-        /// <param name="stream">Name of the ZIP.</param>
-        /// <param name="csvConfiguration">CSV Configuration.</param>
-        /// <param name="folderPath">Ftp FolderPath.</param>
-        /// <returns>IEnumarable of the Files that the ZIP contained using the TModel.</returns>
-        /// Used the example here to build.
-        /// https://stackoverflow.com/questions/8313791/sharpziplib-examine-and-select-contents-of-a-zip-file
-        public static IEnumerable<ParsedFile<TModel>> ReadZipFile<TModel>(Stream stream, CsvConfiguration csvConfiguration, string folderPath)
-        {
-            // Create the empty list of parsed files that we're going to fill.
-            var parsedFiles = new List<ParsedFile<TModel>>();
-
-            using (var zipFile = new ZipFile(stream))
-            {
-                // Here we'll get each entry and add it to the parsed file models.
-                foreach (ZipEntry entry in zipFile)
-                {
-                    // Check to make sure the file isn't a directory or none csv.
-                    if (entry.IsDirectory || !entry.Name.EndsWith(CsvFileExtension, false, CultureInfo.InvariantCulture))
-                    {
-                        continue;
-                    }
-
-                    using Stream zipStream = zipFile.GetInputStream(entry);
-                    using var streamReader = new StreamReader(zipStream);
-                    using var csvReader = new CsvReader(streamReader, csvConfiguration);
-                    csvReader.Read();
-                    if (csvConfiguration.HasHeaderRecord)
-                    {
-                        csvReader.ReadHeader();
-                    }
-
-                    parsedFiles.Add(new ParsedFile<TModel>(entry.Name, csvReader.GetRecords<TModel>().ToList(), folderPath));
-                }
-            }
-
-            // Return the end result list.
-            return parsedFiles;
-        }
-
 
         /// <summary>
         /// Creates the CSV configuration.
