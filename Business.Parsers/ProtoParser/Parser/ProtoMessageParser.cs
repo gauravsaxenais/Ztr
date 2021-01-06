@@ -1,4 +1,6 @@
-﻿namespace Business.Parsers.ProtoParser.Parser
+﻿using Business.Parsers.Core;
+
+namespace Business.Parsers.ProtoParser.Parser
 {
     using Models;
     using EnsureThat;
@@ -38,11 +40,18 @@
         {
             var fileName = Path.GetFileName(protoFilePath);
 
-            string protoDirectory = new FileInfo(protoFilePath).Directory.FullName;
+            var info = new FileInfo(protoFilePath).Directory;
 
-            var result = await GetProtoParsedMessage(fileName, protoDirectory).ConfigureAwait(false);
+            if (info != null)
+            {
+                var protoDirectory = info.FullName;
 
-            return result;
+                var result = await GetProtoParsedMessage(fileName, protoDirectory).ConfigureAwait(false);
+
+                return result;
+            }
+
+            return null;
         }
 
         private async Task<CustomMessage> GetProtoParsedMessage(string protoFileName, string protoFilePath, params string[] args)
@@ -70,10 +79,6 @@
                 }
 
                 return null;
-            }
-            catch
-            {
-                throw;
             }
             finally
             {
