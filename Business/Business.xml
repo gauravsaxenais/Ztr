@@ -854,7 +854,7 @@
         </member>
         <member name="M:Business.RequestHandlers.Managers.GitRepositoryManager.GetFileDataFromTagAsync(System.String,System.String)">
             <summary>
-            This method returns a filedata as string from a particular tag.
+            This method returns a file data as string from a particular tag.
             If a tag is "1.0.7", then the method returns data from all the files
             for a particular tag.
             </summary>
@@ -893,7 +893,7 @@
             false: if a folder and ".git" folder isn't present.
             </returns>
         </member>
-        <member name="M:Business.RequestHandlers.Managers.GitRepositoryManager.CheckForGitSubDir(System.String)">
+        <member name="M:Business.RequestHandlers.Managers.GitRepositoryManager.IsGitSubDirPresent(System.String)">
             <summary>
             Helper function to check whether the ".git" 
             folder exists in a repository folder.

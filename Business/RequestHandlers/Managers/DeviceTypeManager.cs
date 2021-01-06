@@ -40,7 +40,7 @@
 
             try
             {
-                Logger.LogInformation($"{Prefix}: Getting list of all devices.");
+                Logger.LogInformation($"{Prefix} method name: {nameof(GetAllDevicesAsync)}: Getting list of all devices.");
 
                 var listOfDevices = await _moduleServiceManager.GetAllDevicesAsync();
 
@@ -48,7 +48,7 @@
             }
             catch (Exception exception)
             {
-                Logger.LogCritical(exception, $"{Prefix}: Error occurred while getting list of all devices.");
+                Logger.LogCritical(exception, $"{Prefix}: method name: {nameof(GetAllDevicesAsync)} Error occurred while getting list of all devices.");
                 apiResponse = new ApiResponse(ErrorType.BusinessError, exception);
             }
 

@@ -23,6 +23,8 @@
     {
         #region Private Variables
         private readonly IModuleServiceManager _moduleServiceManager;
+        private readonly ILogger<BlockManager> _logger;
+        private const string Prefix = nameof(BlockManager);
         #endregion
 
         #region Constructors                                
@@ -37,6 +39,7 @@
             EnsureArg.IsNotNull(moduleServiceManager, nameof(moduleServiceManager));
 
             _moduleServiceManager = moduleServiceManager;
+            _logger = logger;
         }
         #endregion
 
@@ -48,19 +51,18 @@
         /// <returns></returns>
         public async Task<ApiResponse> GetBlocksAsObjectAsync()
         {
-            var prefix = nameof(BlockManager);
-            ApiResponse apiResponse = null;
+            ApiResponse apiResponse;
 
             try
             {
-                Logger.LogInformation($"{prefix}: Getting list of blocks.");
+                _logger.LogInformation($"{Prefix}: Getting list of blocks.");
                 var blocks = await GetListOfBlocksAsync().ConfigureAwait(false);
 
                 apiResponse = new ApiResponse(status: true, data: new {blocks});
             }
             catch (Exception exception)
             {
-                Logger.LogCritical(exception, $"{prefix}: Error occurred while getting list of blocks.");
+                _logger.LogCritical(exception, $"{Prefix}: Error occurred while getting list of blocks.");
                 apiResponse = new ApiResponse(false, exception.Message, ErrorType.BusinessError, exception);
             }
 

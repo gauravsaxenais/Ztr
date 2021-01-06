@@ -30,6 +30,8 @@
         private readonly IProtoMessageParser _protoParser;
         private readonly ICustomMessageParser _customMessageParser;
         private readonly IModuleParser _moduleParser;
+        private readonly ILogger _logger;
+        private const string prefix = nameof(DefaultValueManager);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DefaultValueManager"/> class.
@@ -55,6 +57,7 @@
             _protoParser = protoParser;
             _customMessageParser = customMessageParser;
             _moduleParser = moduleParser;
+            _logger = logger;
         }
 
         /// <summary>
@@ -65,27 +68,28 @@
         /// <returns></returns>
         public async Task<ApiResponse> GetDefaultValuesAllModulesAsync(string firmwareVersion, string deviceType)
         {
-            var prefix = nameof(DefaultValueManager);
-            ApiResponse apiResponse = null;
+            ApiResponse apiResponse;
 
             try
             {
-                Logger.LogInformation($"{prefix}: Getting default values for {firmwareVersion} and {deviceType}.");
+                _logger.LogInformation($"{prefix}: Getting default values for {firmwareVersion} and {deviceType}.");
 
                 // read default values from toml file defaults.toml
                 var defaultValueFromTomlFile =
                     await _moduleServiceManager.GetDefaultTomlFileContent(firmwareVersion, deviceType);
 
+                _logger.LogInformation($"{prefix}: Getting list of modules {firmwareVersion} and {deviceType}.");
                 // get list of all modules.
                 var listOfModules = await _moduleServiceManager.GetAllModulesAsync(firmwareVersion, deviceType);
 
+                _logger.LogInformation($"{prefix}: Merging default values with module information. {firmwareVersion} and {deviceType}.");
                 await MergeValuesWithModulesAsync(defaultValueFromTomlFile, listOfModules);
 
                 apiResponse = new ApiResponse(status: true, data: listOfModules);
             }
             catch (Exception exception)
             {
-                Logger.LogCritical(exception, $"{prefix}: Error getting default values for {firmwareVersion} and {deviceType}.");
+                _logger.LogCritical(exception, $"{prefix}: Error getting default values for {firmwareVersion} and {deviceType}.");
                 apiResponse = new ApiResponse(false, exception.Message, ErrorType.BusinessError, exception);
             }
 
@@ -100,6 +104,7 @@
         public async Task MergeValuesWithModulesAsync(string defaultValueFromTomlFile, IEnumerable<ModuleReadModel> listOfModules)
         {
             var degreeOfParallelism = 10;
+            _logger.LogInformation($"{prefix}: method name: {nameof(MergeValuesWithModulesAsync)} Merging default values with list of modules in parallel...");
 
             await Task.WhenAll(
                 from partition in Partitioner.Create(listOfModules).GetPartitions(degreeOfParallelism)
@@ -107,15 +112,19 @@
                 {
                     using (partition)
                         while (partition.MoveNext())
-                            await MergeDefaultValuesWithModules(defaultValueFromTomlFile, partition.Current);
+                            await MergeDefaultValuesWithModuleAsync(defaultValueFromTomlFile, partition.Current);
                 }));
         }
 
-        private async Task MergeDefaultValuesWithModules(string defaultValueFromTomlFile, ModuleReadModel module)
+        private async Task MergeDefaultValuesWithModuleAsync(string defaultValueFromTomlFile, ModuleReadModel module)
         {
+            EnsureArg.IsNotNull(module);
+
+            _logger.LogInformation($"{prefix}: method name: {nameof(MergeDefaultValuesWithModuleAsync)} Getting proto file for {module.Name}");
             // get proto files for corresponding module and their uuid
             var protoFilePath = _moduleServiceManager.GetProtoFiles(module);
 
+            _logger.LogInformation($"{prefix}: method name: {nameof(MergeDefaultValuesWithModuleAsync)} Retrieved proto file for {module.Name}");
             if (!string.IsNullOrWhiteSpace(protoFilePath))
             {
                 // get protoparsed messages from the proto files.
@@ -124,8 +133,10 @@
                 var formattedMessage = _customMessageParser.Format(message.Message);
                 formattedMessage.Name = module.Name;
 
+                _logger.LogInformation($"{prefix}: method name: {nameof(MergeDefaultValuesWithModuleAsync)} Getting config values from default.toml file for {module.Name}");
                 var configValues = GetConfigValues(defaultValueFromTomlFile, module.Name);
 
+                _logger.LogInformation($"{prefix}: method name: {nameof(MergeDefaultValuesWithModuleAsync)} Merging config values with protoparsed message for {module.Name}");
                 var jsonModels = _moduleParser.MergeTomlWithProtoMessage(configValues, formattedMessage);
                 module.Config = jsonModels;
             }

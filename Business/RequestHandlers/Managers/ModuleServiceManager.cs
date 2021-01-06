@@ -27,6 +27,8 @@
         private readonly string protoFileName = "module.proto";
         private readonly IGitRepositoryManager _gitRepoManager;
         private readonly DeviceGitConnectionOptions _moduleGitConnectionOptions;
+        private readonly ILogger<ModuleServiceManager> _logger;
+        private const string Prefix = nameof(ModuleServiceManager);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ModuleManager"/> class.
@@ -40,6 +42,7 @@
             EnsureArg.IsNotNull(gitRepoManager, nameof(gitRepoManager));
             EnsureArg.IsNotNull(moduleGitConnectionOptions, nameof(moduleGitConnectionOptions));
 
+            _logger = logger;
             _gitRepoManager = gitRepoManager;
             _moduleGitConnectionOptions = moduleGitConnectionOptions;
             
@@ -71,8 +74,10 @@
         /// <returns></returns>
         public async Task<List<ModuleReadModel>> GetAllModulesAsync(string firmwareVersion, string deviceType)
         {
+            _logger.LogInformation($"{Prefix}: method name: {nameof(GetAllModulesAsync)} Getting list of all modules {firmwareVersion} {deviceType}.");
             var listOfModules = await GetListOfModulesAsync(firmwareVersion, deviceType);
 
+            _logger.LogInformation($"{Prefix}: method name: {nameof(GetAllModulesAsync)} Modules retrieved for {firmwareVersion} {deviceType}. Getting icons for modules...");
             foreach (var module in listOfModules)
             {
                 module.IconUrl = GetModuleIconUrl(module);
@@ -89,6 +94,7 @@
         /// <returns></returns>
         public IEnumerable<FileInfo> GetAllBlockFiles()
         {
+            _logger.LogInformation($"{Prefix}: method name: {nameof(GetAllBlockFiles)} Getting list of all blocks.");
             var blockConfigDirectory = new DirectoryInfo(_moduleGitConnectionOptions.BlockConfig);
             var filesInDirectory = blockConfigDirectory.EnumerateFiles();
 
@@ -101,8 +107,12 @@
         /// <returns></returns>
         public async Task<IEnumerable<string>> GetAllDevicesAsync()
         {
+            _logger.LogInformation($"{Prefix}: Cloning github repository.");
             await _gitRepoManager.CloneRepositoryAsync().ConfigureAwait(false);
+            _logger.LogInformation($"{Prefix}: Github repository cloning is successful.");
 
+            _logger.LogInformation(
+                $"{Prefix} method name: {nameof(GetAllDevicesAsync)}: Getting list of all directories as devices.");
             var listOfDevices = FileReaderExtensions.GetDirectories(_moduleGitConnectionOptions.DefaultTomlConfiguration.DeviceFolder);
             listOfDevices = listOfDevices.ConvertAll(item => item.ToUpper());
 
@@ -115,6 +125,7 @@
         /// <returns></returns>
         public async Task<IEnumerable<string>> GetAllFirmwareVersionsAsync()
         {
+            _logger.LogInformation($"{Prefix} method name: {nameof(GetAllFirmwareVersionsAsync)}: Getting list of all firmware versions.");
             var listFirmwareVersions = await _gitRepoManager.GetAllTagNamesAsync();
 
             return listFirmwareVersions;
@@ -140,6 +151,7 @@
         /// <returns></returns>
         public async Task<string> GetDefaultTomlFileContent(string firmwareVersion, string deviceType)
         {
+            _logger.LogInformation($"{Prefix} method name: {nameof(GetDefaultTomlFileContent)}: Getting default value from toml file for {firmwareVersion}, {deviceType}.");
             var defaultValueFromTomlFile = await GetFileContentFromPath(firmwareVersion, deviceType, _moduleGitConnectionOptions.DefaultTomlConfiguration.DefaultTomlFile);
 
             return defaultValueFromTomlFile;

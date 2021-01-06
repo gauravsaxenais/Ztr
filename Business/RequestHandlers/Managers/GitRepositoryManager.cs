@@ -1,7 +1,7 @@
 ﻿namespace Business.RequestHandlers.Managers
 {
-    using Interfaces;
     using EnsureThat;
+    using Interfaces;
     using LibGit2Sharp;
     using LibGit2Sharp.Handlers;
     using System;
@@ -22,12 +22,12 @@
     public class GitRepositoryManager : IGitRepositoryManager
     {
         #region Fields
-        private UsernamePasswordCredentials _credentials;
         private DefaultCredentials _defaultCredentials;
         private GitConnectionOptions _gitConnection;
         private CloneOptions _cloneOptions;
-        private readonly string GitFolder = ".git";
-        private readonly string TextMimeType = "text/plain";
+        private const string GitFolder = ".git";
+        private const string TextMimeType = "text/plain";
+
         #endregion
 
         #region Constructors        
@@ -53,21 +53,12 @@
 
             _gitConnection = gitConnection;
 
-            _credentials = new UsernamePasswordCredentials
-            {
-                Username = gitConnection.UserName,
-                Password = gitConnection.Password
-            };
-
             _defaultCredentials = new DefaultCredentials();
 
             var credentialsProvider = new CredentialsHandler((url, usernameFromUrl, types) => _defaultCredentials);
             
             _cloneOptions = new CloneOptions() { CredentialsProvider = credentialsProvider };
-            _cloneOptions.CertificateCheck += delegate (Certificate certificate, bool valid, string host)
-            {
-                return true;
-            };
+            _cloneOptions.CertificateCheck += (certificate, valid, host) => true;
         }
 
         /// <summary>
@@ -99,23 +90,25 @@
                 }
 
                 Directory.CreateDirectory(_gitConnection.GitLocalFolder);
-                
+
                 await Task.Run(() =>
                 {
                     Repository.Clone(_gitConnection.GitRepositoryUrl, _gitConnection.GitLocalFolder, _cloneOptions);
                 });
             }
-            catch (LibGit2SharpException ex)
+            catch (Exception ex)
             {
                 var message = ex.Message;
                 if (message.Contains("401"))
                 {
                     throw new CustomArgumentException("Unauthorized: Incorrect username/password");
                 }
+
                 if (message.Contains("403"))
                 {
                     throw new CustomArgumentException("Forbidden: Possibly Incorrect username/password");
                 }
+
                 if (message.Contains("404"))
                 {
                     throw new CustomArgumentException("Not found: The repository was not found");
@@ -155,7 +148,7 @@
         }
 
         /// <summary>
-        /// This method returns a filedata as string from a particular tag.
+        /// This method returns a file data as string from a particular tag.
         /// If a tag is "1.0.7", then the method returns data from all the files
         /// for a particular tag.
         /// </summary>
@@ -180,7 +173,7 @@
                 tagsPerPeeledCommitId = TagsPerPeeledCommitId(repo.Tags);
 
                 // Let's enumerate all the reachable commits (similarly to `git log --all`)
-                foreach (Commit commit in repo.Commits.QueryBy(new CommitFilter { IncludeReachableFrom = repo.Refs }))
+                foreach (var commit in repo.Commits.QueryBy(new CommitFilter { IncludeReachableFrom = repo.Refs }))
                 {
                     foreach (var tags in AssignedTags(commit, tagsPerPeeledCommitId))
                     {
@@ -216,7 +209,7 @@
 
             foreach (TreeEntry branch in tree.Where(x => x.TargetType == TreeEntryTargetType.Tree))
             {
-                if (this.TreeContainsFile((Tree)branch.Target, fileName))
+                if (TreeContainsFile((Tree)branch.Target, fileName))
                 {
                     return true;
                 }
@@ -237,7 +230,7 @@
                     GetContentOfFiles(repo, (Tree)gitObject, contentfromFiles);
                 }
 
-                if (treeEntry.TargetType == TreeEntryTargetType.Blob)
+                else if (treeEntry.TargetType == TreeEntryTargetType.Blob)
                 {
                     var blob = GetBlobFromFile(treeEntry);
                     contentfromFiles.Add(new ExportFileResultModel(TextMimeType, System.Text.Encoding.UTF8.GetBytes(blob), path));
@@ -260,7 +253,7 @@
                 // Add new tags.
                 foreach (var tag in repo.Tags)
                 {
-                    GitObject peeledTarget = tag.PeeledTarget;
+                    var peeledTarget = tag.PeeledTarget;
 
                     if (peeledTarget is Commit temp)
                     {
@@ -324,11 +317,11 @@
         {
             var tagsPerPeeledCommitId = new Dictionary<ObjectId, List<Tag>>();
 
-            if (listOfTags != null && listOfTags.Any())
+            if (listOfTags != null)
             {
-                foreach (Tag tag in listOfTags)
+                foreach (var tag in listOfTags)
                 {
-                    GitObject peeledTarget = tag.PeeledTarget;
+                    var peeledTarget = tag.PeeledTarget;
 
                     if (!(peeledTarget is Commit))
                     {
@@ -363,21 +356,7 @@
         /// </returns>
         private bool IsExistsContentRepositoryDirectory()
         {
-            if (Directory.Exists(_gitConnection.GitLocalFolder))
-            {
-                if (CheckForGitSubDir(_gitConnection.GitLocalFolder))
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                return false;
-            }
+            return Directory.Exists(_gitConnection.GitLocalFolder) && IsGitSubDirPresent(_gitConnection.GitLocalFolder);
         }
 
         /// <summary>
@@ -386,16 +365,9 @@
         /// </summary>
         /// <param name="pathToRep">path to a repository folder.</param>
         /// <returns></returns>
-        private bool CheckForGitSubDir(string pathToRep)
+        private bool IsGitSubDirPresent(string pathToRep)
         {
-            if (Directory.Exists(Path.Combine(pathToRep, GitFolder)))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return Directory.Exists(Path.Combine(pathToRep, GitFolder));
         }
 
         /// <summary>
@@ -404,31 +376,25 @@
         /// <param name="directory">The name of the directory to remove.</param>
         private void DeleteReadOnlyDirectory(string directory)
         {
-            try
+            foreach (var subDirectory in Directory.EnumerateDirectories(directory))
             {
-                foreach (var subdirectory in Directory.EnumerateDirectories(directory))
-                {
-                    DeleteReadOnlyDirectory(subdirectory);
-                }
-                foreach (var fileName in Directory.EnumerateFiles(directory))
-                {
-                    var fileInfo = new FileInfo(fileName)
-                    {
-                        Attributes = FileAttributes.Normal
-                    };
-
-                    if (FileReaderExtensions.IsFileClosed(fileName))
-                    {
-                        fileInfo.Delete();
-                    }
-                }
-
-                Directory.Delete(directory);
+                DeleteReadOnlyDirectory(subDirectory);
             }
-            catch (Exception)
+
+            foreach (var fileName in Directory.EnumerateFiles(directory))
             {
-                throw;
+                var fileInfo = new FileInfo(fileName)
+                {
+                    Attributes = FileAttributes.Normal
+                };
+
+                if (FileReaderExtensions.IsFileClosed(fileName))
+                {
+                    fileInfo.Delete();
+                }
             }
+
+            Directory.Delete(directory);
         }
 
         #endregion
