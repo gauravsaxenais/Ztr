@@ -223,7 +223,7 @@
             Creates the host builder.
             </summary>
             <param name="args">The arguments.</param>
-            <returns>hostbuilder.</returns>
+            <returns></returns>
         </member>
         <member name="T:Service.ServiceCollectionExtensions">
             <summary>
@@ -265,9 +265,9 @@
         </member>
         <member name="M:Service.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
             <summary>
-            This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+            Configures the specified application.
             </summary>
-            <param name="app">application builder.</param>
+            <param name="app">The application.</param>
         </member>
         <member name="T:ZTR.Framework.Service.ApplicationBuilderExtensions">
             <summary>ApplicationBuilder.</summary>

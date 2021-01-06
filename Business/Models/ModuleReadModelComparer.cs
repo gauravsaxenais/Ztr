@@ -25,7 +25,7 @@
             }
 
             return x.UUID == y.UUID &&
-                  x.Name == y.Name;
+                   x.Name == y.Name;
         }
 
         /// <summary>

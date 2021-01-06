@@ -1,7 +1,6 @@
-﻿using System.IO;
-
-namespace Business.RequestHandlers.Interfaces
+﻿namespace Business.RequestHandlers.Interfaces
 {
+    using System.IO;
     using Models;
     using System.Collections.Generic;
     using System.Threading.Tasks;

@@ -5,8 +5,8 @@
     using System.Linq;
     using EnsureThat;
     using Nett;
-    using ZTR.Framework.Business.Content;
-    using ZTR.Framework.Business.Models;
+    using Content;
+    using Models;
 
     public static class TomlFileReader
     {
@@ -28,22 +28,20 @@
             return fileData;
         }
 
-        public static T ReadDataFromFile<T>(string filePath, TomlSettings settings) where T : class, new()
+        public static object ReadDataFromFile(string filePath, string fieldToRead, TomlSettings settings)
         {
             EnsureArg.IsNotEmptyOrWhiteSpace(filePath, (nameof(filePath)));
             EnsureArg.IsNotNull(settings, nameof(settings));
 
-            T fileData;
             try
             {
-                fileData = Toml.ReadFile<T>(filePath, settings);
+                var data = Toml.ReadFile(filePath, settings);
+                return data.Get<object>(fieldToRead);
             }
             catch (Exception exception)
             {
                 throw new CustomArgumentException(Resource.TomlParsingError, exception);
             }
-
-            return fileData;
         }
 
         public static List<Dictionary<string, object>> ReadDataFromFile(string filePath, TomlSettings settings, string fieldToRead)
@@ -77,37 +75,8 @@
             return items;
         }
 
-        public static List<Dictionary<string, object>> ReadDataFromString(string data, string fieldToRead, TomlSettings settings)
-        {
-            EnsureArg.IsNotEmptyOrWhiteSpace(data, nameof(data));
-            EnsureArg.IsNotNull(settings, nameof(settings));
-            EnsureArg.IsNotEmptyOrWhiteSpace(fieldToRead, nameof(fieldToRead));
-
-            var items = new List<Dictionary<string, object>>();
-
-            try
-            {
-                TomlTable fileData = null;
-
-                fileData = Toml.ReadString(data, settings);
-
-                var readModels = (TomlTableArray)fileData[fieldToRead];
-
-                foreach (var tempItem in readModels.Items)
-                {
-                    var dictionary = tempItem.Rows.ToDictionary(t => t.Key, t => (object)t.Value.ToString());
-
-                    items.Add(dictionary);
-                }
-            }
-            catch (Exception exception)
-            {
-                throw new CustomArgumentException(Resource.TomlParsingError, exception);
-            }
-            return items;
-        }
-
-        public static TomlSettings LoadLowerCaseTomlSettingsWithMappingForDefaultValues()
+        
+        public static TomlSettings LoadLowerCaseTomlSettings()
         {
             var fieldNamesToLowerCaseSettings = TomlSettings.Create(config => config
             .ConfigurePropertyMapping(mapping => mapping

@@ -15,9 +15,13 @@
 
   <ItemGroup>
     <Compile Remove="tmp\**" />
+    <Compile Remove="wwwroot\Skynet\**" />
     <Content Remove="tmp\**" />
+    <Content Remove="wwwroot\Skynet\**" />
     <EmbeddedResource Remove="tmp\**" />
+    <EmbeddedResource Remove="wwwroot\Skynet\**" />
     <None Remove="tmp\**" />
+    <None Remove="wwwroot\Skynet\**" />
   </ItemGroup>
 
   <ItemGroup>

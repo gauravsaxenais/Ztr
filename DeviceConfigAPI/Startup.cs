@@ -2,6 +2,7 @@
 {
     using EnsureThat;
     using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Newtonsoft.Json.Converters;
@@ -58,9 +59,9 @@
         }
 
         /// <summary>
-        /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// Configures the specified application.
         /// </summary>
-        /// <param name="app">application builder.</param>
+        /// <param name="app">The application.</param>
         public void Configure(IApplicationBuilder app)
         {
             EnsureArg.IsNotNull(app);
@@ -74,6 +75,18 @@
                 app.UseMiddleware<ForceHttpsMiddleware>();
                 app.UseHttpsRedirection();
             }
+
+            const string cacheMaxAge = "604800";
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                OnPrepareResponse = ctx =>
+                {
+                    // using Microsoft.AspNetCore.Http;
+                    ctx.Context.Response.Headers.Append(
+                        "Cache-Control", $"public, max-age={cacheMaxAge}");
+                }
+            });
+
 
             // Use routing first, then Cors second.
             app.UseRouting();

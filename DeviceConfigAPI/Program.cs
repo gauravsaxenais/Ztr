@@ -1,12 +1,11 @@
 namespace Service
 {
-    using System;
     using Business.Configuration;
-    using Microsoft.AspNetCore.Builder;
+    using Configuration;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Hosting;
     using Serilog;
-    using Service.Configuration;
+    using System;
     using ZTR.Framework.Configuration;
     using ZTR.Framework.Security;
 
@@ -38,7 +37,7 @@ namespace Service
         /// Creates the host builder.
         /// </summary>
         /// <param name="args">The arguments.</param>
-        /// <returns>hostbuilder.</returns>
+        /// <returns></returns>
         public static IHostBuilder CreateHostBuilder(string[] args)
         {
             return Host.CreateDefaultBuilder(args)
