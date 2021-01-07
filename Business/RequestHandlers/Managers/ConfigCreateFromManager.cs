@@ -50,7 +50,7 @@
         {
             EnsureArg.IsNotNull(configTomlFile);
             var prefix = nameof(ConfigCreateFromManager);
-            ApiResponse apiResponse = null;
+            ApiResponse apiResponse;
 
             try
             {

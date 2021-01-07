@@ -194,29 +194,6 @@
         #endregion
 
         #region Private methods
-        /// <summary>
-        /// Checks a GIT tree to see if a file exists
-        /// </summary>
-        /// <param name="tree">The GIT tree</param>
-        /// <param name="fileName">The file name</param>
-        /// <returns>true if file exists</returns>
-        private bool TreeContainsFile(Tree tree, string fileName)
-        {
-            if (tree.Any(x => x.Path.IndexOf(fileName, StringComparison.OrdinalIgnoreCase) >= 0))
-            {
-                return true;
-            }
-
-            foreach (TreeEntry branch in tree.Where(x => x.TargetType == TreeEntryTargetType.Tree))
-            {
-                if (TreeContainsFile((Tree)branch.Target, fileName))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
 
         private void GetContentOfFiles(IRepository repo, Tree tree, List<ExportFileResultModel> contentfromFiles)
         {

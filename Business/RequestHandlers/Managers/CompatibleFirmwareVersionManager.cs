@@ -46,7 +46,7 @@
             EnsureArg.HasItems(module.Modules);
 
             var prefix = nameof(CompatibleFirmwareVersionManager);
-            ApiResponse apiResponse = null;
+            ApiResponse apiResponse;
             var firmwareVersions = new List<string>();
 
             try

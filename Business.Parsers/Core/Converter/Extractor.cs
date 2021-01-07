@@ -1,6 +1,5 @@
 ﻿namespace Business.Parsers.Core.Converter
 {
-    using Business.Parsers.Core.Converter;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -16,11 +15,12 @@
         {
             if (IsValueEmpty(value) && dictionary.ContainsKey(_config.Fields))
             {
-                T dict;
-                dict = (T)Convert((object[])dictionary[_config.Fields]);
-                
-                if (dict.Count > 0)
+                var dict = (T)Convert((object[])dictionary[_config.Fields]);
+
+                if (dict.Any())
+                {
                     value = dict;
+                }
             }
 
             return value;

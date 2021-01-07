@@ -1,7 +1,6 @@
-﻿using System;
-
-namespace Business.Parsers.Core.Models
+﻿namespace Business.Parsers.Core.Models
 {
+    using System;
     /// <summary>
     /// Config Convert Model
     /// </summary>

@@ -1,14 +1,13 @@
-﻿using EnsureThat;
-
-namespace Business.Parsers.Core.Converter
+﻿namespace Business.Parsers.Core.Converter
 {
+    using EnsureThat;
+    using Microsoft.Extensions.Logging;
+    using Models;
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
-    using Models;
-    using Microsoft.Extensions.Logging;
     using ZTR.Framework.Business;
 
     public class ConvertConfig

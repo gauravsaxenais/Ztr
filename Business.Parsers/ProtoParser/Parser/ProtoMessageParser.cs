@@ -1,13 +1,12 @@
-﻿using Business.Parsers.Core;
-
-namespace Business.Parsers.ProtoParser.Parser
+﻿namespace Business.Parsers.ProtoParser.Parser
 {
-    using Models;
+    using Core;
     using EnsureThat;
     using Google.Protobuf;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.Extensions.Logging;
+    using Models;
     using System;
     using System.Diagnostics;
     using System.IO;
@@ -177,7 +176,7 @@ namespace Business.Parsers.ProtoParser.Parser
 
             string name = "protoc.exe";
             string path = FileReaderExtensions.ToSafeFullPath(Global.WebRoot, name);
-            
+
             if (!File.Exists(path) && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 // look inside ourselves...

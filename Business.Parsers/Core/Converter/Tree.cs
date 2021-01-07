@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-
-namespace Business.Parsers.Core.Converter
+﻿namespace Business.Parsers.Core.Converter
 {
+    using System.Collections.Generic;
     public interface ITree : IDictionary<string, object>
     {
     }
