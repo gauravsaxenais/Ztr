@@ -58,7 +58,7 @@
                 
                 var configTomlFileContent = ReadAsString(configTomlFile);
 
-                var (modules, blocks) = await GetModulesAndBlocks(configTomlFileContent);
+                var (modules, blocks) = await GetModulesAndBlocksAsync(configTomlFileContent);
 
                 apiResponse = new ApiResponse(status: true, data: new { modules, blocks });
             }
@@ -71,7 +71,7 @@
             return apiResponse;
         }
 
-        private async Task<(IEnumerable<ModuleReadModel>, IEnumerable<BlockJsonModel>)> GetModulesAndBlocks(string configTomlFileContent)
+        private async Task<(IEnumerable<ModuleReadModel>, IEnumerable<BlockJsonModel>)> GetModulesAndBlocksAsync(string configTomlFileContent)
         {
             EnsureArg.IsNotEmptyOrWhiteSpace(configTomlFileContent);
 
