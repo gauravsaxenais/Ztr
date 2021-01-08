@@ -53,7 +53,7 @@
             {
                 Logger.LogInformation($"{prefix}: Getting list of compatible firmware versions based on a firmware version.");
                 
-                var listOfTags = await _moduleServiceManager.GetTagsEarlierThanThisTagAsync(module.FirmwareVersion);
+                var listOfTags = await _moduleServiceManager.GetTagsEarlierThanThisTagAsync(module.FirmwareVersion).ConfigureAwait(false);
 
                 foreach(var tag in listOfTags)
                 {

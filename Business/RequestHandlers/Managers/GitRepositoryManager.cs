@@ -19,7 +19,7 @@
     /// gets all the tags.
     /// </summary>
     /// <seealso cref="IGitRepositoryManager" />
-    public class GitRepositoryManager : IGitRepositoryManager
+    public sealed class GitRepositoryManager : IGitRepositoryManager, IDisposable
     {
         #region Fields
         private DefaultCredentials _defaultCredentials;
@@ -27,7 +27,7 @@
         private CloneOptions _cloneOptions;
         private const string GitFolder = ".git";
         private const string TextMimeType = "text/plain";
-
+        private Repository _repository;
         #endregion
 
         #region Constructors        
@@ -40,7 +40,8 @@
         }
         #endregion
 
-        #region Public methods        
+        #region Public methods
+
         /// <summary>
         /// Sets the connection options.
         /// </summary>
@@ -56,18 +57,9 @@
             _defaultCredentials = new DefaultCredentials();
 
             var credentialsProvider = new CredentialsHandler((url, usernameFromUrl, types) => _defaultCredentials);
-            
+
             _cloneOptions = new CloneOptions() { CredentialsProvider = credentialsProvider };
             _cloneOptions.CertificateCheck += (certificate, valid, host) => true;
-        }
-
-        /// <summary>
-        /// Gets the connection options.
-        /// </summary>
-        /// <returns></returns>
-        public GitConnectionOptions GetConnectionOptions()
-        {
-            return _gitConnection;
         }
 
         /// <summary>
@@ -95,26 +87,12 @@
                 {
                     Repository.Clone(_gitConnection.GitRepositoryUrl, _gitConnection.GitLocalFolder, _cloneOptions);
                 });
+
+                _repository = new Repository(_gitConnection.GitLocalFolder);
             }
-            catch (Exception ex)
+            catch (LibGit2SharpException ex)
             {
-                var message = ex.Message;
-                if (message.Contains("401"))
-                {
-                    throw new CustomArgumentException("Unauthorized: Incorrect username/password");
-                }
-
-                if (message.Contains("403"))
-                {
-                    throw new CustomArgumentException("Forbidden: Possibly Incorrect username/password");
-                }
-
-                if (message.Contains("404"))
-                {
-                    throw new CustomArgumentException("Not found: The repository was not found");
-                }
-
-                throw;
+                throw new CustomArgumentException("Unable to clone git repo.", ex);
             }
         }
 
@@ -124,10 +102,15 @@
         /// <returns></returns>
         public async Task<List<string>> GetAllTagNamesAsync()
         {
-            var tags = new List<(string, DateTimeOffset)>();
-            tags = await GetAllTagsAsync().ConfigureAwait(false);
-
-            return tags.Select(x => x.Item1).ToList();
+            try
+            {
+                var tags = await GetAllTagsAsync().ConfigureAwait(false);
+                return tags.Select(x => x.Item1).ToList();
+            }
+            catch (LibGit2SharpException ex)
+            {
+                throw new CustomArgumentException("Unable to get all tag names.", ex);
+            }
         }
 
         /// <summary>
@@ -137,14 +120,20 @@
         /// <returns></returns>
         public async Task<List<string>> GetTagsEarlierThanThisTagAsync(string tagName)
         {
-            var tags = new List<(string, DateTimeOffset)>();
-            tags = await GetAllTagsAsync().ConfigureAwait(false);
+            try
+            {
+                var tags = await GetAllTagsAsync().ConfigureAwait(false);
 
-            var tag = tags.FirstOrDefault(x => x.Item1 == tagName);
+                var tag = tags.FirstOrDefault(x => x.Item1 == tagName);
 
-            var tagNames = tags.Where(x => x.Item2 < tag.Item2).Select(x => x.Item1).ToList();
+                var tagNames = tags.Where(x => x.Item2 < tag.Item2).Select(x => x.Item1).ToList();
 
-            return tagNames;
+                return tagNames;
+            }
+            catch (LibGit2SharpException ex)
+            {
+                throw new CustomArgumentException($"Unable to get tags earlier than {tagName} from git repo.", ex);
+            }
         }
 
         /// <summary>
@@ -160,42 +149,56 @@
             EnsureArg.IsNotEmptyOrWhiteSpace(tag);
             EnsureArg.IsNotEmptyOrWhiteSpace(fileName);
 
-            var tagsPerPeeledCommitId = new Dictionary<ObjectId, List<Tag>>();
-            var listOfContentFiles = new List<ExportFileResultModel>();
-
-            if (!IsExistsContentRepositoryDirectory())
+            try
             {
-                await CloneRepositoryAsync().ConfigureAwait(false);
-            }
+                var listOfContentFiles = new List<ExportFileResultModel>();
 
-            using (var repo = new Repository(_gitConnection.GitLocalFolder))
-            {
-                tagsPerPeeledCommitId = TagsPerPeeledCommitId(repo.Tags);
+                if (!IsExistsContentRepositoryDirectory())
+                {
+                    await CloneRepositoryAsync().ConfigureAwait(false);
+                }
+
+                _repository = new Repository(_gitConnection.GitLocalFolder);
+                var tagsPerPeeledCommitId = TagsPerPeeledCommitId(_repository.Tags);
 
                 // Let's enumerate all the reachable commits (similarly to `git log --all`)
-                foreach (var commit in repo.Commits.QueryBy(new CommitFilter { IncludeReachableFrom = repo.Refs }))
+                foreach (var commit in _repository.Commits.QueryBy(new CommitFilter
+                    {IncludeReachableFrom = _repository.Refs}))
                 {
                     foreach (var tags in AssignedTags(commit, tagsPerPeeledCommitId))
                     {
                         if (tags.FriendlyName == tag)
                         {
-                            GetContentOfFiles(repo, commit.Tree, listOfContentFiles);
+                            GetContentOfFiles(_repository, commit.Tree, listOfContentFiles);
 
                             // case insensitive search.
-                            listOfContentFiles = listOfContentFiles.Where(p => p.FileName?.IndexOf(fileName, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
+                            listOfContentFiles = listOfContentFiles.Where(p =>
+                                p.FileName?.IndexOf(fileName, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
                         }
                     }
                 }
-            }
 
-            return listOfContentFiles;
+                return listOfContentFiles;
+            }
+            catch (LibGit2SharpException exception)
+            {
+                throw new CustomArgumentException($"Unable to get file for a particular {tag} from git repo.", exception);
+            }
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            _repository?.Dispose();
         }
 
         #endregion
 
         #region Private methods
 
-        private void GetContentOfFiles(IRepository repo, Tree tree, List<ExportFileResultModel> contentfromFiles)
+        private void GetContentOfFiles(IRepository repo, Tree tree, ICollection<ExportFileResultModel> contentFromFiles)
         {
             foreach (var treeEntry in tree)
             {
@@ -204,13 +207,13 @@
 
                 if (treeEntry.TargetType == TreeEntryTargetType.Tree)
                 {
-                    GetContentOfFiles(repo, (Tree)gitObject, contentfromFiles);
+                    GetContentOfFiles(repo, (Tree)gitObject, contentFromFiles);
                 }
 
                 else if (treeEntry.TargetType == TreeEntryTargetType.Blob)
                 {
                     var blob = GetBlobFromFile(treeEntry);
-                    contentfromFiles.Add(new ExportFileResultModel(TextMimeType, System.Text.Encoding.UTF8.GetBytes(blob), path));
+                    contentFromFiles.Add(new ExportFileResultModel(TextMimeType, System.Text.Encoding.UTF8.GetBytes(blob), path));
                 }
             }
         }
@@ -225,21 +228,17 @@
                 await CloneRepositoryAsync().ConfigureAwait(false);
             }
 
-            using (var repo = new Repository(_gitConnection.GitLocalFolder))
+            _repository = new Repository(_gitConnection.GitLocalFolder);
+            // Add new tags.
+            foreach (var tag in _repository.Tags)
             {
-                // Add new tags.
-                foreach (var tag in repo.Tags)
+                var peeledTarget = tag.PeeledTarget;
+
+                if (peeledTarget is Commit)
                 {
-                    var peeledTarget = tag.PeeledTarget;
-
-                    if (peeledTarget is Commit temp)
-                    {
-                        var date = temp.Author.When;
-
-                        // We're not interested by Tags pointing at Blobs or Trees
-                        // only interested in tags for a commit.
-                        tags.Add(tag);
-                    }
+                    // We're not interested by Tags pointing at Blobs or Trees
+                    // only interested in tags for a commit.
+                    tags.Add(tag);
                 }
 
                 tagNames = SortTags(tags: tags, order: t => ((Commit)t.PeeledTarget).Author.When,
@@ -282,12 +281,7 @@
 
         private static IEnumerable<Tag> AssignedTags(Commit commit, Dictionary<ObjectId, List<Tag>> tags)
         {
-            if (!tags.ContainsKey(commit.Id))
-            {
-                return Enumerable.Empty<Tag>();
-            }
-
-            return tags[commit.Id];
+            return !tags.ContainsKey(commit.Id) ? Enumerable.Empty<Tag>() : tags[commit.Id];
         }
 
         private Dictionary<ObjectId, List<Tag>> TagsPerPeeledCommitId(IEnumerable<Tag> listOfTags)

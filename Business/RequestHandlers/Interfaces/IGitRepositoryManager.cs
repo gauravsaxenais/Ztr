@@ -16,12 +16,6 @@
         void SetConnectionOptions(GitConnectionOptions gitConnection);
 
         /// <summary>
-        /// Gets the connection options.
-        /// </summary>
-        /// <returns></returns>
-        GitConnectionOptions GetConnectionOptions();
-
-        /// <summary>
         /// Clones the repository asynchronous.
         /// </summary>
         /// <returns></returns>

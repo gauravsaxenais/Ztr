@@ -75,7 +75,7 @@
         public async Task<List<ModuleReadModel>> GetAllModulesAsync(string firmwareVersion, string deviceType)
         {
             _logger.LogInformation($"{Prefix}: method name: {nameof(GetAllModulesAsync)} Getting list of all modules {firmwareVersion} {deviceType}.");
-            var listOfModules = await GetListOfModulesAsync(firmwareVersion, deviceType);
+            var listOfModules = await GetListOfModulesAsync(firmwareVersion, deviceType).ConfigureAwait(false);
 
             _logger.LogInformation($"{Prefix}: method name: {nameof(GetAllModulesAsync)} Modules retrieved for {firmwareVersion} {deviceType}. Getting icons for modules...");
             foreach (var module in listOfModules)
@@ -126,19 +126,19 @@
         public async Task<IEnumerable<string>> GetAllFirmwareVersionsAsync()
         {
             _logger.LogInformation($"{Prefix} method name: {nameof(GetAllFirmwareVersionsAsync)}: Getting list of all firmware versions.");
-            var listFirmwareVersions = await _gitRepoManager.GetAllTagNamesAsync();
+            var listFirmwareVersions = await _gitRepoManager.GetAllTagNamesAsync().ConfigureAwait(false);
 
             return listFirmwareVersions;
         }
 
         /// <summary>
-        /// Gets the tags earlier than this tag asynchronous.
+        /// Gets the tags earlier than this tag.
         /// </summary>
         /// <param name="firmwareVersion">The firmware version.</param>
         /// <returns></returns>
         public async Task<List<string>> GetTagsEarlierThanThisTagAsync(string firmwareVersion)
         {
-            var listOfTags = await _gitRepoManager.GetTagsEarlierThanThisTagAsync(firmwareVersion);
+            var listOfTags = await _gitRepoManager.GetTagsEarlierThanThisTagAsync(firmwareVersion).ConfigureAwait(false);
 
             return listOfTags;
         }
@@ -149,10 +149,10 @@
         /// <param name="firmwareVersion">The firmware version.</param>
         /// <param name="deviceType">Type of the device.</param>
         /// <returns></returns>
-        public async Task<string> GetDefaultTomlFileContent(string firmwareVersion, string deviceType)
+        public async Task<string> GetDefaultTomlFileContentAsync(string firmwareVersion, string deviceType)
         {
-            _logger.LogInformation($"{Prefix} method name: {nameof(GetDefaultTomlFileContent)}: Getting default value from toml file for {firmwareVersion}, {deviceType}.");
-            var defaultValueFromTomlFile = await GetFileContentFromPath(firmwareVersion, deviceType, _moduleGitConnectionOptions.DefaultTomlConfiguration.DefaultTomlFile);
+            _logger.LogInformation($"{Prefix} method name: {nameof(GetDefaultTomlFileContentAsync)}: Getting default value from toml file for {firmwareVersion}, {deviceType}.");
+            var defaultValueFromTomlFile = await GetFileContentFromPath(firmwareVersion, deviceType, _moduleGitConnectionOptions.DefaultTomlConfiguration.DefaultTomlFile).ConfigureAwait(false);
 
             return defaultValueFromTomlFile;
         }
@@ -241,7 +241,7 @@
         }
 
         /// <summary>
-        /// Gets the list of modules asynchronous.
+        /// Gets the list of modules.
         /// </summary>
         /// <param name="firmwareVersion">The firmware version.</param>
         /// <param name="deviceType">Type of the device.</param>
@@ -249,7 +249,9 @@
         private async Task<List<ModuleReadModel>> GetListOfModulesAsync(string firmwareVersion, string deviceType)
         {
             var listOfModules = new List<ModuleReadModel>();
-            var fileContent = await GetFileContentFromPath(firmwareVersion, deviceType, _moduleGitConnectionOptions.DefaultTomlConfiguration.DeviceTomlFile);
+            var fileContent = await GetFileContentFromPath(firmwareVersion, deviceType,
+                _moduleGitConnectionOptions.DefaultTomlConfiguration.DeviceTomlFile)
+                .ConfigureAwait(false);
 
             if (!string.IsNullOrWhiteSpace(fileContent))
             {
@@ -271,10 +273,9 @@
 
         private async Task<string> GetFileContentFromPath(string firmwareVersion, string deviceType, string path)
         {
-            var gitConnectionOptions = (DeviceGitConnectionOptions)_gitRepoManager.GetConnectionOptions();
-
-            var listOfFiles = await _gitRepoManager.GetFileDataFromTagAsync(firmwareVersion, path)
-                                                   .ConfigureAwait(false);
+            var listOfFiles = await _gitRepoManager
+                .GetFileDataFromTagAsync(firmwareVersion, path)
+                .ConfigureAwait(false);
 
             // case insensitive search.
             var deviceTypeFile = listOfFiles.FirstOrDefault(p => p.FileName?.IndexOf(deviceType, StringComparison.OrdinalIgnoreCase) >= 0);

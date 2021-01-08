@@ -19,19 +19,19 @@
         Task<List<ModuleReadModel>> GetAllModulesAsync(string firmwareVersion, string deviceType);
 
         /// <summary>
-        /// Gets the tags earlier than this tag asynchronous.
+        /// Gets the tags earlier than this tag.
         /// </summary>
         /// <param name="firmwareVersion">The firmware version.</param>
         /// <returns></returns>
-        Task<List<string>> GetTagsEarlierThanThisTagAsync(string firmwareVersion);
-
+        Task <List<string>> GetTagsEarlierThanThisTagAsync(string firmwareVersion);
+            
         /// <summary>
-        /// Gets the default content of the toml file.
+        /// Gets the default toml file content asynchronous.
         /// </summary>
         /// <param name="firmwareVersion">The firmware version.</param>
         /// <param name="deviceType">Type of the device.</param>
         /// <returns></returns>
-        Task<string> GetDefaultTomlFileContent(string firmwareVersion, string deviceType);
+        Task<string> GetDefaultTomlFileContentAsync(string firmwareVersion, string deviceType);
 
         /// <summary>
         /// Gets the proto files.

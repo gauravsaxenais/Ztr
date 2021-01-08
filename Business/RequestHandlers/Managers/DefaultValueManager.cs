@@ -76,11 +76,12 @@
 
                 // read default values from toml file defaults.toml
                 var defaultValueFromTomlFile =
-                    await _moduleServiceManager.GetDefaultTomlFileContent(firmwareVersion, deviceType);
+                    await _moduleServiceManager.GetDefaultTomlFileContentAsync(firmwareVersion, deviceType).ConfigureAwait(false);
 
                 _logger.LogInformation($"{Prefix}: Getting list of modules {firmwareVersion} and {deviceType}.");
                 // get list of all modules.
-                var listOfModules = await _moduleServiceManager.GetAllModulesAsync(firmwareVersion, deviceType);
+                var listOfModules = await _moduleServiceManager.GetAllModulesAsync(firmwareVersion, deviceType)
+                    .ConfigureAwait(false);
 
                 _logger.LogInformation($"{Prefix}: Merging default values with module information. {firmwareVersion} and {deviceType}.");
                 await MergeValuesWithModulesAsync(defaultValueFromTomlFile, listOfModules);
