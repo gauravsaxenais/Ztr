@@ -527,12 +527,6 @@
             </summary>
             <param name="gitConnection">The git connection.</param>
         </member>
-        <member name="M:Business.RequestHandlers.Interfaces.IGitRepositoryManager.GetConnectionOptions">
-            <summary>
-            Gets the connection options.
-            </summary>
-            <returns></returns>
-        </member>
         <member name="M:Business.RequestHandlers.Interfaces.IGitRepositoryManager.CloneRepositoryAsync">
             <summary>
             Clones the repository asynchronous.
@@ -588,14 +582,14 @@
         </member>
         <member name="M:Business.RequestHandlers.Interfaces.IModuleServiceManager.GetTagsEarlierThanThisTagAsync(System.String)">
             <summary>
-            Gets the tags earlier than this tag asynchronous.
+            Gets the tags earlier than this tag.
             </summary>
             <param name="firmwareVersion">The firmware version.</param>
             <returns></returns>
         </member>
-        <member name="M:Business.RequestHandlers.Interfaces.IModuleServiceManager.GetDefaultTomlFileContent(System.String,System.String)">
+        <member name="M:Business.RequestHandlers.Interfaces.IModuleServiceManager.GetDefaultTomlFileContentAsync(System.String,System.String)">
             <summary>
-            Gets the default content of the toml file.
+            Gets the default toml file content asynchronous.
             </summary>
             <param name="firmwareVersion">The firmware version.</param>
             <param name="deviceType">Type of the device.</param>
@@ -820,12 +814,6 @@
             </summary>
             <param name="gitConnection">The git connection.</param>
         </member>
-        <member name="M:Business.RequestHandlers.Managers.GitRepositoryManager.GetConnectionOptions">
-            <summary>
-            Gets the connection options.
-            </summary>
-            <returns></returns>
-        </member>
         <member name="M:Business.RequestHandlers.Managers.GitRepositoryManager.CloneRepositoryAsync">
             <summary>
             Clones the repository asynchronous.
@@ -861,13 +849,10 @@
             <param name="fileName">file name to search</param>
             <returns></returns>
         </member>
-        <member name="M:Business.RequestHandlers.Managers.GitRepositoryManager.TreeContainsFile(LibGit2Sharp.Tree,System.String)">
+        <member name="M:Business.RequestHandlers.Managers.GitRepositoryManager.Dispose">
             <summary>
-            Checks a GIT tree to see if a file exists
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
             </summary>
-            <param name="tree">The GIT tree</param>
-            <param name="fileName">The file name</param>
-            <returns>true if file exists</returns>
         </member>
         <member name="M:Business.RequestHandlers.Managers.GitRepositoryManager.SortTags``1(System.Collections.Generic.IEnumerable{LibGit2Sharp.Tag},System.Func{LibGit2Sharp.Tag,System.Object},System.Func{LibGit2Sharp.Tag,``0},System.Func{LibGit2Sharp.Tag,System.Boolean})">
             <summary>
@@ -973,12 +958,12 @@
         </member>
         <member name="M:Business.RequestHandlers.Managers.ModuleServiceManager.GetTagsEarlierThanThisTagAsync(System.String)">
             <summary>
-            Gets the tags earlier than this tag asynchronous.
+            Gets the tags earlier than this tag.
             </summary>
             <param name="firmwareVersion">The firmware version.</param>
             <returns></returns>
         </member>
-        <member name="M:Business.RequestHandlers.Managers.ModuleServiceManager.GetDefaultTomlFileContent(System.String,System.String)">
+        <member name="M:Business.RequestHandlers.Managers.ModuleServiceManager.GetDefaultTomlFileContentAsync(System.String,System.String)">
             <summary>
             Gets the default content of the toml file.
             </summary>
@@ -1002,7 +987,7 @@
         </member>
         <member name="M:Business.RequestHandlers.Managers.ModuleServiceManager.GetListOfModulesAsync(System.String,System.String)">
             <summary>
-            Gets the list of modules asynchronous.
+            Gets the list of modules.
             </summary>
             <param name="firmwareVersion">The firmware version.</param>
             <param name="deviceType">Type of the device.</param>

@@ -45,7 +45,7 @@
                 Logger.LogInformation(
                     $"{prefix}: Getting list of modules for firmware version: {firmwareVersion} and device type: {deviceType}");
 
-                var listOfModules = await _moduleServiceManager.GetAllModulesAsync(firmwareVersion, deviceType);
+                var listOfModules = await _moduleServiceManager.GetAllModulesAsync(firmwareVersion, deviceType).ConfigureAwait(false);
 
                 apiResponse = new ApiResponse(true, listOfModules);
             }

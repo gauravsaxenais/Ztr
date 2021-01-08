@@ -67,7 +67,7 @@
             {
                 Logger.LogInformation($"{Prefix}: Getting list of all firmware versions");
 
-                var listFirmwareVersions = await _moduleServiceManager.GetAllFirmwareVersionsAsync();
+                var listFirmwareVersions = await _moduleServiceManager.GetAllFirmwareVersionsAsync().ConfigureAwait(false);
 
                 apiResponse = new ApiResponse(status: true, data: listFirmwareVersions);
             }
