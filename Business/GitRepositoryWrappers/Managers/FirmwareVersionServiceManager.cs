@@ -60,7 +60,7 @@ namespace Business.GitRepositoryWrappers.Managers
             {
                 SetGitRepoConnection();
 
-                _firmwareVersionGitConnectionOptions.GitRepositoryUrl = gitUrl;
+                _firmwareVersionGitConnectionOptions.GitRemoteLocation = gitUrl;
                 _gitRepoManager.SetConnectionOptions(_firmwareVersionGitConnectionOptions);
 
                 _logger.LogInformation($"{Prefix}: Cloning github repository.");

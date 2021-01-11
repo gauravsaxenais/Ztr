@@ -1,6 +1,6 @@
 ﻿namespace Business.Configuration
 {
-    using ZTR.Framework.Business.File;
+    using ZTR.Framework.Business;
 
     /// <summary>
     /// This class maps to configuration in appsettings.json file.
@@ -35,7 +35,7 @@
         /// </returns>
         public override string ToString()
         {
-            return $"FirmwareVersionGitConnectionOptions($ GitLocalFolder: {GitLocalFolder} GitRepoUrl: {GitRepositoryUrl})";
+            return $"FirmwareVersionGitConnectionOptions($ GitLocalFolder: {GitLocalFolder} GitRepoUrl: {GitRemoteLocation})";
         }
     }
 }

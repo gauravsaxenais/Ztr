@@ -9,6 +9,7 @@
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
+    using ZTR.Framework.Business;
     using ZTR.Framework.Business.File;
     using ZTR.Framework.Business.File.FileReaders;
     using ZTR.Framework.Business.Models;
@@ -28,16 +29,15 @@
         private const string GitFolder = ".git";
         private const string TextMimeType = "text/plain";
         private Repository _repository;
+
         #endregion
 
-        #region Constructors        
+        #region Constructors
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GitRepositoryManager"/> class.
-        /// </summary>
         public GitRepositoryManager()
         {
         }
+
         #endregion
 
         #region Public methods
@@ -50,7 +50,7 @@
         {
             EnsureArg.IsNotNull(gitConnection);
             EnsureArg.IsNotEmptyOrWhiteSpace(gitConnection.GitLocalFolder);
-            EnsureArg.IsNotEmptyOrWhiteSpace(gitConnection.GitRepositoryUrl);
+            EnsureArg.IsNotEmptyOrWhiteSpace(gitConnection.GitRemoteLocation);
 
             _gitConnection = gitConnection;
 
@@ -61,6 +61,8 @@
             _cloneOptions = new CloneOptions() { CredentialsProvider = credentialsProvider };
             _cloneOptions.CertificateCheck += (certificate, valid, host) => true;
         }
+
+        public bool IsValidRepo => Repository.IsValid(_gitConnection.GitLocalFolder);
 
         /// <summary>
         /// Clones the repository asynchronous.
@@ -76,6 +78,7 @@
         {
             try
             {
+                var name = GetProjectNameFromDirectory(_gitConnection.GitRemoteLocation);
                 if (IsExistsContentRepositoryDirectory())
                 {
                     DeleteReadOnlyDirectory(_gitConnection.GitLocalFolder);
@@ -85,7 +88,7 @@
 
                 await Task.Run(() =>
                 {
-                    Repository.Clone(_gitConnection.GitRepositoryUrl, _gitConnection.GitLocalFolder, _cloneOptions);
+                    Repository.Clone(_gitConnection.GitRemoteLocation, _gitConnection.GitLocalFolder, _cloneOptions);
                 });
 
                 _repository = new Repository(_gitConnection.GitLocalFolder);
@@ -135,7 +138,7 @@
                 throw new CustomArgumentException($"Unable to get tags earlier than {tagName} from git repo.", ex);
             }
         }
-
+        
         /// <summary>
         /// This method returns a file data as string from a particular tag.
         /// If a tag is "1.0.7", then the method returns data from all the files
@@ -199,7 +202,14 @@
 
         #region Private methods
 
-        private void GetContentOfFiles(IRepository repo, Tree tree, ICollection<ExportFileResultModel> contentFromFiles)
+        private string GetProjectNameFromDirectory(string directory)
+        {
+            var separators = new[] { '/', '\\', '.' };
+            return directory.Split(separators, StringSplitOptions.RemoveEmptyEntries)
+                .LastOrDefault(c => c != "git");
+        }
+
+        private void GetContentOfFiles(LibGit2Sharp.IRepository repo, Tree tree, ICollection<ExportFileResultModel> contentFromFiles)
         {
             foreach (var treeEntry in tree)
             {

@@ -68,7 +68,7 @@
             <summary>
             This class maps to configuration in appsettings.json file.
             </summary>
-            <seealso cref="T:ZTR.Framework.Business.File.GitConnectionOptions" />
+            <seealso cref="T:ZTR.Framework.Business.GitConnectionOptions" />
         </member>
         <member name="P:Business.Configuration.DevicesGitConnectionOptions.DeviceToml">
             <summary>
@@ -104,7 +104,7 @@
             <summary>
             This class maps to configuration in appsettings.json file.
             </summary>
-            <seealso cref="T:ZTR.Framework.Business.File.GitConnectionOptions" />
+            <seealso cref="T:ZTR.Framework.Business.GitConnectionOptions" />
         </member>
         <member name="M:Business.Configuration.FirmwareVersionGitConnectionOptions.#ctor">
             <summary>

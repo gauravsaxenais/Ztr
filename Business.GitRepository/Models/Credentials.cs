@@ -1,7 +1,7 @@
-﻿namespace Business.GitRepository.Managers
+﻿namespace Business.GitRepository.Models
 {
-    using Interfaces;
     using System.Security;
+    using ZTR.Framework.Business;
 
     /// <summary>
     /// Stores user name and password credentials.

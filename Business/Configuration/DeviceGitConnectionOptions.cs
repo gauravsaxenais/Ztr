@@ -1,6 +1,6 @@
 ﻿namespace Business.Configuration
 {
-    using ZTR.Framework.Business.File;
+    using ZTR.Framework.Business;
 
     /// <summary>
     /// This class maps to the connection options in appsettings.json file.
@@ -68,7 +68,7 @@
         /// </returns>
         public override string ToString()
         {
-            return $"DeviceGitConnectionOptions($ GitLocalFolder: {this.GitLocalFolder} GitRepoUrl: {this.GitRepositoryUrl} ModulesConfig: {this.ModulesConfig} BlockConfig: {this.BlockConfig} TomlConfiguration: {this.DefaultTomlConfiguration} MetaFile: {this.MetaToml} )";
+            return $"DeviceGitConnectionOptions($ GitLocalFolder: {this.GitLocalFolder} GitRepoUrl: {this.GitRemoteLocation} ModulesConfig: {this.ModulesConfig} BlockConfig: {this.BlockConfig} TomlConfiguration: {this.DefaultTomlConfiguration} MetaFile: {this.MetaToml} )";
         }
     }
 }

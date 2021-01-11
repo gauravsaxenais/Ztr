@@ -1,4 +1,4 @@
-﻿namespace Business.GitRepository.Interfaces
+﻿namespace ZTR.Framework.Business
 {
     public interface ICredentials<TPassword>
     {
