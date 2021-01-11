@@ -5,6 +5,7 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using System.Threading.Tasks;
     using ZTR.Framework.Business;
     using ZTR.Framework.Service;
@@ -12,19 +13,19 @@
     /// <summary>
     /// This service returns the device information.
     /// </summary>
-    [System.ComponentModel.Description("Device Type Controller Service")]
+    [System.ComponentModel.Description("Firmware version Controller Service")]
     [Produces(SupportedContentTypes.Json, SupportedContentTypes.Xml)]
     [Consumes(SupportedContentTypes.Json, SupportedContentTypes.Xml)]
     [QueryRoute]
-    public class DeviceTypeController : ApiControllerBase
+    public class FirmwareVersionController : ApiControllerBase
     {
-        private readonly IDeviceTypeManager _manager;
+        private readonly IFirmwareVersionManager _manager;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DeviceTypeController"/> class.
+        /// Initializes a new instance of the <see cref="FirmwareVersionController"/> class.
         /// </summary>
         /// <param name="manager">The _manager.</param>
-        public DeviceTypeController(IDeviceTypeManager manager)
+        public FirmwareVersionController(IFirmwareVersionManager manager)
         {
             EnsureArg.IsNotNull(manager, nameof(manager));
 
@@ -32,17 +33,17 @@
         }
 
         /// <summary>
-        /// Gets all devices.
+        /// Gets all firmware versions.
         /// </summary>
-        /// <returns>all devices.</returns>
-        [HttpGet(nameof(GetAllDevices))]
+        /// <param name="deviceType">Type of the device.</param>
+        /// <returns></returns>
+        [HttpGet(nameof(GetAllFirmwareVersions))]
         [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetAllDevices()
+        public async Task<IActionResult> GetAllFirmwareVersions([Required] string deviceType)
         {
-            var result = await _manager.GetAllDevicesAsync().ConfigureAwait(false);
-
+            var result = await _manager.GetAllFirmwareVersionsAsync(deviceType).ConfigureAwait(false);
             return Ok(result);
         }
     }

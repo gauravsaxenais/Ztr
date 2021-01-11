@@ -13,11 +13,5 @@
         /// </summary>
         /// <returns></returns>
         Task<ApiResponse> GetAllDevicesAsync();
-
-        /// <summary>
-        /// Gets all firmware versions asynchronous.
-        /// </summary>
-        /// <returns></returns>
-        Task<ApiResponse> GetAllFirmwareVersionsAsync();
     }
 }

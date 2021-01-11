@@ -84,6 +84,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Business.GitRepository\Business.GitRepository.csproj" />
     <ProjectReference Include="..\Business\Business.csproj" />
     <ProjectReference Include="..\Framework\Framework.Service\Framework.Service.csproj" />
   </ItemGroup>

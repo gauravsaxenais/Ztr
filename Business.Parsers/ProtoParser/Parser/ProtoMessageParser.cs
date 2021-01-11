@@ -16,12 +16,11 @@
     using System.Threading.Tasks;
     using ZTR.Framework.Business.File.FileReaders;
 
-    public class ProtoMessageParser : IProtoMessageParser
+    public sealed class ProtoMessageParser : IProtoMessageParser
     {
         private readonly ILogger<ProtoMessageParser> _logger;
         private const string CsExtension = ".cs";
         private const string DllExtension = ".dll";
-        private const string FileDescriptorExtension = ".desc";
 
         public ProtoMessageParser(ILogger<ProtoMessageParser> logger)
         {
@@ -100,9 +99,8 @@
             var tmpOutputFolder = Path.Combine($"{Global.WebRoot}tmp", Guid.NewGuid().ToString("n"));
             Directory.CreateDirectory(tmpOutputFolder);
 
-            string protocPath = GetProtoCompilerPath();
-            string tmpDescriptorFile = Path.Combine(tmpOutputFolder, fileName + FileDescriptorExtension);
-            string inputs = $" --descriptor_set_out={tmpDescriptorFile} --include_imports --proto_path={protoFilePath} --csharp_out={tmpOutputFolder}  --error_format=gcc {fileName} {string.Join(" ", args)}";
+            var protocPath = GetProtoCompilerPath();
+            var inputs = $" --include_imports --proto_path={protoFilePath} --csharp_out={tmpOutputFolder}  --error_format=gcc {fileName} {string.Join(" ", args)}";
 
             var psi = new ProcessStartInfo(
                 protocPath,
@@ -123,24 +121,39 @@
 
             _logger.LogInformation("Starting Proto compiler");
             _logger.LogInformation(inputs);
-            var proc = Process.Start(psi);
 
-            var result = proc.StandardOutput.ReadToEnd();
-            result += " " + proc.StandardError.ReadToEnd();
-            proc.WaitForExit();
+            var proc = new Process { StartInfo = psi };
 
-            _logger.LogInformation(result);
-
-            if (proc.ExitCode != 0)
+            try
             {
-                if (HasByteOrderMark(fileName))
+                proc.Start();
+
+                var result = proc.StandardOutput.ReadToEnd();
+                result += " " + proc.StandardError.ReadToEnd();
+                proc.WaitForExit();
+
+                _logger.LogInformation(result);
+
+                if (proc.ExitCode != 0)
                 {
-                    //stderr.WriteLine("The input file should be UTF8 without a byte-order-mark (in Visual Studio use \"File\" -> \"Advanced Save Options...\" to rectify)");
+                    if (HasByteOrderMark(fileName))
+                    {
+                        //stderr.WriteLine("The input file should be UTF8 without a byte-order-mark (in Visual Studio use \"File\" -> \"Advanced Save Options...\" to rectify)");
+                    }
+
+                    throw new ApplicationException("Protoc error" + fileName);
                 }
-
-                throw new ApplicationException("Protoc in linux error" + fileName);
             }
-
+            catch (Exception ex)
+            {
+                throw new ApplicationException("Protoc error" + fileName, ex);
+            }
+            finally
+            {
+                proc.Close();
+                proc.Dispose();
+            }
+            
             return tmpOutputFolder;
         }
 

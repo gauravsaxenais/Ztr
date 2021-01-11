@@ -1,11 +1,12 @@
 ﻿namespace Business.RequestHandlers.Managers
 {
-    using System;
+    using Business.GitRepositoryWrappers.Interfaces;
     using EnsureThat;
     using Interfaces;
     using Microsoft.Extensions.Logging;
     using Models;
     using Nett;
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -22,23 +23,24 @@
     public class BlockManager : Manager, IBlockManager
     {
         #region Private Variables
-        private readonly IModuleServiceManager _moduleServiceManager;
+        private readonly IBlockServiceManager _blockServiceManager;
         private readonly ILogger<BlockManager> _logger;
         private const string Prefix = nameof(BlockManager);
         #endregion
 
-        #region Constructors                                
+        #region Constructors     
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="BlockManager"/> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
-        /// <param name="moduleServiceManager">The module service manager.</param>
-        public BlockManager(ILogger<BlockManager> logger, IModuleServiceManager moduleServiceManager) : base(logger)
+        /// <param name="blockServiceManager">The module service manager.</param>
+        public BlockManager(ILogger<BlockManager> logger, IBlockServiceManager blockServiceManager) : base(logger)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
-            EnsureArg.IsNotNull(moduleServiceManager, nameof(moduleServiceManager));
+            EnsureArg.IsNotNull(blockServiceManager, nameof(blockServiceManager));
 
-            _moduleServiceManager = moduleServiceManager;
+            _blockServiceManager = blockServiceManager;
             _logger = logger;
         }
         #endregion
@@ -75,7 +77,7 @@
         /// <returns></returns>
         public async Task<IEnumerable<BlockJsonModel>> GetListOfBlocksAsync()
         {
-            var filesInDirectory = _moduleServiceManager.GetAllBlockFiles();
+            var filesInDirectory = _blockServiceManager.GetAllBlockFiles();
 
             var data = await BatchProcessBlockFiles(filesInDirectory).ConfigureAwait(false);
             

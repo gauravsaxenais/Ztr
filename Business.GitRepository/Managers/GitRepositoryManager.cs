@@ -1,4 +1,4 @@
-﻿namespace Business.RequestHandlers.Managers
+﻿namespace Business.GitRepository.Managers
 {
     using EnsureThat;
     using Interfaces;
@@ -159,27 +159,28 @@
                 }
 
                 _repository = new Repository(_gitConnection.GitLocalFolder);
-                var tagsPerPeeledCommitId = TagsPerPeeledCommitId(_repository.Tags);
+
+                var repoTag = _repository.Tags.FirstOrDefault(item => item.FriendlyName == tag);
+
+                var commitForTag = GetAllCommitsForTag(repoTag);
 
                 // Let's enumerate all the reachable commits (similarly to `git log --all`)
                 foreach (var commit in _repository.Commits.QueryBy(new CommitFilter
-                    {IncludeReachableFrom = _repository.Refs}))
+                { IncludeReachableFrom = _repository.Refs }))
                 {
-                    foreach (var tags in AssignedTags(commit, tagsPerPeeledCommitId))
+                    if (commit.Id == commitForTag)
                     {
-                        if (tags.FriendlyName == tag)
-                        {
-                            GetContentOfFiles(_repository, commit.Tree, listOfContentFiles);
+                        GetContentOfFiles(_repository, commit.Tree, listOfContentFiles);
 
-                            // case insensitive search.
-                            listOfContentFiles = listOfContentFiles.Where(p =>
-                                p.FileName?.IndexOf(fileName, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
-                        }
+                        // case insensitive search.
+                        listOfContentFiles = listOfContentFiles.Where(p =>
+                            p.FileName?.IndexOf(fileName, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
                     }
                 }
 
                 return listOfContentFiles;
             }
+
             catch (LibGit2SharpException exception)
             {
                 throw new CustomArgumentException($"Unable to get file for a particular {tag} from git repo.", exception);
@@ -279,40 +280,20 @@
             return content;
         }
 
-        private static IEnumerable<Tag> AssignedTags(Commit commit, Dictionary<ObjectId, List<Tag>> tags)
+        private ObjectId GetAllCommitsForTag(Tag tag)
         {
-            return !tags.ContainsKey(commit.Id) ? Enumerable.Empty<Tag>() : tags[commit.Id];
-        }
+            EnsureArg.IsNotNull(tag);
+            var peeledTarget = tag.PeeledTarget;
 
-        private Dictionary<ObjectId, List<Tag>> TagsPerPeeledCommitId(IEnumerable<Tag> listOfTags)
-        {
-            var tagsPerPeeledCommitId = new Dictionary<ObjectId, List<Tag>>();
-
-            if (listOfTags != null)
+            if (peeledTarget is Commit)
             {
-                foreach (var tag in listOfTags)
-                {
-                    var peeledTarget = tag.PeeledTarget;
+                // We're not interested by Tags pointing at Blobs or Trees
+                var commitId = peeledTarget.Id;
 
-                    if (!(peeledTarget is Commit))
-                    {
-                        // We're not interested by Tags pointing at Blobs or Trees
-                        continue;
-                    }
-
-                    ObjectId commitId = peeledTarget.Id;
-
-                    if (!tagsPerPeeledCommitId.ContainsKey(commitId))
-                    {
-                        // A Commit may be pointed at by more than one Tag
-                        tagsPerPeeledCommitId.Add(commitId, new List<Tag>());
-                    }
-
-                    tagsPerPeeledCommitId[commitId].Add(tag);
-                }
+                return commitId;
             }
 
-            return tagsPerPeeledCommitId;
+            return null;
         }
 
         /// <summary>

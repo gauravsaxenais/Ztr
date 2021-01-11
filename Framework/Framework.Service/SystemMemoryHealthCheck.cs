@@ -1,8 +1,9 @@
-﻿namespace ZTR.Framework.Service.HealthCheckup
+﻿namespace ZTR.Framework.Service
 {
     using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
+    using HealthCheckup;
     using Microsoft.Extensions.Diagnostics.HealthChecks;
 
     public class SystemMemoryHealthCheck : IHealthCheck

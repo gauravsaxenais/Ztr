@@ -1,6 +1,5 @@
-﻿namespace Business.RequestHandlers.Interfaces
+﻿namespace Business.GitRepositoryWrappers.Interfaces
 {
-    using System.IO;
     using Models;
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -39,23 +38,5 @@
         /// <param name="module">The module.</param>
         /// <returns></returns>
         string GetProtoFiles(ModuleReadModel module);
-
-        /// <summary>
-        /// Gets all firmware versions asynchronous.
-        /// </summary>
-        /// <returns></returns>
-        Task<IEnumerable<string>> GetAllFirmwareVersionsAsync();
-
-        /// <summary>
-        /// Gets all devices asynchronous.
-        /// </summary>
-        /// <returns></returns>
-        Task<IEnumerable<string>> GetAllDevicesAsync();
-
-        /// <summary>
-        /// Gets all block files.
-        /// </summary>
-        /// <returns></returns>
-        IEnumerable<FileInfo> GetAllBlockFiles();
     }
 }

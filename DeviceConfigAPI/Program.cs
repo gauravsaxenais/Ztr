@@ -48,7 +48,7 @@ namespace Service
                     typeof(ApplicationOptions).Assembly,
                     typeof(SecurityOptions).Assembly,
                     typeof(DeviceGitConnectionOptions).Assembly,
-                    typeof(ModuleGitConnectionOptions).Assembly
+                    typeof(DevicesGitConnectionOptions).Assembly
                 }, args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

@@ -180,11 +180,23 @@
             </summary>
             <returns>all devices.</returns>
         </member>
-        <member name="M:Service.Controllers.DeviceTypeController.GetAllFirmwareVersions">
+        <member name="T:Service.Controllers.FirmwareVersionController">
             <summary>
-            Gets the current firmware versions from github repository.
+            This service returns the device information.
             </summary>
-            <returns>status code representing the result of the operation and the result.</returns>
+        </member>
+        <member name="M:Service.Controllers.FirmwareVersionController.#ctor(Business.RequestHandlers.Interfaces.IFirmwareVersionManager)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Service.Controllers.FirmwareVersionController"/> class.
+            </summary>
+            <param name="manager">The _manager.</param>
+        </member>
+        <member name="M:Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions(System.String)">
+            <summary>
+            Gets all firmware versions.
+            </summary>
+            <param name="deviceType">Type of the device.</param>
+            <returns></returns>
         </member>
         <member name="T:Service.Controllers.ModuleController">
             <summary>

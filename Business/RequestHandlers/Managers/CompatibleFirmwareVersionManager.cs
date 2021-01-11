@@ -1,9 +1,10 @@
 ﻿namespace Business.RequestHandlers.Managers
 {
-    using Models;
-    using Interfaces;
+    using Business.GitRepositoryWrappers.Interfaces;
     using EnsureThat;
+    using Interfaces;
     using Microsoft.Extensions.Logging;
+    using Models;
     using System;
     using System.Collections.Generic;
     using System.Linq;

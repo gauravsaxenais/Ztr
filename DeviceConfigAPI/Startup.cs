@@ -15,7 +15,6 @@
     using ZTR.Framework.Business.Models;
     using ZTR.Framework.Configuration;
     using ZTR.Framework.Service;
-    using ZTR.Framework.Service.HealthCheckup;
     using JsonSerializer = System.Text.Json.JsonSerializer;
 
     /// <summary>

@@ -1,12 +1,13 @@
 ﻿namespace Business.RequestHandlers.Managers
 {
-    using System;
+    using Business.GitRepositoryWrappers.Interfaces;
     using EnsureThat;
     using Interfaces;
     using Microsoft.Extensions.Logging;
     using Models;
     using Nett;
     using Parsers.ProtoParser.Parser;
+    using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
@@ -140,6 +141,9 @@
                 _logger.LogInformation($"{Prefix}: method name: {nameof(MergeDefaultValuesWithModuleAsync)} Merging config values with protoparsed message for {module.Name}");
                 var jsonModels = _moduleParser.MergeTomlWithProtoMessage(configValues, formattedMessage);
                 module.Config = jsonModels;
+
+                message = null;
+                formattedMessage = null;
             }
         }
 

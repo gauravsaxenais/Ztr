@@ -1,7 +1,10 @@
 ﻿namespace Service
 {
+    using Business.GitRepository.Interfaces;
+    using Business.GitRepository.Managers;
+    using Business.GitRepositoryWrappers.Interfaces;
+    using Business.GitRepositoryWrappers.Managers;
     using Business.Parsers;
-    using Business.Parsers.ProtoParser;
     using Business.RequestHandlers.Interfaces;
     using Business.RequestHandlers.Managers;
     using EnsureThat;
@@ -25,12 +28,17 @@
             services.AddScoped<IGitRepositoryManager, GitRepositoryManager>();
             services.AddScoped<IDeviceTypeManager, DeviceTypeManager>();
             services.AddScoped<IModuleManager, ModuleManager>();
+            services.AddScoped<IFirmwareVersionManager, FirmwareVersionManager>();
             services.AddScoped<IDefaultValueManager, DefaultValueManager>();
             services.AddScoped<IBlockManager, BlockManager>();
             services.AddScoped<IConfigGeneratorManager, ConfigGeneratorManager>();
             services.AddScoped<IConfigCreateFromManager, ConfigCreateFromManager>();
             services.AddScoped<ICompatibleFirmwareVersionManager, CompatibleFirmwareVersionManager>();
+
             services.AddScoped<IModuleServiceManager, ModuleServiceManager>();
+            services.AddScoped<IDeviceServiceManager, DeviceServiceManager>();
+            services.AddScoped<IBlockServiceManager, BlockServiceManager>();
+            services.AddScoped<IFirmwareVersionServiceManager, FirmwareVersionServiceManager>();
 
             services.AddCors(o => o.AddPolicy(ApiConstants.ApiAllowAllOriginsPolicy, builder =>
             {

@@ -1,11 +1,7 @@
-﻿using System.Threading.Tasks;
-
-namespace Business.Test
+﻿namespace Business.Test
 {
-    using Models;
-    using RequestHandlers.Interfaces;
+    using Business.GitRepositoryWrappers.Interfaces;
     using Moq;
-    using System.Collections.Generic;
     using Xunit;
 
     // naming convention - [MethodWeTest_StateUnderTest_ExpectedBehavior]

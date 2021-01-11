@@ -26,7 +26,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.Security", "..\Fr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.Test", "..\Framework\Framework.Test\Framework.Test.csproj", "{9568F491-4A68-47FA-8FF7-5F8F5300B1AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business.Test", "..\Business.Test1\Business.Test.csproj", "{7350BCE9-8E02-4F2F-BAA3-EF305537A13C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Business.Test", "..\Business.Test1\Business.Test.csproj", "{7350BCE9-8E02-4F2F-BAA3-EF305537A13C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business.GitRepository", "..\Business.GitRepository\Business.GitRepository.csproj", "{A08CC0CE-009F-4C72-90F3-496324574860}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -70,6 +72,10 @@ Global
 		{7350BCE9-8E02-4F2F-BAA3-EF305537A13C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7350BCE9-8E02-4F2F-BAA3-EF305537A13C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7350BCE9-8E02-4F2F-BAA3-EF305537A13C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A08CC0CE-009F-4C72-90F3-496324574860}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A08CC0CE-009F-4C72-90F3-496324574860}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A08CC0CE-009F-4C72-90F3-496324574860}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A08CC0CE-009F-4C72-90F3-496324574860}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,5 +1,6 @@
 ﻿namespace Business.RequestHandlers.Managers
 {
+    using Business.GitRepositoryWrappers.Interfaces;
     using EnsureThat;
     using Interfaces;
     using Microsoft.Extensions.Logging;

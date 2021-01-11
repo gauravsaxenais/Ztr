@@ -16,12 +16,13 @@
 
   <ItemGroup>
     <PackageReference Include="Ensure.That" Version="9.2.0" />
-    <PackageReference Include="LibGit2Sharp" Version="0.27.0-preview-0096" />
+    <PackageReference Include="LibGit2Sharp" Version="0.26.2" />
     <PackageReference Include="Nett" Version="0.15.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Business.GitRepository\Business.GitRepository.csproj" />
     <ProjectReference Include="..\Business.Parsers\Business.Parsers.csproj" />
   </ItemGroup>
 

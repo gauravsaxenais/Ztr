@@ -1,4 +1,4 @@
-﻿namespace Business.RequestHandlers.Interfaces
+﻿namespace Business.GitRepository.Interfaces
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
