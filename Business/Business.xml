@@ -176,9 +176,15 @@
             Block Service Manager.
             </summary>
         </member>
-        <member name="M:Business.GitRepositoryWrappers.Interfaces.IBlockServiceManager.GetAllBlockFiles">
+        <member name="M:Business.GitRepositoryWrappers.Interfaces.IBlockServiceManager.GetAllBlockFilesAsync">
             <summary>
             Gets all block files.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.GitRepositoryWrappers.Interfaces.IBlockServiceManager.GetAllModulesAsync">
+            <summary>
+            Gets all modules.
             </summary>
             <returns></returns>
         </member>
@@ -280,17 +286,18 @@
             </summary>
             <exception cref="T:ZTR.Framework.Business.Models.CustomArgumentException">Current directory path is not valid.</exception>
         </member>
-        <member name="M:Business.GitRepositoryWrappers.Managers.BlockServiceManager.GetAllBlockFiles">
+        <member name="M:Business.GitRepositoryWrappers.Managers.BlockServiceManager.GetAllBlockFilesAsync">
             <summary>
             Gets all block files.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Business.GitRepositoryWrappers.Managers.BlockServiceManager.GetAllDevicesAsync">
+        <member name="M:Business.GitRepositoryWrappers.Managers.BlockServiceManager.GetAllModulesAsync">
             <summary>
-            Gets all devices asynchronous.
+            Gets all modules.
             </summary>
             <returns></returns>
+            <exception cref="T:System.NotImplementedException"></exception>
         </member>
         <member name="T:Business.GitRepositoryWrappers.Managers.DeviceServiceManager">
             <summary>
@@ -456,6 +463,14 @@
             </summary>
             <value>
             The module.
+            </value>
+        </member>
+        <member name="P:Business.Models.BlockReadModel.Lines">
+            <summary>
+            Gets or sets the lines.
+            </summary>
+            <value>
+            The lines.
             </value>
         </member>
         <member name="M:Business.Models.BlockReadModel.ToString">

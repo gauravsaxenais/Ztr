@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.IO;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Block Service Manager.
@@ -12,6 +13,12 @@
         /// Gets all block files.
         /// </summary>
         /// <returns></returns>
-        IEnumerable<FileInfo> GetAllBlockFiles();
+        Task<IEnumerable<FileInfo>> GetAllBlockFilesAsync();
+
+        /// <summary>
+        /// Gets all modules.
+        /// </summary>
+        /// <returns></returns>
+        Task<IEnumerable<string>> GetAllModulesAsync();
     }
 }

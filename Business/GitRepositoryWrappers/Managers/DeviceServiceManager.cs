@@ -53,7 +53,9 @@
         public async Task<IEnumerable<string>> GetAllDevicesAsync()
         {
             _logger.LogInformation($"{Prefix}: Cloning github repository.");
-            await _gitRepoManager.CloneRepositoryAsync().ConfigureAwait(false);
+
+            await _gitRepoManager.CloneRepositoryAsync();
+
             _logger.LogInformation($"{Prefix}: Github repository cloning is successful.");
 
             var dictionaryDevices = await GetListOfDevicesAsync().ConfigureAwait(false);
@@ -77,10 +79,10 @@
         {
             object url = null;
             var dictionaryDevices = await GetListOfDevicesAsync().ConfigureAwait(false);
-            
+
             var device =
-                dictionaryDevices.FirstOrDefault(d => d.TryGetValue("name", out object value) 
-                                                      && value is string i 
+                dictionaryDevices.FirstOrDefault(d => d.TryGetValue("name", out object value)
+                                                      && value is string i
                                                       && string.Equals(i, deviceType,
                                                           StringComparison.OrdinalIgnoreCase));
             device?.TryGetValue("url", out url);

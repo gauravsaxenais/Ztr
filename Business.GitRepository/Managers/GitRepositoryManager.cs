@@ -29,11 +29,12 @@
         private const string GitFolder = ".git";
         private const string TextMimeType = "text/plain";
         private Repository _repository;
-
+        private readonly object _syncRoot = new object();
         #endregion
 
         #region Constructors
 
+        // for serialization
         public GitRepositoryManager()
         {
         }
@@ -68,35 +69,33 @@
         /// Clones the repository asynchronous.
         /// </summary>
         /// <exception cref="Exception">
-        /// Unauthorized: Incorrect username/password
-        /// or
-        /// Forbidden: Possibly Incorrect username/password
-        /// or
-        /// Not found: The repository was not found
         /// </exception>
         public async Task CloneRepositoryAsync()
         {
-            try
+            lock (_syncRoot)
             {
-                var name = GetProjectNameFromDirectory(_gitConnection.GitRemoteLocation);
-                if (IsExistsContentRepositoryDirectory())
+                try
                 {
-                    DeleteReadOnlyDirectory(_gitConnection.GitLocalFolder);
+                    var name = GetProjectNameFromDirectory(_gitConnection.GitRemoteLocation);
+                    if (IsExistsContentRepositoryDirectory())
+                    {
+                        DeleteReadOnlyDirectory(_gitConnection.GitLocalFolder);
+                    }
+
+                    Directory.CreateDirectory(_gitConnection.GitLocalFolder);
+
+                    Repository.Clone(_gitConnection.GitRemoteLocation, _gitConnection.GitLocalFolder,
+                        _cloneOptions);
+
+                    _repository = new Repository(_gitConnection.GitLocalFolder);
                 }
-
-                Directory.CreateDirectory(_gitConnection.GitLocalFolder);
-
-                await Task.Run(() =>
+                catch (LibGit2SharpException ex)
                 {
-                    Repository.Clone(_gitConnection.GitRemoteLocation, _gitConnection.GitLocalFolder, _cloneOptions);
-                });
+                    throw new CustomArgumentException("Unable to clone git repository.", ex);
+                }
+            }
 
-                _repository = new Repository(_gitConnection.GitLocalFolder);
-            }
-            catch (LibGit2SharpException ex)
-            {
-                throw new CustomArgumentException("Unable to clone git repo.", ex);
-            }
+            await Task.CompletedTask;
         }
 
         /// <summary>
@@ -138,7 +137,7 @@
                 throw new CustomArgumentException($"Unable to get tags earlier than {tagName} from git repo.", ex);
             }
         }
-        
+
         /// <summary>
         /// This method returns a file data as string from a particular tag.
         /// If a tag is "1.0.7", then the method returns data from all the files
