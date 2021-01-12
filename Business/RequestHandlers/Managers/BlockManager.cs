@@ -77,9 +77,9 @@
         /// <returns></returns>
         public async Task<IEnumerable<BlockJsonModel>> GetListOfBlocksAsync()
         {
-            var filesInDirectory = _blockServiceManager.GetAllBlockFiles();
+            var filesInDirectory = await _blockServiceManager.GetAllBlockFilesAsync().ConfigureAwait(false);
 
-            var data = await BatchProcessBlockFiles(filesInDirectory).ConfigureAwait(false);
+            var data = await BatchProcessBlockFilesAsync(filesInDirectory).ConfigureAwait(false);
             
             return data.ToList();
         }
@@ -118,7 +118,7 @@
             return blocks;
         }
 
-        private async Task<IEnumerable<BlockJsonModel>> BatchProcessBlockFiles(IEnumerable<FileInfo> models)
+        private async Task<IEnumerable<BlockJsonModel>> BatchProcessBlockFilesAsync(IEnumerable<FileInfo> models)
         {
             var batchSize = 4;
             var listOfRequests = new List<Task<List<BlockJsonModel>>>();

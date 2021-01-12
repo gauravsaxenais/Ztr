@@ -1,6 +1,5 @@
 ﻿namespace Business.Parsers.ProtoParser.Parser
 {
-    using Core;
     using EnsureThat;
     using Google.Protobuf;
     using Microsoft.CodeAnalysis;
@@ -14,6 +13,7 @@
     using System.Reflection;
     using System.Runtime.InteropServices;
     using System.Threading.Tasks;
+    using ZTR.Framework.Business;
     using ZTR.Framework.Business.File.FileReaders;
 
     public sealed class ProtoMessageParser : IProtoMessageParser
@@ -65,7 +65,7 @@
                 protoFilePath = CombinePathFromAppRoot(protoFilePath);
 
                 // try to use protoc
-                outputFolder = GenerateCSharpFile(protoFileName, protoFilePath, args);
+                outputFolder = await GenerateCSharpFileAsync(protoFileName, protoFilePath, args).ConfigureAwait(false);
                 outputFolder = FileReaderExtensions.NormalizeFolderPath(outputFolder);
 
                 var dllPath = await GenerateDllFromCsFileAsync(protoFileName, outputFolder);
@@ -94,66 +94,43 @@
             }
         }
 
-        public string GenerateCSharpFile(string fileName, string protoFilePath, params string[] args)
+        public async Task<string> GenerateCSharpFileAsync(string fileName, string protoFilePath, params string[] args)
         {
             var tmpOutputFolder = Path.Combine($"{Global.WebRoot}tmp", Guid.NewGuid().ToString("n"));
             Directory.CreateDirectory(tmpOutputFolder);
 
             var protocPath = GetProtoCompilerPath();
-            var inputs = $" --include_imports --proto_path={protoFilePath} --csharp_out={tmpOutputFolder}  --error_format=gcc {fileName} {string.Join(" ", args)}";
+            var inputs = $" --proto_path={protoFilePath} --csharp_out={tmpOutputFolder}  --error_format=gcc {fileName} {string.Join(" ", args)}";
 
-            var psi = new ProcessStartInfo(
-                protocPath,
-                arguments: inputs
-            )
-            {
-                CreateNoWindow = true,
-                WindowStyle = ProcessWindowStyle.Hidden,
-                WorkingDirectory = Global.WebRoot,
-                UseShellExecute = false
-            };
-
-            psi.CreateNoWindow = true;
-            psi.WindowStyle = ProcessWindowStyle.Hidden;
-            psi.WorkingDirectory = Global.WebRoot;
-            psi.UseShellExecute = false;
-            psi.RedirectStandardOutput = psi.RedirectStandardError = true;
-
-            _logger.LogInformation("Starting Proto compiler");
+            _logger.LogInformation($"Starting Proto compiler for fileName: {fileName}");
             _logger.LogInformation(inputs);
-
-            var proc = new Process { StartInfo = psi };
-
             try
             {
-                proc.Start();
+                var exitCode = await ProcessExtensions.StartProcess(
+                    protocPath,
+                    inputs,
+                    Global.WebRoot,
+                    10000,
+                    null,
+                    null);
 
-                var result = proc.StandardOutput.ReadToEnd();
-                result += " " + proc.StandardError.ReadToEnd();
-                proc.WaitForExit();
+                _logger.LogInformation($"Process Exited with Exit Code {exitCode}!");
 
-                _logger.LogInformation(result);
-
-                if (proc.ExitCode != 0)
+                if (exitCode != 0)
                 {
                     if (HasByteOrderMark(fileName))
                     {
-                        //stderr.WriteLine("The input file should be UTF8 without a byte-order-mark (in Visual Studio use \"File\" -> \"Advanced Save Options...\" to rectify)");
+                        _logger.LogError("The input file should be UTF8 without a byte-order-mark (in Visual Studio use \"File\" -> \"Advanced Save Options...\" to rectify).");
                     }
 
                     throw new ApplicationException("Protoc error" + fileName);
                 }
             }
-            catch (Exception ex)
+            catch (TaskCanceledException ex)
             {
-                throw new ApplicationException("Protoc error" + fileName, ex);
+                throw new ApplicationException("Protoc timed out!" + fileName, ex);
             }
-            finally
-            {
-                proc.Close();
-                proc.Dispose();
-            }
-            
+
             return tmpOutputFolder;
         }
 

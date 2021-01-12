@@ -1,7 +1,6 @@
 ﻿namespace Business.GitRepositoryWrappers.Interfaces
 {
     using ZTR.Framework.Business;
-    using ZTR.Framework.Business.File;
 
     /// <summary>
     /// Base class for Service Managers.

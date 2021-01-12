@@ -1,15 +1,14 @@
 ﻿namespace Business.GitRepositoryWrappers.Managers
 {
     using Business.GitRepository.Interfaces;
-    using Interfaces;
     using Configuration;
     using EnsureThat;
+    using Interfaces;
     using Microsoft.Extensions.Logging;
     using System.Collections.Generic;
     using System.IO;
     using System.Threading.Tasks;
     using ZTR.Framework.Business;
-    using ZTR.Framework.Business.File.FileReaders;
     using ZTR.Framework.Business.Models;
 
     /// <summary>
@@ -66,31 +65,23 @@
         /// Gets all block files.
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<FileInfo> GetAllBlockFiles()
+        public async Task<IEnumerable<FileInfo>> GetAllBlockFilesAsync()
         {
-            _logger.LogInformation($"{Prefix}: method name: {nameof(GetAllBlockFiles)} Getting list of all blocks.");
+            _logger.LogInformation($"{Prefix}: method name: {nameof(GetAllBlockFilesAsync)} Getting list of all blocks.");
             var blockConfigDirectory = new DirectoryInfo(_moduleGitConnectionOptions.BlockConfig);
             var filesInDirectory = blockConfigDirectory.EnumerateFiles();
 
-            return filesInDirectory;
+            return await Task.FromResult(filesInDirectory);
         }
 
         /// <summary>
-        /// Gets all devices asynchronous.
+        /// Gets all modules.
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<string>> GetAllDevicesAsync()
+        /// <exception cref="System.NotImplementedException"></exception>
+        public Task<IEnumerable<string>> GetAllModulesAsync()
         {
-            _logger.LogInformation($"{Prefix}: Cloning github repository.");
-            await _gitRepoManager.CloneRepositoryAsync().ConfigureAwait(false);
-            _logger.LogInformation($"{Prefix}: Github repository cloning is successful.");
-
-            _logger.LogInformation(
-                $"{Prefix} method name: {nameof(GetAllDevicesAsync)}: Getting list of all directories as devices.");
-            var listOfDevices = FileReaderExtensions.GetDirectories(_moduleGitConnectionOptions.DefaultTomlConfiguration.DeviceFolder);
-            listOfDevices = listOfDevices.ConvertAll(item => item.ToUpper());
-
-            return listOfDevices;
+            throw new System.NotImplementedException();
         }
     }
 }
