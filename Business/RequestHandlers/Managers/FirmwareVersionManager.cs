@@ -1,10 +1,10 @@
 ﻿namespace Business.RequestHandlers.Managers
 {
     using Business.GitRepositoryWrappers.Interfaces;
-    using Interfaces;
     using EnsureThat;
+    using Interfaces;
     using Microsoft.Extensions.Logging;
-    using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using ZTR.Framework.Business;
 
@@ -16,6 +16,7 @@
     public class FirmwareVersionManager : Manager, IFirmwareVersionManager
     {
         private readonly IFirmwareVersionServiceManager _firmwareVersionServiceManager;
+        private readonly ILogger _logger;
         private const string Prefix = nameof(FirmwareVersionManager);
 
         /// <summary>
@@ -29,33 +30,22 @@
             EnsureArg.IsNotNull(firmwareVersionServiceManager, nameof(firmwareVersionServiceManager));
 
             _firmwareVersionServiceManager = firmwareVersionServiceManager;
+            _logger = logger;
         }
 
         /// <summary>
         /// Gets all firmware versions asynchronous.
         /// </summary>
         /// <returns></returns>
-        public async Task<ApiResponse> GetAllFirmwareVersionsAsync(string deviceType)
+        public async Task<IEnumerable<string>> GetAllFirmwareVersionsAsync(string deviceType)
         {
-            EnsureArg.IsNotNull(deviceType);
-            ApiResponse apiResponse;
+            EnsureArg.IsNotEmptyOrWhiteSpace(deviceType);
 
-            try
-            {
-                Logger.LogInformation($"{Prefix}: Getting list of all firmware versions");
+            _logger.LogInformation($"{Prefix}: methodName: {nameof(GetAllFirmwareVersionsAsync)} Getting list of compatible firmware versions based on a device type {deviceType}.");
+            var listFirmwareVersions = await _firmwareVersionServiceManager.GetAllFirmwareVersionsAsync(deviceType)
+                .ConfigureAwait(false);
 
-                var listFirmwareVersions = await _firmwareVersionServiceManager.GetAllFirmwareVersionsAsync(deviceType)
-                                                                                              .ConfigureAwait(false);
-
-                apiResponse = new ApiResponse(status: true, data: listFirmwareVersions);
-            }
-            catch (Exception exception)
-            {
-                Logger.LogCritical(exception, $"{Prefix}: Error occurred while getting list of all firmware versions.");
-                apiResponse = new ApiResponse(ErrorType.BusinessError, exception);
-            }
-            
-            return apiResponse;
+            return listFirmwareVersions;
         }
     }
 }

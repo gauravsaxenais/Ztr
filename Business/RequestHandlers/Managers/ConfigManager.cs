@@ -9,18 +9,19 @@
     /// <summary>
     ///   <br />
     /// </summary>
-    public class ConfigGeneratorManager : IConfigGeneratorManager
+    public class ConfigManager : IConfigManager
     {
         private readonly ConverterService _service;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ConfigGeneratorManager"/> class.
+        /// Initializes a new instance of the <see cref="ConfigManager"/> class.
         /// </summary>
         /// <param name="service">The service.</param>
-        public ConfigGeneratorManager(ConverterService service)
+        public ConfigManager(ConverterService service)
         {
             _service = service;
         }
+
         /// <summary>
         /// Creates the configuration asynchronous.
         /// </summary>

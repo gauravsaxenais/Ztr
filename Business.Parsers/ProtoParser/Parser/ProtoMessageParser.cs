@@ -1,6 +1,4 @@
-﻿using ZTR.Framework.Business;
-
-namespace Business.Parsers.ProtoParser.Parser
+﻿namespace Business.Parsers.ProtoParser.Parser
 {
     using EnsureThat;
     using Google.Protobuf;
@@ -13,6 +11,7 @@ namespace Business.Parsers.ProtoParser.Parser
     using System.Reflection;
     using System.Runtime.InteropServices;
     using System.Threading.Tasks;
+    using ZTR.Framework.Business;
     using ZTR.Framework.Business.File.FileReaders;
 
     public sealed class ProtoMessageParser : IProtoMessageParser

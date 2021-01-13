@@ -3,7 +3,10 @@
     using Business.RequestHandlers.Interfaces;
     using EnsureThat;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Logging;
+    using System;
     using System.Threading.Tasks;
+    using ZTR.Framework.Business;
     using ZTR.Framework.Service;
 
     /// <summary>Block Controller - This service is responsible for getting arguments in network blocks.</summary>
@@ -13,16 +16,21 @@
     public class BlockController : ApiControllerBase
     {
         private readonly IBlockManager _manager;
+        private readonly ILogger<BlockController> _logger;
+        private const string Prefix = nameof(BlockController);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BlockController"/> class.
         /// </summary>
+        /// <param name="logger">The logger.</param>
         /// <param name="manager">The manager.</param>
-        public BlockController(IBlockManager manager)
+        public BlockController(ILogger<BlockController> logger, IBlockManager manager)
         {
             EnsureArg.IsNotNull(manager, nameof(manager));
+            EnsureArg.IsNotNull(logger, nameof(logger));
 
             _manager = manager;
+            _logger = logger;
         }
 
         /// <summary>Gets all blocks.</summary>
@@ -32,9 +40,22 @@
         [HttpGet(nameof(GetAllBlocks))]
         public async Task<IActionResult> GetAllBlocks()
         {
-            var result = await this._manager.GetBlocksAsObjectAsync().ConfigureAwait(false);
+            ApiResponse apiResponse;
 
-            return Ok(result);
+            try
+            {
+                _logger.LogInformation($"{Prefix}: Getting list of blocks.");
+                var result = await _manager.GetBlocksAsObjectAsync().ConfigureAwait(false);
+
+                apiResponse = new ApiResponse(status: true, data: result);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogCritical(exception, $"{Prefix}: Error occurred while getting list of blocks.");
+                apiResponse = new ApiResponse(false, exception.Message, ErrorType.BusinessError, exception);
+            }
+
+            return Ok(apiResponse);
         }
     }
 }

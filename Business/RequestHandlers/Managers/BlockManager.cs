@@ -6,7 +6,6 @@
     using Microsoft.Extensions.Logging;
     using Models;
     using Nett;
-    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -51,24 +50,12 @@
         /// Parses the toml files asynchronous.
         /// </summary>
         /// <returns></returns>
-        public async Task<ApiResponse> GetBlocksAsObjectAsync()
+        public async Task<object> GetBlocksAsObjectAsync()
         {
-            ApiResponse apiResponse;
+            _logger.LogInformation($"{Prefix}: methodName: {nameof(GetBlocksAsObjectAsync)} Getting list of blocks.");
+            var blocks = await GetListOfBlocksAsync().ConfigureAwait(false);
 
-            try
-            {
-                _logger.LogInformation($"{Prefix}: Getting list of blocks.");
-                var blocks = await GetListOfBlocksAsync().ConfigureAwait(false);
-
-                apiResponse = new ApiResponse(status: true, data: new {blocks});
-            }
-            catch (Exception exception)
-            {
-                _logger.LogCritical(exception, $"{Prefix}: Error occurred while getting list of blocks.");
-                apiResponse = new ApiResponse(false, exception.Message, ErrorType.BusinessError, exception);
-            }
-
-            return apiResponse;
+            return new {blocks};
         }
 
         /// <summary>

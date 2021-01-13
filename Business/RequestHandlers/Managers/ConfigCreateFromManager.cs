@@ -1,11 +1,10 @@
 ﻿namespace Business.RequestHandlers.Managers
 {
-    using Models;
-    using Interfaces;
     using EnsureThat;
+    using Interfaces;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Logging;
-    using System;
+    using Models;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -24,6 +23,7 @@
     {
         private readonly IDefaultValueManager _defaultValueManager;
         private readonly IBlockManager _blockManager;
+        private readonly ILogger _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigCreateFromManager"/> class.
@@ -39,6 +39,7 @@
 
             _blockManager = blockManager;
             _defaultValueManager = defaultValueManager;
+            _logger = logger;
         }
 
         /// <summary>
@@ -46,29 +47,18 @@
         /// </summary>
         /// <param name="configTomlFile">config.toml as string.</param>
         /// <returns></returns>
-        public async Task<ApiResponse> GenerateConfigTomlModelAsync(IFormFile configTomlFile)
+        public async Task<object> GenerateConfigTomlModelAsync(IFormFile configTomlFile)
         {
             EnsureArg.IsNotNull(configTomlFile);
             var prefix = nameof(ConfigCreateFromManager);
-            ApiResponse apiResponse;
 
-            try
-            {
-                Logger.LogInformation($"{prefix}: Getting list of modules and blocks from config.toml file.");
-                
-                var configTomlFileContent = ReadAsString(configTomlFile);
+            _logger.LogInformation($"{prefix}: methodName: {nameof(GenerateConfigTomlModelAsync)}Getting list of modules and blocks from config.toml file.");
 
-                var (modules, blocks) = await GetModulesAndBlocksAsync(configTomlFileContent);
+            var configTomlFileContent = ReadAsString(configTomlFile);
 
-                apiResponse = new ApiResponse(status: true, data: new { modules, blocks });
-            }
-            catch (Exception exception)
-            {
-                Logger.LogCritical(exception, $"{prefix}: Error occurred while getting list of modules and blocks from toml file.");
-                apiResponse = new ApiResponse(false, exception.Message, ErrorType.BusinessError, exception);
-            }
+            var (modules, blocks) = await GetModulesAndBlocksAsync(configTomlFileContent);
 
-            return apiResponse;
+            return new { modules, blocks };
         }
 
         private async Task<(IEnumerable<ModuleReadModel>, IEnumerable<BlockJsonModel>)> GetModulesAndBlocksAsync(string configTomlFileContent)

@@ -5,7 +5,6 @@
     using Interfaces;
     using Microsoft.Extensions.Logging;
     using Models;
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -20,6 +19,7 @@
     public class CompatibleFirmwareVersionManager : Manager, ICompatibleFirmwareVersionManager
     {
         private readonly IModuleServiceManager _moduleServiceManager;
+        private readonly ILogger _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CompatibleFirmwareVersionManager"/> class.
@@ -32,6 +32,7 @@
             EnsureArg.IsNotNull(moduleServiceManager, nameof(moduleServiceManager));
 
             _moduleServiceManager = moduleServiceManager;
+            _logger = logger;
         }
 
         /// <summary>
@@ -39,7 +40,7 @@
         /// </summary>
         /// <param name="module">The module.</param>
         /// <returns></returns>
-        public async Task<ApiResponse> GetCompatibleFirmwareVersionsAsync(CompatibleFirmwareVersionReadModel module)
+        public async Task<IEnumerable<string>> GetCompatibleFirmwareVersionsAsync(CompatibleFirmwareVersionReadModel module)
         {
             EnsureArg.IsNotNull(module);
             EnsureArg.IsNotEmptyOrWhiteSpace(module.FirmwareVersion);
@@ -47,38 +48,27 @@
             EnsureArg.HasItems(module.Modules);
 
             var prefix = nameof(CompatibleFirmwareVersionManager);
-            ApiResponse apiResponse;
             var firmwareVersions = new List<string>();
 
-            try
-            {
-                Logger.LogInformation($"{prefix}: Getting list of compatible firmware versions based on a firmware version.");
-                
-                var listOfTags = await _moduleServiceManager.GetTagsEarlierThanThisTagAsync(module.FirmwareVersion).ConfigureAwait(false);
+            _logger.LogInformation($"{prefix}: methodName: {nameof(GetCompatibleFirmwareVersionsAsync)} Getting list of compatible firmware versions based on a firmware version.");
 
-                foreach(var tag in listOfTags)
+            var listOfTags = await _moduleServiceManager.GetTagsEarlierThanThisTagAsync(module.FirmwareVersion).ConfigureAwait(false);
+
+            foreach (var tag in listOfTags)
+            {
+                var moduleList = await _moduleServiceManager.GetAllModulesAsync(tag, module.DeviceType).ConfigureAwait(false);
+
+                var contained = module.Modules.Intersect(moduleList, new ModuleReadModelComparer()).Count() == module.Modules.Count();
+
+                if (contained)
                 {
-                    var moduleList = await _moduleServiceManager.GetAllModulesAsync(tag, module.DeviceType).ConfigureAwait(false);
-
-                    var contained = module.Modules.Intersect(moduleList, new ModuleReadModelComparer()).Count() == module.Modules.Count();
-
-                    if (contained)
-                    {
-                        firmwareVersions.Add(tag);
-                    }
-
-                    else break;
+                    firmwareVersions.Add(tag);
                 }
-                
-                apiResponse = new ApiResponse(status: true, data: firmwareVersions);
-            }
-            catch (Exception exception)
-            {
-                Logger.LogCritical(exception, $"{prefix}: Error occurred while getting list of compatible firmware versions based on a firmware version.");
-                apiResponse = new ApiResponse(false, exception.Message, ErrorType.BusinessError, exception);
+
+                else break;
             }
 
-            return apiResponse;
+            return firmwareVersions;
         }
     }
 }

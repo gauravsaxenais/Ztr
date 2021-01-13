@@ -1,13 +1,15 @@
 ﻿namespace Service.Controllers
 {
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.Threading.Tasks;
     using Business.Models;
     using Business.RequestHandlers.Interfaces;
     using EnsureThat;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Logging;
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.Threading.Tasks;
     using ZTR.Framework.Business;
     using ZTR.Framework.Service;
 
@@ -24,16 +26,20 @@
     public class DefaultValuesController : ApiControllerBase
     {
         private readonly IDefaultValueManager _manager;
+        private readonly ILogger<DefaultValuesController> _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DefaultValuesController"/> class.
         /// </summary>
-        /// <param name="manager">interface of the 'backend' _manager which does all the work.</param>
-        public DefaultValuesController(IDefaultValueManager manager)
+        /// <param name="manager">The manager.</param>
+        /// <param name="logger">The logger.</param>
+        public DefaultValuesController(IDefaultValueManager manager, ILogger<DefaultValuesController> logger)
         {
             EnsureArg.IsNotNull(manager, nameof(manager));
+            EnsureArg.IsNotNull(logger, nameof(logger));
 
             _manager = manager;
+            _logger = logger;
         }
 
         /// <summary>
@@ -48,9 +54,24 @@
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllDefaultValues([Required, FromQuery] string firmwareVersion, [Required, FromQuery] string deviceType)
         {
-            var result = await _manager.GetDefaultValuesAllModulesAsync(firmwareVersion, deviceType).ConfigureAwait(false);
+            ApiResponse apiResponse;
+            var prefix = nameof(DefaultValuesController);
 
-            return this.Ok(result);
+            try
+            {
+                _logger.LogInformation($"{prefix}: Getting default values for {firmwareVersion} and {deviceType}.");
+
+                var result = await _manager.GetDefaultValuesAllModulesAsync(firmwareVersion, deviceType).ConfigureAwait(false);
+
+                apiResponse = new ApiResponse(status: true, data: result);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogCritical(exception, $"{prefix}: Error getting default values for {firmwareVersion} and {deviceType}.");
+                apiResponse = new ApiResponse(false, exception.Message, ErrorType.BusinessError, exception);
+            }
+
+            return Ok(apiResponse);
         }
     }
 }

@@ -1,14 +1,15 @@
 ﻿namespace Business.RequestHandlers.Managers
 {
     using Business.GitRepositoryWrappers.Interfaces;
+    using Models;
     using EnsureThat;
     using Interfaces;
     using Microsoft.Extensions.Logging;
-    using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using ZTR.Framework.Business;
 
-    /// <summary>
+    /// <summary>r
     /// Returns list of all the modules.
     /// </summary>
     /// <seealso cref="Manager" />
@@ -16,6 +17,7 @@
     public class ModuleManager : Manager, IModuleManager
     {
         private readonly IModuleServiceManager _moduleServiceManager;
+        private readonly ILogger _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ModuleManager"/> class.
@@ -28,6 +30,7 @@
             EnsureArg.IsNotNull(moduleServiceManager, nameof(moduleServiceManager));
 
             _moduleServiceManager = moduleServiceManager;
+            _logger = logger;
         }
 
         /// <summary>
@@ -36,28 +39,16 @@
         /// <param name="firmwareVersion">The firmware version.</param>
         /// <param name="deviceType">Type of the device.</param>
         /// <returns></returns>
-        public async Task<ApiResponse> GetAllModulesAsync(string firmwareVersion, string deviceType)
+        public async Task<IEnumerable<ModuleReadModel>> GetAllModulesAsync(string firmwareVersion, string deviceType)
         {
             var prefix = nameof(ModuleManager);
-            ApiResponse apiResponse;
 
-            try
-            {
-                Logger.LogInformation(
-                    $"{prefix}: Getting list of modules for firmware version: {firmwareVersion} and device type: {deviceType}");
+            _logger.LogInformation(
+                $"{prefix}: methodName: {nameof(GetAllModulesAsync)}. Getting list of modules for firmware version: {firmwareVersion} and device type: {deviceType}");
 
-                var listOfModules = await _moduleServiceManager.GetAllModulesAsync(firmwareVersion, deviceType).ConfigureAwait(false);
+            var listOfModules = await _moduleServiceManager.GetAllModulesAsync(firmwareVersion, deviceType).ConfigureAwait(false);
 
-                apiResponse = new ApiResponse(true, listOfModules);
-            }
-            catch (Exception exception)
-            {
-                Logger.LogCritical(exception,
-                    $"{prefix}: Error occurred while getting list of modules for firmware version: {firmwareVersion} and device type: {deviceType}");
-                apiResponse = new ApiResponse(ErrorType.BusinessError, exception);
-            }
-
-            return apiResponse;
+            return listOfModules;
         }
     }
 }

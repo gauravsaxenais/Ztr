@@ -6,7 +6,7 @@
     /// <summary>
     /// Config Generator interface methods.
     /// </summary>
-    public interface IConfigGeneratorManager
+    public interface IConfigManager
     {
         /// <summary>
         /// Creates the configuration asynchronous.

@@ -31,7 +31,7 @@
             services.AddScoped<IFirmwareVersionManager, FirmwareVersionManager>();
             services.AddScoped<IDefaultValueManager, DefaultValueManager>();
             services.AddScoped<IBlockManager, BlockManager>();
-            services.AddScoped<IConfigGeneratorManager, ConfigGeneratorManager>();
+            services.AddScoped<IConfigManager, ConfigManager>();
             services.AddScoped<IConfigCreateFromManager, ConfigCreateFromManager>();
             services.AddScoped<ICompatibleFirmwareVersionManager, CompatibleFirmwareVersionManager>();
 

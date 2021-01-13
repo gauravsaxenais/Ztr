@@ -4,7 +4,7 @@
     using EnsureThat;
     using Interfaces;
     using Microsoft.Extensions.Logging;
-    using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using ZTR.Framework.Business;
 
@@ -16,6 +16,7 @@
     public class DeviceTypeManager : Manager, IDeviceTypeManager
     {
         private readonly IDeviceServiceManager _deviceServiceManager;
+        private readonly ILogger _logger;
         private const string Prefix = nameof(DeviceTypeManager);
 
         /// <summary>
@@ -29,31 +30,20 @@
             EnsureArg.IsNotNull(deviceServiceManager, nameof(deviceServiceManager));
 
             _deviceServiceManager = deviceServiceManager;
+            _logger = logger;
         }
 
         /// <summary>
         /// Gets all devices asynchronous.
         /// </summary>
         /// <returns></returns>
-        public async Task<ApiResponse> GetAllDevicesAsync()
+        public async Task<IEnumerable<string>> GetAllDevicesAsync()
         {
-            ApiResponse apiResponse;
+            _logger.LogInformation($"{Prefix} method name: {nameof(GetAllDevicesAsync)}: Getting list of all devices.");
 
-            try
-            {
-                Logger.LogInformation($"{Prefix} method name: {nameof(GetAllDevicesAsync)}: Getting list of all devices.");
-
-                var listOfDevices = await _deviceServiceManager.GetAllDevicesAsync();
-
-                apiResponse = new ApiResponse(status: true, data: listOfDevices);
-            }
-            catch (Exception exception)
-            {
-                Logger.LogCritical(exception, $"{Prefix}: method name: {nameof(GetAllDevicesAsync)} Error occurred while getting list of all devices.");
-                apiResponse = new ApiResponse(ErrorType.BusinessError, exception);
-            }
-
-            return apiResponse;
+            var listOfDevices = await _deviceServiceManager.GetAllDevicesAsync();
+            
+            return listOfDevices;
         }
     }
 }
