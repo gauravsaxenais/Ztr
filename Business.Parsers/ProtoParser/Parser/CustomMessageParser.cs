@@ -24,7 +24,7 @@
         }
 
         /// <summary>
-        /// Formats the specified protoParsedMessage as Protoparser protoParsedMessage.
+        /// Formats the specified protoParsedMessage as Proto parser protoParsedMessage.
         /// </summary>
         /// <param name="message">The protoParsedMessage to format.</param>
         /// <param name="protoParserProtoParsedMessage">The field to parse the formatted protoParsedMessage to.</param>

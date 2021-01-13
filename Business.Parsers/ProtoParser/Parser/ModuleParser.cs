@@ -1,7 +1,7 @@
 ﻿namespace Business.Parsers.ProtoParser.Parser
 {
-    using Models;
     using EnsureThat;
+    using Models;
     using System;
     using System.Collections;
     using System.Collections.Generic;
@@ -155,7 +155,6 @@
                 listOfData.RemoveAll(x => x.Arrays.Any() || x.Fields.Any());
             }
         }
-
 
         private bool IsValueType(object obj)
         {

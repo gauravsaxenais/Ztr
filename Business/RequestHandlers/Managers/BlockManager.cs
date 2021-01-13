@@ -137,6 +137,7 @@
 
             // fix the indexes
             var blockFiles = data.ToList();
+            
             FixIndex(blockFiles);
 
             return blockFiles;

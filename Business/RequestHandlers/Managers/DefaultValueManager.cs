@@ -142,8 +142,14 @@
                 var jsonModels = _moduleParser.MergeTomlWithProtoMessage(configValues, formattedMessage);
                 module.Config = jsonModels;
 
+                message.Message = null;
                 message = null;
-                formattedMessage = null;
+
+                if (module.Name == "j1939")
+                {
+                    formattedMessage.ClearData(formattedMessage);
+                    formattedMessage = null;
+                }
             }
         }
 

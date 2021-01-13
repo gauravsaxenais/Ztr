@@ -46,6 +46,29 @@
         }
 
         /// <summary>
+        /// Combines the path from application root.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns></returns>
+        public static string CombinePathFromAppRoot(string path)
+        {
+            string loaderPath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
+
+            if (!string.IsNullOrEmpty(loaderPath)
+
+                && loaderPath[loaderPath.Length - 1] != Path.DirectorySeparatorChar
+                && loaderPath[loaderPath.Length - 1] != Path.AltDirectorySeparatorChar)
+            {
+                loaderPath += Path.DirectorySeparatorChar;
+            }
+            if (loaderPath.StartsWith(@"file:\"))
+            {
+                loaderPath = loaderPath[6..];
+            }
+            return Path.Combine(Path.GetDirectoryName(loaderPath), path);
+        }
+
+        /// <summary>
         /// Ensures the correct file system path.
         /// </summary>
         /// <param name="path">The path to file or directory.</param>
