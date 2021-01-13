@@ -1,13 +1,13 @@
 ﻿namespace Business.RequestHandlers.Managers
 {
     using Business.GitRepositoryWrappers.Interfaces;
+    using Business.Parsers.ProtoParser.Models;
     using EnsureThat;
     using Interfaces;
     using Microsoft.Extensions.Logging;
     using Models;
     using Nett;
     using Parsers.ProtoParser.Parser;
-    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -75,6 +75,7 @@
                 await _moduleServiceManager.GetDefaultTomlFileContentAsync(firmwareVersion, deviceType).ConfigureAwait(false);
 
             _logger.LogInformation($"{Prefix}: Getting list of modules {firmwareVersion} and {deviceType}.");
+
             // get list of all modules.
             var listOfModules = await _moduleServiceManager.GetAllModulesAsync(firmwareVersion, deviceType)
                 .ConfigureAwait(false);
@@ -92,49 +93,62 @@
         /// <param name="listOfModules">The list of modules.</param>
         public async Task MergeValuesWithModulesAsync(string defaultValueFromTomlFile, IEnumerable<ModuleReadModel> listOfModules)
         {
-            var degreeOfParallelism = 10;
-            _logger.LogInformation($"{Prefix}: method name: {nameof(MergeValuesWithModulesAsync)} Merging default values with list of modules in parallel...");
+            _logger.LogInformation($"{Prefix}: method name: {nameof(MergeValuesWithModulesAsync)} Getting proto file for modules.");
 
-            await Task.WhenAll(
-                from partition in Partitioner.Create(listOfModules).GetPartitions(degreeOfParallelism)
-                select Task.Run(async delegate
+            var moduleReadModels = listOfModules.ToList();
+            var protoFilePaths = GetProtoFilePaths(moduleReadModels);
+
+            var customMessages = await GetCustomMessages(protoFilePaths).ConfigureAwait(false);
+            _logger.LogInformation($"{Prefix}: method name: {nameof(MergeValuesWithModulesAsync)} Retrieved proto files for modules.");
+
+            foreach (var module in moduleReadModels)
+            {
+                var customMessage = customMessages.FirstOrDefault(x => x.Name == module.Name);
+                module.Config = MergeDefaultValuesWithModuleAsync(defaultValueFromTomlFile, module.Name, customMessage);
+
+                if (customMessage != null)
                 {
-                    using (partition)
-                        while (partition.MoveNext())
-                            await MergeDefaultValuesWithModuleAsync(defaultValueFromTomlFile, partition.Current);
-                }));
+                    customMessage.Message = null;
+                    customMessage = null;
+                }
+            }
         }
 
-        private async Task MergeDefaultValuesWithModuleAsync(string defaultValueFromTomlFile, ModuleReadModel module)
+        private async Task<List<CustomMessage>> GetCustomMessages(Dictionary<string, string> protoFilePaths)
         {
-            EnsureArg.IsNotNull(module);
+            var customMessages = new List<CustomMessage>();
 
-            _logger.LogInformation($"{Prefix}: method name: {nameof(MergeDefaultValuesWithModuleAsync)} Getting proto file for {module.Name}");
-            // get proto files for corresponding module and their uuid
-            var protoFilePath = _moduleServiceManager.GetProtoFiles(module);
-
-            _logger.LogInformation($"{Prefix}: method name: {nameof(MergeDefaultValuesWithModuleAsync)} Retrieved proto file for {module.Name}");
-            if (!string.IsNullOrWhiteSpace(protoFilePath))
+            foreach (var filePath in protoFilePaths)
             {
-                // get protoparsed messages from the proto files.
-                var message = await _protoParser.GetCustomMessages(protoFilePath).ConfigureAwait(false);
+                var moduleName = filePath.Key;
 
-                var formattedMessage = _customMessageParser.Format(message.Message);
-                formattedMessage.Name = module.Name;
-
-                _logger.LogInformation($"{Prefix}: method name: {nameof(MergeDefaultValuesWithModuleAsync)} Getting config values from default.toml file for {module.Name}");
-                var configValues = GetConfigValues(defaultValueFromTomlFile, module.Name);
-
-                _logger.LogInformation($"{Prefix}: method name: {nameof(MergeDefaultValuesWithModuleAsync)} Merging config values with protoparsed message for {module.Name}");
-                var jsonModels = _moduleParser.MergeTomlWithProtoMessage(configValues, formattedMessage);
-                module.Config = jsonModels;
-
-                message.Message = null;
-                message = null;
-
-                formattedMessage.ClearData(formattedMessage);
-                formattedMessage = null;
+                var customMessage =  await _protoParser.GetCustomMessage(filePath.Value, moduleName).ConfigureAwait(false);
+                customMessages.Add(customMessage);
             }
+            
+            return customMessages;
+        }
+
+        private Dictionary<string, string> GetProtoFilePaths(IEnumerable<ModuleReadModel> listOfModules)
+        {
+            return listOfModules.ToDictionary(module => module.Name, module => _moduleServiceManager.GetProtoFiles(module));
+        }
+
+        private IEnumerable<JsonField> MergeDefaultValuesWithModuleAsync(string defaultValueFromTomlFile, string moduleName, CustomMessage message)
+        {
+            var formattedMessage = _customMessageParser.Format(message.Message);
+            formattedMessage.Name = moduleName;
+
+            _logger.LogInformation($"{Prefix}: method name: {nameof(MergeDefaultValuesWithModuleAsync)} Getting config values from default.toml file for {moduleName}");
+            var configValues = GetConfigValues(defaultValueFromTomlFile, moduleName);
+
+            _logger.LogInformation($"{Prefix}: method name: {nameof(MergeDefaultValuesWithModuleAsync)} Merging config values with protoparsed message for {moduleName}");
+            var jsonModels = _moduleParser.MergeTomlWithProtoMessage(configValues, formattedMessage);
+
+            formattedMessage.ClearData(formattedMessage);
+            formattedMessage = null;
+
+            return jsonModels;
         }
 
         private Dictionary<string, object> GetConfigValues(string fileContent, string moduleName)

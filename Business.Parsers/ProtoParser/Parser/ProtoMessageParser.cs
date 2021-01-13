@@ -10,8 +10,8 @@
     using System.Linq;
     using System.Reflection;
     using System.Runtime.InteropServices;
+    using System.Threading;
     using System.Threading.Tasks;
-    using ZTR.Framework.Business;
     using ZTR.Framework.Business.File.FileReaders;
 
     public sealed class ProtoMessageParser : IProtoMessageParser
@@ -36,10 +36,11 @@
         /// Gets the custom messages.
         /// </summary>
         /// <param name="protoFilePath">The proto file path.</param>
+        /// <param name="moduleName"></param>
         /// <returns>
         /// custom message containing the proto parsed message
         /// </returns>
-        public async Task<CustomMessage> GetCustomMessages(string protoFilePath)
+        public async Task<CustomMessage> GetCustomMessage(string protoFilePath, string moduleName)
         {
             var fileName = Path.GetFileName(protoFilePath);
 
@@ -51,7 +52,11 @@
 
                 var result = await GetProtoParsedMessage(fileName, protoDirectory).ConfigureAwait(false);
 
-                return result;
+                if (result != null)
+                {
+                    result.Name = moduleName;
+                    return result;
+                }
             }
 
             return null;
@@ -67,8 +72,6 @@
 
             try
             {
-                protoFilePath = FileReaderExtensions.CombinePathFromAppRoot(protoFilePath);
-
                 // try to use protoc
                 outputFolder = await GenerateCSharpFileAsync(protoFileName, protoFilePath, args).ConfigureAwait(false);
                 outputFolder = FileReaderExtensions.NormalizeFolderPath(outputFolder);
@@ -123,35 +126,40 @@
             _logger.LogInformation("Starting Proto compiler");
             _logger.LogInformation(inputs);
 
-            var proc = new Process { StartInfo = psi };
+            using Process proc = Process.Start(psi);
+            Thread errThread = new Thread(DumpStream(proc.StandardError));
+            Thread outThread = new Thread(DumpStream(proc.StandardOutput));
+            errThread.Name = "stderr reader";
+            outThread.Name = "stdout reader";
+            errThread.Start();
+            outThread.Start();
+            proc.WaitForExit();
+            outThread.Join();
+            errThread.Join();
 
-            try
+            if (proc.ExitCode != 0)
             {
-                proc.Start();
-
-                await proc.WaitForExitAsync();
-
-                if (proc.ExitCode != 0)
+                if (HasByteOrderMark(fileName))
                 {
-                    if (HasByteOrderMark(fileName))
-                    {
-                        _logger.LogCritical("The input file should be UTF8 without a byte-order-mark (in Visual Studio use \"File\" -> \"Advanced Save Options...\" to rectify)");
-                    }
-
-                    throw new ApplicationException("There is an issue in parsing proto file." + fileName);
+                    _logger.LogCritical("The input file should be UTF8 without a byte-order-mark (in Visual Studio use \"File\" -> \"Advanced Save Options...\" to rectify)");
                 }
-            }
-            catch (Exception ex)
-            {
-                throw new ApplicationException("There is an issue in parsing proto file." + fileName, ex);
-            }
-            finally
-            {
-                proc.Close();
-                proc.Dispose();
+
+                throw new ApplicationException("There is an issue in parsing proto file." + fileName);
             }
 
             return tmpOutputFolder;
+        }
+
+        private ThreadStart DumpStream(TextReader reader)
+        {
+            return (ThreadStart)delegate
+            {
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    Debug.WriteLine(line);
+                }
+            };
         }
 
         private CustomMessage GetIMessage(string dllPath)
@@ -161,14 +169,14 @@
             byte[] result = File.ReadAllBytes(dllPath);
 
             using (var context = new CollectibleAssemblyLoadContext())
-                using (var ms = new MemoryStream(result))
+            using (var ms = new MemoryStream(result))
             {
                 var assembly = context.LoadFromStream(ms);
 
                 var instances = from t in assembly.GetTypes()
-                    where t.GetInterfaces().Contains(typeof(IMessage))
-                          && t.GetConstructor(Type.EmptyTypes) != null
-                    select Activator.CreateInstance(t) as IMessage;
+                                where t.GetInterfaces().Contains(typeof(IMessage))
+                                      && t.GetConstructor(Type.EmptyTypes) != null
+                                select Activator.CreateInstance(t) as IMessage;
 
                 foreach (var instance in instances)
                 {

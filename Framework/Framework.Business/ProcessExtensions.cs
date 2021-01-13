@@ -26,7 +26,7 @@ namespace ZTR.Framework.Business
                     return;
                 }
 
-                using (cancellationToken.Register(() => Task.Run(() => tcs.TrySetCanceled())))
+                using (cancellationToken.Register(() => Task.Run(() => tcs.TrySetCanceled(), cancellationToken)))
                 {
                     await tcs.Task;
                 }

@@ -10,6 +10,6 @@
         /// </summary>
         /// <param name="protoFilePath">The proto file path.</param>
         /// <returns>custom message containing the proto parsed message</returns>
-        Task<CustomMessage> GetCustomMessages(string protoFilePath);
+        Task<CustomMessage> GetCustomMessage(string protoFilePath, string moduleName);
     }
 }
