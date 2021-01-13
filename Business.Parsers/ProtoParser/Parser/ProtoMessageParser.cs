@@ -1,9 +1,9 @@
-﻿namespace Business.Parsers.ProtoParser.Parser
+﻿using ZTR.Framework.Business;
+
+namespace Business.Parsers.ProtoParser.Parser
 {
     using EnsureThat;
     using Google.Protobuf;
-    using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.Extensions.Logging;
     using Models;
     using System;
@@ -13,18 +13,24 @@
     using System.Reflection;
     using System.Runtime.InteropServices;
     using System.Threading.Tasks;
-    using ZTR.Framework.Business;
     using ZTR.Framework.Business.File.FileReaders;
 
     public sealed class ProtoMessageParser : IProtoMessageParser
     {
         private readonly ILogger<ProtoMessageParser> _logger;
+        private readonly IProtoFileCompiler _protoFileCompiler;
         private const string CsExtension = ".cs";
         private const string DllExtension = ".dll";
 
-        public ProtoMessageParser(ILogger<ProtoMessageParser> logger)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProtoMessageParser"/> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
+        /// <param name="protoFileCompiler">The proto file compiler.</param>
+        public ProtoMessageParser(ILogger<ProtoMessageParser> logger, IProtoFileCompiler protoFileCompiler)
         {
             _logger = logger;
+            _protoFileCompiler = protoFileCompiler;
         }
 
         /// <summary>
@@ -62,7 +68,7 @@
 
             try
             {
-                protoFilePath = CombinePathFromAppRoot(protoFilePath);
+                protoFilePath = FileReaderExtensions.CombinePathFromAppRoot(protoFilePath);
 
                 // try to use protoc
                 outputFolder = await GenerateCSharpFileAsync(protoFileName, protoFilePath, args).ConfigureAwait(false);
@@ -73,7 +79,7 @@
                 if (!string.IsNullOrWhiteSpace(dllPath))
                 {
                     var message = GetIMessage(dllPath);
-                    return new CustomMessage() { Message = message };
+                    return message;
                 }
 
                 return null;
@@ -102,55 +108,80 @@
             var protocPath = GetProtoCompilerPath();
             var inputs = $" --proto_path={protoFilePath} --csharp_out={tmpOutputFolder}  --error_format=gcc {fileName} {string.Join(" ", args)}";
 
-            _logger.LogInformation($"Starting Proto compiler for fileName: {fileName}");
+            var psi = new ProcessStartInfo(
+                protocPath,
+                arguments: inputs
+            )
+            {
+                CreateNoWindow = true,
+                WindowStyle = ProcessWindowStyle.Hidden,
+                WorkingDirectory = Global.WebRoot,
+                UseShellExecute = false
+            };
+
+            psi.RedirectStandardOutput = psi.RedirectStandardError = true;
+
+            _logger.LogInformation("Starting Proto compiler");
             _logger.LogInformation(inputs);
+
+            var proc = new Process { StartInfo = psi };
+
             try
             {
-                var exitCode = await ProcessExtensions.StartProcess(
-                    protocPath,
-                    inputs,
-                    Global.WebRoot,
-                    10000,
-                    null,
-                    null);
+                proc.Start();
 
-                _logger.LogInformation($"Process Exited with Exit Code {exitCode}!");
+                await proc.WaitForExitAsync();
 
-                if (exitCode != 0)
+                if (proc.ExitCode != 0)
                 {
                     if (HasByteOrderMark(fileName))
                     {
-                        _logger.LogError("The input file should be UTF8 without a byte-order-mark (in Visual Studio use \"File\" -> \"Advanced Save Options...\" to rectify).");
+                        _logger.LogCritical("The input file should be UTF8 without a byte-order-mark (in Visual Studio use \"File\" -> \"Advanced Save Options...\" to rectify)");
                     }
 
-                    throw new ApplicationException("Protoc error" + fileName);
+                    throw new ApplicationException("There is an issue in parsing proto file." + fileName);
                 }
             }
-            catch (TaskCanceledException ex)
+            catch (Exception ex)
             {
-                throw new ApplicationException("Protoc timed out!" + fileName, ex);
+                throw new ApplicationException("There is an issue in parsing proto file." + fileName, ex);
+            }
+            finally
+            {
+                proc.Close();
+                proc.Dispose();
             }
 
             return tmpOutputFolder;
         }
 
-        private IMessage GetIMessage(string dllPath)
+        private CustomMessage GetIMessage(string dllPath)
         {
             EnsureArg.IsNotNullOrWhiteSpace(dllPath);
+            CustomMessage customMessage;
+            byte[] result = File.ReadAllBytes(dllPath);
 
-            byte[] assemblyBytes = File.ReadAllBytes(dllPath);
-            var assembly = Assembly.Load(assemblyBytes);
-
-            var instances = from t in assembly.GetTypes()
-                            where t.GetInterfaces().Contains(typeof(IMessage))
-                                     && t.GetConstructor(Type.EmptyTypes) != null
-                            select Activator.CreateInstance(t) as IMessage;
-
-            foreach (var instance in instances)
+            using (var context = new CollectibleAssemblyLoadContext())
+                using (var ms = new MemoryStream(result))
             {
-                if (instance.Descriptor.Name == "Config" && CanConvertToMessageType(instance.GetType()))
+                var assembly = context.LoadFromStream(ms);
+
+                var instances = from t in assembly.GetTypes()
+                    where t.GetInterfaces().Contains(typeof(IMessage))
+                          && t.GetConstructor(Type.EmptyTypes) != null
+                    select Activator.CreateInstance(t) as IMessage;
+
+                foreach (var instance in instances)
                 {
-                    return instance;
+                    if (instance.Descriptor.Name == "Config" && CanConvertToMessageType(instance.GetType()))
+                    {
+                        customMessage = new CustomMessage()
+                        {
+                            Message = instance
+                        };
+
+                        return customMessage;
+                    }
                 }
             }
 
@@ -170,13 +201,13 @@
             if (!File.Exists(path) && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 // look inside ourselves...
-                using (Stream resStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(
+                using (var resStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(
                     typeof(ProtoMessageParser).Namespace + "." + name))
                 using (Stream outFile = File.OpenWrite(path))
                 {
                     long len = 0;
                     int bytesRead;
-                    byte[] buffer = new byte[4096];
+                    var buffer = new byte[4096];
                     while (resStream != null && (bytesRead = resStream.Read(buffer, 0, buffer.Length)) > 0)
                     {
                         outFile.Write(buffer, 0, bytesRead);
@@ -205,37 +236,26 @@
             fileName = char.ToUpper(fileName[0]) + fileName[1..];
 
             string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
-            string filePath = outputFolderPath + fileNameWithoutExtension;
-            string csFilePath = filePath + CsExtension;
-            string dllFilePath = filePath + DllExtension;
+            string csFilePath = outputFolderPath + fileNameWithoutExtension + CsExtension;
+            string dllFilePath = outputFolderPath + fileNameWithoutExtension + DllExtension;
 
-            string localDllFolder = FileReaderExtensions.NormalizeFolderPath(CombinePathFromAppRoot(string.Empty));
+            string fileContent;
 
             using (TextReader readFile = new StreamReader(csFilePath))
             {
-                string content = await readFile.ReadToEndAsync();
-
-                var dotnetCoreDirectory = RuntimeEnvironment.GetRuntimeDirectory();
-
-                var compilation = CSharpCompilation.Create(fileNameWithoutExtension)
-                    .WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary))
-                    .AddReferences(
-                        MetadataReference.CreateFromFile(typeof(object).GetTypeInfo().Assembly.Location),
-                        MetadataReference.CreateFromFile(typeof(SyntaxTree).GetTypeInfo().Assembly.Location),
-                        MetadataReference.CreateFromFile(typeof(CSharpSyntaxTree).GetTypeInfo().Assembly.Location),
-                        MetadataReference.CreateFromFile(Path.Combine(dotnetCoreDirectory, "netstandard.dll")),
-                        MetadataReference.CreateFromFile(Path.Combine(dotnetCoreDirectory, "System.Runtime.dll")),
-                        MetadataReference.CreateFromFile(Path.Combine(localDllFolder, "Google.Protobuf.dll")))
-                    .AddSyntaxTrees(CSharpSyntaxTree.ParseText(content));
-
-                var eResult = compilation.Emit(dllFilePath);
-
-                if (eResult.Success)
-                {
-                    return dllFilePath;
-                }
+                fileContent = await readFile.ReadToEndAsync();
             }
-            return string.Empty;
+
+            try
+            {
+                _protoFileCompiler.GenerateDllFromFile(dllFilePath, fileContent, fileName);
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("Error in compiling cs file to dll. " + fileName, ex);
+            }
+
+            return dllFilePath;
         }
 
         private bool HasByteOrderMark(string path)
@@ -250,25 +270,6 @@
                 Debug.WriteLine(ex); // log only
                 return false;
             }
-        }
-
-        public string CombinePathFromAppRoot(string path)
-        {
-            string loaderPath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
-
-            if (!string.IsNullOrEmpty(loaderPath)
-#pragma warning disable IDE0056 // Use index operator
-                && loaderPath[loaderPath.Length - 1] != Path.DirectorySeparatorChar
-                && loaderPath[loaderPath.Length - 1] != Path.AltDirectorySeparatorChar)
-#pragma warning restore IDE0056 // Use index operator
-            {
-                loaderPath += Path.DirectorySeparatorChar;
-            }
-            if (loaderPath.StartsWith(@"file:\"))
-            {
-                loaderPath = loaderPath[6..];
-            }
-            return Path.Combine(Path.GetDirectoryName(loaderPath), path);
         }
     }
 }

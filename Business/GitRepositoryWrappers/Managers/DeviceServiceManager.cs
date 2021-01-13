@@ -87,6 +87,7 @@
                                                           StringComparison.OrdinalIgnoreCase));
             device?.TryGetValue("url", out url);
 
+            dictionaryDevices.Clear();
             return url != null ? url.ToString() : string.Empty;
         }
 

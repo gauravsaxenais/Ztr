@@ -11,7 +11,19 @@
         public bool IsRepeated { get; set; }
 
         public List<Field> Fields { get; } = new List<Field>();
-        
+
         public List<ProtoParsedMessage> Messages { get; } = new List<ProtoParsedMessage>();
+
+        public void ClearData(ProtoParsedMessage message)
+        {
+            message.Fields.Clear();
+
+            foreach (var msg in message.Messages)
+            {
+                ClearData(msg);
+            }
+
+            message.Messages.Clear();
+        }
     }
 }

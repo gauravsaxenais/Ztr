@@ -15,6 +15,7 @@
             services.AddScoped<IProtoMessageParser, ProtoMessageParser>();
             services.AddScoped<ICustomMessageParser, CustomMessageParser>();
             services.AddScoped<IModuleParser, ModuleParser>();
+            services.AddScoped<IProtoFileCompiler, ProtoFileCompiler>();
 
             services.AddScoped<ConvertConfig>();
         }
