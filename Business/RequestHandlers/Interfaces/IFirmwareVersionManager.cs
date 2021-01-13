@@ -1,7 +1,7 @@
 ﻿namespace Business.RequestHandlers.Interfaces
 {
+    using System.Collections.Generic;
     using System.Threading.Tasks;
-    using ZTR.Framework.Business;
 
     /// <summary>
     /// Gets list of all firmware versions.
@@ -13,6 +13,6 @@
         /// </summary>
         /// <param name="deviceType">Type of the device.</param>
         /// <returns></returns>
-        Task<ApiResponse> GetAllFirmwareVersionsAsync(string deviceType);
+        Task<IEnumerable<string>> GetAllFirmwareVersionsAsync(string deviceType);
     }
 }

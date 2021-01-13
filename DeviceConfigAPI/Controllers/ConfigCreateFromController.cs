@@ -5,6 +5,8 @@
     using EnsureThat;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Logging;
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Threading.Tasks;
@@ -24,16 +26,20 @@
     public class ConfigCreateFromController : ApiControllerBase
     {
         private readonly IConfigCreateFromManager _manager;
+        private readonly ILogger<ConfigCreateFromController> _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigCreateFromController"/> class.
         /// </summary>
-        /// <param name="manager">interface of the 'backend' _manager which does all the work.</param>
-        public ConfigCreateFromController(IConfigCreateFromManager manager)
+        /// <param name="manager">The manager.</param>
+        /// <param name="logger">The logger.</param>
+        public ConfigCreateFromController(IConfigCreateFromManager manager, ILogger<ConfigCreateFromController> logger)
         {
             EnsureArg.IsNotNull(manager, nameof(manager));
+            EnsureArg.IsNotNull(logger, nameof(logger));
 
             _manager = manager;
+            _logger = logger;
         }
 
         /// <summary>
@@ -47,9 +53,23 @@
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetConfigTomlValues([Required] IFormFile configTomlFile)
         {
-            var result = await _manager.GenerateConfigTomlModelAsync(configTomlFile).ConfigureAwait(false);
+            var prefix = nameof(ConfigCreateFromController);
+            ApiResponse apiResponse;
 
-            return Ok(result);
+            try
+            {
+                _logger.LogInformation($"{prefix}: Getting list of modules and blocks from config.toml file.");
+
+                var result = await _manager.GenerateConfigTomlModelAsync(configTomlFile).ConfigureAwait(false);
+                apiResponse = new ApiResponse(status: true, data: result);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogCritical(exception, $"{prefix}: Error occurred while getting list of modules and blocks from toml file.");
+                apiResponse = new ApiResponse(false, exception.Message, ErrorType.BusinessError, exception);
+            }
+
+            return Ok(apiResponse);
         }
     }
 }

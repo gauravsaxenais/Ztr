@@ -762,19 +762,19 @@
             <param name="configTomlFile">The firmware version.</param>
             <returns></returns>
         </member>
-        <member name="T:Business.RequestHandlers.Interfaces.IConfigGeneratorManager">
+        <member name="T:Business.RequestHandlers.Interfaces.IConfigManager">
             <summary>
             Config Generator interface methods.
             </summary>
         </member>
-        <member name="M:Business.RequestHandlers.Interfaces.IConfigGeneratorManager.CreateConfigAsync(Business.Parsers.Core.Models.ConfigReadModel)">
+        <member name="M:Business.RequestHandlers.Interfaces.IConfigManager.CreateConfigAsync(Business.Parsers.Core.Models.ConfigReadModel)">
             <summary>
             Creates the configuration asynchronous.
             </summary>
             <param name="model">The model.</param>
             <returns></returns>
         </member>
-        <member name="M:Business.RequestHandlers.Interfaces.IConfigGeneratorManager.UpdateTomlConfig(System.String)">
+        <member name="M:Business.RequestHandlers.Interfaces.IConfigManager.UpdateTomlConfig(System.String)">
             <summary>
             Updates the toml configuration.
             </summary>
@@ -925,18 +925,18 @@
             <param name="fileContent">Content of the file.</param>
             <returns></returns>
         </member>
-        <member name="T:Business.RequestHandlers.Managers.ConfigGeneratorManager">
+        <member name="T:Business.RequestHandlers.Managers.ConfigManager">
             <summary>
               <br />
             </summary>
         </member>
-        <member name="M:Business.RequestHandlers.Managers.ConfigGeneratorManager.#ctor(Business.Parsers.Core.Converter.ConverterService)">
+        <member name="M:Business.RequestHandlers.Managers.ConfigManager.#ctor(Business.Parsers.Core.Converter.ConverterService)">
             <summary>
-            Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.ConfigGeneratorManager"/> class.
+            Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.ConfigManager"/> class.
             </summary>
             <param name="service">The service.</param>
         </member>
-        <member name="M:Business.RequestHandlers.Managers.ConfigGeneratorManager.CreateConfigAsync(Business.Parsers.Core.Models.ConfigReadModel)">
+        <member name="M:Business.RequestHandlers.Managers.ConfigManager.CreateConfigAsync(Business.Parsers.Core.Models.ConfigReadModel)">
             <summary>
             Creates the configuration asynchronous.
             </summary>
@@ -945,7 +945,7 @@
               <br />
             </returns>
         </member>
-        <member name="M:Business.RequestHandlers.Managers.ConfigGeneratorManager.UpdateTomlConfig(System.String)">
+        <member name="M:Business.RequestHandlers.Managers.ConfigManager.UpdateTomlConfig(System.String)">
             <summary>
             Updates the toml configuration.
             </summary>
@@ -1030,7 +1030,7 @@
             <returns></returns>
         </member>
         <member name="T:Business.RequestHandlers.Managers.ModuleManager">
-            <summary>
+            <summary>r
             Returns list of all the modules.
             </summary>
             <seealso cref="T:ZTR.Framework.Business.Manager" />

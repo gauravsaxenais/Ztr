@@ -7,7 +7,6 @@
     using Models;
     using Nett;
     using Parsers.ProtoParser.Parser;
-    using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
@@ -67,35 +66,23 @@
         /// <param name="firmwareVersion">The firmware version.</param>
         /// <param name="deviceType">Type of the device.</param>
         /// <returns></returns>
-        public async Task<ApiResponse> GetDefaultValuesAllModulesAsync(string firmwareVersion, string deviceType)
+        public async Task<IEnumerable<ModuleReadModel>> GetDefaultValuesAllModulesAsync(string firmwareVersion, string deviceType)
         {
-            ApiResponse apiResponse;
+            _logger.LogInformation($"{Prefix}: Getting default values for {firmwareVersion} and {deviceType}.");
 
-            try
-            {
-                _logger.LogInformation($"{Prefix}: Getting default values for {firmwareVersion} and {deviceType}.");
+            // read default values from toml file defaults.toml
+            var defaultValueFromTomlFile =
+                await _moduleServiceManager.GetDefaultTomlFileContentAsync(firmwareVersion, deviceType).ConfigureAwait(false);
 
-                // read default values from toml file defaults.toml
-                var defaultValueFromTomlFile =
-                    await _moduleServiceManager.GetDefaultTomlFileContentAsync(firmwareVersion, deviceType).ConfigureAwait(false);
+            _logger.LogInformation($"{Prefix}: Getting list of modules {firmwareVersion} and {deviceType}.");
+            // get list of all modules.
+            var listOfModules = await _moduleServiceManager.GetAllModulesAsync(firmwareVersion, deviceType)
+                .ConfigureAwait(false);
 
-                _logger.LogInformation($"{Prefix}: Getting list of modules {firmwareVersion} and {deviceType}.");
-                // get list of all modules.
-                var listOfModules = await _moduleServiceManager.GetAllModulesAsync(firmwareVersion, deviceType)
-                    .ConfigureAwait(false);
+            _logger.LogInformation($"{Prefix}: Merging default values with module information. {firmwareVersion} and {deviceType}.");
+            await MergeValuesWithModulesAsync(defaultValueFromTomlFile, listOfModules);
 
-                _logger.LogInformation($"{Prefix}: Merging default values with module information. {firmwareVersion} and {deviceType}.");
-                await MergeValuesWithModulesAsync(defaultValueFromTomlFile, listOfModules);
-
-                apiResponse = new ApiResponse(status: true, data: listOfModules);
-            }
-            catch (Exception exception)
-            {
-                _logger.LogCritical(exception, $"{Prefix}: Error getting default values for {firmwareVersion} and {deviceType}.");
-                apiResponse = new ApiResponse(false, exception.Message, ErrorType.BusinessError, exception);
-            }
-
-            return apiResponse;
+            return listOfModules;
         }
 
         /// <summary>
@@ -145,11 +132,8 @@
                 message.Message = null;
                 message = null;
 
-                if (module.Name == "j1939")
-                {
-                    formattedMessage.ClearData(formattedMessage);
-                    formattedMessage = null;
-                }
+                formattedMessage.ClearData(formattedMessage);
+                formattedMessage = null;
             }
         }
 

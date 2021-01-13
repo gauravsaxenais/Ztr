@@ -1,7 +1,7 @@
 ﻿namespace Business.RequestHandlers.Interfaces
 {
+    using System.Collections.Generic;
     using System.Threading.Tasks;
-    using ZTR.Framework.Business;
 
     /// <summary>
     /// Gets all the devices e.g. M3, M7, M9 etc.
@@ -12,6 +12,6 @@
         /// Gets all devices asynchronous.
         /// </summary>
         /// <returns></returns>
-        Task<ApiResponse> GetAllDevicesAsync();
+        Task<IEnumerable<string>> GetAllDevicesAsync();
     }
 }

@@ -1,6 +1,4 @@
-﻿using ZTR.Framework.Business;
-
-namespace Business.RequestHandlers.Interfaces
+﻿namespace Business.RequestHandlers.Interfaces
 {
     using Models;
     using System.Collections.Generic;
@@ -18,8 +16,8 @@ namespace Business.RequestHandlers.Interfaces
         /// <param name="firmwareVersion">The firmware version.</param>
         /// <param name="deviceType">Type of the device.</param>
         /// <returns></returns>
-        Task<ApiResponse> GetDefaultValuesAllModulesAsync(string firmwareVersion, string deviceType);
-        
+        Task<IEnumerable<ModuleReadModel>> GetDefaultValuesAllModulesAsync(string firmwareVersion, string deviceType);
+
         /// <summary>
         /// Merges the values with modules asynchronous.
         /// </summary>

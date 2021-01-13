@@ -4,6 +4,8 @@
     using EnsureThat;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Logging;
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Threading.Tasks;
@@ -20,16 +22,19 @@
     public class FirmwareVersionController : ApiControllerBase
     {
         private readonly IFirmwareVersionManager _manager;
+        private readonly ILogger<FirmwareVersionController> _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FirmwareVersionController"/> class.
         /// </summary>
-        /// <param name="manager">The _manager.</param>
-        public FirmwareVersionController(IFirmwareVersionManager manager)
+        /// <param name="manager">The manager.</param>
+        /// <param name="logger">The logger.</param>
+        public FirmwareVersionController(IFirmwareVersionManager manager, ILogger<FirmwareVersionController> logger)
         {
             EnsureArg.IsNotNull(manager, nameof(manager));
 
             _manager = manager;
+            _logger = logger;
         }
 
         /// <summary>
@@ -43,8 +48,24 @@
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllFirmwareVersions([Required] string deviceType)
         {
-            var result = await _manager.GetAllFirmwareVersionsAsync(deviceType).ConfigureAwait(false);
-            return Ok(result);
+            ApiResponse apiResponse;
+            var prefix = nameof(FirmwareVersionController);
+
+            try
+            {
+                _logger.LogInformation($"{prefix}: Getting list of all firmware versions");
+
+                var result = await _manager.GetAllFirmwareVersionsAsync(deviceType).ConfigureAwait(false);
+
+                apiResponse = new ApiResponse(status: true, data: result);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogCritical(exception, $"{prefix}: Error occurred while getting list of all firmware versions.");
+                apiResponse = new ApiResponse(ErrorType.BusinessError, exception);
+            }
+            
+            return Ok(apiResponse);
         }
     }
 }

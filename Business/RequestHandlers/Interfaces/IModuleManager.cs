@@ -1,7 +1,8 @@
 ﻿namespace Business.RequestHandlers.Interfaces
 {
+    using Models;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
-    using ZTR.Framework.Business;
 
     /// <summary>
     /// get list of all the modules, their name and uuid information.
@@ -14,6 +15,6 @@
         /// <param name="firmwareVersion">The firmware version.</param>
         /// <param name="deviceType">Type of the device.</param>
         /// <returns></returns>
-        Task<ApiResponse> GetAllModulesAsync(string firmwareVersion, string deviceType);
+        Task<IEnumerable<ModuleReadModel>> GetAllModulesAsync(string firmwareVersion, string deviceType);
     }
 }

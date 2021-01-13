@@ -2,7 +2,6 @@
 {
     using Microsoft.AspNetCore.Http;
     using System.Threading.Tasks;
-    using ZTR.Framework.Business;
 
     /// <summary>
     /// This module takes config.toml as input 
@@ -15,6 +14,6 @@
         /// </summary>
         /// <param name="configTomlFile">The firmware version.</param>
         /// <returns></returns>
-        Task<ApiResponse> GenerateConfigTomlModelAsync(IFormFile configTomlFile);
+        Task<object> GenerateConfigTomlModelAsync(IFormFile configTomlFile);
     }
 }

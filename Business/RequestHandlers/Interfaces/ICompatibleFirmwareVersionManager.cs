@@ -1,8 +1,8 @@
 ﻿namespace Business.RequestHandlers.Interfaces
 {
     using Models;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
-    using ZTR.Framework.Business;
 
     /// <summary>
     /// This Manager returns a list of all compatible firmware versions.
@@ -14,6 +14,6 @@
         /// </summary>
         /// <param name="module">The module.</param>
         /// <returns></returns>
-        Task<ApiResponse> GetCompatibleFirmwareVersionsAsync(CompatibleFirmwareVersionReadModel module);
+        Task<IEnumerable<string>> GetCompatibleFirmwareVersionsAsync(CompatibleFirmwareVersionReadModel module);
     }
 }

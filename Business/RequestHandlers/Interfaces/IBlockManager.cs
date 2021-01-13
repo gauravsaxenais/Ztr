@@ -1,6 +1,5 @@
 ﻿namespace Business.RequestHandlers.Interfaces
 {
-    using ZTR.Framework.Business;
     using Models;
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -15,7 +14,7 @@
         /// Parses the toml files asynchronous.
         /// </summary>
         /// <returns></returns>
-        Task<ApiResponse> GetBlocksAsObjectAsync();
+        Task<object> GetBlocksAsObjectAsync();
 
         /// <summary>
         /// Gets the list of blocks asynchronous.

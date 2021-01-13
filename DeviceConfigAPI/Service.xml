@@ -73,10 +73,11 @@
         <member name="T:Service.Controllers.BlockController">
             <summary>Block Controller - This service is responsible for getting arguments in network blocks.</summary>
         </member>
-        <member name="M:Service.Controllers.BlockController.#ctor(Business.RequestHandlers.Interfaces.IBlockManager)">
+        <member name="M:Service.Controllers.BlockController.#ctor(Microsoft.Extensions.Logging.ILogger{Service.Controllers.BlockController},Business.RequestHandlers.Interfaces.IBlockManager)">
             <summary>
             Initializes a new instance of the <see cref="T:Service.Controllers.BlockController"/> class.
             </summary>
+            <param name="logger">The logger.</param>
             <param name="manager">The manager.</param>
         </member>
         <member name="M:Service.Controllers.BlockController.GetAllBlocks">
@@ -92,11 +93,12 @@
             </summary>
             <seealso cref="T:Service.Controllers.ApiControllerBase" />
         </member>
-        <member name="M:Service.Controllers.CompatibleFirmwareVersionController.#ctor(Business.RequestHandlers.Interfaces.ICompatibleFirmwareVersionManager)">
+        <member name="M:Service.Controllers.CompatibleFirmwareVersionController.#ctor(Business.RequestHandlers.Interfaces.ICompatibleFirmwareVersionManager,Microsoft.Extensions.Logging.ILogger{Service.Controllers.CompatibleFirmwareVersionController})">
             <summary>
             Initializes a new instance of the <see cref="T:Service.Controllers.CompatibleFirmwareVersionController"/> class.
             </summary>
-            <param name="manager">interface of the 'backend' _manager which does all the work.</param>
+            <param name="manager">The manager.</param>
+            <param name="logger">The logger.</param>
         </member>
         <member name="M:Service.Controllers.CompatibleFirmwareVersionController.GetCompatibleFirmwareVersions(Business.Models.CompatibleFirmwareVersionReadModel)">
             <summary>
@@ -108,11 +110,12 @@
         <member name="T:Service.Controllers.ConfigController">
             <summary>Config Controller - This service is responsible for generating the config toml.</summary>
         </member>
-        <member name="M:Service.Controllers.ConfigController.#ctor(Business.RequestHandlers.Interfaces.IConfigGeneratorManager)">
+        <member name="M:Service.Controllers.ConfigController.#ctor(Business.RequestHandlers.Interfaces.IConfigManager,Microsoft.Extensions.Logging.ILogger{Service.Controllers.ConfigController})">
             <summary>
             Initializes a new instance of the <see cref="T:Service.Controllers.ConfigController"/> class.
             </summary>
-            <param name="manager">The _manager.</param>
+            <param name="manager">The manager.</param>
+            <param name="logger">The logger.</param>
         </member>
         <member name="M:Service.Controllers.ConfigController.CreateTomlConfig(Business.Parsers.Core.Models.ConfigReadModel)">
             <summary>Creates the toml configuration.</summary>
@@ -128,11 +131,12 @@
             </summary>
             <seealso cref="T:Microsoft.AspNetCore.Mvc.ControllerBase" />
         </member>
-        <member name="M:Service.Controllers.ConfigCreateFromController.#ctor(Business.RequestHandlers.Interfaces.IConfigCreateFromManager)">
+        <member name="M:Service.Controllers.ConfigCreateFromController.#ctor(Business.RequestHandlers.Interfaces.IConfigCreateFromManager,Microsoft.Extensions.Logging.ILogger{Service.Controllers.ConfigCreateFromController})">
             <summary>
             Initializes a new instance of the <see cref="T:Service.Controllers.ConfigCreateFromController"/> class.
             </summary>
-            <param name="manager">interface of the 'backend' _manager which does all the work.</param>
+            <param name="manager">The manager.</param>
+            <param name="logger">The logger.</param>
         </member>
         <member name="M:Service.Controllers.ConfigCreateFromController.GetConfigTomlValues(Microsoft.AspNetCore.Http.IFormFile)">
             <summary>
@@ -149,11 +153,12 @@
             </summary>
             <seealso cref="T:Microsoft.AspNetCore.Mvc.ControllerBase" />
         </member>
-        <member name="M:Service.Controllers.DefaultValuesController.#ctor(Business.RequestHandlers.Interfaces.IDefaultValueManager)">
+        <member name="M:Service.Controllers.DefaultValuesController.#ctor(Business.RequestHandlers.Interfaces.IDefaultValueManager,Microsoft.Extensions.Logging.ILogger{Service.Controllers.DefaultValuesController})">
             <summary>
             Initializes a new instance of the <see cref="T:Service.Controllers.DefaultValuesController"/> class.
             </summary>
-            <param name="manager">interface of the 'backend' _manager which does all the work.</param>
+            <param name="manager">The manager.</param>
+            <param name="logger">The logger.</param>
         </member>
         <member name="M:Service.Controllers.DefaultValuesController.GetAllDefaultValues(System.String,System.String)">
             <summary>
@@ -168,11 +173,12 @@
             This service returns the device information.
             </summary>
         </member>
-        <member name="M:Service.Controllers.DeviceTypeController.#ctor(Business.RequestHandlers.Interfaces.IDeviceTypeManager)">
+        <member name="M:Service.Controllers.DeviceTypeController.#ctor(Business.RequestHandlers.Interfaces.IDeviceTypeManager,Microsoft.Extensions.Logging.ILogger{Service.Controllers.DeviceTypeController})">
             <summary>
             Initializes a new instance of the <see cref="T:Service.Controllers.DeviceTypeController"/> class.
             </summary>
-            <param name="manager">The _manager.</param>
+            <param name="manager">The manager.</param>
+            <param name="logger">The logger.</param>
         </member>
         <member name="M:Service.Controllers.DeviceTypeController.GetAllDevices">
             <summary>
@@ -185,11 +191,12 @@
             This service returns the device information.
             </summary>
         </member>
-        <member name="M:Service.Controllers.FirmwareVersionController.#ctor(Business.RequestHandlers.Interfaces.IFirmwareVersionManager)">
+        <member name="M:Service.Controllers.FirmwareVersionController.#ctor(Business.RequestHandlers.Interfaces.IFirmwareVersionManager,Microsoft.Extensions.Logging.ILogger{Service.Controllers.FirmwareVersionController})">
             <summary>
             Initializes a new instance of the <see cref="T:Service.Controllers.FirmwareVersionController"/> class.
             </summary>
-            <param name="manager">The _manager.</param>
+            <param name="manager">The manager.</param>
+            <param name="logger">The logger.</param>
         </member>
         <member name="M:Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions(System.String)">
             <summary>
@@ -205,11 +212,12 @@
             </summary>
             <seealso cref="T:Microsoft.AspNetCore.Mvc.ControllerBase" />
         </member>
-        <member name="M:Service.Controllers.ModuleController.#ctor(Business.RequestHandlers.Interfaces.IModuleManager)">
+        <member name="M:Service.Controllers.ModuleController.#ctor(Business.RequestHandlers.Interfaces.IModuleManager,Microsoft.Extensions.Logging.ILogger{Service.Controllers.ModuleController})">
             <summary>
             Initializes a new instance of the <see cref="T:Service.Controllers.ModuleController"/> class.
             </summary>
-            <param name="manager">The _manager.</param>
+            <param name="manager">The manager.</param>
+            <param name="logger">The logger.</param>
         </member>
         <member name="M:Service.Controllers.ModuleController.GetAllModules(System.String,System.String)">
             <summary>
