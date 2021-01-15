@@ -5,13 +5,12 @@
     using System.IO;
     using System.Linq;
     using System.Text;
-    using System.Threading;
     using System.Threading.Tasks;
     using EnsureThat;
 
     public static class FileReaderExtensions
     {
-        private readonly static HashSet<char> _invalidCharacters = new HashSet<char>(Path.GetInvalidPathChars());
+        private static readonly HashSet<char> InvalidCharacters = new HashSet<char>(Path.GetInvalidPathChars());
 
         /// <summary>
         /// Normalizes a given folder path by replacing all backslashes with forward slashes, as well as ensuring there is a trailing slash.
@@ -80,7 +79,7 @@
             if (path == null)
                 throw new ArgumentNullException($"{nameof(path)} is null.", nameof(path));
 
-            if (string.IsNullOrWhiteSpace(path) || path.Any(pc => _invalidCharacters.Contains(pc)))
+            if (string.IsNullOrWhiteSpace(path) || path.Any(pc => InvalidCharacters.Contains(pc)))
             {
                 var message =
                     $"{nameof(path)} is a zero-length string, contains only white space, or contains one or more invalid characters as defined by InvalidPathChars.";
@@ -130,38 +129,6 @@
             }
 
             return directories;
-        }
-
-        public static bool IsFileClosed(string filepath)
-        {
-            bool fileClosed = false;
-            int retries = 20;
-            const int delay = 400; // Max time spent here = retries*delay milliseconds
-
-            if (!File.Exists(filepath))
-                return false;
-
-            do
-            {
-                try
-                {
-                    // Attempts to open then close the file in RW mode, denying other users to place any locks.
-                    FileStream fs = File.Open(filepath, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
-                    fs.Close();
-                    fileClosed = true; // success
-                }
-                catch (IOException) { }
-
-                retries--;
-
-                if (!fileClosed)
-                {
-                    Thread.Sleep(delay);
-                }
-            }
-            while (!fileClosed && retries > 0);
-
-            return fileClosed;
         }
 
         private static List<string> GetDirectories(string path, string searchPattern = "*")

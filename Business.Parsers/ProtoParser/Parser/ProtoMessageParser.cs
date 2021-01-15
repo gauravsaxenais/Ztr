@@ -5,13 +5,12 @@
     using Microsoft.Extensions.Logging;
     using Models;
     using System;
-    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Reflection;
     using System.Runtime.InteropServices;
+    using System.Threading;
     using System.Threading.Tasks;
-    using ZTR.Framework.Business;
     using ZTR.Framework.Business.File.FileReaders;
 
     public sealed class ProtoMessageParser : IProtoMessageParser
@@ -20,6 +19,7 @@
         private readonly IProtoFileCompiler _protoFileCompiler;
         private const string CsExtension = ".cs";
         private const string DllExtension = ".dll";
+        private static readonly object LockObject = new object();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProtoMessageParser"/> class.
@@ -39,27 +39,15 @@
         /// <returns>
         /// custom message containing the proto parsed message
         /// </returns>
-        public async Task<CustomMessage> GetCustomMessages(string protoFilePath)
+        public async Task<CustomMessage> GetCustomMessage(string protoFilePath)
         {
-            var fileName = Path.GetFileName(protoFilePath);
-
-            var info = new FileInfo(protoFilePath).Directory;
-
-            if (info != null)
-            {
-                var protoDirectory = info.FullName;
-
-                var result = await GetProtoParsedMessage(fileName, protoDirectory).ConfigureAwait(false);
-
-                return result;
-            }
-
-            return null;
+            var result = await GetProtoParsedMessage(protoFilePath).ConfigureAwait(false);
+            
+            return result;
         }
 
-        private async Task<CustomMessage> GetProtoParsedMessage(string protoFileName, string protoFilePath, params string[] args)
+        private async Task<CustomMessage> GetProtoParsedMessage(string protoFilePath, params string[] args)
         {
-            EnsureArg.IsNotEmptyOrWhiteSpace(protoFileName);
             EnsureArg.IsNotEmptyOrWhiteSpace(protoFilePath);
 
             string outputFolder = string.Empty;
@@ -69,16 +57,22 @@
             {
                 protoFilePath = FileReaderExtensions.CombinePathFromAppRoot(protoFilePath);
 
-                // try to use protoc
-                outputFolder = await GenerateCSharpFileAsync(protoFileName, protoFilePath, args).ConfigureAwait(false);
+                _logger.LogInformation($"Inside method: {nameof(GetProtoParsedMessage)}. Creating temp directory for protofilePath = {protoFilePath}.");
+                outputFolder = Path.Combine($"{Global.WebRoot}tmp", Guid.NewGuid().ToString("n"));
                 outputFolder = FileReaderExtensions.NormalizeFolderPath(outputFolder);
 
-                var dllPath = await GenerateDllFromCsFileAsync(protoFileName, outputFolder);
+                Directory.CreateDirectory(outputFolder);
 
-                if (!string.IsNullOrWhiteSpace(dllPath))
+                if (HasGeneratedCSharpFile(outputFolder, protoFilePath, args))
                 {
-                    var message = GetIMessage(dllPath);
-                    return message;
+                    var protoFileName = Path.GetFileName(protoFilePath);
+                    var dllPath = await GenerateDllFromCsFileAsync(protoFileName, outputFolder);
+
+                    if (!string.IsNullOrWhiteSpace(dllPath))
+                    {
+                        var message = GetIMessage(dllPath);
+                        return message;
+                    }
                 }
 
                 return null;
@@ -99,82 +93,60 @@
             }
         }
 
-        public async Task<string> GenerateCSharpFileAsync(string fileName, string protoFilePath, params string[] args)
+        private bool HasGeneratedCSharpFile(string outputFolder, string protoFilePath, params string[] args)
         {
-            var tmpOutputFolder = Path.Combine($"{Global.WebRoot}tmp", Guid.NewGuid().ToString("n"));
-            Directory.CreateDirectory(tmpOutputFolder);
+            string protocPath = GetProtoCompilerPath();
 
-            var protocPath = GetProtoCompilerPath();
-            var inputs = $" --proto_path={protoFilePath} --csharp_out={tmpOutputFolder}  --error_format=gcc {fileName} {string.Join(" ", args)}";
+            string protoFileName = Path.GetFileName(protoFilePath);
+            string protoFolder = Path.GetDirectoryName(protoFilePath);
 
-            var psi = new ProcessStartInfo(
-                protocPath,
-                arguments: inputs
-            )
-            {
-                CreateNoWindow = true,
-                WindowStyle = ProcessWindowStyle.Hidden,
-                WorkingDirectory = Global.WebRoot,
-                UseShellExecute = false
-            };
+            string arguments = $" --proto_path={protoFolder} --csharp_out={outputFolder} --error_format=gcc {protoFileName} {string.Join(" ", args)}";
 
-            psi.RedirectStandardOutput = psi.RedirectStandardError = true;
-
-            _logger.LogInformation("Starting Proto compiler");
-            _logger.LogInformation(inputs);
-
-            var proc = new Process { StartInfo = psi };
-
+            Monitor.Enter(LockObject);
             try
             {
-                proc.Start();
+                _logger.LogInformation($"Inside method: {nameof(HasGeneratedCSharpFile)}. Now generating cs file.");
 
-                await proc.WaitForExitAsync();
-
-                if (proc.ExitCode != 0)
+                using (var process = new ProcessExecutor(protocPath))
                 {
-                    if (HasByteOrderMark(fileName))
-                    {
-                        _logger.LogCritical("The input file should be UTF8 without a byte-order-mark (in Visual Studio use \"File\" -> \"Advanced Save Options...\" to rectify)");
-                    }
-
-                    throw new ApplicationException("There is an issue in parsing proto file." + fileName);
+                    process.Run(arguments);
+                    process.Wait();
                 }
+
+                _logger.LogInformation($"Inside method: {nameof(HasGeneratedCSharpFile)}. cs file generated successfully.");
             }
             catch (Exception ex)
             {
-                throw new ApplicationException("There is an issue in parsing proto file." + fileName, ex);
+                throw new ApplicationException("Protoc in linux error: " + outputFolder, ex);
             }
             finally
             {
-                proc.Close();
-                proc.Dispose();
+                Monitor.Exit(LockObject);
             }
 
-            return tmpOutputFolder;
+            return true;
         }
 
         private CustomMessage GetIMessage(string dllPath)
         {
             EnsureArg.IsNotNullOrWhiteSpace(dllPath);
-            CustomMessage customMessage;
             byte[] result = File.ReadAllBytes(dllPath);
 
             using (var context = new CollectibleAssemblyLoadContext())
-                using (var ms = new MemoryStream(result))
+            using (var ms = new MemoryStream(result))
             {
                 var assembly = context.LoadFromStream(ms);
 
                 var instances = from t in assembly.GetTypes()
-                    where t.GetInterfaces().Contains(typeof(IMessage))
-                          && t.GetConstructor(Type.EmptyTypes) != null
-                    select Activator.CreateInstance(t) as IMessage;
+                                where t.GetInterfaces().Contains(typeof(IMessage))
+                                      && t.GetConstructor(Type.EmptyTypes) != null
+                                select Activator.CreateInstance(t) as IMessage;
 
                 foreach (var instance in instances)
                 {
                     if (instance.Descriptor.Name == "Config" && CanConvertToMessageType(instance.GetType()))
                     {
-                        customMessage = new CustomMessage()
+                        var customMessage = new CustomMessage()
                         {
                             Message = instance
                         };
@@ -189,11 +161,14 @@
 
         private string GetProtoCompilerPath()
         {
+            _logger.LogInformation($"Inside method {nameof(GetProtoCompilerPath)}.");
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
+                _logger.LogInformation($"Inside method {nameof(GetProtoCompilerPath)}. Operating system is linux");
                 return "protoc";
             }
 
+            _logger.LogInformation($"Inside method {nameof(GetProtoCompilerPath)}. Operating system is windows.");
             string name = "protoc.exe";
             string path = FileReaderExtensions.ToSafeFullPath(Global.WebRoot, name);
 
@@ -232,18 +207,14 @@
 
         private async Task<string> GenerateDllFromCsFileAsync(string fileName, string outputFolderPath)
         {
+            _logger.LogInformation($"Inside method: {nameof(GenerateDllFromCsFileAsync)}. Generating dll for {fileName} and outputFolder: {outputFolderPath}");
             fileName = char.ToUpper(fileName[0]) + fileName[1..];
 
             string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
-            string csFilePath = outputFolderPath + fileNameWithoutExtension + CsExtension;
-            string dllFilePath = outputFolderPath + fileNameWithoutExtension + DllExtension;
+            string csFilePath = Path.Combine(outputFolderPath, fileNameWithoutExtension + CsExtension);
+            string dllFilePath = Path.Combine(outputFolderPath, fileNameWithoutExtension + DllExtension);
 
-            string fileContent;
-
-            using (TextReader readFile = new StreamReader(csFilePath))
-            {
-                fileContent = await readFile.ReadToEndAsync();
-            }
+            string fileContent = await File.ReadAllTextAsync(csFilePath);
 
             try
             {
@@ -254,21 +225,8 @@
                 throw new ApplicationException("Error in compiling cs file to dll. " + fileName, ex);
             }
 
+            _logger.LogInformation($"Inside method: {nameof(GenerateDllFromCsFileAsync)}. Generated dll for {fileName} and outputFolder: {outputFolderPath}");
             return dllFilePath;
-        }
-
-        private bool HasByteOrderMark(string path)
-        {
-            try
-            {
-                using Stream s = File.OpenRead(path);
-                return s.ReadByte() > 127;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex); // log only
-                return false;
-            }
         }
     }
 }

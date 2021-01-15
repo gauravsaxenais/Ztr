@@ -7,12 +7,12 @@
     using Models;
     using Nett;
     using Parsers.ProtoParser.Parser;
-    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using ZTR.Framework.Business;
     using ZTR.Framework.Business.File.FileReaders;
+    using System.Diagnostics;
 
     /// <summary>
     /// This class returns all the modules, their name and uuid information.
@@ -92,17 +92,21 @@
         /// <param name="listOfModules">The list of modules.</param>
         public async Task MergeValuesWithModulesAsync(string defaultValueFromTomlFile, IEnumerable<ModuleReadModel> listOfModules)
         {
-            var degreeOfParallelism = 10;
             _logger.LogInformation($"{Prefix}: method name: {nameof(MergeValuesWithModulesAsync)} Merging default values with list of modules in parallel...");
 
-            await Task.WhenAll(
-                from partition in Partitioner.Create(listOfModules).GetPartitions(degreeOfParallelism)
-                select Task.Run(async delegate
-                {
-                    using (partition)
-                        while (partition.MoveNext())
-                            await MergeDefaultValuesWithModuleAsync(defaultValueFromTomlFile, partition.Current);
-                }));
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
+            var moduleReadModels = listOfModules.ToList();
+            for (var index = 0; index < moduleReadModels.Count(); index ++)
+            {
+                await MergeDefaultValuesWithModuleAsync(defaultValueFromTomlFile, moduleReadModels.ElementAt(index));
+            }
+
+            stopWatch.Stop();
+
+            var elapsed = stopWatch.Elapsed;
+            _logger.LogInformation(
+                $"{Prefix}: method name: {nameof(MergeValuesWithModulesAsync)} Total time taken for all modules: {elapsed:m\\:ss\\.ff}");
         }
 
         private async Task MergeDefaultValuesWithModuleAsync(string defaultValueFromTomlFile, ModuleReadModel module)
@@ -116,8 +120,8 @@
             _logger.LogInformation($"{Prefix}: method name: {nameof(MergeDefaultValuesWithModuleAsync)} Retrieved proto file for {module.Name}");
             if (!string.IsNullOrWhiteSpace(protoFilePath))
             {
-                // get protoparsed messages from the proto files.
-                var message = await _protoParser.GetCustomMessages(protoFilePath).ConfigureAwait(false);
+                // get proto parsed messages from the proto files.
+                var message = await _protoParser.GetCustomMessage(protoFilePath).ConfigureAwait(false);
 
                 var formattedMessage = _customMessageParser.Format(message.Message);
                 formattedMessage.Name = module.Name;

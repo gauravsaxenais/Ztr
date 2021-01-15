@@ -23,4 +23,10 @@
     <ProjectReference Include="..\Framework\Framework.Business\Framework.Business.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="protoc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

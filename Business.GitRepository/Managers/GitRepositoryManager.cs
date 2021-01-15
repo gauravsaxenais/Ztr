@@ -8,10 +8,10 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
     using ZTR.Framework.Business;
     using ZTR.Framework.Business.File;
-    using ZTR.Framework.Business.File.FileReaders;
     using ZTR.Framework.Business.Models;
     using Blob = LibGit2Sharp.Blob;
 
@@ -32,17 +32,7 @@
         private readonly object _syncRoot = new object();
         #endregion
 
-        #region Constructors
-
-        // for serialization
-        public GitRepositoryManager()
-        {
-        }
-
-        #endregion
-
         #region Public methods
-
         /// <summary>
         /// Sets the connection options.
         /// </summary>
@@ -63,20 +53,17 @@
             _cloneOptions.CertificateCheck += (certificate, valid, host) => true;
         }
 
-        public bool IsValidRepo => Repository.IsValid(_gitConnection.GitLocalFolder);
-
         /// <summary>
         /// Clones the repository asynchronous.
         /// </summary>
         /// <exception cref="Exception">
-        /// </exception>
+        /// </exception>/
         public async Task CloneRepositoryAsync()
         {
             lock (_syncRoot)
             {
                 try
                 {
-                    var name = GetProjectNameFromDirectory(_gitConnection.GitRemoteLocation);
                     if (IsExistsContentRepositoryDirectory())
                     {
                         DeleteReadOnlyDirectory(_gitConnection.GitLocalFolder);
@@ -91,7 +78,7 @@
                 }
                 catch (LibGit2SharpException ex)
                 {
-                    throw new CustomArgumentException("Unable to clone git repository.", ex);
+                    throw new CustomArgumentException("System is unable to retrieve git repository information. Please try after sometime.", ex);
                 }
             }
 
@@ -107,7 +94,9 @@
             try
             {
                 var tags = await GetAllTagsAsync().ConfigureAwait(false);
-                return tags.Select(x => x.Item1).ToList();
+                var tagNames = tags.Select(x => x.Item1).ToList();
+
+                return tagNames;
             }
             catch (LibGit2SharpException ex)
             {
@@ -200,13 +189,6 @@
         #endregion
 
         #region Private methods
-
-        private string GetProjectNameFromDirectory(string directory)
-        {
-            var separators = new[] { '/', '\\', '.' };
-            return directory.Split(separators, StringSplitOptions.RemoveEmptyEntries)
-                .LastOrDefault(c => c != "git");
-        }
 
         private void GetContentOfFiles(LibGit2Sharp.IRepository repo, Tree tree, ICollection<ExportFileResultModel> contentFromFiles)
         {
@@ -337,27 +319,54 @@
         /// <param name="directory">The name of the directory to remove.</param>
         private void DeleteReadOnlyDirectory(string directory)
         {
-            foreach (var subDirectory in Directory.EnumerateDirectories(directory))
+            var directoryInfos = new Stack<DirectoryInfo>();
+            var root = new DirectoryInfo(directory);
+            directoryInfos.Push(root);
+            
+            while (directoryInfos.Count > 0)
             {
-                DeleteReadOnlyDirectory(subDirectory);
-            }
-
-            foreach (var fileName in Directory.EnumerateFiles(directory))
-            {
-                var fileInfo = new FileInfo(fileName)
+                var fol = directoryInfos.Pop();
+                fol.Attributes &= ~(FileAttributes.Archive | FileAttributes.ReadOnly | FileAttributes.Hidden);
+                
+                foreach (var d in fol.GetDirectories())
                 {
-                    Attributes = FileAttributes.Normal
-                };
-
-                if (FileReaderExtensions.IsFileClosed(fileName))
+                    directoryInfos.Push(d);
+                }
+                
+                foreach (var f in fol.GetFiles())
                 {
-                    fileInfo.Delete();
+                    f.Attributes &= ~(FileAttributes.Archive | FileAttributes.ReadOnly | FileAttributes.Hidden);
+                    f.Delete();
                 }
             }
 
-            Directory.Delete(directory);
+            SafeDeleteDirectory(root.FullName);
         }
 
+        private void SafeDeleteDirectory(string destinationDirectory)
+        {
+            const int tries = 10;
+            for (var index = 1; index <= tries; index++)
+            {
+                try
+                {
+                    Directory.Delete(destinationDirectory, true);
+                }
+                catch (DirectoryNotFoundException)
+                {
+                    return;  
+                }
+                catch (IOException)
+                { 
+                    Thread.Sleep(10);
+                    continue;
+                }
+                return;
+            }
+
+            throw new CustomArgumentException($"There is an issue accessing the git repository.");
+        }
+        
         #endregion
     }
 }

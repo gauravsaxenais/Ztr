@@ -150,10 +150,26 @@
 
         private void RemoveEmptyArrays(List<JsonField> listOfData)
         {
-            if (listOfData != null && listOfData.Count > 0)
+            if (listOfData != null)
             {
-                listOfData.RemoveAll(x => x.Arrays.Any() || x.Fields.Any());
+                foreach (var message in listOfData)
+                {
+                    if (message.DataType == "array")
+                    {
+                        var fields = message.Fields;
+                        var arrays = message.Arrays;
+
+                        RemoveEmptyArrays(fields);
+                        arrays.ForEach(RemoveEmptyArrays);
+
+                        fields.Clear();
+                        arrays.Clear();
+                    }
+                }
             }
+
+            // fix the indexes
+            FixIndex(listOfData);
         }
 
         private bool IsValueType(object obj)

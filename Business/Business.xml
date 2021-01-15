@@ -416,6 +416,14 @@
             <param name="module">The module.</param>
             <returns></returns>
         </member>
+        <member name="M:Business.GitRepositoryWrappers.Managers.ModuleServiceManager.GetProtoFiles(System.String,System.Collections.Generic.IEnumerable{Business.Models.ModuleReadModel})">
+            <summary>
+            Gets the proto file path.
+            </summary>
+            <param name="moduleFilePath">The module file path.</param>
+            <param name="listOfModules">The list of modules.</param>
+            <returns></returns>
+        </member>
         <member name="M:Business.GitRepositoryWrappers.Managers.ModuleServiceManager.GetProtoFiles(Business.Models.ModuleReadModel)">
             <summary>
             Gets the proto files.

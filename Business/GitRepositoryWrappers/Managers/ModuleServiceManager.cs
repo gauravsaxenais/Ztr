@@ -173,6 +173,37 @@
         }
 
         /// <summary>
+        /// Gets the proto file path.
+        /// </summary>
+        /// <param name="moduleFilePath">The module file path.</param>
+        /// <param name="listOfModules">The list of modules.</param>
+        /// <returns></returns>
+        private Dictionary<string, string> GetProtoFiles(string moduleFilePath, IEnumerable<ModuleReadModel> listOfModules)
+        {
+            EnsureArg.IsNotNullOrWhiteSpace(moduleFilePath);
+            EnsureArg.IsNotNull(listOfModules);
+
+            var protoFilePath = new Dictionary<string, string>();
+
+            foreach (var moduleName in listOfModules)
+            {
+                var moduleFolder = FileReaderExtensions.GetSubDirectoryPath(moduleFilePath, moduleName.Name);
+
+                if (!string.IsNullOrWhiteSpace(moduleFolder))
+                {
+                    var uuidFolder = FileReaderExtensions.GetSubDirectoryPath(moduleFolder, moduleName.UUID);
+
+                    foreach (string file in Directory.EnumerateFiles(uuidFolder, protoFileName))
+                    {
+                        protoFilePath.Add(moduleName.Name, file);
+                    }
+                }
+            }
+
+            return protoFilePath;
+        }
+
+        /// <summary>
         /// Gets the proto files.
         /// </summary>
         /// <param name="module">The module.</param>

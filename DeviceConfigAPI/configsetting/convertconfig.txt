@@ -11,6 +11,7 @@ rm:originalid
 rm:datatype
 rm:defaultvalue
 rm:configured
+rm:iconurl
 rule:args:object
 rule:config:object
 rule:isvisible:omit:false

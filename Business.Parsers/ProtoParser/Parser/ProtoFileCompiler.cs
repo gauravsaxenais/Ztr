@@ -7,7 +7,6 @@
     using System.IO;
     using System.Linq;
     using System.Reflection;
-    using System.Runtime.Loader;
     using ZTR.Framework.Business.File.FileReaders;
 
     public class ProtoFileCompiler : IProtoFileCompiler
