@@ -97,11 +97,16 @@
             var stopWatch = new Stopwatch();
             stopWatch.Start();
             var moduleReadModels = listOfModules.ToList();
-            for (var index = 0; index < moduleReadModels.Count(); index ++)
+
+            var modulesTasks = new List<Task>();
+
+            for (var index = 0; index < moduleReadModels.Count(); index++)
             {
-                await MergeDefaultValuesWithModuleAsync(defaultValueFromTomlFile, moduleReadModels.ElementAt(index));
+                modulesTasks.Add(MergeDefaultValuesWithModuleAsync(defaultValueFromTomlFile, moduleReadModels.ElementAt(index)));
             }
 
+            await Task.WhenAll(modulesTasks);
+            
             stopWatch.Stop();
 
             var elapsed = stopWatch.Elapsed;

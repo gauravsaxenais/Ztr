@@ -17,7 +17,7 @@
             // add fields, repeated and non-repeated messages to the list
             // in case there is no data, just return fields, repeated and non-repeated messages
             // as basic data.
-            listOfData.AddRange(AddEmptyMessage(protoParsedMessage));
+            listOfData.AddRange(AddEmptyFieldsAndArrays(protoParsedMessage));
 
             if (configValues.Any())
             {
@@ -89,7 +89,7 @@
         }
 
         #region Private methods
-        private List<JsonField> AddEmptyMessage(ProtoParsedMessage protoParsedMessage)
+        private List<JsonField> AddEmptyFieldsAndArrays(ProtoParsedMessage protoParsedMessage)
         {
             var listOfData = new List<JsonField>();
             listOfData.AddRange(GetFieldsFromProtoMessage(protoParsedMessage));
@@ -105,10 +105,10 @@
 
                 if (message.IsRepeated)
                 {
-                    tempJsonModel.Arrays.Add(AddEmptyMessage(message));
+                    tempJsonModel.Arrays.Add(AddEmptyFieldsAndArrays(message));
                 }
 
-                else tempJsonModel.Fields.AddRange(AddEmptyMessage(message));
+                else tempJsonModel.Fields.AddRange(AddEmptyFieldsAndArrays(message));
 
                 listOfData.Add(tempJsonModel);
             }
@@ -152,18 +152,20 @@
         {
             if (listOfData != null)
             {
-                foreach (var message in listOfData)
+                for (int index = 0; index < listOfData.Count; index ++)
                 {
-                    if (message.DataType == "array")
+                    if (listOfData[index].DataType == "array")
                     {
-                        var fields = message.Fields;
-                        var arrays = message.Arrays;
+                        var fields = listOfData[index].Fields;
+                        var arrays = listOfData[index].Arrays;
 
                         RemoveEmptyArrays(fields);
                         arrays.ForEach(RemoveEmptyArrays);
 
                         fields.Clear();
                         arrays.Clear();
+
+                        listOfData.RemoveAt(index);
                     }
                 }
             }
@@ -171,7 +173,6 @@
             // fix the indexes
             FixIndex(listOfData);
         }
-
         private bool IsValueType(object obj)
         {
             var objType = obj.GetType();

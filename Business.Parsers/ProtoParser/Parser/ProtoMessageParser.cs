@@ -164,11 +164,9 @@
             _logger.LogInformation($"Inside method {nameof(GetProtoCompilerPath)}.");
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                _logger.LogInformation($"Inside method {nameof(GetProtoCompilerPath)}. Operating system is linux");
                 return "protoc";
             }
 
-            _logger.LogInformation($"Inside method {nameof(GetProtoCompilerPath)}. Operating system is windows.");
             string name = "protoc.exe";
             string path = FileReaderExtensions.ToSafeFullPath(Global.WebRoot, name);
 

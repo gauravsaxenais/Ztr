@@ -2,7 +2,6 @@
 {
     using System;
     using System.Net.Http;
-    using System.Net.Http.Headers;
 
     public static class HttpClientExtension
     {
@@ -11,12 +10,6 @@
             client.Timeout = apiTimeoutInMinutes.HasValue ? TimeSpan.FromMinutes(apiTimeoutInMinutes.Value) : client.Timeout;
             client.DefaultRequestHeaders.Add("User-Agent", userAgentHeaders);
 
-            return client;
-        }
-
-        public static HttpClient AddBearerToken(this HttpClient client, string bearerToken)
-        {
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(SecurityConstants.Bearer, bearerToken);
             return client;
         }
     }
