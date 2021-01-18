@@ -137,10 +137,20 @@
             {
                 var data = blockReadModel.Lines.SelectMany(x => x).Where(x => !string.IsNullOrWhiteSpace(x));
 
-                modules.AddRange(data.Select(item => item.GetFirstFromSplit(delimiter))
-                    .Select(firstItem => firstItem.Any(char.IsWhiteSpace)
-                        ? firstItem.Substring(firstItem.IndexOf(' ') + 1)
-                        : firstItem));
+                foreach (var item in data.Select(item => item.GetFirstFromSplit(delimiter)))
+                {
+                    if (item.Any(char.IsWhiteSpace))
+                    {
+                        if(!item.Split(' ').Last().Contains('$'))
+                            modules.Add(item.Split(' ').Last());
+                    }
+
+                    else
+                    {
+                        if (!item.Contains('$'))
+                            modules.Add(item);
+                    }
+                }
             }
 
             return await Task.FromResult(modules);
