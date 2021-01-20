@@ -78,10 +78,9 @@ namespace ZTR.Framework.Business
         /// <summary>
         /// Initializes a new instance of the <see cref="ErrorMessage{TErrorCode}"/> class.
         /// </summary>
-        /// <param name="validationError">The validation error.</param>
         /// <param name="validationFailure">The validation failure.</param>
         /// <exception cref="InvalidOperationException">Could not parse an error code enumeration of type {typeof(TErrorCode).Name} with a value for {validationFailure.ErrorCode}.</exception>
-        public ErrorMessage(ErrorType validationError, ValidationFailure validationFailure)
+        public ErrorMessage(ValidationFailure validationFailure)
         {
             EnsureArg.IsNotNull(validationFailure, nameof(validationFailure));
 

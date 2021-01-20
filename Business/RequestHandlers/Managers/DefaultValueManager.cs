@@ -8,11 +8,11 @@
     using Nett;
     using Parsers.ProtoParser.Parser;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
     using ZTR.Framework.Business;
     using ZTR.Framework.Business.File.FileReaders;
-    using System.Diagnostics;
 
     /// <summary>
     /// This class returns all the modules, their name and uuid information.
@@ -102,8 +102,7 @@
 
             for (var index = 0; index < moduleReadModels.Count(); index++)
             {
-                //if(moduleReadModels.ElementAt(index).Name == "power")
-                    modulesTasks.Add(MergeDefaultValuesWithModuleAsync(defaultValueFromTomlFile, moduleReadModels.ElementAt(index)));
+                modulesTasks.Add(MergeDefaultValuesWithModuleAsync(defaultValueFromTomlFile, moduleReadModels.ElementAt(index)));
             }
 
             await Task.WhenAll(modulesTasks);
