@@ -14,6 +14,15 @@
     {
         private const string FileSchemaType = "file";
 
+        /// <summary>
+        /// Adds the swagger with comments.
+        /// </summary>
+        /// <param name="services">The services.</param>
+        /// <param name="apiName">Name of the API.</param>
+        /// <param name="apiVersion">The API version.</param>
+        /// <param name="apiDescription">The API description.</param>
+        /// <param name="assemblies">The assemblies.</param>
+        /// <returns></returns>
         public static IServiceCollection AddSwaggerWithComments(this IServiceCollection services, string apiName, string apiVersion, string apiDescription, IEnumerable<Assembly> assemblies)
         {
             EnsureArg.IsNotNull(assemblies, nameof(assemblies));
@@ -67,6 +76,16 @@
             return services;
         }
 
+        /// <summary>
+        /// Adds the swagger with comments.
+        /// </summary>
+        /// <param name="services">The services.</param>
+        /// <param name="apiName">Name of the API.</param>
+        /// <param name="apiVersion">The API version.</param>
+        /// <param name="apiDescription">The API description.</param>
+        /// <param name="assembly">The assembly.</param>
+        /// <param name="assemblies">The assemblies.</param>
+        /// <returns></returns>
         public static IServiceCollection AddSwaggerWithComments(this IServiceCollection services, string apiName, string apiVersion, string apiDescription, Assembly assembly, params Assembly[] assemblies)
         {
             EnsureArg.IsNotNull(assembly, nameof(assembly));

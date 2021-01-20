@@ -3,6 +3,9 @@
     using System;
     using System.Reflection;
 
+    /// <summary>
+    /// TrimInputMode
+    /// </summary>
     public enum TrimInputMode
     {
         NoTrim,
@@ -19,18 +22,34 @@
         private TrimInputMode _trimInput = TrimInputMode.NoTrim;
         private char _paddingChar = ' ';
 
+        /// <summary>
+        /// Gets or sets the trim input.
+        /// </summary>
+        /// <value>
+        /// The trim input.
+        /// </value>
         public TrimInputMode TrimInput
         {
             get { return _trimInput; }
             set { _trimInput = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the padding character.
+        /// </summary>
+        /// <value>
+        /// The padding character.
+        /// </value>
         public char PaddingChar
         {
             get { return _paddingChar; }
             set { _paddingChar = value; }
         }
 
+        /// <summary>
+        /// Parses the specified input.
+        /// </summary>
+        /// <param name="input">The input.</param>
         public void Parse(string input)
         {
             if (!string.IsNullOrEmpty(input))
@@ -69,6 +88,12 @@
             }
         }
 
+        /// <summary>
+        /// Converts to string.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String" /> that represents this instance.
+        /// </returns>
         public override string ToString()
         {
             string result = string.Empty;
@@ -114,6 +139,12 @@
             return result;
         }
 
+        /// <summary>
+        /// Returns true if ... is valid.
+        /// </summary>
+        /// <returns>
+        ///   <c>true</c> if this instance is valid; otherwise, <c>false</c>.
+        /// </returns>
         public abstract bool IsValid();
     }
 }

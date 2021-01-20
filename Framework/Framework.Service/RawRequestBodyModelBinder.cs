@@ -6,6 +6,10 @@
 
     public class RawRequestBodyModelBinder : IModelBinder
     {
+        /// <summary>
+        /// Attempts to bind a model.
+        /// </summary>
+        /// <param name="bindingContext">The <see cref="T:Microsoft.AspNetCore.Mvc.ModelBinding.ModelBindingContext" />.</param>
         public async Task BindModelAsync(ModelBindingContext bindingContext)
         {
             var request = bindingContext.HttpContext.Request;

@@ -113,24 +113,6 @@
             return await ReadAllTextAsync(safeFullPath, Encoding.UTF8);
         }
 
-        public static List<string> GetDirectories(string path, string searchPattern = "*",
-        SearchOption searchOption = SearchOption.TopDirectoryOnly)
-        {
-            if (searchOption == SearchOption.TopDirectoryOnly)
-            {
-                return GetDirectories(path, searchPattern).ToList();
-            }
-
-            var directories = new List<string>(GetDirectories(path, searchPattern));
-
-            for (var temp = 0; temp < directories.Count; temp++)
-            {
-                directories.AddRange(GetDirectories(directories[temp], searchPattern));
-            }
-
-            return directories;
-        }
-
         private static List<string> GetDirectories(string path, string searchPattern = "*")
         {
             var directoryNames = new List<string>();
@@ -159,6 +141,26 @@
             }
 
             return string.Empty;
+        }
+
+        public static async Task<KeyValuePair<string, string>> ReadContentsAsync(FileInfo fileInfo)
+        {
+            var content = await File.ReadAllTextAsync(fileInfo.FullName);
+            var name = Path.GetFileNameWithoutExtension(fileInfo.Name);
+
+            return new KeyValuePair<string, string>(name, content);
+        }
+
+        public static async Task<IDictionary<string, string>> ReadContentsAsync(IEnumerable<FileInfo> fileInfos)
+        {
+            IDictionary<string, string> listOfData = new Dictionary<string, string>();
+            foreach (var fileInfo in fileInfos)
+            {
+                var data = await ReadContentsAsync(fileInfo).ConfigureAwait(false);
+                listOfData.Add(data);
+            }
+
+            return listOfData;
         }
     }
 }

@@ -12,6 +12,14 @@
 
     public static class SwaggerConfigurationExtension
     {
+        /// <summary>
+        /// Uses the swagger.
+        /// </summary>
+        /// <param name="app">The application.</param>
+        /// <param name="apiVersion">The API version.</param>
+        /// <param name="apiName">Name of the API.</param>
+        /// <param name="alwaysShowInSwaggerUI">if set to <c>true</c> [always show in swagger UI].</param>
+        /// <param name="isOpenAuth">if set to <c>true</c> [is open authentication].</param>
         public static void UseSwagger(this IApplicationBuilder app, string apiVersion, string apiName, bool alwaysShowInSwaggerUI = false, bool isOpenAuth = false)
         {
             ConfigureSwaggerUI(app, (swaggerUIOptions) =>
@@ -20,6 +28,12 @@
             }, isOpenAuth: isOpenAuth);
         }
 
+        /// <summary>
+        /// Uses the swagger.
+        /// </summary>
+        /// <param name="app">The application.</param>
+        /// <param name="swaggerConfigurationModels">The swagger configuration models.</param>
+        /// <param name="isOpenAuth">if set to <c>true</c> [is open authentication].</param>
         public static void UseSwagger(this IApplicationBuilder app, IEnumerable<SwaggerConfigurationModel> swaggerConfigurationModels, bool isOpenAuth = false)
         {
             ConfigureSwaggerUI(app, (swaggerUIOptions) =>

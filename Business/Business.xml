@@ -460,6 +460,14 @@
             <summary>Gets the arguments.</summary>
             <value>The arguments.</value>
         </member>
+        <member name="P:Business.Models.BlockJsonModel.Modules">
+            <summary>
+            Gets the modules.
+            </summary>
+            <value>
+            The modules.
+            </value>
+        </member>
         <member name="T:Business.Models.BlockReadModel">
             <summary>
             Block - This class maps to toml file.

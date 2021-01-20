@@ -8,6 +8,11 @@
 
     public class FileUploadOperationFilter : IOperationFilter
     {
+        /// <summary>
+        /// Applies the specified operation.
+        /// </summary>
+        /// <param name="operation">The operation.</param>
+        /// <param name="context">The context.</param>
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
             if (context.ApiDescription.ParameterDescriptions.Any(x => x.ModelMetadata.ContainerType == typeof(IFormFile)))

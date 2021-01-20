@@ -6,6 +6,12 @@
 
     public static class EnsureArgExtensions
     {
+        /// <summary>
+        /// Determines whether the specified items has items.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="items">The items.</param>
+        /// <param name="paramName">Name of the parameter.</param>
         public static void HasItems<T>(IEnumerable<T> items, string paramName = null)
         {
             EnsureArg.IsNotNull(items, nameof(items));

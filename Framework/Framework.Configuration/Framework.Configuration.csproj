@@ -11,6 +11,7 @@
     <FileVersion>1.0.0</FileVersion>
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
     <OutputType>Library</OutputType>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

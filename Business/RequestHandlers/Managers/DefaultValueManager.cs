@@ -102,7 +102,7 @@
 
             for (var index = 0; index < moduleReadModels.Count(); index++)
             {
-                if(moduleReadModels.ElementAt(index).Name == "io")
+                //if(moduleReadModels.ElementAt(index).Name == "power")
                     modulesTasks.Add(MergeDefaultValuesWithModuleAsync(defaultValueFromTomlFile, moduleReadModels.ElementAt(index)));
             }
 

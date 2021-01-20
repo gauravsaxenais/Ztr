@@ -18,6 +18,13 @@
         public string Tag { get; set; }
         /// <summary>Gets the arguments.</summary>
         /// <value>The arguments.</value>
-        public List<NetworkArgumentReadModel> Args { get; set; } = new List<NetworkArgumentReadModel>();
+        public List<NetworkArgumentReadModel> Args { get; } = new List<NetworkArgumentReadModel>();
+        /// <summary>
+        /// Gets the modules.
+        /// </summary>
+        /// <value>
+        /// The modules.
+        /// </value>
+        public List<string> Modules { get; } = new List<string>();
     }
 }

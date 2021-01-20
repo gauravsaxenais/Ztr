@@ -19,16 +19,37 @@
 
         public static bool IsStaging => IsEnvironment(Environments.Staging);
 
+        /// <summary>
+        /// Determines whether the specified environment name is environment.
+        /// </summary>
+        /// <param name="environmentName">Name of the environment.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified environment name is environment; otherwise, <c>false</c>.
+        /// </returns>
         public static bool IsEnvironment(string environmentName)
         {
             return environmentName != null && _currentEnvironment?.ToUpperInvariant() == environmentName.ToUpperInvariant();
         }
 
+        /// <summary>
+        /// Defaults the application configuration.
+        /// </summary>
+        /// <param name="configurationBuilder">The configuration builder.</param>
+        /// <param name="assembly">The assembly.</param>
+        /// <param name="args">The arguments.</param>
+        /// <returns></returns>
         public static IHostBuilder DefaultAppConfiguration(this IHostBuilder configurationBuilder, Assembly assembly, string[] args = null)
         {
             return configurationBuilder.DefaultAppConfiguration(new[] { assembly }, args);
         }
 
+        /// <summary>
+        /// Defaults the application configuration.
+        /// </summary>
+        /// <param name="configurationBuilder">The configuration builder.</param>
+        /// <param name="assemblies">The assemblies.</param>
+        /// <param name="args">The arguments.</param>
+        /// <returns></returns>
         public static IHostBuilder DefaultAppConfiguration(this IHostBuilder configurationBuilder, IEnumerable<Assembly> assemblies, string[] args = null)
         {
             var optionTypes = GetConfigurationOptions(assemblies);
@@ -36,11 +57,25 @@
             return BuilderCreator.Construct(new HostingBuilder(), configurationBuilder, optionTypes, options, args);
         }
 
+        /// <summary>
+        /// Defaults the application configuration.
+        /// </summary>
+        /// <param name="configurationBuilder">The configuration builder.</param>
+        /// <param name="assembly">The assembly.</param>
+        /// <param name="args">The arguments.</param>
+        /// <returns></returns>
         public static IWebHostBuilder DefaultAppConfiguration(this IWebHostBuilder configurationBuilder, Assembly assembly, string[] args = null)
         {
             return configurationBuilder.DefaultAppConfiguration(new[] { assembly }, args);
         }
 
+        /// <summary>
+        /// Defaults the application configuration.
+        /// </summary>
+        /// <param name="configurationBuilder">The configuration builder.</param>
+        /// <param name="assemblies">The assemblies.</param>
+        /// <param name="args">The arguments.</param>
+        /// <returns></returns>
         public static IWebHostBuilder DefaultAppConfiguration(this IWebHostBuilder configurationBuilder, IEnumerable<Assembly> assemblies, string[] args = null)
         {
             var optionTypes = GetConfigurationOptions(assemblies);

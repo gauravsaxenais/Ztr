@@ -7,14 +7,20 @@
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
     public class RawRequestBodyAttribute : ModelBinderAttribute
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RawRequestBodyAttribute"/> class.
+        /// </summary>
         public RawRequestBodyAttribute()
             : base(typeof(RawRequestBodyModelBinder))
         {
         }
 
-        public override BindingSource BindingSource
-        {
-            get => BindingSource.Body;
-        }
+        /// <summary>
+        /// Gets the binding source.
+        /// </summary>
+        /// <value>
+        /// The binding source.
+        /// </value>
+        public override BindingSource BindingSource => BindingSource.Body;
     }
 }

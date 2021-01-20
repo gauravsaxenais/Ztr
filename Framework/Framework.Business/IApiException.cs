@@ -2,6 +2,9 @@
 {
     using System.Collections.Generic;
 
+    /// <summary>
+    /// IApi Exception
+    /// </summary>
     public interface IApiException
     {
         int StatusCode { get; }

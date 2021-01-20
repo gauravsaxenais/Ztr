@@ -3,6 +3,7 @@
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <PackageId>ZTR.Business</PackageId>
     <Authors>ZTR.Business</Authors>
     <Company>ZTR.Business</Company>

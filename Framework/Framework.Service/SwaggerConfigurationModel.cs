@@ -2,11 +2,17 @@
 {
     public class SwaggerConfigurationModel
     {
-        public SwaggerConfigurationModel(string apiVersion, string apiName, bool alwaysShowInSwaggerUI = false)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SwaggerConfigurationModel"/> class.
+        /// </summary>
+        /// <param name="apiVersion">The API version.</param>
+        /// <param name="apiName">Name of the API.</param>
+        /// <param name="alwaysShowInSwaggerUi">if set to <c>true</c> [always show in swagger UI].</param>
+        public SwaggerConfigurationModel(string apiVersion, string apiName, bool alwaysShowInSwaggerUi = false)
         {
             ApiVersion = apiVersion;
             ApiName = apiName;
-            AlwaysShowInSwaggerUI = alwaysShowInSwaggerUI;
+            AlwaysShowInSwaggerUI = alwaysShowInSwaggerUi;
         }
 
         /// <summary>

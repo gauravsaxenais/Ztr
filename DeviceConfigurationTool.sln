@@ -3,32 +3,30 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service", "Service.csproj", "{CCCA1DEF-FD02-42C1-8B76-E726D071AA76}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service", "DeviceConfigAPI\Service.csproj", "{CCCA1DEF-FD02-42C1-8B76-E726D071AA76}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E3DAB377-50D1-41ED-81FA-0689DCE74084}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Business", "..\Business\Business.csproj", "{0C5C655C-CAF4-4191-B1AA-2A40CD1E387A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Business", "Business\Business.csproj", "{0C5C655C-CAF4-4191-B1AA-2A40CD1E387A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Business.Parsers", "..\Business.Parsers\Business.Parsers.csproj", "{D810FB58-72F8-4BF6-A1E0-95EA8C3DAA72}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Business.Parsers", "Business.Parsers\Business.Parsers.csproj", "{D810FB58-72F8-4BF6-A1E0-95EA8C3DAA72}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{553DDF6E-0F2F-4106-B9D7-42A5A798284B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.Business", "..\Framework\Framework.Business\Framework.Business.csproj", "{B5DC660D-5EC9-4FC0-BD58-A10991B9F863}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.Business", "Framework\Framework.Business\Framework.Business.csproj", "{B5DC660D-5EC9-4FC0-BD58-A10991B9F863}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.Configuration", "..\Framework\Framework.Configuration\Framework.Configuration.csproj", "{238209AD-1228-4D0F-B8A7-21957A50CDB5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.Configuration", "Framework\Framework.Configuration\Framework.Configuration.csproj", "{238209AD-1228-4D0F-B8A7-21957A50CDB5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.Service", "..\Framework\Framework.Service\Framework.Service.csproj", "{E963A489-C1E8-402B-AE5B-97C52AFAC88E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.Service", "Framework\Framework.Service\Framework.Service.csproj", "{E963A489-C1E8-402B-AE5B-97C52AFAC88E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.Security", "..\Framework\Framework.Security\Framework.Security.csproj", "{C6C7FDB2-A4D7-4839-AA83-B0226D462A4D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.Security", "Framework\Framework.Security\Framework.Security.csproj", "{C6C7FDB2-A4D7-4839-AA83-B0226D462A4D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.Test", "..\Framework\Framework.Test\Framework.Test.csproj", "{9568F491-4A68-47FA-8FF7-5F8F5300B1AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.Test", "Framework\Framework.Test\Framework.Test.csproj", "{9568F491-4A68-47FA-8FF7-5F8F5300B1AB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Business.Test", "..\Business.Test\Business.Test.csproj", "{7350BCE9-8E02-4F2F-BAA3-EF305537A13C}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Business.GitRepository", "..\Business.GitRepository\Business.GitRepository.csproj", "{A08CC0CE-009F-4C72-90F3-496324574860}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Business.GitRepository", "Business.GitRepository\Business.GitRepository.csproj", "{A08CC0CE-009F-4C72-90F3-496324574860}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -68,10 +66,6 @@ Global
 		{9568F491-4A68-47FA-8FF7-5F8F5300B1AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9568F491-4A68-47FA-8FF7-5F8F5300B1AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9568F491-4A68-47FA-8FF7-5F8F5300B1AB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7350BCE9-8E02-4F2F-BAA3-EF305537A13C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7350BCE9-8E02-4F2F-BAA3-EF305537A13C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7350BCE9-8E02-4F2F-BAA3-EF305537A13C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7350BCE9-8E02-4F2F-BAA3-EF305537A13C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A08CC0CE-009F-4C72-90F3-496324574860}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A08CC0CE-009F-4C72-90F3-496324574860}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A08CC0CE-009F-4C72-90F3-496324574860}.Release|Any CPU.ActiveCfg = Release|Any CPU

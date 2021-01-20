@@ -5,6 +5,11 @@
 
     public static class ProblemDetailsExtensions
     {
+        /// <summary>
+        /// Converts to formattedstring.
+        /// </summary>
+        /// <param name="problemDetails">The problem details.</param>
+        /// <returns></returns>
         public static string ToFormattedString(this ProblemDetails problemDetails)
         {
             var stringBuilder = new StringBuilder();
@@ -18,6 +23,11 @@
             return stringBuilder.ToString();
         }
 
+        /// <summary>
+        /// Converts to formatted string.
+        /// </summary>
+        /// <param name="validationProblemDetails">The validation problem details.</param>
+        /// <returns></returns>
         public static string ToFormattedString(this ValidationProblemDetails validationProblemDetails)
         {
             var stringBuilder = new StringBuilder();

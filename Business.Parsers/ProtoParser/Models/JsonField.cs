@@ -4,8 +4,8 @@
 
     public class JsonField : Field
     {
+        public List<JsonField> Fields { get; } = new List<JsonField>();
+        public List<List<JsonField>> Arrays { get; } = new List<List<JsonField>>();
         public bool IsVisible { get; set; }
-        public List<JsonField> Fields { get; private set; } = new List<JsonField>();
-        public List<List<JsonField>> Arrays { get; private set; } = new List<List<JsonField>>();
     }
 }

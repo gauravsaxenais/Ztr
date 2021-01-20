@@ -2,10 +2,19 @@
 {
     public class ExportFileResultModel
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExportFileResultModel"/> class.
+        /// </summary>
         public ExportFileResultModel()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExportFileResultModel"/> class.
+        /// </summary>
+        /// <param name="mimeType">Type of the MIME.</param>
+        /// <param name="data">The data.</param>
+        /// <param name="fileName">Name of the file.</param>
         public ExportFileResultModel(string mimeType, byte[] data, string fileName)
         {
             MimeType = mimeType;

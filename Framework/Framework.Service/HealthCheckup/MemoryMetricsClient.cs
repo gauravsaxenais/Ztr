@@ -6,18 +6,15 @@
 
     public class MemoryMetricsClient
     {
+        /// <summary>
+        /// Gets the metrics.
+        /// </summary>
+        /// <returns></returns>
         public MemoryMetrics GetMetrics()
         {
             MemoryMetrics metrics;
 
-            if (IsUnix())
-            {
-                metrics = GetUnixMetrics();
-            }
-            else
-            {
-                metrics = GetWindowsMetrics();
-            }
+            metrics = IsUnix() ? GetUnixMetrics() : GetWindowsMetrics();
 
             return metrics;
         }
