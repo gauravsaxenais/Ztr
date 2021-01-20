@@ -9,6 +9,13 @@
     {
         private const string JsonFileName = "appsettings.json";
 
+        /// <summary>
+        /// Adds the application configuration.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="environmentName">Name of the environment.</param>
+        /// <param name="args">The arguments.</param>
+        /// <returns></returns>
         public static IConfigurationBuilder AddAppConfiguration(this IConfigurationBuilder configuration, string environmentName, string[] args)
         {
             string fileName = $"appsettings.{environmentName}.json";

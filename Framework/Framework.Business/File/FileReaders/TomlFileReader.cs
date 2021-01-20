@@ -3,13 +3,24 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using EnsureThat;
-    using Nett;
     using Content;
+    using EnsureThat;
     using Models;
+    using Nett;
 
+    /// <summary>
+    /// TomlFileReader.
+    /// </summary>
     public static class TomlFileReader
     {
+        /// <summary>
+        /// Reads the data from string.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="data">The data.</param>
+        /// <param name="settings">The settings.</param>
+        /// <returns></returns>
+        /// <exception cref="CustomArgumentException"></exception>
         public static T ReadDataFromString<T>(string data, TomlSettings settings) where T : class, new()
         {
             EnsureArg.IsNotEmptyOrWhiteSpace(data, nameof(data));
@@ -28,6 +39,14 @@
             return fileData;
         }
 
+        /// <summary>
+        /// Reads the data from file.
+        /// </summary>
+        /// <param name="filePath">The file path.</param>
+        /// <param name="fieldToRead">The field to read.</param>
+        /// <param name="settings">The settings.</param>
+        /// <returns></returns>
+        /// <exception cref="CustomArgumentException"></exception>
         public static object ReadDataFromFile(string filePath, string fieldToRead, TomlSettings settings)
         {
             EnsureArg.IsNotEmptyOrWhiteSpace(filePath, (nameof(filePath)));
@@ -44,6 +63,14 @@
             }
         }
 
+        /// <summary>
+        /// Reads the data from file.
+        /// </summary>
+        /// <param name="filePath">The file path.</param>
+        /// <param name="settings">The settings.</param>
+        /// <param name="fieldToRead">The field to read.</param>
+        /// <returns></returns>
+        /// <exception cref="CustomArgumentException"></exception>
         public static List<Dictionary<string, object>> ReadDataFromFile(string filePath, TomlSettings settings, string fieldToRead)
         {
             EnsureArg.IsNotEmptyOrWhiteSpace(filePath, (nameof(filePath)));
@@ -75,7 +102,10 @@
             return items;
         }
 
-        
+        /// <summary>
+        /// Loads the lower case toml settings.
+        /// </summary>
+        /// <returns></returns>
         public static TomlSettings LoadLowerCaseTomlSettings()
         {
             var fieldNamesToLowerCaseSettings = TomlSettings.Create(config => config

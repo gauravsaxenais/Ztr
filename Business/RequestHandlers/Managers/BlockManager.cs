@@ -53,9 +53,9 @@
         public async Task<object> GetBlocksAsObjectAsync()
         {
             _logger.LogInformation($"{Prefix}: methodName: {nameof(GetBlocksAsObjectAsync)} Getting list of blocks.");
-            var (blocks, modules) = await BatchProcessBlockFilesAsync().ConfigureAwait(false);
+            var blocks = await BatchProcessBlockFilesAsync().ConfigureAwait(false);
 
-            return new { blocks, modules };
+            return new { blocks };
         }
 
         /// <summary>
@@ -65,63 +65,60 @@
         public async Task<List<BlockJsonModel>> GetListOfBlocksAsync()
         {
             // using discard _ for modules.
-            var (blocks, _) = await BatchProcessBlockFilesAsync().ConfigureAwait(false);
+            var blocks  = await BatchProcessBlockFilesAsync().ConfigureAwait(false);
 
             return blocks;
         }
 
-        private async Task<(List<BlockJsonModel> blocks, List<string> modules)> ProcessBlockFileAsync(IEnumerable<FileInfo> filesInDirectory)
+        private async Task<List<BlockJsonModel>> ProcessBlockFileAsync(IDictionary<string, string> filesData)
         {
             var blocks = new List<BlockJsonModel>();
-            var modules = new List<string>();
             var tomlSettings = TomlFileReader.LoadLowerCaseTomlSettings();
 
-            var inDirectory = filesInDirectory as FileInfo[] ?? filesInDirectory.ToArray();
-            for (var lIndex = 0; lIndex < inDirectory.Count(); lIndex++)
-            {
-                var content = await File.ReadAllTextAsync(inDirectory.ElementAt(lIndex).FullName);
+            foreach(var data in filesData)
+            { 
+                var blockReadModel = Toml.ReadString<BlockReadModel>(data.Value, tomlSettings);
+                var name = Path.GetFileNameWithoutExtension(data.Key);
 
-                var blockReadModel = Toml.ReadString<BlockReadModel>(content, tomlSettings);
-                var name = Path.GetFileNameWithoutExtension(inDirectory.ElementAt(lIndex).Name);
-
-                var blocksTask = GetBlocksAsync(blockReadModel, name);
+                var blockTask = GetBlockAsync(blockReadModel, name);
                 var modulesTask = GetModulesAsync(blockReadModel);
 
-                await Task.WhenAll(blocksTask, modulesTask);
+                await Task.WhenAll(blockTask, modulesTask);
 
-                blocks.AddRange(blocksTask.Result);
-                modules.AddRange(modulesTask.Result);
+                var block = blockTask.Result;
+                block.Modules.AddRange(modulesTask.Result);
+
+                blocks.Add(block);
             }
 
-            return (blocks, modules);
+            return blocks;
         }
 
-        private async Task<(List<BlockJsonModel> blocks, List<string> modules)> BatchProcessBlockFilesAsync()
+        private async Task<List<BlockJsonModel>> BatchProcessBlockFilesAsync()
         {
             var batchSize = 4;
 
-            var models
+            var blockFiles
                 = await _blockServiceManager.GetAllBlockFilesAsync().ConfigureAwait(false);
-            var listOfRequests = new List<Task<(List<BlockJsonModel> blocks, List<string> modules)>>();
+            var listOfRequests = new List<Task<List<BlockJsonModel>>>();
 
-            var fileModels = models.ToList();
+            var fileModels = blockFiles.ToList();
             for (var skip = 0; skip <= fileModels.Count(); skip += batchSize)
             {
-                var model = fileModels.Skip<FileInfo>(skip).Take<FileInfo>(batchSize);
-                listOfRequests.Add(ProcessBlockFileAsync(model));
+                var files = fileModels.Skip(skip).Take(batchSize).ToList();
+                var listOfData = await FileReaderExtensions.ReadContentsAsync(files);
+
+                listOfRequests.Add(ProcessBlockFileAsync(listOfData));
             }
 
             // This will run all the calls in parallel to gain some performance
             var allFinishedTasks = await Task.WhenAll(listOfRequests).ConfigureAwait(false);
 
-            var blocks = allFinishedTasks.SelectMany(x => x.blocks).ToList();
-
-            // remove duplicates.
-            var modules = new HashSet<string>(allFinishedTasks.SelectMany(x => x.modules)).ToList();
+            var blocks = allFinishedTasks.SelectMany(x => x).ToList();
 
             FixIndex(blocks);
 
-            return (blocks, modules);
+            return blocks;
         }
 
         /// <summary>
@@ -130,7 +127,7 @@
         /// <returns>list of modules</returns>
         private async Task<IEnumerable<string>> GetModulesAsync(BlockReadModel blockReadModel)
         {
-            var modules = new List<string>();
+            var modules = new HashSet<string>();
             const char delimiter = '.';
 
             if (blockReadModel?.Lines != null && blockReadModel.Lines.Any())
@@ -156,9 +153,10 @@
             return await Task.FromResult(modules);
         }
 
-        private async Task<IEnumerable<BlockJsonModel>> GetBlocksAsync(BlockReadModel blockReadModel, string name)
+        private async Task<BlockJsonModel> GetBlockAsync(BlockReadModel blockReadModel, string name)
         {
-            var blocks = new List<BlockJsonModel>();
+            var jsonModel = new BlockJsonModel() { Type = name, Tag = string.Empty };
+
             if (blockReadModel?.Arguments != null && blockReadModel.Arguments.Any())
             {
                 var args = blockReadModel.Arguments.Select((data, index) => new NetworkArgumentReadModel
@@ -171,12 +169,11 @@
                     Min = data.Min,
                     Max = data.Max
                 }).ToList();
-
-                var jsonModel = new BlockJsonModel() { Type = name, Tag = string.Empty, Args = args };
-                blocks.Add(jsonModel);
+                
+                jsonModel.Args.AddRange(args);
             }
 
-            return await Task.FromResult(blocks);
+            return await Task.FromResult(jsonModel);
         }
 
         private static void FixIndex(IReadOnlyList<BlockJsonModel> listOfData)

@@ -2,6 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+
     <UserSecretsId>a41a48f3-0424-472a-a992-538117412324</UserSecretsId>
     <AssemblyName>Service</AssemblyName>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
@@ -20,10 +24,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="tmp\**" />
-    <Content Remove="tmp\**" />
-    <EmbeddedResource Remove="tmp\**" />
-    <None Remove="tmp\**" />
+    <Compile Remove="Temp\**" />
+    <Content Remove="Temp\**" />
+    <EmbeddedResource Remove="Temp\**" />
+    <None Remove="Temp\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -89,6 +93,5 @@
     <ProjectReference Include="..\Business\Business.csproj" />
     <ProjectReference Include="..\Framework\Framework.Service\Framework.Service.csproj" />
   </ItemGroup>
-
 
 </Project>

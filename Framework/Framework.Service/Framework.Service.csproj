@@ -9,6 +9,7 @@
     <Authors></Authors>
     <Company>ZTR</Company>
     <FileVersion>1.0.0</FileVersion>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

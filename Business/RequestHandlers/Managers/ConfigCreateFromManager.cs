@@ -52,7 +52,7 @@
             EnsureArg.IsNotNull(configTomlFile);
             var prefix = nameof(ConfigCreateFromManager);
 
-            _logger.LogInformation($"{prefix}: methodName: {nameof(GenerateConfigTomlModelAsync)}Getting list of modules and blocks from config.toml file.");
+            _logger.LogInformation($"{prefix}: methodName: {nameof(GenerateConfigTomlModelAsync)} Getting list of modules and blocks from config.toml file.");
 
             var configTomlFileContent = ReadAsString(configTomlFile);
 

@@ -4,13 +4,22 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
-    using ZTR.Framework.Configuration;
     using EnsureThat;
     using FluentValidation;
     using Microsoft.Extensions.DependencyInjection;
 
+    /// <summary>
+    /// ServiceCollectionExtensions
+    /// </summary>
     public static class ServiceCollectionExtensions
     {
+        /// <summary>
+        /// Adds the managers.
+        /// </summary>
+        /// <param name="services">The services.</param>
+        /// <param name="assemblies">The assemblies.</param>
+        /// <param name="serviceLifetime">The service lifetime.</param>
+        /// <returns></returns>
         public static IServiceCollection AddManagers(this IServiceCollection services, IEnumerable<Assembly> assemblies, ServiceLifetime serviceLifetime = ServiceLifetime.Scoped)
         {
             EnsureArg.IsNotNull(services, nameof(services));
@@ -19,6 +28,13 @@
             return services.RegisterValidators(assemblies, serviceLifetime).RegisterManagers(assemblies, serviceLifetime);
         }
 
+        /// <summary>
+        /// Adds the managers.
+        /// </summary>
+        /// <param name="services">The services.</param>
+        /// <param name="assembly">The assembly.</param>
+        /// <param name="serviceLifetime">The service lifetime.</param>
+        /// <returns></returns>
         public static IServiceCollection AddManagers(this IServiceCollection services, Assembly assembly, ServiceLifetime serviceLifetime = ServiceLifetime.Scoped)
         {
             EnsureArg.IsNotNull(services, nameof(services));

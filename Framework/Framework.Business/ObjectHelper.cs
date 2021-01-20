@@ -6,6 +6,9 @@
     using System.Runtime.Serialization.Formatters.Binary;
     using Newtonsoft.Json;
 
+    /// <summary>
+    /// ObjectHelper
+    /// </summary>
     public static class ObjectHelper
     {
         /// <summary>

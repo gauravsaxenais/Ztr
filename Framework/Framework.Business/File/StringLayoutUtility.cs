@@ -3,11 +3,26 @@
     using System;
     using System.Reflection;
 
+    /// <summary>
+    /// TrimInputMode
+    /// </summary>
     public enum TrimInputMode
     {
+        /// <summary>
+        /// The no trim
+        /// </summary>
         NoTrim,
+        /// <summary>
+        /// The trim
+        /// </summary>
         Trim,
+        /// <summary>
+        /// The trim start
+        /// </summary>
         TrimStart,
+        /// <summary>
+        /// The trim end
+        /// </summary>
         TrimEnd
     }
 
@@ -19,18 +34,34 @@
         private TrimInputMode _trimInput = TrimInputMode.NoTrim;
         private char _paddingChar = ' ';
 
+        /// <summary>
+        /// Gets or sets the trim input.
+        /// </summary>
+        /// <value>
+        /// The trim input.
+        /// </value>
         public TrimInputMode TrimInput
         {
             get { return _trimInput; }
             set { _trimInput = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the padding character.
+        /// </summary>
+        /// <value>
+        /// The padding character.
+        /// </value>
         public char PaddingChar
         {
             get { return _paddingChar; }
             set { _paddingChar = value; }
         }
 
+        /// <summary>
+        /// Parses the specified input.
+        /// </summary>
+        /// <param name="input">The input.</param>
         public void Parse(string input)
         {
             if (!string.IsNullOrEmpty(input))
@@ -39,8 +70,7 @@
                 {
                     foreach (Attribute attribute in property.GetCustomAttributes(true))
                     {
-                        var stringLayoutAttribute = attribute as StringLayoutAttribute;
-                        if (stringLayoutAttribute != null)
+                        if (attribute is StringLayoutAttribute stringLayoutAttribute)
                         {
                             string tmp = string.Empty;
                             if (stringLayoutAttribute.StartPosition <= input.Length - 1)
@@ -69,6 +99,12 @@
             }
         }
 
+        /// <summary>
+        /// Converts to string.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String" /> that represents this instance.
+        /// </returns>
         public override string ToString()
         {
             string result = string.Empty;
@@ -77,8 +113,7 @@
             {
                 foreach (Attribute attribute in property.GetCustomAttributes(false))
                 {
-                    StringLayoutAttribute stringLayoutAttribute = attribute as StringLayoutAttribute;
-                    if (stringLayoutAttribute != null)
+                    if (attribute is StringLayoutAttribute stringLayoutAttribute)
                     {
                         string propertyValue = (string)property.GetValue(this, null);
                         if (stringLayoutAttribute.StartPosition > 0 && result.Length < stringLayoutAttribute.StartPosition)
@@ -96,7 +131,7 @@
 
                         if (result.Length > stringLayoutAttribute.EndPosition + 1)
                         {
-                            right = result.Substring(stringLayoutAttribute.EndPosition + 1);
+                            right = result[(stringLayoutAttribute.EndPosition + 1)..];
                         }
 
                         if (propertyValue.Length < stringLayoutAttribute.EndPosition - stringLayoutAttribute.StartPosition + 1)
@@ -114,6 +149,12 @@
             return result;
         }
 
+        /// <summary>
+        /// Returns true if ... is valid.
+        /// </summary>
+        /// <returns>
+        ///   <c>true</c> if this instance is valid; otherwise, <c>false</c>.
+        /// </returns>
         public abstract bool IsValid();
     }
 }

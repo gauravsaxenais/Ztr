@@ -7,6 +7,12 @@
     #pragma warning disable CS1591
     public static class LoggingExtension
     {
+        /// <summary>
+        /// Adds the logging.
+        /// </summary>
+        /// <param name="logging">The logging.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns></returns>
         public static ILoggingBuilder AddLogging(this ILoggingBuilder logging, IConfiguration configuration)
         {
             logging.AddConfiguration(configuration);
@@ -18,6 +24,14 @@
             return logging;
         }
 
+        /// <summary>
+        /// Adds the file logging.
+        /// </summary>
+        /// <param name="loggingBuilder">The logging builder.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="defaultLogFilePath">The default log file path.</param>
+        /// <param name="defaultLogFileSizeInBytes">The default log file size in bytes.</param>
+        /// <returns></returns>
         public static ILoggingBuilder AddFileLogging(this ILoggingBuilder loggingBuilder, IConfiguration configuration, string defaultLogFilePath = "Logs/Log-.txt", int defaultLogFileSizeInBytes = 134217728)
         {
             var logger = new LoggerConfiguration()

@@ -9,6 +9,7 @@
     <Company>ZTR</Company>
     <FileVersion>1.0.0</FileVersion>
     <IsPackable>true</IsPackable>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

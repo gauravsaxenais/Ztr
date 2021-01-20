@@ -4,20 +4,20 @@
     using System.Diagnostics;
     using System.Runtime.InteropServices;
 
+    /// <summary>
+    /// MemoryMetricsClient
+    /// </summary>
     public class MemoryMetricsClient
     {
+        /// <summary>
+        /// Gets the metrics.
+        /// </summary>
+        /// <returns></returns>
         public MemoryMetrics GetMetrics()
         {
             MemoryMetrics metrics;
 
-            if (IsUnix())
-            {
-                metrics = GetUnixMetrics();
-            }
-            else
-            {
-                metrics = GetWindowsMetrics();
-            }
+            metrics = IsUnix() ? GetUnixMetrics() : GetWindowsMetrics();
 
             return metrics;
         }

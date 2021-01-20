@@ -4,6 +4,9 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    /// <summary>
+    /// IQueryableExtensions
+    /// </summary>
     public static class IQueryableExtensions
     {
         /// <summary>

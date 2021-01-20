@@ -2,8 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
-    using Framework.Configuration;
+    using Configuration;
 
+    /// <summary>
+    /// SecurityOptions
+    /// </summary>
+    /// <seealso cref="ConfigurationOptions" />
     public class SecurityOptions : ConfigurationOptions
     {
         /// <summary>

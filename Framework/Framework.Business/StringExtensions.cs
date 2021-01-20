@@ -7,10 +7,18 @@
     using System.Text.RegularExpressions;
     using EnsureThat;
 
+    /// <summary>
+    /// StringExtensions
+    /// </summary>
     public static class StringExtensions
     {
-        private static readonly object BalanceLock = new();
+        private static readonly object BalanceLock = new object();
 
+        /// <summary>
+        /// Converts to guid value.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <returns></returns>
         public static string ToGuidValue(this string source)
         {
             byte[] hashedBytes;
@@ -32,24 +40,21 @@
             return sb.ToString();
         }
 
+        /// <summary>
+        /// Converts to guid.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <returns></returns>
         public static Guid ToGuid(this string source)
         {
             return Guid.Parse(ToGuidValue(source));
         }
 
-        public static string ToLowerFirstCharacter(this string input)
-        {
-            EnsureArg.IsNotNullOrWhiteSpace(input, nameof(input));
-
-            var firstChar = input[0];
-            if (firstChar >= 'A' && firstChar <= 'Z')
-            {
-                firstChar = (char)(firstChar + 32);
-            }
-
-            return firstChar + input[1..];
-        }
-
+        /// <summary>
+        /// Removes the newline.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <returns></returns>
         public static string RemoveNewline(this string input)
         {
             EnsureArg.IsNotNullOrWhiteSpace(input, nameof(input));
@@ -61,17 +66,38 @@
             input = regex.Replace(input, " ");
             return input;
         }
+
+        /// <summary>
+        /// Determines whether this instance is number.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified input is number; otherwise, <c>false</c>.
+        /// </returns>
         public static bool IsNumber(this string input)
         {
             EnsureArg.IsNotNullOrWhiteSpace(input, nameof(input));
             return decimal.TryParse(input, out _);
         }
+
+        /// <summary>
+        /// Removes the quotes.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <returns></returns>
         public static string RemoveQuotes(this string input)
         {
             EnsureArg.IsNotNullOrWhiteSpace(input, nameof(input));
             return input.Replace(@"""", string.Empty);
         }
 
+        /// <summary>
+        /// Determines whether [is path URL].
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>
+        ///   <c>true</c> if [is path URL] [the specified path]; otherwise, <c>false</c>.
+        /// </returns>
         public static bool IsPathUrl(this string path)
         {
             EnsureArg.IsNotEmptyOrWhiteSpace(path);
@@ -92,6 +118,12 @@
             }
         }
 
+        /// <summary>
+        /// Gets the first from split.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <param name="delimiter">The delimiter.</param>
+        /// <returns></returns>
         public static string GetFirstFromSplit(this string input, char delimiter)
         {
             var index = input.IndexOf(delimiter);
