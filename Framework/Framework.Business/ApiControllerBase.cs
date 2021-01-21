@@ -1,6 +1,5 @@
 ﻿namespace Service.Controllers
 {
-    using Microsoft.AspNetCore.Cors;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -8,7 +7,6 @@
 
     /// <summary>Base controller implementing Base shared methods.</summary>
     [ApiController]
-    [EnableCors(ApiConstants.ApiAllowAllOriginsPolicy)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status200OK)]
     public class ApiControllerBase : ControllerBase
     {
@@ -21,7 +19,7 @@
         /// </returns>
         public override OkObjectResult Ok([ActionResultObjectValue] object value)
         {
-            return value is ApiResponse ? base.Ok((ApiResponse) value) : base.Ok(new ApiResponse { Success = true, Data = value });
+            return value is ApiResponse response ? base.Ok(response) : base.Ok(new ApiResponse { Success = true, Data = value });
         }
     }
 }

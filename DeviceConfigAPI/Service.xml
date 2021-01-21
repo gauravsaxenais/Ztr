@@ -58,18 +58,6 @@
             The service base URI.
             </value>
         </member>
-        <member name="T:Service.Controllers.ApiControllerBase">
-            <summary>Base controller implementing Base shared methods.</summary>
-        </member>
-        <member name="M:Service.Controllers.ApiControllerBase.Ok(System.Object)">
-            <summary>
-            Creates an <see cref="T:Microsoft.AspNetCore.Mvc.OkObjectResult" /> object that produces an <see cref="F:Microsoft.AspNetCore.Http.StatusCodes.Status200OK" /> response.
-            </summary>
-            <param name="value">The content value to format in the entity body.</param>
-            <returns>
-            The created <see cref="T:Microsoft.AspNetCore.Mvc.OkObjectResult" /> for the response.
-            </returns>
-        </member>
         <member name="T:Service.Controllers.BlockController">
             <summary>Block Controller - This service is responsible for getting arguments in network blocks.</summary>
         </member>
@@ -292,7 +280,7 @@
         <member name="T:ZTR.Framework.Service.ApplicationBuilderExtensions">
             <summary>ApplicationBuilder.</summary>
         </member>
-        <member name="M:ZTR.Framework.Service.ApplicationBuilderExtensions.AddAppCustomBuild(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+        <member name="M:ZTR.Framework.Service.ApplicationBuilderExtensions.AddCors(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
             <summary>
             Adds the application custom build.
             </summary>

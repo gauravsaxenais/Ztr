@@ -51,7 +51,11 @@
         [ProducesResponseType(typeof(IEnumerable<ModuleReadModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetConfigTomlValues([Required] IFormFile configTomlFile)
+        public async Task<IActionResult> GetConfigTomlValues(
+            [Required]
+            [MaxFileSize(1 * 1024 * 1024)]
+            [AllowedExtensions(new[] { ".toml" })]
+            IFormFile configTomlFile)
         {
             var prefix = nameof(ConfigCreateFromController);
             ApiResponse apiResponse;
@@ -62,6 +66,7 @@
 
                 var result = await _manager.GenerateConfigTomlModelAsync(configTomlFile).ConfigureAwait(false);
                 apiResponse = new ApiResponse(status: true, data: result);
+                _logger.LogInformation($"{prefix}: Successfully retrieved list of modules and blocks from config.toml file.");
             }
             catch (Exception exception)
             {

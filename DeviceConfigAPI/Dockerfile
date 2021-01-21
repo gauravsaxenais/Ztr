@@ -1,6 +1,6 @@
-# Update and install required dependencies
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
 
+# Update and install required dependencies
 RUN apt-get update && apt-get install -y git autoconf libtool make automake unzip build-essential
 
 WORKDIR /app

@@ -15,6 +15,7 @@
     using ZTR.Framework.Business.Models;
     using ZTR.Framework.Configuration;
     using ZTR.Framework.Service;
+    using ZTR.Framework.Service.ExceptionLogger;
     using JsonSerializer = System.Text.Json.JsonSerializer;
 
     /// <summary>
@@ -28,7 +29,7 @@
         /// <param name="configuration">The configuration.</param>
         public Startup(IConfiguration configuration)
         {
-            this.Configuration = configuration;
+            Configuration = configuration;
         }
 
         /// <summary>
@@ -45,6 +46,8 @@
         /// <param name="services">service collection.</param>
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAllowAllOriginsCorsPolicy();
+
             services.AddControllers()
                 .AddNewtonsoftJson(options => options.SerializerSettings.Converters.Add(new StringEnumConverter()));
 
@@ -87,9 +90,14 @@
                 app.UseHttpsRedirection();
             }
 
-            // Use routing first, then Cors second.
+            // Use routing first, then AddCors second.
             app.UseRouting();
-            app.AddAppCustomBuild();
+
+            // Add Exception middleware.
+            app.UseMiddleware<ExceptionMiddleware>();
+
+            // Add Cors here.
+            app.AddCors();
 
             app.UseSwagger(new[]
             {
