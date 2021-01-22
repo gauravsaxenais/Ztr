@@ -18,7 +18,7 @@ namespace Business.GitRepositoryWrappers.Managers
     /// </summary>
     /// <seealso cref="Manager" />
     /// <seealso cref="IFirmwareVersionServiceManager" />
-    /// <seealso cref="DevicesGitConnectionOptions" />
+    /// <seealso cref="DeviceGitConnectionOptions" />
     public class FirmwareVersionServiceManager : Manager, IFirmwareVersionServiceManager, IServiceManager<FirmwareVersionGitConnectionOptions>
     {
         private readonly IGitRepositoryManager _gitRepoManager;

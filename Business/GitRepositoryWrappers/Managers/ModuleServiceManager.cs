@@ -24,11 +24,11 @@
     /// <seealso cref="IModuleServiceManager" />
     /// <seealso cref="Manager" />
     /// <seealso cref="IModuleServiceManager" />
-    public class ModuleServiceManager : Manager, IModuleServiceManager, IServiceManager<DeviceGitConnectionOptions>
+    public class ModuleServiceManager : Manager, IModuleServiceManager, IServiceManager<ModuleBlockGitConnectionOptions>
     {
         private readonly string protoFileName = "module.proto";
         private readonly IGitRepositoryManager _gitRepoManager;
-        private readonly DeviceGitConnectionOptions _moduleGitConnectionOptions;
+        private readonly ModuleBlockGitConnectionOptions _moduleGitConnectionOptions;
         private readonly ILogger<ModuleServiceManager> _logger;
         private const string Prefix = nameof(ModuleServiceManager);
 
@@ -38,7 +38,7 @@
         /// <param name="logger">The logger.</param>
         /// <param name="gitRepoManager">The git repo manager.</param>
         /// <param name="moduleGitConnectionOptions">The module git connection options.</param>
-        public ModuleServiceManager(ILogger<ModuleServiceManager> logger, IGitRepositoryManager gitRepoManager, DeviceGitConnectionOptions moduleGitConnectionOptions) : base(logger)
+        public ModuleServiceManager(ILogger<ModuleServiceManager> logger, IGitRepositoryManager gitRepoManager, ModuleBlockGitConnectionOptions moduleGitConnectionOptions) : base(logger)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
             EnsureArg.IsNotNull(gitRepoManager, nameof(gitRepoManager));
@@ -67,7 +67,6 @@
             _moduleGitConnectionOptions.GitLocalFolder = Path.Combine(currentDirectory, _moduleGitConnectionOptions.GitLocalFolder);
             _moduleGitConnectionOptions.DefaultTomlConfiguration.DeviceFolder = Path.Combine(_moduleGitConnectionOptions.GitLocalFolder, _moduleGitConnectionOptions.DefaultTomlConfiguration.DeviceFolder);
             _moduleGitConnectionOptions.ModulesConfig = Path.Combine(currentDirectory, _moduleGitConnectionOptions.GitLocalFolder, _moduleGitConnectionOptions.ModulesConfig);
-            _moduleGitConnectionOptions.BlockConfig = Path.Combine(currentDirectory, _moduleGitConnectionOptions.GitLocalFolder, _moduleGitConnectionOptions.BlockConfig);
 
             _gitRepoManager.SetConnectionOptions(_moduleGitConnectionOptions);
         }
@@ -170,37 +169,6 @@
             }
 
             return iconUrl;
-        }
-
-        /// <summary>
-        /// Gets the proto file path.
-        /// </summary>
-        /// <param name="moduleFilePath">The module file path.</param>
-        /// <param name="listOfModules">The list of modules.</param>
-        /// <returns></returns>
-        private Dictionary<string, string> GetProtoFiles(string moduleFilePath, IEnumerable<ModuleReadModel> listOfModules)
-        {
-            EnsureArg.IsNotNullOrWhiteSpace(moduleFilePath);
-            EnsureArg.IsNotNull(listOfModules);
-
-            var protoFilePath = new Dictionary<string, string>();
-
-            foreach (var moduleName in listOfModules)
-            {
-                var moduleFolder = FileReaderExtensions.GetSubDirectoryPath(moduleFilePath, moduleName.Name);
-
-                if (!string.IsNullOrWhiteSpace(moduleFolder))
-                {
-                    var uuidFolder = FileReaderExtensions.GetSubDirectoryPath(moduleFolder, moduleName.UUID);
-
-                    foreach (string file in Directory.EnumerateFiles(uuidFolder, protoFileName))
-                    {
-                        protoFilePath.Add(moduleName.Name, file);
-                    }
-                }
-            }
-
-            return protoFilePath;
         }
 
         /// <summary>

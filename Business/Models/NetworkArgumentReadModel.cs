@@ -1,7 +1,8 @@
 ﻿namespace Business.Models
 {
     using Newtonsoft.Json;
-    // name = "A_low", label = "12V Low", description = "12V min value.", datatype = "integer", min = "0", max = "200" },
+
+    // name = "A_low", label = "12V Low", description = "12V min value.", type = "integer", min = "0", max = "200" },
     /// <summary>
     ///   <br />
     /// </summary>
@@ -24,8 +25,7 @@
 
         /// <summary>Gets or sets the type of the data.</summary>
         /// <value>The type of the data.</value>
-        [JsonProperty("datatype")]
-        public string DataType { get; set; }
+        public string Type { get; set; }
 
         /// <summary>Determines the minimum of the parameters.</summary>
         /// <value>The minimum.</value>

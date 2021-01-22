@@ -8,6 +8,7 @@ namespace Service
     using System;
     using ZTR.Framework.Configuration;
     using ZTR.Framework.Security;
+    using ZTR.Framework.Service;
 
 #pragma warning disable CA1052 // Static holder types should be Static or NotInheritable
 
@@ -47,8 +48,8 @@ namespace Service
                 {
                     typeof(ApplicationOptions).Assembly,
                     typeof(SecurityOptions).Assembly,
-                    typeof(DeviceGitConnectionOptions).Assembly,
-                    typeof(DevicesGitConnectionOptions).Assembly
+                    typeof(ModuleBlockGitConnectionOptions).Assembly,
+                    typeof(DeviceGitConnectionOptions).Assembly
                 }, args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

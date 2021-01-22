@@ -23,12 +23,12 @@
     public sealed class GitRepositoryManager : IGitRepositoryManager, IDisposable
     {
         #region Fields
-        private DefaultCredentials _defaultCredentials;
         private GitConnectionOptions _gitConnection;
         private CloneOptions _cloneOptions;
         private const string GitFolder = ".git";
         private const string TextMimeType = "text/plain";
         private Repository _repository;
+        private UsernamePasswordCredentials _credentials;
         private readonly object _syncRoot = new object();
         #endregion
 
@@ -45,9 +45,13 @@
 
             _gitConnection = gitConnection;
 
-            _defaultCredentials = new DefaultCredentials();
+            _credentials = new UsernamePasswordCredentials()
+            {
+                Username = gitConnection.UserName,
+                Password = gitConnection.Password
+            };
 
-            var credentialsProvider = new CredentialsHandler((url, usernameFromUrl, types) => _defaultCredentials);
+            var credentialsProvider = new CredentialsHandler((url, usernameFromUrl, types) => _credentials);
 
             _cloneOptions = new CloneOptions() { CredentialsProvider = credentialsProvider };
             _cloneOptions.CertificateCheck += (certificate, valid, host) => true;

@@ -9,6 +9,7 @@
     using Business.RequestHandlers.Managers;
     using EnsureThat;
     using Microsoft.Extensions.DependencyInjection;
+    using ZTR.Framework.Service;
 
     /// <summary>
     /// Services Collections Extensions.
@@ -39,20 +40,15 @@
             services.AddScoped<IDeviceServiceManager, DeviceServiceManager>();
             services.AddScoped<IBlockServiceManager, BlockServiceManager>();
             services.AddScoped<IFirmwareVersionServiceManager, FirmwareVersionServiceManager>();
-            
-            services.AddConverters();
 
-            return services;
-        }
-
-        public static IServiceCollection AddAllowAllOriginsCorsPolicy(this IServiceCollection services)
-        {
             services.AddCors(o => o.AddPolicy(ApiConstants.ApiAllowAllOriginsPolicy, builder =>
             {
                 builder.AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader();
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
             }));
+
+            services.AddConverters();
 
             return services;
         }

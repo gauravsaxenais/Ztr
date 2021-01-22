@@ -3,10 +3,19 @@
     using ZTR.Framework.Business;
 
     /// <summary>
-    /// This class maps to the connection options in appsettings.json file.
+    /// This class maps to configuration in appsettings.json file.
     /// </summary>
+    /// <seealso cref="GitConnectionOptions" />
     public sealed class DeviceGitConnectionOptions : GitConnectionOptions
     {
+        /// <summary>
+        /// Gets or sets the device toml.
+        /// </summary>
+        /// <value>
+        /// The device toml.
+        /// </value>
+        public string DeviceToml { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DeviceGitConnectionOptions"/> class.
         /// </summary>
@@ -21,44 +30,10 @@
         /// <param name="userName">Name of the user.</param>
         /// <param name="password">The password.</param>
         /// <param name="gitRepositoryUrl">The git repository URL.</param>
-        /// <param name="tomlConfiguration">The toml configuration.</param>
-        public DeviceGitConnectionOptions(string gitLocalFolder, string userName, string password, string gitRepositoryUrl, TomlConfigurationFile tomlConfiguration) :
+        public DeviceGitConnectionOptions(string gitLocalFolder, string userName, string password, string gitRepositoryUrl) :
             base(gitLocalFolder, userName, password, gitRepositoryUrl)
         {
-            DefaultTomlConfiguration = tomlConfiguration;
         }
-
-        /// <summary>
-        /// Gets or sets the toml configuration.
-        /// </summary>
-        /// <value>
-        /// The toml configuration.
-        /// </value>
-        public TomlConfigurationFile DefaultTomlConfiguration { get; set; }
-
-        /// <summary>
-        /// Gets or sets the modules configuration folder.
-        /// </summary>
-        /// <value>
-        /// The modules configuration.
-        /// </value>
-        public string ModulesConfig { get; set; }
-
-        /// <summary>
-        /// Gets or sets the block configuration.
-        /// </summary>
-        /// <value>
-        /// The block configuration.
-        /// </value>
-        public string BlockConfig { get; set; }
-
-        /// <summary>
-        /// Gets or sets the meta toml.
-        /// </summary>
-        /// <value>
-        /// The meta toml.
-        /// </value>
-        public string MetaToml { get; set; }
 
         /// <summary>
         /// Converts to string.
@@ -68,7 +43,7 @@
         /// </returns>
         public override string ToString()
         {
-            return $"DeviceGitConnectionOptions($ GitLocalFolder: {this.GitLocalFolder} GitRepoUrl: {this.GitRemoteLocation} ModulesConfig: {this.ModulesConfig} BlockConfig: {this.BlockConfig} TomlConfiguration: {this.DefaultTomlConfiguration} MetaFile: {this.MetaToml} )";
+            return $"DevicesGitConnectionOptions($ GitLocalFolder: {GitLocalFolder} GitRepoUrl: {GitRemoteLocation})";
         }
     }
 }

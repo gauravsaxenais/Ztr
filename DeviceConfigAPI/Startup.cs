@@ -29,7 +29,7 @@
         /// <param name="configuration">The configuration.</param>
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            this.Configuration = configuration;
         }
 
         /// <summary>
@@ -46,8 +46,6 @@
         /// <param name="services">service collection.</param>
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAllowAllOriginsCorsPolicy();
-
             services.AddControllers()
                 .AddNewtonsoftJson(options => options.SerializerSettings.Converters.Add(new StringEnumConverter()));
 
@@ -90,14 +88,10 @@
                 app.UseHttpsRedirection();
             }
 
-            // Use routing first, then AddCors second.
+            // Use routing first, then Cors second.
             app.UseRouting();
-
-            // Add Exception middleware.
             app.UseMiddleware<ExceptionMiddleware>();
-
-            // Add Cors here.
-            app.AddCors();
+            app.AddAppCorsAndExceptionMiddleWare();
 
             app.UseSwagger(new[]
             {

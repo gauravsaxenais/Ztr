@@ -1,8 +1,9 @@
-﻿namespace ZTR.Framework.Business
+﻿namespace ZTR.Framework.Service
 {
     using System;
     using EnsureThat;
     using Newtonsoft.Json;
+    using Business;
 
     /// <summary>
     /// ApiResponse

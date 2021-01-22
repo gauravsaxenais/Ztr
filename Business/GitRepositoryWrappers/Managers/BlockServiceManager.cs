@@ -16,11 +16,11 @@
     /// </summary>
     /// <seealso cref="Manager" />
     /// <seealso cref="IBlockServiceManager" />
-    /// <seealso cref="DeviceGitConnectionOptions" />
-    public class BlockServiceManager : Manager, IBlockServiceManager, IServiceManager<DeviceGitConnectionOptions>
+    /// <seealso cref="ModuleBlockGitConnectionOptions" />
+    public class BlockServiceManager : Manager, IBlockServiceManager, IServiceManager<ModuleBlockGitConnectionOptions>
     {
         private readonly IGitRepositoryManager _gitRepoManager;
-        private readonly DeviceGitConnectionOptions _moduleGitConnectionOptions;
+        private readonly ModuleBlockGitConnectionOptions _moduleGitConnectionOptions;
         private readonly ILogger<BlockServiceManager> _logger;
         private const string Prefix = nameof(BlockServiceManager);
 
@@ -30,7 +30,7 @@
         /// <param name="logger">The logger.</param>
         /// <param name="gitRepoManager">The git repo manager.</param>
         /// <param name="moduleGitConnectionOptions">The module git connection options.</param>
-        public BlockServiceManager(ILogger<BlockServiceManager> logger, IGitRepositoryManager gitRepoManager, DeviceGitConnectionOptions moduleGitConnectionOptions) : base(logger)
+        public BlockServiceManager(ILogger<BlockServiceManager> logger, IGitRepositoryManager gitRepoManager, ModuleBlockGitConnectionOptions moduleGitConnectionOptions) : base(logger)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
             EnsureArg.IsNotNull(gitRepoManager, nameof(gitRepoManager));

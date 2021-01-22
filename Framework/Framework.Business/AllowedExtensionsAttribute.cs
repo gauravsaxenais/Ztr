@@ -1,10 +1,8 @@
-﻿using System.Collections;
-using System.Linq;
-
-namespace ZTR.Framework.Business
+﻿namespace ZTR.Framework.Business
 {
     using System.ComponentModel.DataAnnotations;
     using System.IO;
+    using System.Linq;
     using Microsoft.AspNetCore.Http;
 
     /// <summary>

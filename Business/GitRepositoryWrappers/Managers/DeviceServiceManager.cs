@@ -20,10 +20,10 @@
     /// </summary>
     /// <seealso cref="Manager" />
     /// <seealso cref="IDeviceServiceManager" />
-    public class DeviceServiceManager : Manager, IDeviceServiceManager, IServiceManager<DevicesGitConnectionOptions>
+    public class DeviceServiceManager : Manager, IDeviceServiceManager, IServiceManager<DeviceGitConnectionOptions>
     {
         private readonly IGitRepositoryManager _gitRepoManager;
-        private readonly DevicesGitConnectionOptions _devicesGitConnectionOptions;
+        private readonly DeviceGitConnectionOptions _devicesGitConnectionOptions;
         private readonly ILogger<DeviceServiceManager> _logger;
         private const string Prefix = nameof(DeviceServiceManager);
 
@@ -33,7 +33,7 @@
         /// <param name="logger">The logger.</param>
         /// <param name="gitRepoManager">The git repo manager.</param>
         /// <param name="deviceGitConnectionOptions">The device git connection options.</param>
-        public DeviceServiceManager(ILogger<DeviceServiceManager> logger, IGitRepositoryManager gitRepoManager, DevicesGitConnectionOptions deviceGitConnectionOptions) : base(logger)
+        public DeviceServiceManager(ILogger<DeviceServiceManager> logger, IGitRepositoryManager gitRepoManager, DeviceGitConnectionOptions deviceGitConnectionOptions) : base(logger)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
             EnsureArg.IsNotNull(gitRepoManager, nameof(gitRepoManager));

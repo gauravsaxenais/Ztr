@@ -65,7 +65,7 @@
         public async Task<List<BlockJsonModel>> GetListOfBlocksAsync()
         {
             // using discard _ for modules.
-            var blocks  = await BatchProcessBlockFilesAsync().ConfigureAwait(false);
+            var blocks = await BatchProcessBlockFilesAsync().ConfigureAwait(false);
 
             return blocks;
         }
@@ -75,8 +75,8 @@
             var blocks = new List<BlockJsonModel>();
             var tomlSettings = TomlFileReader.LoadLowerCaseTomlSettings();
 
-            foreach(var data in filesData)
-            { 
+            foreach (var data in filesData)
+            {
                 var blockReadModel = Toml.ReadString<BlockReadModel>(data.Value, tomlSettings);
                 var name = Path.GetFileNameWithoutExtension(data.Key);
 
@@ -114,7 +114,9 @@
             // This will run all the calls in parallel to gain some performance
             var allFinishedTasks = await Task.WhenAll(listOfRequests).ConfigureAwait(false);
 
-            var blocks = allFinishedTasks.SelectMany(x => x).ToList();
+            var blocks = allFinishedTasks.SelectMany(x => x)
+                                                        .OrderBy(item => item.Type)
+                                                        .ToList();
 
             FixIndex(blocks);
 
@@ -138,7 +140,7 @@
                 {
                     if (item.Any(char.IsWhiteSpace))
                     {
-                        if(!item.Split(' ').Last().Contains('$'))
+                        if (!item.Split(' ').Last().Contains('$'))
                             modules.Add(item.Split(' ').Last());
                     }
 
@@ -165,11 +167,11 @@
                     Name = data.Name,
                     Label = data.Label,
                     Description = data.Description,
-                    DataType = data.DataType,
+                    Type = data.Type,
                     Min = data.Min,
                     Max = data.Max
                 }).ToList();
-                
+
                 jsonModel.Args.AddRange(args);
             }
 

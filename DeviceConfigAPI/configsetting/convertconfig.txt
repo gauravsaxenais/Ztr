@@ -8,7 +8,7 @@ rm:isconfigure
 rm:d
 rm:valid
 rm:originalid
-rm:datatype
+rm:type
 rm:defaultvalue
 rm:configured
 rm:iconurl

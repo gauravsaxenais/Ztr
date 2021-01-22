@@ -4,28 +4,14 @@
         <name>Service</name>
     </assembly>
     <members>
-        <member name="T:Service.ApiConstants">
-            <summary>Constants for API.</summary>
+        <member name="T:ZTR.Framework.Service.ApplicationBuilderExtensions">
+            <summary>ApplicationBuilder.</summary>
         </member>
-        <member name="F:Service.ApiConstants.ApiName">
+        <member name="M:ZTR.Framework.Service.ApplicationBuilderExtensions.AddAppCorsAndExceptionMiddleWare(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
             <summary>
-            The API name.
+            Adds the application custom build.
             </summary>
-        </member>
-        <member name="F:Service.ApiConstants.ApiVersion">
-            <summary>
-            The API version.
-            </summary>
-        </member>
-        <member name="F:Service.ApiConstants.ApiDescription">
-            <summary>
-            The API description.
-            </summary>
-        </member>
-        <member name="F:Service.ApiConstants.ApiAllowAllOriginsPolicy">
-            <summary>
-            The API allow all origins policy.
-            </summary>
+            <param name="app">The application.</param>
         </member>
         <member name="T:Service.Configuration.ApplicationOptions">
             <summary>
@@ -79,7 +65,7 @@
             This controller returns the list of compatible firmware versions.
             It takes input a firmware version and returns an array of firmware versions.
             </summary>
-            <seealso cref="T:Service.Controllers.ApiControllerBase" />
+            <seealso cref="T:ZTR.Framework.Service.ApiControllerBase" />
         </member>
         <member name="M:Service.Controllers.CompatibleFirmwareVersionController.#ctor(Business.RequestHandlers.Interfaces.ICompatibleFirmwareVersionManager,Microsoft.Extensions.Logging.ILogger{Service.Controllers.CompatibleFirmwareVersionController})">
             <summary>
@@ -274,15 +260,6 @@
         <member name="M:Service.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
             <summary>
             Configures the specified application.
-            </summary>
-            <param name="app">The application.</param>
-        </member>
-        <member name="T:ZTR.Framework.Service.ApplicationBuilderExtensions">
-            <summary>ApplicationBuilder.</summary>
-        </member>
-        <member name="M:ZTR.Framework.Service.ApplicationBuilderExtensions.AddCors(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
-            <summary>
-            Adds the application custom build.
             </summary>
             <param name="app">The application.</param>
         </member>

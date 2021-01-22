@@ -1,4 +1,4 @@
-﻿namespace Service
+﻿namespace ZTR.Framework.Service
 {
     /// <summary>Constants for API.</summary>
     public static class ApiConstants
