@@ -21,14 +21,15 @@
         /// <param name="settings">The settings.</param>
         /// <returns></returns>
         /// <exception cref="CustomArgumentException"></exception>
-        public static T ReadDataFromString<T>(string data, TomlSettings settings) where T : class, new()
+        public static T ReadDataFromString<T>(string data, TomlSettings settings = null) where T : class, new()
         {
             EnsureArg.IsNotEmptyOrWhiteSpace(data, nameof(data));
-            EnsureArg.IsNotNull(settings, nameof(settings));
-
+            
             T fileData;
             try
             {
+                settings ??= LoadLowerCaseTomlSettings();
+
                 fileData = Toml.ReadString<T>(data, settings);
             }
             catch (Exception exception)

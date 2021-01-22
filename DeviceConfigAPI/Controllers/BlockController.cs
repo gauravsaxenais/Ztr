@@ -49,7 +49,7 @@
             try
             {
                 _logger.LogInformation($"{Prefix}: Getting list of blocks.");
-                var result = await _manager.GetBlocksAsObjectAsync().ConfigureAwait(false);
+                var result = await _manager.GetBlocksAsync().ConfigureAwait(false);
 
                 apiResponse = new ApiResponse(status: true, data: result);
             }

@@ -50,9 +50,12 @@
         /// Parses the toml files asynchronous.
         /// </summary>
         /// <returns></returns>
-        public async Task<object> GetBlocksAsObjectAsync()
+        public async Task<object> GetBlocksAsync()
         {
-            _logger.LogInformation($"{Prefix}: methodName: {nameof(GetBlocksAsObjectAsync)} Getting list of blocks.");
+            _logger.LogInformation($"{Prefix}: methodName: {nameof(GetBlocksAsync)} Getting list of blocks.");
+
+            // clone repo here.
+            await _blockServiceManager.CloneGitRepoAsync().ConfigureAwait(false);
             var blocks = await BatchProcessBlockFilesAsync().ConfigureAwait(false);
 
             return new { blocks };
@@ -64,7 +67,8 @@
         /// <returns></returns>
         public async Task<List<BlockJsonModel>> GetListOfBlocksAsync()
         {
-            // using discard _ for modules.
+            // clone repo here.
+            await _blockServiceManager.CloneGitRepoAsync().ConfigureAwait(false);
             var blocks = await BatchProcessBlockFilesAsync().ConfigureAwait(false);
 
             return blocks;
@@ -167,7 +171,7 @@
                     Name = data.Name,
                     Label = data.Label,
                     Description = data.Description,
-                    Type = data.Type,
+                    DataType = data.Type,
                     Min = data.Min,
                     Max = data.Max
                 }).ToList();

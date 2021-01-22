@@ -20,5 +20,11 @@
         /// </summary>
         /// <returns></returns>
         Task<IEnumerable<string>> GetAllModulesAsync();
+
+        /// <summary>
+        /// Clones the git repo asynchronous.
+        /// </summary>
+        /// <returns></returns>
+        Task CloneGitRepoAsync();
     }
 }

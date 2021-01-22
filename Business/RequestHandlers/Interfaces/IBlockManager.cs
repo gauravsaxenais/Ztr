@@ -14,7 +14,7 @@
         /// Parses the toml files asynchronous.
         /// </summary>
         /// <returns></returns>
-        Task<object> GetBlocksAsObjectAsync();
+        Task<object> GetBlocksAsync();
 
         /// <summary>
         /// Gets the list of blocks asynchronous.

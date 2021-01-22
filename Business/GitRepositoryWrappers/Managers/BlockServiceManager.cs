@@ -75,6 +75,17 @@
         }
 
         /// <summary>
+        /// Clones the git repo asynchronous.
+        /// </summary>
+        /// <returns></returns>
+        public async Task CloneGitRepoAsync()
+        {
+            _logger.LogInformation($"{Prefix}: Cloning github repository.");
+            await _gitRepoManager.CloneRepositoryAsync().ConfigureAwait(false);
+            _logger.LogInformation($"{Prefix}: Github repository cloning is successful.");
+        }
+
+        /// <summary>
         /// Gets all modules.
         /// </summary>
         /// <returns></returns>

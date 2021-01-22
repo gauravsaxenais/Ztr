@@ -120,58 +120,6 @@
         }
 
         /// <summary>
-        /// Gets the module icon URL.
-        /// </summary>
-        /// <param name="module">The module.</param>
-        /// <returns></returns>
-        private string GetModuleIconUrl(ModuleReadModel module)
-        {
-            EnsureArg.IsNotNull(module);
-            var iconUrl = string.Empty;
-            var moduleFilePath = _moduleGitConnectionOptions.ModulesConfig;
-
-            var moduleFolder = FileReaderExtensions.GetSubDirectoryPath(moduleFilePath, module.Name);
-
-            if (string.IsNullOrWhiteSpace(moduleFolder))
-            {
-                return string.Empty;
-            }
-
-            var metaTomlFile = Path.Combine(moduleFolder, _moduleGitConnectionOptions.MetaToml);
-
-            try
-            {
-                if (File.Exists(metaTomlFile))
-                {
-                    var tml = Toml.ReadFile(metaTomlFile, TomlFileReader.LoadLowerCaseTomlSettings());
-
-                    var dict = tml.ToDictionary();
-                    var moduleValues = dict["module"];
-
-                    if (moduleValues is Dictionary<string, object>)
-                    {
-                        var moduleFromToml = (Dictionary<string, object>)dict["module"];
-                        if (moduleFromToml != null && (string) moduleFromToml["name"] == module.Name)
-                        {
-                            iconUrl = moduleFromToml["iconUrl"].ToString();
-
-                            if (!iconUrl.IsPathUrl())
-                            {
-                                return string.Empty;
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                iconUrl = string.Empty;
-            }
-
-            return iconUrl;
-        }
-
-        /// <summary>
         /// Gets the proto files.
         /// </summary>
         /// <param name="module">The module.</param>
@@ -203,6 +151,58 @@
         }
 
         /// <summary>
+        /// Gets the module icon URL.
+        /// </summary>
+        /// <param name="module">The module.</param>
+        /// <returns></returns>
+        private string GetModuleIconUrl(ModuleReadModel module)
+        {
+            EnsureArg.IsNotNull(module);
+            var iconUrl = string.Empty;
+            var moduleFilePath = _moduleGitConnectionOptions.ModulesConfig;
+
+            var moduleFolder = FileReaderExtensions.GetSubDirectoryPath(moduleFilePath, module.Name);
+
+            if (string.IsNullOrWhiteSpace(moduleFolder))
+            {
+                return string.Empty;
+            }
+
+            var metaTomlFile = Path.Combine(moduleFolder, _moduleGitConnectionOptions.MetaToml);
+
+            try
+            {
+                if (File.Exists(metaTomlFile))
+                {
+                    var tml = Toml.ReadFile(metaTomlFile, TomlFileReader.LoadLowerCaseTomlSettings());
+
+                    var dict = tml.ToDictionary();
+                    var moduleValues = dict["module"];
+
+                    if (moduleValues is Dictionary<string, object>)
+                    {
+                        var moduleFromToml = (Dictionary<string, object>)dict["module"];
+                        if (moduleFromToml != null && (string)moduleFromToml["name"] == module.Name)
+                        {
+                            iconUrl = moduleFromToml["iconUrl"].ToString();
+
+                            if (!iconUrl.IsPathUrl())
+                            {
+                                return string.Empty;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                iconUrl = string.Empty;
+            }
+
+            return iconUrl;
+        }
+
+        /// <summary>
         /// Gets the list of modules.
         /// </summary>
         /// <param name="firmwareVersion">The firmware version.</param>
@@ -217,20 +217,12 @@
 
             if (!string.IsNullOrWhiteSpace(fileContent))
             {
-                var data = GetTomlData(fileContent);
+                var data = TomlFileReader.ReadDataFromString<ConfigurationReadModel>(data: fileContent); 
 
                 listOfModules = data.Module;
             }
 
             return listOfModules;
-        }
-
-        private ConfigurationReadModel GetTomlData(string fileContent)
-        {
-            var tomlSettings = TomlFileReader.LoadLowerCaseTomlSettings();
-            var tomlData = TomlFileReader.ReadDataFromString<ConfigurationReadModel>(data: fileContent, settings: tomlSettings);
-
-            return tomlData;
         }
 
         private async Task<string> GetFileContentFromPath(string firmwareVersion, string deviceType, string path)

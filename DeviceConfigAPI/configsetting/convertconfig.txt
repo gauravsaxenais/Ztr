@@ -8,11 +8,12 @@ rm:isconfigure
 rm:d
 rm:valid
 rm:originalid
-rm:type
+rm:datatype
 rm:defaultvalue
 rm:configured
 rm:iconurl
 rm:duplicate
+rm:modules
 rule:args:object
 rule:config:object
 rule:isvisible:omit:false

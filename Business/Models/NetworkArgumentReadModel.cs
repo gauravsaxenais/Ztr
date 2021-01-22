@@ -25,7 +25,16 @@
 
         /// <summary>Gets or sets the type of the data.</summary>
         /// <value>The type of the data.</value>
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Type { get; set; }
+
+        /// <summary>
+        /// Gets or sets the type of the data.
+        /// </summary>
+        /// <value>
+        /// The type of the data.
+        /// </value>
+        public string DataType { get; set; }
 
         /// <summary>Determines the minimum of the parameters.</summary>
         /// <value>The minimum.</value>

@@ -75,6 +75,7 @@
                 await _moduleServiceManager.GetDefaultTomlFileContentAsync(firmwareVersion, deviceType).ConfigureAwait(false);
 
             _logger.LogInformation($"{Prefix}: Getting list of modules {firmwareVersion} and {deviceType}.");
+
             // get list of all modules.
             var listOfModules = await _moduleServiceManager.GetAllModulesAsync(firmwareVersion, deviceType)
                 .ConfigureAwait(false);
@@ -106,7 +107,7 @@
             }
 
             await Task.WhenAll(modulesTasks);
-            
+
             stopWatch.Stop();
 
             var elapsed = stopWatch.Elapsed;

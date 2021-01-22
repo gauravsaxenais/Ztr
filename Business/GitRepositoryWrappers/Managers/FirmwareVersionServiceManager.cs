@@ -1,6 +1,4 @@
-﻿using System.Security;
-
-namespace Business.GitRepositoryWrappers.Managers
+﻿namespace Business.GitRepositoryWrappers.Managers
 {
     using Business.GitRepository.Interfaces;
     using Configuration;
@@ -45,6 +43,8 @@ namespace Business.GitRepositoryWrappers.Managers
             _gitRepoManager = gitRepoManager;
             _deviceServiceManager = deviceServiceManager;
             _firmwareVersionGitConnectionOptions = firmwareVersionGitConnectionOptions;
+
+            SetGitRepoConnection();
         }
 
         /// <summary>
@@ -58,8 +58,6 @@ namespace Business.GitRepositoryWrappers.Managers
 
             if (!string.IsNullOrWhiteSpace(gitUrl))
             {
-                SetGitRepoConnection();
-
                 _firmwareVersionGitConnectionOptions.GitRemoteLocation = gitUrl;
                 _gitRepoManager.SetConnectionOptions(_firmwareVersionGitConnectionOptions);
 

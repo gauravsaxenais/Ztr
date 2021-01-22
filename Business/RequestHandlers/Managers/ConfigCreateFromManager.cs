@@ -98,27 +98,13 @@
         {
             EnsureArg.IsNotEmptyOrWhiteSpace(configTomlFile);
 
-            var data = GetTomlData(configTomlFile);
+            var data = TomlFileReader.ReadDataFromString<ConfigurationReadModel>(configTomlFile);
 
             var listOfModules = data.Module;
 
             listOfModules = listOfModules.Select((module, index) => new ModuleReadModel { Id = index, Config = module.Config, Name = module.Name, UUID = module.UUID }).ToList();
 
             return listOfModules;
-        }
-
-        /// <summary>
-        /// Gets the toml data.
-        /// </summary>
-        /// <param name="fileContent">Content of the file.</param>
-        /// <returns></returns>
-        private ConfigurationReadModel GetTomlData(string fileContent)
-        {
-            var tomlSettings = TomlFileReader.LoadLowerCaseTomlSettings();
-
-            var tomlData = TomlFileReader.ReadDataFromString<ConfigurationReadModel>(data: fileContent, settings: tomlSettings);
-
-            return tomlData;
         }
     }
 }
