@@ -1,4 +1,4 @@
-﻿namespace Business.GitRepositoryWrappers.Interfaces
+﻿namespace Business.GitRepository.Interfaces
 {
     using ZTR.Framework.Business;
 
@@ -9,9 +9,5 @@
     /// <seealso cref="IManager" />
     public interface IServiceManager<T> where T : GitConnectionOptions
     {
-        /// <summary>
-        /// Sets the git repo connection.
-        /// </summary>
-        public void SetGitRepoConnection();
     }
 }

@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Business.Common\Business.Common.csproj" />
     <ProjectReference Include="..\Framework\Framework.Business\Framework.Business.csproj" />
   </ItemGroup>
 

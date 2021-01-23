@@ -1,5 +1,6 @@
 ﻿namespace Service.Controllers
 {
+    using Business.Common.Models;
     using Business.Models;
     using Business.RequestHandlers.Interfaces;
     using EnsureThat;

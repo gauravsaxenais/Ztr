@@ -1,5 +1,6 @@
 ﻿namespace Business.RequestHandlers.Managers
 {
+    using Business.Common.Models;
     using EnsureThat;
     using Interfaces;
     using Microsoft.AspNetCore.Http;

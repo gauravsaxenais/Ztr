@@ -34,6 +34,7 @@
         /// <value>
         /// The type of the data.
         /// </value>
+        [JsonProperty(PropertyName = "datatype")]
         public string DataType { get; set; }
 
         /// <summary>Determines the minimum of the parameters.</summary>

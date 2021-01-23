@@ -13,5 +13,12 @@
         /// </summary>
         /// <returns></returns>
         Task<IEnumerable<string>> GetAllDevicesAsync();
+
+        /// <summary>
+        /// Gets the firmware git URL asynchronous.
+        /// </summary>
+        /// <param name="deviceType">Type of the device.</param>
+        /// <returns></returns>
+        Task<string> GetFirmwareGitUrlAsync(string deviceType);
     }
 }

@@ -28,6 +28,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.Test", "Framework
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Business.GitRepository", "Business.GitRepository\Business.GitRepository.csproj", "{A08CC0CE-009F-4C72-90F3-496324574860}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business.Common", "Business.Common\Business.Common.csproj", "{337963EB-DF61-4247-9781-AF14CDE9E0F5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -70,6 +72,10 @@ Global
 		{A08CC0CE-009F-4C72-90F3-496324574860}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A08CC0CE-009F-4C72-90F3-496324574860}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A08CC0CE-009F-4C72-90F3-496324574860}.Release|Any CPU.Build.0 = Release|Any CPU
+		{337963EB-DF61-4247-9781-AF14CDE9E0F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{337963EB-DF61-4247-9781-AF14CDE9E0F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{337963EB-DF61-4247-9781-AF14CDE9E0F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{337963EB-DF61-4247-9781-AF14CDE9E0F5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

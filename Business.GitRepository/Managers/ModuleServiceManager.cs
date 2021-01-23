@@ -1,12 +1,9 @@
-﻿namespace Business.GitRepositoryWrappers.Managers
+﻿namespace Business.GitRepository.Managers
 {
-    using Business.GitRepository.Interfaces;
-    using Business.RequestHandlers.Managers;
-    using Configuration;
+    using Business.Common.Models;
     using EnsureThat;
     using Interfaces;
     using Microsoft.Extensions.Logging;
-    using Models;
     using Nett;
     using System;
     using System.Collections.Generic;
@@ -15,7 +12,6 @@
     using System.Threading.Tasks;
     using ZTR.Framework.Business;
     using ZTR.Framework.Business.File.FileReaders;
-    using ZTR.Framework.Business.Models;
 
     /// <summary>
     /// Wrapper for GitRepoManager.
@@ -24,51 +20,32 @@
     /// <seealso cref="IModuleServiceManager" />
     /// <seealso cref="Manager" />
     /// <seealso cref="IModuleServiceManager" />
-    public class ModuleServiceManager : Manager, IModuleServiceManager, IServiceManager<ModuleBlockGitConnectionOptions>
+    public class ModuleServiceManager : Manager, IModuleServiceManager, IServiceManager<GitConnectionOptions>
     {
         private readonly string protoFileName = "module.proto";
         private readonly IGitRepositoryManager _gitRepoManager;
-        private readonly ModuleBlockGitConnectionOptions _moduleGitConnectionOptions;
+        
         private readonly ILogger<ModuleServiceManager> _logger;
         private const string Prefix = nameof(ModuleServiceManager);
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ModuleManager"/> class.
+        /// Initializes a new instance of the <see cref="ModuleServiceManager"/> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
         /// <param name="gitRepoManager">The git repo manager.</param>
-        /// <param name="moduleGitConnectionOptions">The module git connection options.</param>
-        public ModuleServiceManager(ILogger<ModuleServiceManager> logger, IGitRepositoryManager gitRepoManager, ModuleBlockGitConnectionOptions moduleGitConnectionOptions) : base(logger)
+        public ModuleServiceManager(ILogger<ModuleServiceManager> logger, IGitRepositoryManager gitRepoManager) : base(logger)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
             EnsureArg.IsNotNull(gitRepoManager, nameof(gitRepoManager));
-            EnsureArg.IsNotNull(moduleGitConnectionOptions, nameof(moduleGitConnectionOptions));
 
             _logger = logger;
             _gitRepoManager = gitRepoManager;
-            _moduleGitConnectionOptions = moduleGitConnectionOptions;
-            
-            SetGitRepoConnection();
         }
 
-        /// <summary>
-        /// Sets the git repo connection.
-        /// </summary>
-        /// <exception cref="CustomArgumentException">Current directory path is not valid.</exception>
-        public void SetGitRepoConnection()
+        
+        public void SetGitRepoConnection(GitConnectionOptions connectionOptions)
         {
-            var currentDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-
-            if (currentDirectory == null)
-            {
-                throw new CustomArgumentException("Current directory path is not valid.");
-            }
-
-            _moduleGitConnectionOptions.GitLocalFolder = Path.Combine(currentDirectory, _moduleGitConnectionOptions.GitLocalFolder);
-            _moduleGitConnectionOptions.DefaultTomlConfiguration.DeviceFolder = Path.Combine(_moduleGitConnectionOptions.GitLocalFolder, _moduleGitConnectionOptions.DefaultTomlConfiguration.DeviceFolder);
-            _moduleGitConnectionOptions.ModulesConfig = Path.Combine(currentDirectory, _moduleGitConnectionOptions.GitLocalFolder, _moduleGitConnectionOptions.ModulesConfig);
-
-            _gitRepoManager.SetConnectionOptions(_moduleGitConnectionOptions);
+            _gitRepoManager.SetConnectionOptions(connectionOptions);
         }
 
         /// <summary>
@@ -76,16 +53,20 @@
         /// </summary>
         /// <param name="firmwareVersion">The firmware version.</param>
         /// <param name="deviceType">Type of the device.</param>
+        /// <param name="moduleFilePath">The module file path.</param>
+        /// <param name="deviceTomlFilePath">The device toml file path.</param>
+        /// <param name="metaTomlFilePath">The meta toml file path.</param>
         /// <returns></returns>
-        public async Task<List<ModuleReadModel>> GetAllModulesAsync(string firmwareVersion, string deviceType)
+        public async Task<List<ModuleReadModel>> GetAllModulesAsync(string firmwareVersion, string deviceType, string moduleFilePath, string deviceTomlFilePath, string metaTomlFilePath)
         {
             _logger.LogInformation($"{Prefix}: method name: {nameof(GetAllModulesAsync)} Getting list of all modules {firmwareVersion} {deviceType}.");
-            var listOfModules = await GetListOfModulesAsync(firmwareVersion, deviceType).ConfigureAwait(false);
+            var listOfModules = await GetListOfModulesAsync(firmwareVersion, deviceType, deviceTomlFilePath).ConfigureAwait(false);
 
             _logger.LogInformation($"{Prefix}: method name: {nameof(GetAllModulesAsync)} Modules retrieved for {firmwareVersion} {deviceType}. Getting icons for modules...");
+
             foreach (var module in listOfModules)
             {
-                module.IconUrl = GetModuleIconUrl(module);
+                module.IconUrl = GetModuleIconUrl(module, moduleFilePath, metaTomlFilePath);
             }
 
             // fix the indexes.
@@ -106,15 +87,16 @@
         }
 
         /// <summary>
-        /// Gets the default content of the toml file.
+        /// Gets the default toml file content asynchronous.
         /// </summary>
         /// <param name="firmwareVersion">The firmware version.</param>
         /// <param name="deviceType">Type of the device.</param>
+        /// <param name="defaultPath">The default path.</param>
         /// <returns></returns>
-        public async Task<string> GetDefaultTomlFileContentAsync(string firmwareVersion, string deviceType)
+        public async Task<string> GetDefaultTomlFileContentAsync(string firmwareVersion, string deviceType, string defaultPath)
         {
             _logger.LogInformation($"{Prefix} method name: {nameof(GetDefaultTomlFileContentAsync)}: Getting default value from toml file for {firmwareVersion}, {deviceType}.");
-            var defaultValueFromTomlFile = await GetFileContentFromPath(firmwareVersion, deviceType, _moduleGitConnectionOptions.DefaultTomlConfiguration.DefaultTomlFile).ConfigureAwait(false);
+            var defaultValueFromTomlFile = await GetFileContentFromPath(firmwareVersion, deviceType, defaultPath).ConfigureAwait(false);
 
             return defaultValueFromTomlFile;
         }
@@ -123,12 +105,11 @@
         /// Gets the proto files.
         /// </summary>
         /// <param name="module">The module.</param>
+        /// <param name="moduleFilePath">The module file path.</param>
         /// <returns></returns>
-        public string GetProtoFiles(ModuleReadModel module)
+        public string GetProtoFiles(ModuleReadModel module, string moduleFilePath)
         {
             EnsureArg.IsNotNull(module);
-
-            var moduleFilePath = _moduleGitConnectionOptions.ModulesConfig;
 
             var moduleFolder = FileReaderExtensions.GetSubDirectoryPath(moduleFilePath, module.Name);
 
@@ -154,13 +135,14 @@
         /// Gets the module icon URL.
         /// </summary>
         /// <param name="module">The module.</param>
+        /// <param name="moduleFilePath">The module file path.</param>
+        /// <param name="metaTomlFilePath">The meta toml file path.</param>
         /// <returns></returns>
-        private string GetModuleIconUrl(ModuleReadModel module)
+        private string GetModuleIconUrl(ModuleReadModel module, string moduleFilePath, string metaTomlFilePath)
         {
             EnsureArg.IsNotNull(module);
             var iconUrl = string.Empty;
-            var moduleFilePath = _moduleGitConnectionOptions.ModulesConfig;
-
+            
             var moduleFolder = FileReaderExtensions.GetSubDirectoryPath(moduleFilePath, module.Name);
 
             if (string.IsNullOrWhiteSpace(moduleFolder))
@@ -168,7 +150,7 @@
                 return string.Empty;
             }
 
-            var metaTomlFile = Path.Combine(moduleFolder, _moduleGitConnectionOptions.MetaToml);
+            var metaTomlFile = Path.Combine(moduleFolder, metaTomlFilePath);
 
             try
             {
@@ -203,16 +185,16 @@
         }
 
         /// <summary>
-        /// Gets the list of modules.
+        /// Gets the list of modules asynchronous.
         /// </summary>
         /// <param name="firmwareVersion">The firmware version.</param>
         /// <param name="deviceType">Type of the device.</param>
+        /// <param name="deviceTomlFilePath">The device toml file path.</param>
         /// <returns></returns>
-        private async Task<List<ModuleReadModel>> GetListOfModulesAsync(string firmwareVersion, string deviceType)
+        private async Task<List<ModuleReadModel>> GetListOfModulesAsync(string firmwareVersion, string deviceType, string deviceTomlFilePath)
         {
             var listOfModules = new List<ModuleReadModel>();
-            var fileContent = await GetFileContentFromPath(firmwareVersion, deviceType,
-                _moduleGitConnectionOptions.DefaultTomlConfiguration.DeviceTomlFile)
+            var fileContent = await GetFileContentFromPath(firmwareVersion, deviceType, deviceTomlFilePath)
                 .ConfigureAwait(false);
 
             if (!string.IsNullOrWhiteSpace(fileContent))

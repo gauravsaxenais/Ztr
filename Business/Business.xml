@@ -4,40 +4,6 @@
         <name>Business</name>
     </assembly>
     <members>
-        <member name="T:Business.Configuration.ConnectionType">
-            <summary>
-            ConnectionType
-            </summary>
-        </member>
-        <member name="F:Business.Configuration.ConnectionType.Device">
-            <summary>
-            The device
-            </summary>
-        </member>
-        <member name="F:Business.Configuration.ConnectionType.Devices">
-            <summary>
-            The devices
-            </summary>
-        </member>
-        <member name="F:Business.Configuration.ConnectionType.Firmware">
-            <summary>
-            The firmware
-            </summary>
-        </member>
-        <member name="T:Business.Configuration.DeviceGitConnectionFactory">
-            <summary>
-            An implementation for git connection
-            from appsettings.json
-            </summary>
-        </member>
-        <member name="M:Business.Configuration.DeviceGitConnectionFactory.GetDeviceConnection(Business.Configuration.ConnectionType)">
-            <summary>
-            Gets the device connection.
-            </summary>
-            <param name="connectionType">Type of the connection.</param>
-            <returns></returns>
-            <exception cref="T:System.NotImplementedException"></exception>
-        </member>
         <member name="T:Business.Configuration.DeviceGitConnectionOptions">
             <summary>
             This class maps to configuration in appsettings.json file.
@@ -101,18 +67,6 @@
             <returns>
             A <see cref="T:System.String" /> that represents this instance.
             </returns>
-        </member>
-        <member name="T:Business.Configuration.IDeviceGitConnectionFactory">
-            <summary>
-            A factory for managing connections.
-            </summary>
-        </member>
-        <member name="M:Business.Configuration.IDeviceGitConnectionFactory.GetDeviceConnection(Business.Configuration.ConnectionType)">
-            <summary>
-            Gets the device connection.
-            </summary>
-            <param name="connectionType">Type of the connection.</param>
-            <returns></returns>
         </member>
         <member name="T:Business.Configuration.ModuleBlockGitConnectionOptions">
             <summary>
@@ -217,278 +171,6 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="T:Business.GitRepositoryWrappers.Interfaces.IBlockServiceManager">
-            <summary>
-            Block Service Manager.
-            </summary>
-        </member>
-        <member name="M:Business.GitRepositoryWrappers.Interfaces.IBlockServiceManager.GetAllBlockFilesAsync">
-            <summary>
-            Gets all block files.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Business.GitRepositoryWrappers.Interfaces.IBlockServiceManager.GetAllModulesAsync">
-            <summary>
-            Gets all modules.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Business.GitRepositoryWrappers.Interfaces.IBlockServiceManager.CloneGitRepoAsync">
-            <summary>
-            Clones the git repo asynchronous.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="T:Business.GitRepositoryWrappers.Interfaces.IDeviceServiceManager">
-            <summary>
-            Git repo wrapper for devices.
-            </summary>
-        </member>
-        <member name="M:Business.GitRepositoryWrappers.Interfaces.IDeviceServiceManager.GetAllDevicesAsync">
-            <summary>
-            Gets all devices asynchronous.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Business.GitRepositoryWrappers.Interfaces.IDeviceServiceManager.GetFirmwareGitUrlAsync(System.String)">
-            <summary>
-            Gets the firmware git URL asynchronous.
-            </summary>
-            <param name="deviceType">Type of the device.</param>
-            <returns></returns>
-        </member>
-        <member name="T:Business.GitRepositoryWrappers.Interfaces.IFirmwareVersionServiceManager">
-            <summary>
-            Git repo wrapper for devices.
-            </summary>
-        </member>
-        <member name="M:Business.GitRepositoryWrappers.Interfaces.IFirmwareVersionServiceManager.GetAllFirmwareVersionsAsync(System.String)">
-            <summary>
-            Gets all firmware versions asynchronous.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="T:Business.GitRepositoryWrappers.Interfaces.IModuleServiceManager">
-            <summary>
-            Module service.
-            </summary>
-        </member>
-        <member name="M:Business.GitRepositoryWrappers.Interfaces.IModuleServiceManager.GetAllModulesAsync(System.String,System.String)">
-            <summary>
-            Gets all modules asynchronous.
-            </summary>
-            <param name="firmwareVersion">The firmware version.</param>
-            <param name="deviceType">Type of the device.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.GitRepositoryWrappers.Interfaces.IModuleServiceManager.GetTagsEarlierThanThisTagAsync(System.String)">
-            <summary>
-            Gets the tags earlier than this tag.
-            </summary>
-            <param name="firmwareVersion">The firmware version.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.GitRepositoryWrappers.Interfaces.IModuleServiceManager.GetDefaultTomlFileContentAsync(System.String,System.String)">
-            <summary>
-            Gets the default toml file content asynchronous.
-            </summary>
-            <param name="firmwareVersion">The firmware version.</param>
-            <param name="deviceType">Type of the device.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.GitRepositoryWrappers.Interfaces.IModuleServiceManager.GetProtoFiles(Business.Models.ModuleReadModel)">
-            <summary>
-            Gets the proto files.
-            </summary>
-            <param name="module">The module.</param>
-            <returns></returns>
-        </member>
-        <member name="T:Business.GitRepositoryWrappers.Interfaces.IServiceManager`1">
-            <summary>
-            Base class for Service Managers.
-            </summary>
-            <typeparam name="T"></typeparam>
-            <seealso cref="T:ZTR.Framework.Business.IManager" />
-        </member>
-        <member name="M:Business.GitRepositoryWrappers.Interfaces.IServiceManager`1.SetGitRepoConnection">
-            <summary>
-            Sets the git repo connection.
-            </summary>
-        </member>
-        <member name="T:Business.GitRepositoryWrappers.Managers.BlockServiceManager">
-            <summary>
-            Block Service Manager
-            </summary>
-            <seealso cref="T:ZTR.Framework.Business.Manager" />
-            <seealso cref="T:Business.GitRepositoryWrappers.Interfaces.IBlockServiceManager" />
-            <seealso cref="T:Business.Configuration.ModuleBlockGitConnectionOptions" />
-        </member>
-        <member name="M:Business.GitRepositoryWrappers.Managers.BlockServiceManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.GitRepositoryWrappers.Managers.BlockServiceManager},Business.GitRepository.Interfaces.IGitRepositoryManager,Business.Configuration.ModuleBlockGitConnectionOptions)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Business.GitRepositoryWrappers.Managers.BlockServiceManager"/> class.
-            </summary>
-            <param name="logger">The logger.</param>
-            <param name="gitRepoManager">The git repo manager.</param>
-            <param name="moduleGitConnectionOptions">The module git connection options.</param>
-        </member>
-        <member name="M:Business.GitRepositoryWrappers.Managers.BlockServiceManager.SetGitRepoConnection">
-            <summary>
-            Sets the git repo connection.
-            </summary>
-            <exception cref="T:ZTR.Framework.Business.Models.CustomArgumentException">Current directory path is not valid.</exception>
-        </member>
-        <member name="M:Business.GitRepositoryWrappers.Managers.BlockServiceManager.GetAllBlockFilesAsync">
-            <summary>
-            Gets all block files.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Business.GitRepositoryWrappers.Managers.BlockServiceManager.CloneGitRepoAsync">
-            <summary>
-            Clones the git repo asynchronous.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Business.GitRepositoryWrappers.Managers.BlockServiceManager.GetAllModulesAsync">
-            <summary>
-            Gets all modules.
-            </summary>
-            <returns></returns>
-            <exception cref="T:System.NotImplementedException"></exception>
-        </member>
-        <member name="T:Business.GitRepositoryWrappers.Managers.DeviceServiceManager">
-            <summary>
-            Device list wrapper for devices.
-            </summary>
-            <seealso cref="T:ZTR.Framework.Business.Manager" />
-            <seealso cref="T:Business.GitRepositoryWrappers.Interfaces.IDeviceServiceManager" />
-        </member>
-        <member name="M:Business.GitRepositoryWrappers.Managers.DeviceServiceManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.GitRepositoryWrappers.Managers.DeviceServiceManager},Business.GitRepository.Interfaces.IGitRepositoryManager,Business.Configuration.DeviceGitConnectionOptions)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Business.GitRepositoryWrappers.Managers.DeviceServiceManager"/> class.
-            </summary>
-            <param name="logger">The logger.</param>
-            <param name="gitRepoManager">The git repo manager.</param>
-            <param name="deviceGitConnectionOptions">The device git connection options.</param>
-        </member>
-        <member name="M:Business.GitRepositoryWrappers.Managers.DeviceServiceManager.GetAllDevicesAsync">
-            <summary>
-            Gets all devices asynchronous.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Business.GitRepositoryWrappers.Managers.DeviceServiceManager.GetFirmwareGitUrlAsync(System.String)">
-            <summary>
-            Gets the firmware git URL.
-            </summary>
-            <param name="deviceType"></param>
-            <returns></returns>
-            <exception cref="T:System.NotImplementedException"></exception>
-        </member>
-        <member name="M:Business.GitRepositoryWrappers.Managers.DeviceServiceManager.SetGitRepoConnection">
-            <summary>
-            Sets the git repo connection.
-            </summary>
-            <exception cref="T:ZTR.Framework.Business.Models.CustomArgumentException">Current directory path is not valid.</exception>
-        </member>
-        <member name="T:Business.GitRepositoryWrappers.Managers.FirmwareVersionServiceManager">
-            <summary>
-            Firmware version service manager.
-            </summary>
-            <seealso cref="T:ZTR.Framework.Business.Manager" />
-            <seealso cref="T:Business.GitRepositoryWrappers.Interfaces.IFirmwareVersionServiceManager" />
-            <seealso cref="T:Business.Configuration.DeviceGitConnectionOptions" />
-        </member>
-        <member name="M:Business.GitRepositoryWrappers.Managers.FirmwareVersionServiceManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.GitRepositoryWrappers.Managers.FirmwareVersionServiceManager},Business.GitRepository.Interfaces.IGitRepositoryManager,Business.GitRepositoryWrappers.Interfaces.IDeviceServiceManager,Business.Configuration.FirmwareVersionGitConnectionOptions)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Business.GitRepositoryWrappers.Managers.FirmwareVersionServiceManager"/> class.
-            </summary>
-            <param name="logger">The logger.</param>
-            <param name="gitRepoManager">The git repo manager.</param>
-            <param name="deviceServiceManager">The device service manager.</param>
-            <param name="firmwareVersionGitConnectionOptions">The firmware version git connection options.</param>
-        </member>
-        <member name="M:Business.GitRepositoryWrappers.Managers.FirmwareVersionServiceManager.GetAllFirmwareVersionsAsync(System.String)">
-            <summary>
-            Gets all firmware versions asynchronous.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Business.GitRepositoryWrappers.Managers.FirmwareVersionServiceManager.SetGitRepoConnection">
-            <summary>
-            Sets the git repo connection.
-            </summary>
-            <exception cref="T:ZTR.Framework.Business.Models.CustomArgumentException">Current directory path is not valid.</exception>
-        </member>
-        <member name="T:Business.GitRepositoryWrappers.Managers.ModuleServiceManager">
-            <summary>
-            Wrapper for GitRepoManager.
-            </summary>
-            <seealso cref="T:ZTR.Framework.Business.Manager" />
-            <seealso cref="T:Business.GitRepositoryWrappers.Interfaces.IModuleServiceManager" />
-            <seealso cref="T:ZTR.Framework.Business.Manager" />
-            <seealso cref="T:Business.GitRepositoryWrappers.Interfaces.IModuleServiceManager" />
-        </member>
-        <member name="M:Business.GitRepositoryWrappers.Managers.ModuleServiceManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.GitRepositoryWrappers.Managers.ModuleServiceManager},Business.GitRepository.Interfaces.IGitRepositoryManager,Business.Configuration.ModuleBlockGitConnectionOptions)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.ModuleManager"/> class.
-            </summary>
-            <param name="logger">The logger.</param>
-            <param name="gitRepoManager">The git repo manager.</param>
-            <param name="moduleGitConnectionOptions">The module git connection options.</param>
-        </member>
-        <member name="M:Business.GitRepositoryWrappers.Managers.ModuleServiceManager.SetGitRepoConnection">
-            <summary>
-            Sets the git repo connection.
-            </summary>
-            <exception cref="T:ZTR.Framework.Business.Models.CustomArgumentException">Current directory path is not valid.</exception>
-        </member>
-        <member name="M:Business.GitRepositoryWrappers.Managers.ModuleServiceManager.GetAllModulesAsync(System.String,System.String)">
-            <summary>
-            Gets all modules asynchronous.
-            </summary>
-            <param name="firmwareVersion">The firmware version.</param>
-            <param name="deviceType">Type of the device.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.GitRepositoryWrappers.Managers.ModuleServiceManager.GetTagsEarlierThanThisTagAsync(System.String)">
-            <summary>
-            Gets the tags earlier than this tag.
-            </summary>
-            <param name="firmwareVersion">The firmware version.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.GitRepositoryWrappers.Managers.ModuleServiceManager.GetDefaultTomlFileContentAsync(System.String,System.String)">
-            <summary>
-            Gets the default content of the toml file.
-            </summary>
-            <param name="firmwareVersion">The firmware version.</param>
-            <param name="deviceType">Type of the device.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.GitRepositoryWrappers.Managers.ModuleServiceManager.GetProtoFiles(Business.Models.ModuleReadModel)">
-            <summary>
-            Gets the proto files.
-            </summary>
-            <param name="module">The module.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.GitRepositoryWrappers.Managers.ModuleServiceManager.GetModuleIconUrl(Business.Models.ModuleReadModel)">
-            <summary>
-            Gets the module icon URL.
-            </summary>
-            <param name="module">The module.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.GitRepositoryWrappers.Managers.ModuleServiceManager.GetListOfModulesAsync(System.String,System.String)">
-            <summary>
-            Gets the list of modules.
-            </summary>
-            <param name="firmwareVersion">The firmware version.</param>
-            <param name="deviceType">Type of the device.</param>
-            <returns></returns>
-        </member>
         <member name="T:Business.Models.BlockJsonModel">
             <summary>
               Returns list of arguments for block as a json.
@@ -575,182 +257,6 @@
             <value>
             The modules.
             </value>
-        </member>
-        <member name="T:Business.Models.ConfigurationReadModel">
-            <summary>
-            ConfigurationReadModel - This class maps to toml file.
-            </summary>
-        </member>
-        <member name="P:Business.Models.ConfigurationReadModel.Module">
-            <summary>
-            Gets or sets the module.
-            </summary>
-            <value>
-            The module.
-            </value>
-        </member>
-        <member name="P:Business.Models.ConfigurationReadModel.Device">
-            <summary>
-            Gets or sets the device.
-            </summary>
-            <value>
-            The device.
-            </value>
-        </member>
-        <member name="M:Business.Models.ConfigurationReadModel.ToString">
-            <summary>
-            Converts to string.
-            </summary>
-            <returns>
-            A <see cref="T:System.String" /> that represents this instance.
-            </returns>
-        </member>
-        <member name="T:Business.Models.DeviceReadModel">
-            <summary>
-            This class maps to toml file.
-            Toml file has a device which has all the
-            fields.
-            </summary>
-        </member>
-        <member name="P:Business.Models.DeviceReadModel.Name">
-            <summary>
-            Gets or sets the name.
-            </summary>
-            <value>
-            The name.
-            </value>
-        </member>
-        <member name="P:Business.Models.DeviceReadModel.Description">
-            <summary>
-            Gets or sets the description.
-            </summary>
-            <value>
-            The description.
-            </value>
-        </member>
-        <member name="P:Business.Models.DeviceReadModel.Digital_Inputs">
-            <summary>
-            Gets or sets the digital inputs.
-            </summary>
-            <value>
-            The digital inputs.
-            </value>
-        </member>
-        <member name="P:Business.Models.DeviceReadModel.Digital_Outputs">
-            <summary>
-            Gets or sets the digital outputs.
-            </summary>
-            <value>
-            The digital outputs.
-            </value>
-        </member>
-        <member name="P:Business.Models.DeviceReadModel.Analog_Inputs">
-            <summary>
-            Gets or sets the analog inputs.
-            </summary>
-            <value>
-            The analog inputs.
-            </value>
-        </member>
-        <member name="P:Business.Models.DeviceReadModel.Uarts">
-            <summary>
-            Gets or sets the uarts.
-            </summary>
-            <value>
-            The uarts.
-            </value>
-        </member>
-        <member name="M:Business.Models.DeviceReadModel.ToString">
-            <summary>
-            Converts to string.
-            </summary>
-            <returns>
-            A <see cref="T:System.String" /> that represents this instance.
-            </returns>
-        </member>
-        <member name="T:Business.Models.ModuleReadModel">
-            <summary>
-            This class maps to toml file.
-            The data in the toml file is
-            mapped to the fields.
-            </summary>
-        </member>
-        <member name="M:Business.Models.ModuleReadModel.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:Business.Models.ModuleReadModel"/> class.
-            </summary>
-        </member>
-        <member name="P:Business.Models.ModuleReadModel.Id">
-            <summary>
-            Gets or sets the identifier.
-            </summary>
-            <value>
-            The identifier.
-            </value>
-        </member>
-        <member name="P:Business.Models.ModuleReadModel.Name">
-            <summary>
-            Gets or sets the name.
-            </summary>
-            <value>
-            The name.
-            </value>
-        </member>
-        <member name="P:Business.Models.ModuleReadModel.UUID">
-            <summary>
-            Gets or sets the UUID.
-            </summary>
-            <value>
-            The UUID.
-            </value>
-        </member>
-        <member name="P:Business.Models.ModuleReadModel.IconUrl">
-            <summary>
-            Gets or sets the icon URL.
-            </summary>
-            <value>
-            The icon URL.
-            </value>
-        </member>
-        <member name="P:Business.Models.ModuleReadModel.Config">
-            <summary>
-            Gets or sets the attributes.
-            </summary>
-            <value>
-            The attributes.
-            </value>
-        </member>
-        <member name="M:Business.Models.ModuleReadModel.ToString">
-            <summary>
-            Converts to string.
-            </summary>
-            <returns>
-            A <see cref="T:System.String" /> that represents this instance.
-            </returns>
-        </member>
-        <member name="T:Business.Models.ModuleReadModelComparer">
-            <summary>
-            Checks whether the two modulereadmodels are equal or not.
-            </summary>
-        </member>
-        <member name="M:Business.Models.ModuleReadModelComparer.Equals(Business.Models.ModuleReadModel,Business.Models.ModuleReadModel)">
-            <summary>
-            Determines whether the specified objects are equal.
-            </summary>
-            <param name="x">The first object of type <paramref name="x" /> to compare.</param>
-            <param name="y">The second object of type <paramref name="y" /> to compare.</param>
-            <returns>
-              <see langword="true" /> if the specified objects are equal; otherwise, <see langword="false" />.
-            </returns>
-        </member>
-        <member name="M:Business.Models.ModuleReadModelComparer.GetHashCode(Business.Models.ModuleReadModel)">
-            <summary>
-            Returns a hash code for this instance.
-            </summary>
-            <param name="obj">The object.</param>
-            <returns>
-            A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
-            </returns>
         </member>
         <member name="T:Business.Models.NetworkArgumentReadModel">
             <summary>
@@ -869,7 +375,7 @@
             <param name="deviceType">Type of the device.</param>
             <returns></returns>
         </member>
-        <member name="M:Business.RequestHandlers.Interfaces.IDefaultValueManager.MergeValuesWithModulesAsync(System.String,System.Collections.Generic.IEnumerable{Business.Models.ModuleReadModel})">
+        <member name="M:Business.RequestHandlers.Interfaces.IDefaultValueManager.MergeValuesWithModulesAsync(System.String,System.Collections.Generic.IEnumerable{Business.Common.Models.ModuleReadModel})">
             <summary>
             Merges the values with modules asynchronous.
             </summary>
@@ -886,6 +392,13 @@
             <summary>
             Gets all devices asynchronous.
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Interfaces.IDeviceTypeManager.GetFirmwareGitUrlAsync(System.String)">
+            <summary>
+            Gets the firmware git URL asynchronous.
+            </summary>
+            <param name="deviceType">Type of the device.</param>
             <returns></returns>
         </member>
         <member name="T:Business.RequestHandlers.Interfaces.IFirmwareVersionManager">
@@ -921,12 +434,13 @@
             <seealso cref="T:ZTR.Framework.Business.Manager" />
             <seealso cref="T:Business.RequestHandlers.Interfaces.IBlockManager" />
         </member>
-        <member name="M:Business.RequestHandlers.Managers.BlockManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.BlockManager},Business.GitRepositoryWrappers.Interfaces.IBlockServiceManager)">
+        <member name="M:Business.RequestHandlers.Managers.BlockManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.BlockManager},Business.Configuration.ModuleBlockGitConnectionOptions,Business.GitRepository.Interfaces.IBlockServiceManager)">
             <summary>
             Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.BlockManager"/> class.
             </summary>
             <param name="logger">The logger.</param>
-            <param name="blockServiceManager">The module service manager.</param>
+            <param name="moduleGitConnectionOptions">The module git connection options.</param>
+            <param name="blockServiceManager">The block service manager.</param>
         </member>
         <member name="M:Business.RequestHandlers.Managers.BlockManager.GetBlocksAsync">
             <summary>
@@ -939,6 +453,12 @@
             Gets the list of blocks asynchronous.
             </summary>
             <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.BlockManager.SetGitRepoConnection">
+            <summary>
+            Sets the git repo connection.
+            </summary>
+            <exception cref="T:ZTR.Framework.Business.Models.CustomArgumentException">Current directory path is not valid.</exception>
         </member>
         <member name="M:Business.RequestHandlers.Managers.BlockManager.GetModulesAsync(Business.Models.BlockReadModel)">
             <summary>
@@ -954,12 +474,13 @@
             <seealso cref="T:ZTR.Framework.Business.Manager" />
             <seealso cref="T:Business.RequestHandlers.Interfaces.ICompatibleFirmwareVersionManager" />
         </member>
-        <member name="M:Business.RequestHandlers.Managers.CompatibleFirmwareVersionManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DefaultValueManager},Business.GitRepositoryWrappers.Interfaces.IModuleServiceManager)">
+        <member name="M:Business.RequestHandlers.Managers.CompatibleFirmwareVersionManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DefaultValueManager},Business.GitRepository.Interfaces.IModuleServiceManager,Business.Configuration.ModuleBlockGitConnectionOptions)">
             <summary>
             Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.CompatibleFirmwareVersionManager"/> class.
             </summary>
             <param name="logger">The logger.</param>
             <param name="moduleServiceManager">The module service manager.</param>
+            <param name="moduleGitConnectionOptions">The module git connection options.</param>
         </member>
         <member name="M:Business.RequestHandlers.Managers.CompatibleFirmwareVersionManager.GetCompatibleFirmwareVersionsAsync(Business.Models.CompatibleFirmwareVersionReadModel)">
             <summary>
@@ -967,6 +488,12 @@
             </summary>
             <param name="module">The module.</param>
             <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.CompatibleFirmwareVersionManager.SetGitRepoConnection">
+            <summary>
+            Sets the git repo connection.
+            </summary>
+            <exception cref="T:ZTR.Framework.Business.Models.CustomArgumentException">Current directory path is not valid.</exception>
         </member>
         <member name="T:Business.RequestHandlers.Managers.ConfigCreateFromManager">
             <summary>
@@ -1037,7 +564,7 @@
             <seealso cref="T:ZTR.Framework.Business.Manager" />
             <seealso cref="T:Business.RequestHandlers.Interfaces.IDefaultValueManager" />
         </member>
-        <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DefaultValueManager},Business.GitRepositoryWrappers.Interfaces.IModuleServiceManager,Business.Parsers.ProtoParser.Parser.IProtoMessageParser,Business.Parsers.ProtoParser.Parser.ICustomMessageParser,Business.Parsers.ProtoParser.Parser.IModuleParser)">
+        <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DefaultValueManager},Business.GitRepository.Interfaces.IModuleServiceManager,Business.Parsers.ProtoParser.Parser.IProtoMessageParser,Business.Parsers.ProtoParser.Parser.ICustomMessageParser,Business.Parsers.ProtoParser.Parser.IModuleParser,Business.Configuration.ModuleBlockGitConnectionOptions)">
             <summary>
             Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.DefaultValueManager"/> class.
             </summary>
@@ -1046,6 +573,7 @@
             <param name="protoParser">The proto parser.</param>
             <param name="customMessageParser">The custom message parser.</param>
             <param name="moduleParser">The module parser.</param>
+            <param name="moduleGitConnectionOptions">The module git connection options.</param>
         </member>
         <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.GetDefaultValuesAllModulesAsync(System.String,System.String)">
             <summary>
@@ -1055,7 +583,13 @@
             <param name="deviceType">Type of the device.</param>
             <returns></returns>
         </member>
-        <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.MergeValuesWithModulesAsync(System.String,System.Collections.Generic.IEnumerable{Business.Models.ModuleReadModel})">
+        <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.SetGitRepoConnection">
+            <summary>
+            Sets the git repo connection.
+            </summary>
+            <exception cref="T:ZTR.Framework.Business.Models.CustomArgumentException">Current directory path is not valid.</exception>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.MergeValuesWithModulesAsync(System.String,System.Collections.Generic.IEnumerable{Business.Common.Models.ModuleReadModel})">
             <summary>
             Merges the values with modules asynchronous.
             </summary>
@@ -1069,18 +603,32 @@
             <seealso cref="T:ZTR.Framework.Business.Manager" />
             <seealso cref="T:Business.RequestHandlers.Interfaces.IDeviceTypeManager" />
         </member>
-        <member name="M:Business.RequestHandlers.Managers.DeviceTypeManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DeviceTypeManager},Business.GitRepositoryWrappers.Interfaces.IDeviceServiceManager)">
+        <member name="M:Business.RequestHandlers.Managers.DeviceTypeManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DeviceTypeManager},Business.Configuration.DeviceGitConnectionOptions,Business.GitRepository.Interfaces.IDeviceServiceManager)">
             <summary>
             Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.DeviceTypeManager"/> class.
             </summary>
             <param name="logger">The logger.</param>
-            <param name="deviceServiceManager">The module service manager.</param>
+            <param name="deviceGitConnectionOptions">The device git connection options.</param>
+            <param name="deviceServiceManager">The device service manager.</param>
         </member>
         <member name="M:Business.RequestHandlers.Managers.DeviceTypeManager.GetAllDevicesAsync">
             <summary>
             Gets all devices asynchronous.
             </summary>
             <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.DeviceTypeManager.GetFirmwareGitUrlAsync(System.String)">
+            <summary>
+            Gets the firmware git URL asynchronous.
+            </summary>
+            <param name="deviceType">Type of the device.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.DeviceTypeManager.SetGitRepoConnection">
+            <summary>
+            Sets the git repo connection.
+            </summary>
+            <exception cref="T:ZTR.Framework.Business.Models.CustomArgumentException">Current directory path is not valid.</exception>
         </member>
         <member name="T:Business.RequestHandlers.Managers.FirmwareVersionManager">
             <summary>
@@ -1089,18 +637,26 @@
             <seealso cref="T:ZTR.Framework.Business.Manager" />
             <seealso cref="T:Business.RequestHandlers.Interfaces.IFirmwareVersionManager" />
         </member>
-        <member name="M:Business.RequestHandlers.Managers.FirmwareVersionManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DeviceTypeManager},Business.GitRepositoryWrappers.Interfaces.IFirmwareVersionServiceManager)">
+        <member name="M:Business.RequestHandlers.Managers.FirmwareVersionManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DeviceTypeManager},Business.GitRepository.Interfaces.IFirmwareVersionServiceManager,Business.Configuration.FirmwareVersionGitConnectionOptions,Business.RequestHandlers.Interfaces.IDeviceTypeManager)">
             <summary>
             Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.FirmwareVersionManager"/> class.
             </summary>
             <param name="logger">The logger.</param>
-            <param name="firmwareVersionServiceManager">The firmware version manager.</param>
+            <param name="firmwareVersionServiceManager">The firmware version service manager.</param>
+            <param name="firmwareVersionGitConnection">The firmware version git connection.</param>
+            <param name="deviceTypeManager">The device type manager.</param>
         </member>
         <member name="M:Business.RequestHandlers.Managers.FirmwareVersionManager.GetAllFirmwareVersionsAsync(System.String)">
             <summary>
             Gets all firmware versions asynchronous.
             </summary>
             <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.FirmwareVersionManager.SetGitRepoConnection">
+            <summary>
+            Sets the git repo connection.
+            </summary>
+            <exception cref="T:ZTR.Framework.Business.Models.CustomArgumentException">Current directory path is not valid.</exception>
         </member>
         <member name="T:Business.RequestHandlers.Managers.ModuleManager">
             <summary>r
@@ -1109,12 +665,13 @@
             <seealso cref="T:ZTR.Framework.Business.Manager" />
             <seealso cref="T:Business.RequestHandlers.Interfaces.IModuleManager" />
         </member>
-        <member name="M:Business.RequestHandlers.Managers.ModuleManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.ModuleManager},Business.GitRepositoryWrappers.Interfaces.IModuleServiceManager)">
+        <member name="M:Business.RequestHandlers.Managers.ModuleManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.ModuleManager},Business.GitRepository.Interfaces.IModuleServiceManager,Business.Configuration.ModuleBlockGitConnectionOptions)">
             <summary>
             Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.ModuleManager"/> class.
             </summary>
             <param name="logger">The logger.</param>
             <param name="moduleServiceManager">The module service manager.</param>
+            <param name="moduleGitConnectionOptions">The module git connection options.</param>
         </member>
         <member name="M:Business.RequestHandlers.Managers.ModuleManager.GetAllModulesAsync(System.String,System.String)">
             <summary>
@@ -1123,6 +680,12 @@
             <param name="firmwareVersion">The firmware version.</param>
             <param name="deviceType">Type of the device.</param>
             <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.ModuleManager.SetGitRepoConnection">
+            <summary>
+            Sets the git repo connection.
+            </summary>
+            <exception cref="T:ZTR.Framework.Business.Models.CustomArgumentException">Current directory path is not valid.</exception>
         </member>
     </members>
 </doc>

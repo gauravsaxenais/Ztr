@@ -2,8 +2,6 @@
 {
     using Business.GitRepository.Interfaces;
     using Business.GitRepository.Managers;
-    using Business.GitRepositoryWrappers.Interfaces;
-    using Business.GitRepositoryWrappers.Managers;
     using Business.Parsers;
     using Business.RequestHandlers.Interfaces;
     using Business.RequestHandlers.Managers;

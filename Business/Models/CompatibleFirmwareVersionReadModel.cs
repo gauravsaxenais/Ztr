@@ -1,5 +1,6 @@
 ﻿namespace Business.Models
 {
+    using Business.Common.Models;
     using System.Collections.Generic;
 
     /// <summary>

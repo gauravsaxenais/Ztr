@@ -1,6 +1,9 @@
-﻿namespace Business.RequestHandlers.Managers
+﻿using Business.Configuration;
+using ZTR.Framework.Business.Models;
+
+namespace Business.RequestHandlers.Managers
 {
-    using Business.GitRepositoryWrappers.Interfaces;
+    using Business.GitRepository.Interfaces;
     using EnsureThat;
     using Interfaces;
     using Microsoft.Extensions.Logging;
@@ -25,6 +28,7 @@
         private readonly IBlockServiceManager _blockServiceManager;
         private readonly ILogger<BlockManager> _logger;
         private const string Prefix = nameof(BlockManager);
+        private readonly ModuleBlockGitConnectionOptions _moduleGitConnectionOptions;
         #endregion
 
         #region Constructors     
@@ -33,14 +37,19 @@
         /// Initializes a new instance of the <see cref="BlockManager"/> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
-        /// <param name="blockServiceManager">The module service manager.</param>
-        public BlockManager(ILogger<BlockManager> logger, IBlockServiceManager blockServiceManager) : base(logger)
+        /// <param name="moduleGitConnectionOptions">The module git connection options.</param>
+        /// <param name="blockServiceManager">The block service manager.</param>
+        public BlockManager(ILogger<BlockManager> logger, ModuleBlockGitConnectionOptions moduleGitConnectionOptions, IBlockServiceManager blockServiceManager) : base(logger)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
             EnsureArg.IsNotNull(blockServiceManager, nameof(blockServiceManager));
+            EnsureArg.IsNotNull(moduleGitConnectionOptions, nameof(moduleGitConnectionOptions));
 
             _blockServiceManager = blockServiceManager;
+            _moduleGitConnectionOptions = moduleGitConnectionOptions;
             _logger = logger;
+
+            SetGitRepoConnection();
         }
         #endregion
 
@@ -74,6 +83,24 @@
             return blocks;
         }
 
+        /// <summary>
+        /// Sets the git repo connection.
+        /// </summary>
+        /// <exception cref="CustomArgumentException">Current directory path is not valid.</exception>
+        public void SetGitRepoConnection()
+        {
+            var currentDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+
+            if (currentDirectory == null)
+            {
+                throw new CustomArgumentException("Current directory path is not valid.");
+            }
+
+            _moduleGitConnectionOptions.BlockConfig = Path.Combine(currentDirectory, _moduleGitConnectionOptions.GitLocalFolder, _moduleGitConnectionOptions.BlockConfig);
+
+            _blockServiceManager.SetGitRepoConnection(_moduleGitConnectionOptions);
+        }
+
         private async Task<List<BlockJsonModel>> ProcessBlockFileAsync(IDictionary<string, string> filesData)
         {
             var blocks = new List<BlockJsonModel>();
@@ -103,7 +130,8 @@
             var batchSize = 4;
 
             var blockFiles
-                = await _blockServiceManager.GetAllBlockFilesAsync().ConfigureAwait(false);
+                = await _blockServiceManager.GetAllBlockFilesAsync(_moduleGitConnectionOptions.BlockConfig).ConfigureAwait(false);
+
             var listOfRequests = new List<Task<List<BlockJsonModel>>>();
 
             var fileModels = blockFiles.ToList();

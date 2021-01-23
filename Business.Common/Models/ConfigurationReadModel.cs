@@ -1,4 +1,4 @@
-﻿namespace Business.Models
+﻿namespace Business.Common.Models
 {
     using System.Collections.Generic;
     using System.Linq;

@@ -1,4 +1,4 @@
-﻿namespace Business.Models
+﻿namespace Business.Common.Models
 {
     /// <summary>
     /// This class maps to toml file.

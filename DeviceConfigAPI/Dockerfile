@@ -15,6 +15,7 @@ COPY ["Framework/Framework.Security/Framework.Security.csproj", "Framework/Frame
 COPY ["Framework/Framework.Business/Framework.Business.csproj", "Framework/Framework.Business/"]
 COPY ["Framework/Framework.Configuration/Framework.Configuration.csproj", "Framework/Framework.Configuration/"]
 COPY ["Business.GitRepository/Business.GitRepository.csproj", "Business.GitRepository/"]
+COPY ["Business.Common/Business.Common.csproj", "Business.Common/"]
 COPY ["Business/Business.csproj", "Business/"]
 COPY ["Business.Parsers/Business.Parsers.csproj", "Business.Parsers/"]
 RUN dotnet restore "DeviceConfigAPI/Service.csproj"
