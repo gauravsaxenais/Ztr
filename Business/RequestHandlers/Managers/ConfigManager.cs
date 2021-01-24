@@ -39,6 +39,14 @@
         }
 
         /// <summary>
+        /// Read from url asynchronous.
+        /// </summary>      
+        public async Task<string> GetFromUrl()
+        { 
+            return await _service.CreateFromUrlAsync();
+        }
+
+        /// <summary>
         /// Updates the toml configuration.
         /// </summary>
         /// <param name="properties">The properties.</param>

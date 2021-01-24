@@ -16,15 +16,18 @@
         internal string Name => "name";
         internal string Fields => "fields";
         internal string Arrays => "arrays";
+        internal string HTML { get; private set; } 
         private readonly ILogger<ConverterService> _logger;
         private static readonly object SyncRoot = new object();
         internal string[] Properties { get; private set; }
         internal IEnumerable<ConfigConvertRuleReadModel> JsonProperties { get; private set; }
         private const string _skipConfigFolder = "configsetting";
         private const string _skipConfigFile = "convertconfig.txt";
+        private const string _htmlfile = "config.html";
         internal IEnumerable<ConfigConvertRuleReadModel> Rules { get; set; }
 
         private string Path => $"{Global.WebRoot}/{_skipConfigFolder}/{_skipConfigFile}";
+        private string HTMLPath => $"{Global.WebRoot}/{_skipConfigFolder}/{_htmlfile}";
 
         public ConvertConfig(ILogger<ConverterService> logger)
         {
@@ -40,6 +43,10 @@
             if (File.Exists(Path))
             {
                 setting = File.ReadAllText(Path);
+            }
+            if (File.Exists(HTMLPath))
+            {
+                HTML = File.ReadAllText(HTMLPath);
             }
 
             var tags = setting.Split(Environment.NewLine);

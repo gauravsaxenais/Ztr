@@ -361,6 +361,11 @@
             <param name="properties">The properties.</param>
             <returns></returns>
         </member>
+        <member name="M:Business.RequestHandlers.Interfaces.IConfigManager.GetFromUrl">
+            <summary>
+            Read configuration.
+            </summary>
+        </member>
         <member name="T:Business.RequestHandlers.Interfaces.IDefaultValueManager">
             <summary>
             Gets default values for all the modules
@@ -544,6 +549,11 @@
             <returns>
               <br />
             </returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.ConfigManager.GetFromUrl">
+            <summary>
+            Read from url asynchronous.
+            </summary>      
         </member>
         <member name="M:Business.RequestHandlers.Managers.ConfigManager.UpdateTomlConfig(System.String)">
             <summary>

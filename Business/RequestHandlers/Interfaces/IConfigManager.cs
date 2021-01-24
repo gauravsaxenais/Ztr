@@ -21,5 +21,11 @@
         /// <param name="properties">The properties.</param>
         /// <returns></returns>
         Task<bool> UpdateTomlConfig(string properties);
+
+
+        /// <summary>
+        /// Read configuration.
+        /// </summary>
+        Task<string> GetFromUrl();
     }
 }
