@@ -44,22 +44,8 @@
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllBlocks()
         {
-            ApiResponse apiResponse;
-
-            try
-            {
-                _logger.LogInformation($"{Prefix}: Getting list of blocks.");
-                var result = await _manager.GetBlocksAsync().ConfigureAwait(false);
-
-                apiResponse = new ApiResponse(status: true, data: result);
-            }
-            catch (Exception exception)
-            {
-                _logger.LogCritical(exception, $"{Prefix}: Error occurred while getting list of blocks.");
-                apiResponse = new ApiResponse(false, exception.Message, ErrorType.BusinessError, exception);
-            }
-
-            return Ok(apiResponse);
+            var result = await _manager.GetBlocksAsync().ConfigureAwait(false);
+            return Ok(result);
         }
     }
 }

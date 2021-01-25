@@ -9,8 +9,4 @@
     <ProjectReference Include="..\Framework\Framework.Business\Framework.Business.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Configuration\" />
-  </ItemGroup>
-
 </Project>

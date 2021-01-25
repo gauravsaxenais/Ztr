@@ -14,20 +14,16 @@
         /// <summary>Gets or sets the name.</summary>
         /// <value>The name.</value>
         public string Name { get; set; }
-
         /// <summary>Gets or sets the label.</summary>
         /// <value>The label.</value>
         public string Label { get; set; }
-
         /// <summary>Gets or sets the description.</summary>
         /// <value>The description.</value>
         public string Description { get; set; }
-
         /// <summary>Gets or sets the type of the data.</summary>
         /// <value>The type of the data.</value>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Type { get; set; }
-
         /// <summary>
         /// Gets or sets the type of the data.
         /// </summary>
@@ -36,12 +32,10 @@
         /// </value>
         [JsonProperty(PropertyName = "datatype")]
         public string DataType { get; set; }
-
         /// <summary>Determines the minimum of the parameters.</summary>
         /// <value>The minimum.</value>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public object Min { get; set; }
-
         /// <summary>Determines the maximum of the parameters.</summary>
         /// <value>The maximum.</value>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
