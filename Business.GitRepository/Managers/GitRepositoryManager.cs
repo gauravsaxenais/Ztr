@@ -194,7 +194,7 @@
 
         #region Private methods
 
-        private void GetContentOfFiles(LibGit2Sharp.IRepository repo, Tree tree, ICollection<ExportFileResultModel> contentFromFiles)
+        private void GetContentOfFiles(IRepository repo, Tree tree, ICollection<ExportFileResultModel> contentFromFiles)
         {
             foreach (var treeEntry in tree)
             {
@@ -217,7 +217,6 @@
         private async Task<List<(string, DateTimeOffset)>> GetAllTagsAsync()
         {
             var tags = new List<Tag>();
-            var tagNames = new List<(string, DateTimeOffset)>();
 
             if (!IsExistsContentRepositoryDirectory())
             {
@@ -225,6 +224,7 @@
             }
 
             _repository = new Repository(_gitConnection.GitLocalFolder);
+
             // Add new tags.
             foreach (var tag in _repository.Tags)
             {
@@ -236,10 +236,12 @@
                     // only interested in tags for a commit.
                     tags.Add(tag);
                 }
-
-                tagNames = SortTags(tags: tags, order: t => ((Commit)t.PeeledTarget).Author.When,
-                                        selector: t => (t.FriendlyName, ((Commit)t.PeeledTarget).Author.When));
             }
+
+            var tagNames = tags.OrderByDescending(t => ((Commit)t.PeeledTarget).Author.When)
+                                                  .ThenByDescending(t => t.FriendlyName)
+                                                  .Select(t => (t.FriendlyName, ((Commit)t.PeeledTarget).Author.When))
+                                                  .ToList();
 
             return tagNames;
         }
@@ -326,17 +328,17 @@
             var directoryInfos = new Stack<DirectoryInfo>();
             var root = new DirectoryInfo(directory);
             directoryInfos.Push(root);
-            
+
             while (directoryInfos.Count > 0)
             {
                 var fol = directoryInfos.Pop();
                 fol.Attributes &= ~(FileAttributes.Archive | FileAttributes.ReadOnly | FileAttributes.Hidden);
-                
+
                 foreach (var d in fol.GetDirectories())
                 {
                     directoryInfos.Push(d);
                 }
-                
+
                 foreach (var f in fol.GetFiles())
                 {
                     f.Attributes &= ~(FileAttributes.Archive | FileAttributes.ReadOnly | FileAttributes.Hidden);
@@ -358,10 +360,10 @@
                 }
                 catch (DirectoryNotFoundException)
                 {
-                    return;  
+                    return;
                 }
                 catch (IOException)
-                { 
+                {
                     Thread.Sleep(10);
                     continue;
                 }
@@ -370,7 +372,7 @@
 
             throw new CustomArgumentException($"There is an issue accessing the git repository.");
         }
-        
+
         #endregion
     }
 }

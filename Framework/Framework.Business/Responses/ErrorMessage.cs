@@ -1,15 +1,15 @@
-﻿using System;
-using System.Diagnostics;
-using System.Text;
-using EnsureThat;
-using FluentValidation.Results;
-using Newtonsoft.Json;
-using ZTR.Framework.Business.Content;
-using ZTR.Framework.Business.Models;
-using ZTR.Framework.Configuration;
-
-namespace ZTR.Framework.Business
+﻿namespace ZTR.Framework.Business
 {
+    using System;
+    using System.Diagnostics;
+    using System.Text;
+    using Configuration;
+    using Content;
+    using EnsureThat;
+    using FluentValidation.Results;
+    using Models;
+    using Newtonsoft.Json;
+
     /// <summary>
     /// ErrorMessage
     /// </summary>
