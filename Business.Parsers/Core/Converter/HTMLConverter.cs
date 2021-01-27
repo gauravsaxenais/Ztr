@@ -17,6 +17,7 @@ namespace Business.Parsers.Core.Converter
         private readonly ConvertConfig _config;       
         private HtmlDocument _document;
         private ITree _tree;
+        private IEnumerable<ConfigMap> _map;
         private IDictionary<string, object> _tomlTree;
         private IBuilder<IDictionary<string, object>> _builder;
         public HTMLConverter(ConvertConfig config, IBuilder<IDictionary<string, object>> builder)
@@ -27,15 +28,15 @@ namespace Business.Parsers.Core.Converter
         }
         public ITree ToConverted(string html)
         {
-           
+            _map = _config.GetMapping();
             CleanToCompatible(ref html);
             ToDictionary(html);
 
             var toml = _config.GetBaseToml();
             _tomlTree = _builder.ToDictionary(toml);
-
-            var map = _config.GetMapping();
-            MergeValues(map);
+            RemoveModule(_tomlTree, false);
+            RemoveArrays(_tomlTree);
+            MergeValues();
 
             return _tree;
         }
@@ -46,10 +47,97 @@ namespace Business.Parsers.Core.Converter
         }
 
         #region Private members
-        private void MergeValues(IEnumerable<ConfigMap> map)
+        private void MergeValues()
         {
 
         }
+        private bool RemoveModule<T>(T input, bool removing) where T : IDictionary<string, object>
+        {
+            var dictionary = new Dictionary<string, object>();
+            foreach (var item in input)
+            {
+                if(removing)
+                {
+                    var ky = item.Key.ToLower();
+                    if ( ky == "name" && !_tree.Keys.Any(o=> o.ToLower() ==item.Value.ToString().ToLower()))
+                    {
+                        return true;                       
+                    }
+                }
+                if(item.Key.ToLower() == "module")
+                {
+                    removing = true;
+                }
+                if (item.Value is object[] s)
+                {
+                  var list =  s.Where(o =>
+                    {
+                        if (o is T)
+                        {
+                          return !RemoveModule((T)o, removing);
+                        }
+                        return true;
+                    }).ToArray();
+
+                    dictionary.Add(item.Key, list);
+                }
+
+                if (item.Value is T t)
+                {
+                    RemoveModule(t, removing);
+                   
+                }
+            }
+
+            foreach (var item in dictionary)
+            {
+                input[item.Key] = dictionary[item.Key];
+            }
+
+            return false;
+        }
+        private void RemoveArrays<T>(T input) where T : IDictionary<string,object>
+        {
+            var dictionary = new Dictionary<string, object>();
+            foreach (var item in input)
+            {
+                if (item.Value is object[] s)
+                {                  
+
+                    if (_config.RmArrays.Contains(item.Key))
+                    {
+                        s.ToList().ForEach(o =>
+                        {
+                            RemoveArrays((T)o);
+                        });
+                    }
+                    else
+                    {
+                        var l = s.OfType<T>();
+                        if (l.Any())
+                        {
+                            var countofproperties = l.Max(o => o.Count);
+                            var first = l.Where(o => o.Count == countofproperties).Take(1).ToArray();
+                            dictionary.Add(item.Key, first);
+                            RemoveArrays(first.First());
+                        }
+                    }
+                }
+
+                if (item.Value is T t)
+                {
+                    RemoveArrays(t);                   
+                }
+            }
+
+            foreach (var item in dictionary)
+            {
+                input[item.Key] = dictionary[item.Key];
+            }
+
+          
+        }
+
         private void ToDictionary(string html)
         {
             _document = new HtmlDocument();
@@ -167,7 +255,15 @@ namespace Business.Parsers.Core.Converter
             {
                 return;
             }
-
+            var m = _map.FirstOrDefault(o => o.From.ToLower() == key.ToLower());
+            if(m!=null)
+            {
+                key = m.To;
+                if(value is string && m.From.ToLower().Contains("hex"))
+                {
+                    value = value.ToString().FromHex();
+                }
+            }
             dictionary.Add(key, value);
 
         }

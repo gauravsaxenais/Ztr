@@ -140,5 +140,20 @@
         {
             return input.RemoveNewline().Replace("&nbsp;", "");
         }
+
+        public static string ToHex(this string str)
+        {
+            return str.ToInt().ToString("X");
+        }        
+        public static string FromHex(this string hexString)
+        {
+            int result;
+            if (int.TryParse(hexString, NumberStyles.HexNumber, null,out result))
+            {
+                return result.ToString();
+            };
+            return hexString;
+        }
+
     }
 }

@@ -20,14 +20,14 @@
         private readonly ILogger<ConverterService> _logger;
         private static readonly object SyncRoot = new object();
         internal string[] Properties { get; private set; }
+        internal string[] RmArrays { get; private set; }
         internal IEnumerable<ConfigConvertRuleReadModel> JsonProperties { get; private set; }
         private const string _skipConfigFolder = "configsetting";
-        private const string _skipConfigFile = "convertconfig.txt";
-
+       
         internal IEnumerable<ConfigConvertRuleReadModel> Rules { get; set; }
         internal ConfigTag HTMLTags { get; set; }
 
-        private string Path => $"{Global.WebRoot}/{_skipConfigFolder}/{_skipConfigFile}";
+        private string Path => $"{Global.WebRoot}/{_skipConfigFolder}/convert.config";
         private string HTMLPath => $"{Global.WebRoot}/{_skipConfigFolder}/config.html";
         private string TomlPath => $"{Global.WebRoot}/{_skipConfigFolder}/config.toml";
         private string MapperPath => $"{Global.WebRoot}/{_skipConfigFolder}/map.config";
@@ -83,6 +83,8 @@
             JsonProperties = tags.Where(o => o.StartsWith("json:")).Select(o => MapConfig(o));
             Rules = tags.Where(o => o.StartsWith("rule:")).Select(o => MapConfig(o));
             HTMLTags = tags.Where(o => o.StartsWith("html:")).Select(o => new ConfigTag(o)).First();
+            RmArrays = tags.Where(o => o.StartsWith("nrmarry:")).Select(o => o.Replace("nrmarry:", string.Empty).RemoveNewline()).ToArray();
+
             static ConfigConvertRuleReadModel MapConfig(string o)
             {
                 var ruleConfig = o.RemoveNewline().Split(':');
