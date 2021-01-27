@@ -16,19 +16,21 @@
         internal string Name => "name";
         internal string Fields => "fields";
         internal string Arrays => "arrays";
-        internal string HTML { get; private set; } 
+     
         private readonly ILogger<ConverterService> _logger;
         private static readonly object SyncRoot = new object();
         internal string[] Properties { get; private set; }
         internal IEnumerable<ConfigConvertRuleReadModel> JsonProperties { get; private set; }
         private const string _skipConfigFolder = "configsetting";
         private const string _skipConfigFile = "convertconfig.txt";
-        private const string _htmlfile = "config.html";
+
         internal IEnumerable<ConfigConvertRuleReadModel> Rules { get; set; }
         internal ConfigTag HTMLTags { get; set; }
 
         private string Path => $"{Global.WebRoot}/{_skipConfigFolder}/{_skipConfigFile}";
-        private string HTMLPath => $"{Global.WebRoot}/{_skipConfigFolder}/{_htmlfile}";
+        private string HTMLPath => $"{Global.WebRoot}/{_skipConfigFolder}/config.html";
+        private string TomlPath => $"{Global.WebRoot}/{_skipConfigFolder}/config.toml";
+        private string MapperPath => $"{Global.WebRoot}/{_skipConfigFolder}/map.config";
 
         public ConvertConfig(ILogger<ConverterService> logger)
         {
@@ -37,18 +39,44 @@
             _logger = logger;
             InitiateRule();
         }
+        internal string GetHtml()
+        {
+            string html = string.Empty;
+            if (File.Exists(HTMLPath))
+            {
+                html = File.ReadAllText(HTMLPath);
+            }
+            return html;
 
+        }
+        internal IEnumerable<ConfigMap> GetMapping()
+        {
+            string mapping = string.Empty;
+            if (File.Exists(MapperPath))
+            {
+                mapping = File.ReadAllText(MapperPath);
+            }
+            var tags = mapping.Split(Environment.NewLine);
+            var map = tags.Where(o => o.StartsWith("map:")).Select(o => new ConfigMap(o)).ToArray();
+            return map;
+        }
+        internal string GetBaseToml()
+        {
+
+            string toml = string.Empty;
+            if (File.Exists(TomlPath))
+            {
+                toml = File.ReadAllText(TomlPath);
+            }
+            return toml;
+        }
         void InitiateRule()
         {
             string setting = string.Empty;
             if (File.Exists(Path))
             {
                 setting = File.ReadAllText(Path);
-            }
-            if (File.Exists(HTMLPath))
-            {
-                HTML = File.ReadAllText(HTMLPath);
-            }
+            }           
 
             var tags = setting.Split(Environment.NewLine);
             Properties = tags.Where(o => o.StartsWith("rm:")).Select(o => o.Replace("rm:", string.Empty).RemoveNewline()).ToArray();

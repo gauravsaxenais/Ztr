@@ -40,9 +40,9 @@
             return await Task.FromResult(contents);            
         }
 
-        public async Task<string> CreateFromUrlAsync()
+        public async Task<string> CreateFromHtmlAsync()
         {
-            var result = _htmlparser.ToJson(_config.HTML);
+            var result = _htmlparser.ToJson(_config.GetHtml());
             return await Task.FromResult(result);
         }
 

@@ -26,6 +26,6 @@
         /// <summary>
         /// Read configuration.
         /// </summary>
-        Task<string> GetFromUrl();
+        Task<string> CreateFromHtmlAsync();
     }
 }

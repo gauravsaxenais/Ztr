@@ -45,10 +45,10 @@
             return Ok(result);
         }
 
-        [HttpGet(nameof(GetFromUrl))]
-        public async Task<IActionResult> GetFromUrl()
+        [HttpGet(nameof(CreateFromHtml))]
+        public async Task<IActionResult> CreateFromHtml()
         {
-            var result = await _manager.GetFromUrl();
+            var result = await _manager.CreateFromHtmlAsync();
             return Ok(result);
         }
     }

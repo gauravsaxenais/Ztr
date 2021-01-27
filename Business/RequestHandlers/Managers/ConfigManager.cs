@@ -41,9 +41,9 @@
         /// <summary>
         /// Read from url asynchronous.
         /// </summary>      
-        public async Task<string> GetFromUrl()
+        public async Task<string> CreateFromHtmlAsync()
         { 
-            return await _service.CreateFromUrlAsync();
+            return await _service.CreateFromHtmlAsync();
         }
 
         /// <summary>

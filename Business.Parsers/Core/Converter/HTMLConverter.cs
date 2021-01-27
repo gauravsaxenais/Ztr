@@ -3,6 +3,7 @@ using HtmlAgilityPack;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -13,19 +14,29 @@ namespace Business.Parsers.Core.Converter
 {
     public class HTMLConverter : IHTMLConverter
     {
-        private readonly ConvertConfig _config;
-        private const string _defaultKey = "root";
+        private readonly ConvertConfig _config;       
         private HtmlDocument _document;
-        private Tree _tree;
-        public HTMLConverter(ConvertConfig config)
+        private ITree _tree;
+        private IDictionary<string, object> _tomlTree;
+        private IBuilder<IDictionary<string, object>> _builder;
+        public HTMLConverter(ConvertConfig config, IBuilder<IDictionary<string, object>> builder)
         {
             _config = config;
             _tree = new Tree();
+            _builder = builder;
         }
         public ITree ToConverted(string html)
         {
+           
             CleanToCompatible(ref html);
             ToDictionary(html);
+
+            var toml = _config.GetBaseToml();
+            _tomlTree = _builder.ToDictionary(toml);
+
+            var map = _config.GetMapping();
+            MergeValues(map);
+
             return _tree;
         }
         
@@ -35,6 +46,10 @@ namespace Business.Parsers.Core.Converter
         }
 
         #region Private members
+        private void MergeValues(IEnumerable<ConfigMap> map)
+        {
+
+        }
         private void ToDictionary(string html)
         {
             _document = new HtmlDocument();

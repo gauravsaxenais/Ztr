@@ -4,5 +4,6 @@
     public interface IBuilder<T>
     {
         string ToTOML(T content, ValueScheme scheme);
+        T ToDictionary(string toml);
     }
 }

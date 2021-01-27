@@ -361,7 +361,7 @@
             <param name="properties">The properties.</param>
             <returns></returns>
         </member>
-        <member name="M:Business.RequestHandlers.Interfaces.IConfigManager.GetFromUrl">
+        <member name="M:Business.RequestHandlers.Interfaces.IConfigManager.CreateFromHtmlAsync">
             <summary>
             Read configuration.
             </summary>
@@ -550,7 +550,7 @@
               <br />
             </returns>
         </member>
-        <member name="M:Business.RequestHandlers.Managers.ConfigManager.GetFromUrl">
+        <member name="M:Business.RequestHandlers.Managers.ConfigManager.CreateFromHtmlAsync">
             <summary>
             Read from url asynchronous.
             </summary>      
