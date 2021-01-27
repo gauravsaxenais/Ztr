@@ -52,22 +52,11 @@
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetCompatibleFirmwareVersions([Required, FromBody] CompatibleFirmwareVersionReadModel module)
         {
-            ApiResponse apiResponse;
             var prefix = nameof(CompatibleFirmwareVersionController);
+            _logger.LogInformation($"{prefix}: Getting list of compatible firmware versions based on a firmware version.");
 
-            try
-            {
-                _logger.LogInformation($"{prefix}: Getting list of compatible firmware versions based on a firmware version.");
-
-                var result = await _manager.GetCompatibleFirmwareVersionsAsync(module).ConfigureAwait(false);
-
-                apiResponse = new ApiResponse(status: true, data: result);
-            }
-            catch (Exception exception)
-            {
-                _logger.LogCritical(exception, $"{prefix}: Error occurred while getting list of compatible firmware versions based on a firmware version.");
-                apiResponse = new ApiResponse(false, exception.Message, ErrorType.BusinessError, exception);
-            }
+            var result = await _manager.GetCompatibleFirmwareVersionsAsync(module).ConfigureAwait(false);
+            var apiResponse = new ApiResponse(status: true, data: result);
 
             return Ok(apiResponse);
         }

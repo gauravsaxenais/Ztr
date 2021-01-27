@@ -41,23 +41,12 @@
         [HttpPost(nameof(CreateTomlConfig))]
         public async Task<IActionResult> CreateTomlConfig([FromBody] ConfigReadModel json)
         {
-            ApiResponse apiResponse;
             var prefix = nameof(ConfigController);
+            _logger.LogInformation($"{prefix}: Creating config.toml.");
 
-            try
-            {
-                _logger.LogInformation($"{prefix}: Creating config.toml.");
+            var result = await _manager.CreateConfigAsync(json).ConfigureAwait(false);
 
-                var result = await _manager.CreateConfigAsync(json).ConfigureAwait(false);
-
-                apiResponse = new ApiResponse(status: true, data: result);
-            }
-            catch (Exception exception)
-            {
-                _logger.LogCritical(exception, $"{prefix}: Error occurred while creating config.toml.");
-                apiResponse = new ApiResponse(false, exception.Message, ErrorType.BusinessError, exception);
-            }
-
+            var apiResponse = new ApiResponse(status: true, data: result);
             return Ok(apiResponse);
         }
     }

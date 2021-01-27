@@ -118,9 +118,7 @@
             try
             {
                 var tags = await GetAllTagsAsync().ConfigureAwait(false);
-
                 var tag = tags.FirstOrDefault(x => x.Item1 == tagName);
-
                 var tagNames = tags.Where(x => x.Item2 < tag.Item2).Select(x => x.Item1).ToList();
 
                 return tagNames;
@@ -218,11 +216,6 @@
         {
             var tags = new List<Tag>();
 
-            if (!IsExistsContentRepositoryDirectory())
-            {
-                await CloneRepositoryAsync().ConfigureAwait(false);
-            }
-
             _repository = new Repository(_gitConnection.GitLocalFolder);
 
             // Add new tags.
@@ -243,7 +236,7 @@
                                                   .Select(t => (t.FriendlyName, ((Commit)t.PeeledTarget).Author.When))
                                                   .ToList();
 
-            return tagNames;
+            return await Task.FromResult(tagNames);
         }
 
         /// <summary>

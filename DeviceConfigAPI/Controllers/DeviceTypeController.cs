@@ -47,23 +47,12 @@
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllDevices()
         {
-            ApiResponse apiResponse;
             var prefix = nameof(DeviceTypeController);
+            _logger.LogInformation($"{prefix} method name: {nameof(GetAllDevices)}: Getting list of all devices.");
 
-            try
-            {
-                _logger.LogInformation($"{prefix} method name: {nameof(GetAllDevices)}: Getting list of all devices.");
+            var result = await _manager.GetAllDevicesAsync().ConfigureAwait(false);
 
-                var result = await _manager.GetAllDevicesAsync().ConfigureAwait(false);
-
-                apiResponse = new ApiResponse(status: true, data: result);
-            }
-            catch (Exception exception)
-            {
-                _logger.LogCritical(exception, $"{prefix}: method name: {nameof(GetAllDevices)} Error occurred while getting list of all devices.");
-                apiResponse = new ApiResponse(ErrorType.BusinessError, exception);
-            }
-
+            var apiResponse = new ApiResponse(status: true, data: result);
             return Ok(apiResponse);
         }
     }

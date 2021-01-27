@@ -1,9 +1,9 @@
 ﻿namespace Business.GitRepository.Interfaces
 {
+    using Common.Configuration;
     using System.Collections.Generic;
     using System.IO;
     using System.Threading.Tasks;
-    using ZTR.Framework.Business;
 
     /// <summary>
     /// Block Service Manager.
@@ -14,13 +14,13 @@
         /// Gets all block files.
         /// </summary>
         /// <returns></returns>
-        Task<IEnumerable<FileInfo>> GetAllBlockFilesAsync(string blockConfigPath);
+        Task<IEnumerable<FileInfo>> GetAllBlockFilesAsync();
 
         /// <summary>
         /// Sets the git repo connection.
         /// </summary>
-        /// <param name="connectionOptions">The connection options.</param>
-        void SetGitRepoConnection(GitConnectionOptions connectionOptions);
+        /// <param name="moduleGitConnectionOptions">The module git connection options.</param>
+        void SetGitRepoConnection(ModuleBlockGitConnectionOptions moduleGitConnectionOptions);
 
         /// <summary>
         /// Clones the git repo asynchronous.

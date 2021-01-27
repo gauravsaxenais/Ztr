@@ -1,10 +1,9 @@
 ﻿namespace Business.GitRepository.Managers
 {
-    using Interfaces;
     using EnsureThat;
+    using Interfaces;
     using Microsoft.Extensions.Logging;
     using Nett;
-    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -45,12 +44,6 @@
         /// <returns></returns>
         public async Task<IEnumerable<string>> GetAllDevicesAsync(string filePath)
         {
-            _logger.LogInformation($"{Prefix}: Cloning github repository.");
-
-            await _gitRepoManager.CloneRepositoryAsync();
-
-            _logger.LogInformation($"{Prefix}: Github repository cloning is successful.");
-
             var dictionaryDevices = await GetListOfDevicesAsync(filePath).ConfigureAwait(false);
 
             var listOfDevices = dictionaryDevices.SelectMany(x => x)
@@ -60,6 +53,16 @@
             _logger.LogInformation(
                 $"{Prefix} method name: {nameof(GetAllDevicesAsync)}: Getting list of all directories as devices.");
             return listOfDevices;
+        }
+
+        /// <summary>
+        /// Clones the git hub repo asynchronous.
+        /// </summary>
+        public async Task CloneGitHubRepoAsync()
+        {
+            _logger.LogInformation($"{Prefix}: Cloning github repository.");
+            await _gitRepoManager.CloneRepositoryAsync().ConfigureAwait(false);
+            _logger.LogInformation($"{Prefix}: Github repository cloning is successful.");
         }
 
         /// <summary>

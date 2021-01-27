@@ -4,10 +4,8 @@
     using System.Diagnostics;
     using System.Text;
     using Configuration;
-    using Content;
     using EnsureThat;
     using FluentValidation.Results;
-    using Models;
     using Newtonsoft.Json;
 
     /// <summary>
@@ -38,10 +36,9 @@
             ID = Guid.NewGuid().ToString("n");
             Message = message;
 
-            if (exception != null)
+            if (exception != null && !string.IsNullOrWhiteSpace(exception.StackTrace))
             {
                 Detail = GenerateMessageFromException(exception);
-                Exception = exception.StackTrace.ToString();
             }
         }
 
@@ -61,7 +58,7 @@
         /// <param name="errorCode">The error code.</param>
         /// <param name="exception">The exception.</param>
         public ErrorMessage(TErrorCode errorCode, Exception exception) :
-            this(errorCode, exception is IApplicationException ? exception.Message : Resource.ExceptionMessage, exception)
+            this(errorCode, exception.Message, exception)
         {         
         }
 

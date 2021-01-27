@@ -5,9 +5,7 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
-    using System;
     using System.Threading.Tasks;
-    using ZTR.Framework.Business;
     using ZTR.Framework.Service;
 
     /// <summary>Block Controller - This service is responsible for getting arguments in network blocks.</summary>
@@ -44,8 +42,12 @@
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllBlocks()
         {
+            var prefix = nameof(BlockController);
+            _logger.LogInformation($"{prefix}: Getting list of blocks.");
             var result = await _manager.GetBlocksAsync().ConfigureAwait(false);
-            return Ok(result);
+
+            var apiResponse = new ApiResponse(status: true, data: result);
+            return Ok(apiResponse);
         }
     }
 }

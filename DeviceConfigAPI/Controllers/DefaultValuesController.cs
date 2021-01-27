@@ -54,22 +54,11 @@
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllDefaultValues([Required, FromQuery] string firmwareVersion, [Required, FromQuery] string deviceType)
         {
-            ApiResponse apiResponse;
             var prefix = nameof(DefaultValuesController);
+            _logger.LogInformation($"{prefix}: Getting default values for {firmwareVersion} and {deviceType}.");
 
-            try
-            {
-                _logger.LogInformation($"{prefix}: Getting default values for {firmwareVersion} and {deviceType}.");
-
-                var result = await _manager.GetDefaultValuesAllModulesAsync(firmwareVersion, deviceType).ConfigureAwait(false);
-
-                apiResponse = new ApiResponse(status: true, data: result);
-            }
-            catch (Exception exception)
-            {
-                _logger.LogCritical(exception, $"{prefix}: Error getting default values for {firmwareVersion} and {deviceType}.");
-                apiResponse = new ApiResponse(false, exception.Message, ErrorType.BusinessError, exception);
-            }
+            var result = await _manager.GetDefaultValuesAllModulesAsync(firmwareVersion, deviceType).ConfigureAwait(false);
+            var apiResponse = new ApiResponse(status: true, data: result);
 
             return Ok(apiResponse);
         }

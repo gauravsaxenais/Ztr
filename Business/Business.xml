@@ -68,109 +68,6 @@
             A <see cref="T:System.String" /> that represents this instance.
             </returns>
         </member>
-        <member name="T:Business.Configuration.ModuleBlockGitConnectionOptions">
-            <summary>
-            This class maps to the connection options in appsettings.json file.
-            </summary>
-        </member>
-        <member name="M:Business.Configuration.ModuleBlockGitConnectionOptions.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:Business.Configuration.ModuleBlockGitConnectionOptions"/> class.
-            </summary>
-        </member>
-        <member name="M:Business.Configuration.ModuleBlockGitConnectionOptions.#ctor(System.String,System.String,System.String,System.String,Business.Configuration.TomlConfigurationFile)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Business.Configuration.ModuleBlockGitConnectionOptions"/> class.
-            </summary>
-            <param name="gitLocalFolder">The git local folder.</param>
-            <param name="userName">Name of the user.</param>
-            <param name="password">The password.</param>
-            <param name="gitRepositoryUrl">The git repository URL.</param>
-            <param name="tomlConfiguration">The toml configuration.</param>
-        </member>
-        <member name="P:Business.Configuration.ModuleBlockGitConnectionOptions.DefaultTomlConfiguration">
-            <summary>
-            Gets or sets the toml configuration.
-            </summary>
-            <value>
-            The toml configuration.
-            </value>
-        </member>
-        <member name="P:Business.Configuration.ModuleBlockGitConnectionOptions.ModulesConfig">
-            <summary>
-            Gets or sets the modules configuration folder.
-            </summary>
-            <value>
-            The modules configuration.
-            </value>
-        </member>
-        <member name="P:Business.Configuration.ModuleBlockGitConnectionOptions.BlockConfig">
-            <summary>
-            Gets or sets the block configuration.
-            </summary>
-            <value>
-            The block configuration.
-            </value>
-        </member>
-        <member name="P:Business.Configuration.ModuleBlockGitConnectionOptions.MetaToml">
-            <summary>
-            Gets or sets the meta toml.
-            </summary>
-            <value>
-            The meta toml.
-            </value>
-        </member>
-        <member name="M:Business.Configuration.ModuleBlockGitConnectionOptions.ToString">
-            <summary>
-            Converts to string.
-            </summary>
-            <returns>
-            A <see cref="T:System.String" /> that represents this instance.
-            </returns>
-        </member>
-        <member name="T:Business.Configuration.TomlConfigurationFile">
-            <summary>
-            Toml configuration file. 
-            </summary>
-        </member>
-        <member name="P:Business.Configuration.TomlConfigurationFile.DeviceFolder">
-            <summary>
-            Gets or sets the device folder.
-            </summary>
-            <value>
-            The device folder.
-            </value>
-        </member>
-        <member name="P:Business.Configuration.TomlConfigurationFile.TomlConfigFolder">
-            <summary>
-            Gets or sets the toml configuration folder.
-            </summary>
-            <value>
-            The toml configuration folder.
-            </value>
-        </member>
-        <member name="P:Business.Configuration.TomlConfigurationFile.DeviceTomlFile">
-            <summary>
-            Gets or sets the device toml file.
-            </summary>
-            <value>
-            The device toml file.
-            </value>
-        </member>
-        <member name="P:Business.Configuration.TomlConfigurationFile.DefaultTomlFile">
-            <summary>
-            Gets or sets the default toml file.
-            </summary>
-            <value>
-            The default toml file.
-            </value>
-        </member>
-        <member name="M:Business.Configuration.TomlConfigurationFile.ToString">
-            <summary>
-            Converts to string.
-            </summary>
-            <returns></returns>
-        </member>
         <member name="T:Business.Models.BlockJsonModel">
             <summary>
               Returns list of arguments for block as a json.
@@ -434,12 +331,11 @@
             <seealso cref="T:ZTR.Framework.Business.Manager" />
             <seealso cref="T:Business.RequestHandlers.Interfaces.IBlockManager" />
         </member>
-        <member name="M:Business.RequestHandlers.Managers.BlockManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.BlockManager},Business.Configuration.ModuleBlockGitConnectionOptions,Business.GitRepository.Interfaces.IBlockServiceManager)">
+        <member name="M:Business.RequestHandlers.Managers.BlockManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.BlockManager},Business.GitRepository.Interfaces.IBlockServiceManager)">
             <summary>
             Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.BlockManager"/> class.
             </summary>
             <param name="logger">The logger.</param>
-            <param name="moduleGitConnectionOptions">The module git connection options.</param>
             <param name="blockServiceManager">The block service manager.</param>
         </member>
         <member name="M:Business.RequestHandlers.Managers.BlockManager.GetBlocksAsync">
@@ -453,12 +349,6 @@
             Gets the list of blocks asynchronous.
             </summary>
             <returns></returns>
-        </member>
-        <member name="M:Business.RequestHandlers.Managers.BlockManager.SetGitRepoConnection">
-            <summary>
-            Sets the git repo connection.
-            </summary>
-            <exception cref="T:ZTR.Framework.Business.Models.CustomArgumentException">Current directory path is not valid.</exception>
         </member>
         <member name="M:Business.RequestHandlers.Managers.BlockManager.GetModulesAsync(Business.Models.BlockReadModel)">
             <summary>
@@ -474,13 +364,12 @@
             <seealso cref="T:ZTR.Framework.Business.Manager" />
             <seealso cref="T:Business.RequestHandlers.Interfaces.ICompatibleFirmwareVersionManager" />
         </member>
-        <member name="M:Business.RequestHandlers.Managers.CompatibleFirmwareVersionManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DefaultValueManager},Business.GitRepository.Interfaces.IModuleServiceManager,Business.Configuration.ModuleBlockGitConnectionOptions)">
+        <member name="M:Business.RequestHandlers.Managers.CompatibleFirmwareVersionManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DefaultValueManager},Business.GitRepository.Interfaces.IModuleServiceManager)">
             <summary>
             Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.CompatibleFirmwareVersionManager"/> class.
             </summary>
             <param name="logger">The logger.</param>
             <param name="moduleServiceManager">The module service manager.</param>
-            <param name="moduleGitConnectionOptions">The module git connection options.</param>
         </member>
         <member name="M:Business.RequestHandlers.Managers.CompatibleFirmwareVersionManager.GetCompatibleFirmwareVersionsAsync(Business.Models.CompatibleFirmwareVersionReadModel)">
             <summary>
@@ -488,12 +377,6 @@
             </summary>
             <param name="module">The module.</param>
             <returns></returns>
-        </member>
-        <member name="M:Business.RequestHandlers.Managers.CompatibleFirmwareVersionManager.SetGitRepoConnection">
-            <summary>
-            Sets the git repo connection.
-            </summary>
-            <exception cref="T:ZTR.Framework.Business.Models.CustomArgumentException">Current directory path is not valid.</exception>
         </member>
         <member name="T:Business.RequestHandlers.Managers.ConfigCreateFromManager">
             <summary>
@@ -503,11 +386,12 @@
             <seealso cref="T:ZTR.Framework.Business.Manager" />
             <seealso cref="T:Business.RequestHandlers.Interfaces.IConfigCreateFromManager" />
         </member>
-        <member name="M:Business.RequestHandlers.Managers.ConfigCreateFromManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DefaultValueManager},Business.RequestHandlers.Interfaces.IDefaultValueManager,Business.RequestHandlers.Interfaces.IBlockManager)">
+        <member name="M:Business.RequestHandlers.Managers.ConfigCreateFromManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.ConfigCreateFromManager},Business.GitRepository.Interfaces.IModuleServiceManager,Business.RequestHandlers.Interfaces.IDefaultValueManager,Business.RequestHandlers.Interfaces.IBlockManager)">
             <summary>
             Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.ConfigCreateFromManager"/> class.
             </summary>
             <param name="logger">The logger.</param>
+            <param name="moduleServiceManager">The module service manager.</param>
             <param name="defaultValueManager">The default value manager.</param>
             <param name="blockManager">The block manager.</param>
         </member>
@@ -516,6 +400,13 @@
             Returns the list of all modules and blocks from config.toml.
             </summary>
             <param name="configTomlFile">config.toml as string.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.ConfigCreateFromManager.ReadAsString(Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            Reads as string.
+            </summary>
+            <param name="file">The file.</param>
             <returns></returns>
         </member>
         <member name="M:Business.RequestHandlers.Managers.ConfigCreateFromManager.GetListOfModules(System.String)">
@@ -564,7 +455,7 @@
             <seealso cref="T:ZTR.Framework.Business.Manager" />
             <seealso cref="T:Business.RequestHandlers.Interfaces.IDefaultValueManager" />
         </member>
-        <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DefaultValueManager},Business.GitRepository.Interfaces.IModuleServiceManager,Business.Parsers.ProtoParser.Parser.IProtoMessageParser,Business.Parsers.ProtoParser.Parser.ICustomMessageParser,Business.Parsers.ProtoParser.Parser.IModuleParser,Business.Configuration.ModuleBlockGitConnectionOptions)">
+        <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DefaultValueManager},Business.GitRepository.Interfaces.IModuleServiceManager,Business.Parsers.ProtoParser.Parser.IProtoMessageParser,Business.Parsers.ProtoParser.Parser.ICustomMessageParser,Business.Parsers.ProtoParser.Parser.IModuleParser)">
             <summary>
             Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.DefaultValueManager"/> class.
             </summary>
@@ -573,7 +464,6 @@
             <param name="protoParser">The proto parser.</param>
             <param name="customMessageParser">The custom message parser.</param>
             <param name="moduleParser">The module parser.</param>
-            <param name="moduleGitConnectionOptions">The module git connection options.</param>
         </member>
         <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.GetDefaultValuesAllModulesAsync(System.String,System.String)">
             <summary>
@@ -582,12 +472,6 @@
             <param name="firmwareVersion">The firmware version.</param>
             <param name="deviceType">Type of the device.</param>
             <returns></returns>
-        </member>
-        <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.SetGitRepoConnection">
-            <summary>
-            Sets the git repo connection.
-            </summary>
-            <exception cref="T:ZTR.Framework.Business.Models.CustomArgumentException">Current directory path is not valid.</exception>
         </member>
         <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.MergeValuesWithModulesAsync(System.String,System.Collections.Generic.IEnumerable{Business.Common.Models.ModuleReadModel})">
             <summary>
@@ -659,19 +543,18 @@
             <exception cref="T:ZTR.Framework.Business.Models.CustomArgumentException">Current directory path is not valid.</exception>
         </member>
         <member name="T:Business.RequestHandlers.Managers.ModuleManager">
-            <summary>r
+            <summary>
             Returns list of all the modules.
             </summary>
             <seealso cref="T:ZTR.Framework.Business.Manager" />
             <seealso cref="T:Business.RequestHandlers.Interfaces.IModuleManager" />
         </member>
-        <member name="M:Business.RequestHandlers.Managers.ModuleManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.ModuleManager},Business.GitRepository.Interfaces.IModuleServiceManager,Business.Configuration.ModuleBlockGitConnectionOptions)">
+        <member name="M:Business.RequestHandlers.Managers.ModuleManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.ModuleManager},Business.GitRepository.Interfaces.IModuleServiceManager)">
             <summary>
             Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.ModuleManager"/> class.
             </summary>
             <param name="logger">The logger.</param>
             <param name="moduleServiceManager">The module service manager.</param>
-            <param name="moduleGitConnectionOptions">The module git connection options.</param>
         </member>
         <member name="M:Business.RequestHandlers.Managers.ModuleManager.GetAllModulesAsync(System.String,System.String)">
             <summary>
@@ -680,12 +563,6 @@
             <param name="firmwareVersion">The firmware version.</param>
             <param name="deviceType">Type of the device.</param>
             <returns></returns>
-        </member>
-        <member name="M:Business.RequestHandlers.Managers.ModuleManager.SetGitRepoConnection">
-            <summary>
-            Sets the git repo connection.
-            </summary>
-            <exception cref="T:ZTR.Framework.Business.Models.CustomArgumentException">Current directory path is not valid.</exception>
         </member>
     </members>
 </doc>

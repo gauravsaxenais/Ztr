@@ -2,10 +2,11 @@
 {
     using System;
     using System.Threading.Tasks;
+    using Business;
+    using Business.Content;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
-    using ZTR.Framework.Business;
 
     /// <summary>
     /// ExceptionMiddleware
@@ -15,7 +16,7 @@
         private readonly RequestDelegate _requestDelegate;
         private readonly IHostEnvironment _hostingEnvironment;
         private readonly ILogger<ExceptionMiddleware> _logger;
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="ExceptionMiddleware"/> class.
         /// </summary>
@@ -48,24 +49,31 @@
             }
         }
 
-        private static async Task WriteResponse(HttpContext context, ExceptionResponse exceptionResponse, ApiResponse problemDetails)
+        private static async Task WriteResponse(HttpContext context, ApiResponse apiResponse)
         {
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-            context.Response.ContentType = "application/json";
+            context.Response.ContentType = SupportedContentTypes.Json;
+
             await context.Response
-                .WriteAsync(exceptionResponse == null
-                    ? problemDetails.ToString()
-                    : exceptionResponse.ResponseText).ConfigureAwait(false);
+                .WriteAsync(apiResponse.ToString()).ConfigureAwait(false);
         }
 
         private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
-            ExceptionResponse exceptionResponse = default;
             _logger.LogCritical(exception, nameof(ExceptionMiddleware));
-            var error = new ErrorMessage<ErrorType>(ErrorType.ServerError, exception);
-            var response = new ApiResponse { Success = false, Error = error };
 
-            await WriteResponse(context, exceptionResponse, response);
+            ErrorMessage<ErrorType> error;
+            if (_hostingEnvironment.IsDevelopment())
+            {
+                error = new ErrorMessage<ErrorType>(ErrorType.ServerError, exception);
+            }
+            else
+            {
+                error = new ErrorMessage<ErrorType>(ErrorType.ServerError, Resource.ExceptionMessage);
+            }
+
+            var response = new ApiResponse { Success = false, Error = error };
+            await WriteResponse(context, response).ConfigureAwait(false);
         }
     }
 }

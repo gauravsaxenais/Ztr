@@ -51,7 +51,7 @@
         public async Task<IEnumerable<string>> GetAllDevicesAsync()
         {
             _logger.LogInformation($"{Prefix} method name: {nameof(GetAllDevicesAsync)}: Getting list of all devices.");
-
+            await _deviceServiceManager.CloneGitHubRepoAsync().ConfigureAwait(false);
             var listOfDevices = await _deviceServiceManager.GetAllDevicesAsync(_devicesGitConnectionOptions.DeviceToml);
             
             return listOfDevices;

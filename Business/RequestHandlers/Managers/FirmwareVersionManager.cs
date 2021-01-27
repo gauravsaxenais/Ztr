@@ -1,7 +1,7 @@
 ﻿namespace Business.RequestHandlers.Managers
 {
-    using Configuration;
     using Business.GitRepository.Interfaces;
+    using Configuration;
     using EnsureThat;
     using Interfaces;
     using Microsoft.Extensions.Logging;
@@ -10,7 +10,6 @@
     using System.Threading.Tasks;
     using ZTR.Framework.Business;
     using ZTR.Framework.Business.Models;
-
 
     /// <summary>
     /// Returns firmware version information.
@@ -59,6 +58,8 @@
             _firmwareVersionGitConnectionOptions.GitRemoteLocation = gitUrl;
             _firmwareVersionServiceManager.SetGitRepoConnection(_firmwareVersionGitConnectionOptions);
 
+            // clone git repository.
+            await _firmwareVersionServiceManager.CloneGitHubRepoAsync().ConfigureAwait(false);
             var listFirmwareVersions = await _firmwareVersionServiceManager.GetAllFirmwareVersionsAsync()
                 .ConfigureAwait(false);
 

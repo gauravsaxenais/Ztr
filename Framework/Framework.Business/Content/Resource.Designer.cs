@@ -61,7 +61,7 @@ namespace ZTR.Framework.Business.Content {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An unexpected error occurred at server..
+        ///   Looks up a localized string similar to An unexpected error occurred at server, please contact administrator !!.
         /// </summary>
         public static string ExceptionMessage {
             get {

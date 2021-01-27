@@ -1,17 +1,22 @@
 ﻿namespace Business.GitRepository.Interfaces
 {
     using Business.Common.Models;
+    using Common.Configuration;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using ZTR.Framework.Business;
 
     /// <summary>
     /// Module service.
     /// </summary>
     public interface IModuleServiceManager
     {
-        Task<List<ModuleReadModel>> GetAllModulesAsync(string firmwareVersion, string deviceType, string moduleFilePath,
-            string deviceTomlFilePath, string metaTomlFilePath);
+        /// <summary>
+        /// Gets all modules asynchronous.
+        /// </summary>
+        /// <param name="firmwareVersion">The firmware version.</param>
+        /// <param name="deviceType">Type of the device.</param>
+        /// <returns></returns>
+        Task<List<ModuleReadModel>> GetAllModulesAsync(string firmwareVersion, string deviceType);
 
         /// <summary>
         /// Gets the tags earlier than this tag.
@@ -25,22 +30,26 @@
         /// </summary>
         /// <param name="firmwareVersion">The firmware version.</param>
         /// <param name="deviceType">Type of the device.</param>
-        /// <param name="defaultFilePath">The default file path.</param>
         /// <returns></returns>
-        Task<string> GetDefaultTomlFileContentAsync(string firmwareVersion, string deviceType, string defaultFilePath);
+        Task<string> GetDefaultTomlFileContentAsync(string firmwareVersion, string deviceType);
 
         /// <summary>
         /// Gets the proto files.
         /// </summary>
         /// <param name="module">The module.</param>
-        /// <param name="moduleFilePath">The module file path.</param>
         /// <returns></returns>
-        string GetProtoFiles(ModuleReadModel module, string moduleFilePath);
+        string GetProtoFiles(ModuleReadModel module);
 
         /// <summary>
         /// Sets the git repo connection.
         /// </summary>
-        /// <param name="connectionOptions">The connection options.</param>
-        void SetGitRepoConnection(GitConnectionOptions connectionOptions);
+        /// <param name="moduleGitConnectionOptions">The module git connection options.</param>
+        void SetGitRepoConnection(ModuleBlockGitConnectionOptions moduleGitConnectionOptions);
+
+        /// <summary>
+        /// Clones the git hub repo asynchronous.
+        /// </summary>
+        /// <returns></returns>
+        Task CloneGitHubRepoAsync();
     }
 }

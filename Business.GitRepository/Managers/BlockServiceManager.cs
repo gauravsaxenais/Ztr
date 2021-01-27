@@ -1,7 +1,10 @@
-﻿namespace Business.GitRepository.Managers
+﻿using Business.Common.Configuration;
+using ZTR.Framework.Business.Models;
+
+namespace Business.GitRepository.Managers
 {
-    using Interfaces;
     using EnsureThat;
+    using Interfaces;
     using Microsoft.Extensions.Logging;
     using System.Collections.Generic;
     using System.IO;
@@ -19,36 +22,54 @@
         private readonly IGitRepositoryManager _gitRepoManager;
         private readonly ILogger<BlockServiceManager> _logger;
         private const string Prefix = nameof(BlockServiceManager);
+        private readonly ModuleBlockGitConnectionOptions _moduleGitConnectionOptions;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BlockServiceManager"/> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
+        /// <param name="moduleGitConnectionOptions">The module git connection options.</param>
         /// <param name="gitRepoManager">The git repo manager.</param>
-        public BlockServiceManager(ILogger<BlockServiceManager> logger, IGitRepositoryManager gitRepoManager) : base(logger)
+        public BlockServiceManager(ILogger<BlockServiceManager> logger, ModuleBlockGitConnectionOptions moduleGitConnectionOptions, IGitRepositoryManager gitRepoManager) : base(logger)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
             EnsureArg.IsNotNull(gitRepoManager, nameof(gitRepoManager));
+            EnsureArg.IsNotNull(moduleGitConnectionOptions, nameof(moduleGitConnectionOptions));
 
             _logger = logger;
             _gitRepoManager = gitRepoManager;
+
+            _moduleGitConnectionOptions = moduleGitConnectionOptions;
+            SetGitRepoConnection(moduleGitConnectionOptions);
         }
 
         /// <summary>
         /// Sets the git repo connection.
         /// </summary>
-        /// <param name="connectionOptions">The connection options.</param>
-        public void SetGitRepoConnection(GitConnectionOptions connectionOptions)
+        /// <param name="moduleGitConnectionOptions">The module git connection options.</param>
+        /// <exception cref="CustomArgumentException">Current directory path is not valid.</exception>
+        public void SetGitRepoConnection(ModuleBlockGitConnectionOptions moduleGitConnectionOptions)
         {
-            _gitRepoManager.SetConnectionOptions(connectionOptions);
+            var currentDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+
+            if (currentDirectory == null)
+            {
+                throw new CustomArgumentException("Current directory path is not valid.");
+            }
+
+            _moduleGitConnectionOptions.GitLocalFolder = Path.Combine(currentDirectory, moduleGitConnectionOptions.GitLocalFolder);
+            _moduleGitConnectionOptions.BlockConfig = Path.Combine(currentDirectory, moduleGitConnectionOptions.GitLocalFolder, moduleGitConnectionOptions.BlockConfig);
+
+            _gitRepoManager.SetConnectionOptions(_moduleGitConnectionOptions);
         }
 
         /// <summary>
         /// Gets all block files.
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<FileInfo>> GetAllBlockFilesAsync(string blockConfigPath)
+        public async Task<IEnumerable<FileInfo>> GetAllBlockFilesAsync()
         {
+            string blockConfigPath = _moduleGitConnectionOptions.BlockConfig;
             _logger.LogInformation($"{Prefix}: method name: {nameof(GetAllBlockFilesAsync)} Getting list of all blocks.");
             var blockConfigDirectory = new DirectoryInfo(blockConfigPath);
             var filesInDirectory = blockConfigDirectory.EnumerateFiles();

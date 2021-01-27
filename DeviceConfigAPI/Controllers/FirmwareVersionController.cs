@@ -5,11 +5,9 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
-    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Threading.Tasks;
-    using ZTR.Framework.Business;
     using ZTR.Framework.Service;
 
     /// <summary>
@@ -51,20 +49,12 @@
             ApiResponse apiResponse;
             var prefix = nameof(FirmwareVersionController);
 
-            try
-            {
-                _logger.LogInformation($"{prefix}: Getting list of all firmware versions");
+            _logger.LogInformation($"{prefix}: Getting list of all firmware versions");
+            var result = await _manager.GetAllFirmwareVersionsAsync(deviceType).ConfigureAwait(false);
+            _logger.LogInformation($"{prefix}: Successfully retrieved list of all firmware versions");
 
-                var result = await _manager.GetAllFirmwareVersionsAsync(deviceType).ConfigureAwait(false);
+            apiResponse = new ApiResponse(status: true, data: result);
 
-                apiResponse = new ApiResponse(status: true, data: result);
-            }
-            catch (Exception exception)
-            {
-                _logger.LogCritical(exception, $"{prefix}: Error occurred while getting list of all firmware versions.");
-                apiResponse = new ApiResponse(ErrorType.BusinessError, exception);
-            }
-            
             return Ok(apiResponse);
         }
     }
