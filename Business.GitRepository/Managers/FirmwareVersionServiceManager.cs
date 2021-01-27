@@ -42,15 +42,21 @@
         /// <returns></returns>
         public async Task<IEnumerable<string>> GetAllFirmwareVersionsAsync()
         {
-            _logger.LogInformation($"{Prefix}: Cloning github repository.");
-            await _gitRepoManager.CloneRepositoryAsync().ConfigureAwait(false);
-            _logger.LogInformation($"{Prefix}: Github repository cloning is successful.");
-
             _logger.LogInformation(
                 $"{Prefix} method name: {nameof(GetAllFirmwareVersionsAsync)}: Getting list of all firmware versions for deviceType.");
             var firmwareVersions = await _gitRepoManager.GetAllTagNamesAsync().ConfigureAwait(false);
 
             return firmwareVersions;
+        }
+
+        /// <summary>
+        /// Clones the git hub repo asynchronous.
+        /// </summary>
+        public async Task CloneGitHubRepoAsync()
+        {
+            _logger.LogInformation($"{Prefix}: Cloning github repository.");
+            await _gitRepoManager.CloneRepositoryAsync().ConfigureAwait(false);
+            _logger.LogInformation($"{Prefix}: Github repository cloning is successful.");
         }
 
         /// <summary>

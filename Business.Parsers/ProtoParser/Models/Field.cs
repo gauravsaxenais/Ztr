@@ -20,7 +20,7 @@
 
         public object Clone()
         {
-            Field other = (Field)this.MemberwiseClone();
+            var other = (Field)MemberwiseClone();
 
             DeepCopy(other);
 

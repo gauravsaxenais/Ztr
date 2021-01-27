@@ -34,6 +34,7 @@
             services.AddScoped<IConfigCreateFromManager, ConfigCreateFromManager>();
             services.AddScoped<ICompatibleFirmwareVersionManager, CompatibleFirmwareVersionManager>();
 
+            // Service managers for git repository.
             services.AddScoped<IModuleServiceManager, ModuleServiceManager>();
             services.AddScoped<IDeviceServiceManager, DeviceServiceManager>();
             services.AddScoped<IBlockServiceManager, BlockServiceManager>();

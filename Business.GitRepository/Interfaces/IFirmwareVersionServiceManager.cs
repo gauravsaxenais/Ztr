@@ -20,5 +20,11 @@
         /// </summary>
         /// <param name="connectionOptions">The connection options.</param>
         void SetGitRepoConnection(GitConnectionOptions connectionOptions);
+
+        /// <summary>
+        /// Clones the git hub repo asynchronous.
+        /// </summary>
+        /// <returns></returns>
+        Task CloneGitHubRepoAsync();
     }
 }

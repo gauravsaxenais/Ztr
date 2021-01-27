@@ -58,22 +58,13 @@
             IFormFile configTomlFile)
         {
             var prefix = nameof(ConfigCreateFromController);
-            ApiResponse apiResponse;
 
-            try
-            {
-                _logger.LogInformation($"{prefix}: Getting list of modules and blocks from config.toml file.");
+            _logger.LogInformation($"{prefix}: Getting list of modules and blocks from config.toml file.");
 
-                var result = await _manager.GenerateConfigTomlModelAsync(configTomlFile).ConfigureAwait(false);
-                apiResponse = new ApiResponse(status: true, data: result);
-                _logger.LogInformation($"{prefix}: Successfully retrieved list of modules and blocks from config.toml file.");
-            }
-            catch (Exception exception)
-            {
-                _logger.LogCritical(exception, $"{prefix}: Error occurred while getting list of modules and blocks from toml file.");
-                apiResponse = new ApiResponse(false, exception.Message, ErrorType.BusinessError, exception);
-            }
-
+            var result = await _manager.GenerateConfigTomlModelAsync(configTomlFile).ConfigureAwait(false);
+            var apiResponse = new ApiResponse(status: true, data: result);
+            _logger.LogInformation($"{prefix}: Successfully retrieved list of modules and blocks from config.toml file.");
+            
             return Ok(apiResponse);
         }
     }

@@ -1,4 +1,4 @@
-﻿namespace Business.Configuration
+﻿namespace Business.Common.Configuration
 {
     /// <summary>
     /// Toml configuration file. 

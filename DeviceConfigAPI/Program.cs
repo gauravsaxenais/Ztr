@@ -1,5 +1,6 @@
 namespace Service
 {
+    using Business.Common.Configuration;
     using Business.Configuration;
     using Configuration;
     using Microsoft.AspNetCore.Hosting;

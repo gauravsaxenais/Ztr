@@ -10,6 +10,12 @@
     public interface IDeviceServiceManager
     {
         /// <summary>
+        /// Clones the git hub repo asynchronous.
+        /// </summary>
+        /// <returns></returns>
+        Task CloneGitHubRepoAsync();
+
+        /// <summary>
         /// Gets all devices asynchronous.
         /// </summary>
         /// <param name="filePath">The file path.</param>
