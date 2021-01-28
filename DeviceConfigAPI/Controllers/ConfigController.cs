@@ -3,6 +3,7 @@
     using Business.Parsers.Core.Models;
     using Business.RequestHandlers.Interfaces;
     using EnsureThat;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using System;
@@ -44,8 +45,8 @@
             var result = await _manager.CreateConfigAsync(json);
             return Ok(result);
         }
-
-        [HttpGet(nameof(CreateFromHtml))]
+        //string device, string firmware, IFormFile htmlfile
+        [HttpPost(nameof(CreateFromHtml))]
         public async Task<IActionResult> CreateFromHtml()
         {
             var result = await _manager.CreateFromHtmlAsync();

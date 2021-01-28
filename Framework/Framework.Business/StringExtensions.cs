@@ -154,6 +154,10 @@
             };
             return hexString;
         }
+        public static bool Compares(this string str, string input)
+        {
+            return str.ToLower() == input.ToLower() ;
+        }
 
     }
 }

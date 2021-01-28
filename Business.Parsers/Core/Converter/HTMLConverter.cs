@@ -26,7 +26,7 @@ namespace Business.Parsers.Core.Converter
             _tree = new Tree();
             _builder = builder;
         }
-        public ITree ToConverted(string html)
+        public IDictionary<string,object> ToConverted(string html)
         {
             _map = _config.GetMapping();
             CleanToCompatible(ref html);
@@ -38,7 +38,7 @@ namespace Business.Parsers.Core.Converter
             RemoveArrays(_tomlTree);
             MergeValues();
 
-            return _tree;
+            return _tomlTree;
         }
         
         public string ToJson(string json)
@@ -48,8 +48,87 @@ namespace Business.Parsers.Core.Converter
 
         #region Private members
         private void MergeValues()
+        {           
+            TraverseSource(_tree, _tomlTree);
+        }
+        private void TraverseSource<T>(T input, T tree) where T : IDictionary<string, object>
         {
+            foreach (var item in input)
+            {       
+                TraverseTarget(tree, item.Key, item);  
+            }
+        }
+        private T CreateDictionary<T>(T from, T source) where T : IDictionary<string, object>
+        {
+            IDictionary<string, object> dictionary = new Dictionary<string, object>();
+            foreach (var item in from)
+            {
+                if (source.Keys.Any(u => u.Compares(item.Key)))
+                {
+                    dictionary.Add(item.Key, source[item.Key]);
+                }
+               
+            }
+            return (T)dictionary;
 
+        }
+        private object TryMerge<T>(T input, KeyValuePair<string, object> source, object target) where T : IDictionary<string, object>
+        {
+           
+            if (source.Value is T[] s && target is T[] tar)
+            {
+                var to = tar.First();
+                var converted = s.Select(o => CreateDictionary(to, o))
+                                 .Where(o=> o.Count > 0)
+                                 .ToArray();
+
+                return converted;
+            }
+
+            if (source.Value is T t)
+            {
+                TraverseSource(t, (T)target);
+            }
+
+            return target;
+        }
+
+        private void TraverseTarget<T>(T input, string key, KeyValuePair<string, object> source) where T : IDictionary<string, object>
+        {
+            Tree dictionary = new Tree();
+            foreach (var item in input)
+            {
+                if(item.Key.Compares(key))
+                {
+                    var d = TryMerge(input, source, item.Value);
+                    dictionary.Add(item.Key, d);                   
+                    return;
+                }
+                if(item.Key.Compares("name") && item.Value is string && key.Compares(item.Value.ToString()) )
+                {
+                    var d = TryMerge(input,source, input);
+                    dictionary.Add(item.Key, d);                  
+                    return;
+                }
+
+                if (item.Value is object[] s)
+                {
+                    s.OfType<T>().ToList().ForEach(o =>
+                    {
+                        TraverseTarget(o, key, source);
+                    });
+                }
+
+                if (item.Value is T t)
+                {
+                    TraverseTarget(t, key, source);
+                }
+            }
+
+            foreach(var item in dictionary)
+            {
+                input[item.Key] = item.Value;
+            }
         }
         private bool RemoveModule<T>(T input, bool removing) where T : IDictionary<string, object>
         {
@@ -57,14 +136,13 @@ namespace Business.Parsers.Core.Converter
             foreach (var item in input)
             {
                 if(removing)
-                {
-                    var ky = item.Key.ToLower();
-                    if ( ky == "name" && !_tree.Keys.Any(o=> o.ToLower() ==item.Value.ToString().ToLower()))
+                {                   
+                    if (item.Key.Compares("name") && !_tree.Keys.Any(o=> o.Compares(item.Value.ToString()) ))
                     {
                         return true;                       
                     }
                 }
-                if(item.Key.ToLower() == "module")
+                if(item.Key.Compares("module"))
                 {
                     removing = true;
                 }
@@ -161,17 +239,17 @@ namespace Business.Parsers.Core.Converter
             var result = new ConverterNode();
             var sibling = node;
             result.Key = string.Empty;
-            while (sibling != null && sibling.Name.ToLower() != "h1")
+            while (sibling != null && !sibling.Name.Compares("h1"))
             {
                 var name = sibling.Descendants(tag).FirstOrDefault();
-                if (sibling.Name.ToLower() == tag)
+                if (sibling.Name.Compares(tag))
                 {
                     result.Key = sibling.InnerText;
                     result.SerialNode = sibling;
                     result.TagNode = sibling;
                     break;
                 }
-                if (name != null && name.Name.ToLower() == tag)
+                if (name != null && name.Name.Compares(tag))
                 {
                     result.Key = name.InnerText;
                     result.SerialNode = sibling;
@@ -187,7 +265,7 @@ namespace Business.Parsers.Core.Converter
         {
             ConverterNode pickerNode;
             Tree t = new Tree();
-            while (node != null && node.Name.ToLower() != "h1")
+            while (node != null && !node.Name.Compares("h1"))
             {
                 pickerNode = GetValue(node, "h2");
                 string key = pickerNode.Key;
@@ -219,7 +297,7 @@ namespace Business.Parsers.Core.Converter
                     int key = 1;
                     foreach (var td in tr.Descendants("td"))
                     {
-                        if (td.Attributes.Any(o => o.Name.ToLower() == "colspan" && o.Value.ToInt() > 1))
+                        if (td.Attributes.Any(o => o.Name.Compares("colspan")  && o.Value.ToInt() > 1))
                         {
                             start = 0;
                             break;
@@ -255,7 +333,7 @@ namespace Business.Parsers.Core.Converter
             {
                 return;
             }
-            var m = _map.FirstOrDefault(o => o.From.ToLower() == key.ToLower());
+            var m = _map.FirstOrDefault(o => o.From.Compares(key));
             if(m!=null)
             {
                 key = m.To;

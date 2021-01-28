@@ -42,8 +42,9 @@
 
         public async Task<string> CreateFromHtmlAsync()
         {
-            var result = _htmlparser.ToJson(_config.GetHtml());
-            return await Task.FromResult(result);
+            var dictionary = _htmlparser.ToConverted(_config.GetHtml());
+            var contents = _builder.ToTOML(dictionary, ValueScheme.Quoted);
+            return await Task.FromResult(contents);
         }
 
         /// <summary>
