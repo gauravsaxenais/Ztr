@@ -61,19 +61,24 @@
             _logger.LogInformation($"{prefix}: methodName: {nameof(GenerateConfigTomlModelAsync)} Getting list of modules and blocks from config.toml file.");
             var configTomlFileContent = ReadAsString(configTomlFile);
 
-            // Clone repo here.
-            await _moduleServiceManager.CloneGitHubRepoAsync().ConfigureAwait(false);
+            var modulesTask = GetModulesAsync(configTomlFileContent);
+            var blocksTask = GetBlocksAsync(configTomlFileContent);
 
-            var modules = await GetModulesAsync(configTomlFileContent).ConfigureAwait(false);
-            var blocks = await GetBlocksAsync(configTomlFileContent).ConfigureAwait(false);
+            await Task.WhenAll(modulesTask, blocksTask);
 
+            var modules = await modulesTask;
+            var blocks = await blocksTask;
+            
             return new { modules, blocks };
         }
 
         private async Task<IEnumerable<ModuleReadModel>> GetModulesAsync(string configTomlFileContent)
         {
             EnsureArg.IsNotEmptyOrWhiteSpace(configTomlFileContent);
-            
+
+            // Clone repo here.
+            await _moduleServiceManager.CloneGitHubRepoAsync().ConfigureAwait(false);
+
             // get list of all modules.
             var modules = GetListOfModules(configTomlFileContent).ToList();
 
