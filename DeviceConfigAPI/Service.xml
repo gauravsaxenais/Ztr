@@ -84,7 +84,7 @@
         <member name="T:Service.Controllers.ConfigController">
             <summary>Config Controller - This service is responsible for generating the config toml.</summary>
         </member>
-        <member name="M:Service.Controllers.ConfigController.#ctor(Business.RequestHandlers.Interfaces.IConfigManager,Microsoft.Extensions.Logging.ILogger{Service.Controllers.ConfigController})">
+        <member name="M:Service.Controllers.ConfigController.#ctor(Business.RequestHandlers.Interfaces.IConfigCreateFromManager,Business.RequestHandlers.Interfaces.IConfigManager,Microsoft.Extensions.Logging.ILogger{Service.Controllers.ConfigController})">
             <summary>
             Initializes a new instance of the <see cref="T:Service.Controllers.ConfigController"/> class.
             </summary>

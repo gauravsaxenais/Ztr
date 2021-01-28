@@ -32,6 +32,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="configsetting\convert.config" />
+    <Content Remove="configsetting\map.config" />
+  </ItemGroup>
+
+  <ItemGroup>
     <_WebToolingArtifacts Remove="Properties\PublishProfiles\ToLinux.pubxml" />
   </ItemGroup>
 
@@ -76,12 +81,25 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="configsetting\convertconfig.txt">
+    <None Update="configsetting\config.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="configsetting\config.toml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Logs\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="configsetting\convert.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="configsetting\map.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\PublishProfiles\ToLinux.pubxml.user" />
   </ItemGroup>
 

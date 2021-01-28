@@ -3,6 +3,7 @@
     using Business.Parsers.Core.Models;
     using Business.RequestHandlers.Interfaces;
     using EnsureThat;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using System;
@@ -19,19 +20,21 @@
     {
         private readonly IConfigManager _manager;
         private readonly ILogger<ConfigController> _logger;
+        private readonly IConfigCreateFromManager _creator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigController"/> class.
         /// </summary>
         /// <param name="manager">The manager.</param>
         /// <param name="logger">The logger.</param>
-        public ConfigController(IConfigManager manager, ILogger<ConfigController> logger)
+        public ConfigController(IConfigCreateFromManager creator, IConfigManager manager, ILogger<ConfigController> logger)
         {
             EnsureArg.IsNotNull(manager, nameof(manager));
             EnsureArg.IsNotNull(logger, nameof(logger));
 
             _manager = manager;
             _logger = logger;
+            _creator = creator;
         }
 
         /// <summary>Creates the toml configuration.</summary>
@@ -41,24 +44,16 @@
         [HttpPost(nameof(CreateTomlConfig))]
         public async Task<IActionResult> CreateTomlConfig([FromBody] ConfigReadModel json)
         {
-            ApiResponse apiResponse;
-            var prefix = nameof(ConfigController);
-
-            try
-            {
-                _logger.LogInformation($"{prefix}: Creating config.toml.");
-
-                var result = await _manager.CreateConfigAsync(json).ConfigureAwait(false);
-
-                apiResponse = new ApiResponse(status: true, data: result);
-            }
-            catch (Exception exception)
-            {
-                _logger.LogCritical(exception, $"{prefix}: Error occurred while creating config.toml.");
-                apiResponse = new ApiResponse(false, exception.Message, ErrorType.BusinessError, exception);
-            }
-
-            return Ok(apiResponse);
+            var result = await _manager.CreateConfigAsync(json);
+            return Ok(result);
+        }
+        //
+        [HttpPost(nameof(CreateFromHtml))]
+        public async Task<IActionResult> CreateFromHtml(string device, string firmware, IFormFile htmlfile)
+        {
+            var toml = await _manager.CreateFromHtmlAsync(device, firmware, htmlfile);
+           // var result = await _creator.GenerateConfigTomlModelAsync(toml);
+            return Ok(toml);
         }
     }
 }

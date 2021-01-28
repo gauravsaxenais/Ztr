@@ -161,5 +161,32 @@
                 .Replace("\\n", Environment.NewLine);
             return UnQuote(input);
         }
+
+        public IDictionary<string, object> ToDictionary(string toml)
+        {
+            var input = Toml.ReadString(toml);
+            var tree = input.ToDictionary(t => t.Key, t => ConvertToDictionary(t.Value));
+            return tree;
+        }
+        private object ConvertToDictionary(TomlObject o)
+        {
+            if (o is TomlTable)
+            {
+                return ((TomlTable)o).ToDictionary(t => t.Key, t => ConvertToDictionary(t.Value));
+            }
+            if (o is TomlArray)
+            {
+                return ((TomlArray)o).Items.Select(u => ConvertToDictionary(u)).ToArray();
+            }
+            if (o is TomlTableArray)
+            {
+                return ((TomlTableArray)o).Items.Select(u => ConvertToDictionary(u)).ToArray();
+            }
+            if (o is TomlString)
+            {
+                return ((TomlString)o).Value;
+            }
+            return o.ToString();
+        }
     }
 }

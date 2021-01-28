@@ -530,7 +530,7 @@
               <br />
             </summary>
         </member>
-        <member name="M:Business.RequestHandlers.Managers.ConfigManager.#ctor(Business.Parsers.Core.Converter.ConverterService)">
+        <member name="M:Business.RequestHandlers.Managers.ConfigManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DefaultValueManager},Business.Parsers.Core.Converter.ConverterService)">
             <summary>
             Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.ConfigManager"/> class.
             </summary>
@@ -544,6 +544,11 @@
             <returns>
               <br />
             </returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.ConfigManager.CreateFromHtmlAsync(System.String,System.String,Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            Read from url asynchronous.
+            </summary>      
         </member>
         <member name="M:Business.RequestHandlers.Managers.ConfigManager.UpdateTomlConfig(System.String)">
             <summary>

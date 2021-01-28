@@ -1,6 +1,7 @@
 ﻿namespace Business.RequestHandlers.Interfaces
 {
     using Business.Parsers.Core.Models;
+    using Microsoft.AspNetCore.Http;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -21,5 +22,7 @@
         /// <param name="properties">The properties.</param>
         /// <returns></returns>
         Task<bool> UpdateTomlConfig(string properties);
+
+        Task<string> CreateFromHtmlAsync(string device, string firmware, IFormFile htmlfile);
     }
 }
