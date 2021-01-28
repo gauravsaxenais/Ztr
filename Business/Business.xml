@@ -97,6 +97,14 @@
             The modules.
             </value>
         </member>
+        <member name="M:Business.Models.BlockJsonModel.Clone">
+            <summary>
+            Creates a new object that is a copy of the current instance.
+            </summary>
+            <returns>
+            A new object that is a copy of this instance.
+            </returns>
+        </member>
         <member name="T:Business.Models.BlockReadModel">
             <summary>
             Block - This class maps to toml file.
@@ -195,6 +203,22 @@
         <member name="P:Business.Models.NetworkArgumentReadModel.Max">
             <summary>Determines the maximum of the parameters.</summary>
             <value>The maximum.</value>
+        </member>
+        <member name="P:Business.Models.NetworkArgumentReadModel.Value">
+            <summary>
+            Gets or sets the value.
+            </summary>
+            <value>
+            The value.
+            </value>
+        </member>
+        <member name="M:Business.Models.NetworkArgumentReadModel.Clone">
+            <summary>
+            Creates a new object that is a copy of the current instance.
+            </summary>
+            <returns>
+            A new object that is a copy of this instance.
+            </returns>
         </member>
         <member name="T:Business.RequestHandlers.Interfaces.IBlockManager">
             <summary>
@@ -402,6 +426,20 @@
             Returns the list of all modules and blocks from config.toml.
             </summary>
             <param name="configTomlFile">config.toml as string.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.ConfigCreateFromManager.GetModulesAsync(System.String)">
+            <summary>
+            Gets the modules asynchronous.
+            </summary>
+            <param name="configTomlFileContent">Content of the configuration toml file.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.ConfigCreateFromManager.GetBlocksAsync(System.String)">
+            <summary>
+            Gets the blocks asynchronous.
+            </summary>
+            <param name="configTomlFileContent">Content of the configuration toml file.</param>
             <returns></returns>
         </member>
         <member name="M:Business.RequestHandlers.Managers.ConfigCreateFromManager.ReadAsString(Microsoft.AspNetCore.Http.IFormFile)">

@@ -8,6 +8,7 @@
     using Microsoft.Extensions.Logging;
     using Models;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Text;
@@ -27,6 +28,7 @@
         private readonly IBlockManager _blockManager;
         private readonly ILogger _logger;
         private readonly IModuleServiceManager _moduleServiceManager;
+        private const string Prefix = nameof(ConfigCreateFromManager);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigCreateFromManager"/> class.
@@ -61,17 +63,24 @@
             _logger.LogInformation($"{prefix}: methodName: {nameof(GenerateConfigTomlModelAsync)} Getting list of modules and blocks from config.toml file.");
             var configTomlFileContent = ReadAsString(configTomlFile);
 
-            var modulesTask = GetModulesAsync(configTomlFileContent);
-            var blocksTask = GetBlocksAsync(configTomlFileContent);
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
+            var modules = await GetModulesAsync(configTomlFileContent).ConfigureAwait(false);
+            var blocks = await GetBlocksAsync(configTomlFileContent).ConfigureAwait(false);
+            stopWatch.Stop();
 
-            await Task.WhenAll(modulesTask, blocksTask);
+            var elapsed = stopWatch.Elapsed;
 
-            var modules = await modulesTask;
-            var blocks = await blocksTask;
-            
+            _logger.LogInformation(
+                $"{Prefix}: method name: {nameof(GenerateConfigTomlModelAsync)} Total time taken for blocks and modules: {elapsed:m\\:ss\\.ff}");
             return new { modules, blocks };
         }
 
+        /// <summary>
+        /// Gets the modules asynchronous.
+        /// </summary>
+        /// <param name="configTomlFileContent">Content of the configuration toml file.</param>
+        /// <returns></returns>
         private async Task<IEnumerable<ModuleReadModel>> GetModulesAsync(string configTomlFileContent)
         {
             EnsureArg.IsNotEmptyOrWhiteSpace(configTomlFileContent);
@@ -81,12 +90,16 @@
 
             // get list of all modules.
             var modules = GetListOfModules(configTomlFileContent).ToList();
-
             await _defaultValueManager.MergeValuesWithModulesAsync(configTomlFileContent, modules).ConfigureAwait(false);
 
             return modules;
         }
 
+        /// <summary>
+        /// Gets the blocks asynchronous.
+        /// </summary>
+        /// <param name="configTomlFileContent">Content of the configuration toml file.</param>
+        /// <returns></returns>
         private async Task<IEnumerable<BlockJsonModel>> GetBlocksAsync(string configTomlFileContent)
         {
             var blocks = await _blockManager.GetBlocksFromFileAsync(configTomlFileContent).ConfigureAwait(false);

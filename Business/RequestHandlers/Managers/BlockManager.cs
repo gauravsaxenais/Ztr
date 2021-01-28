@@ -1,5 +1,6 @@
 ﻿namespace Business.RequestHandlers.Managers
 {
+    using Business.Common.Models;
     using Business.GitRepository.Interfaces;
     using EnsureThat;
     using Interfaces;
@@ -70,9 +71,47 @@
         {
             // clone repo here.
             await _blockServiceManager.CloneGitRepoAsync().ConfigureAwait(false);
-            var blocks = await BatchProcessBlockFilesAsync().ConfigureAwait(false);
+            var blocksFromGitRepository = await BatchProcessBlockFilesAsync().ConfigureAwait(false);
 
-            return blocks;
+            var dataFromFile = TomlFileReader.ReadDataFromString<ConfigurationReadModel>(configTomlFileContent);
+            dataFromFile.Network.TryGetValue("blocks", out var blocksContent);
+            var blocksFromFile = new List<BlockJsonModel>();
+
+            if (blocksContent is Dictionary<string, object>[] dictionaries)
+            {
+                foreach (var dictionary in dictionaries)
+                {
+                    dictionary.TryGetValue("type", out var type);
+                    dictionary.TryGetValue("tag", out var tag);
+                    dictionary.TryGetValue("args", out var argument);
+
+                    var tempBlock = blocksFromGitRepository.FirstOrDefault(x => x.Type == (string)type);
+
+                    if (tempBlock != null)
+                    {
+                        var block = (BlockJsonModel)tempBlock.Clone();
+
+                        var arguments = block.Args;
+                        if (argument is Dictionary<string, object> args)
+                        {
+                            foreach (var elem in args)
+                            {
+                                var updatedArgument = arguments.FirstOrDefault(x => x.Name == elem.Key);
+
+                                if (updatedArgument != null)
+                                {
+                                    updatedArgument.Value = (string)elem.Value;
+                                }
+                            }
+                        }
+
+                        blocksFromFile.Add(block);
+                    }
+                }
+            }
+            
+            FixIndex(blocksFromFile);
+            return blocksFromFile;
         }
 
         private async Task<List<BlockJsonModel>> ProcessBlockFileAsync(IDictionary<string, string> filesData)
@@ -83,9 +122,9 @@
             foreach (var data in filesData)
             {
                 var blockReadModel = Toml.ReadString<BlockReadModel>(data.Value, tomlSettings);
-                var name = Path.GetFileNameWithoutExtension(data.Key);
+                var blockFileName = Path.GetFileNameWithoutExtension(data.Key);
 
-                var blockTask = GetBlockAsync(blockReadModel, name);
+                var blockTask = GetBlockAsync(blockReadModel, tag: string.Empty, blockFileName);
                 var modulesTask = GetModulesAsync(blockReadModel);
 
                 await Task.WhenAll(blockTask, modulesTask);
@@ -161,9 +200,9 @@
             return await Task.FromResult(modules);
         }
 
-        private async Task<BlockJsonModel> GetBlockAsync(BlockReadModel blockReadModel, string name)
+        private async Task<BlockJsonModel> GetBlockAsync(BlockReadModel blockReadModel, string tag, string blockName)
         {
-            var jsonModel = new BlockJsonModel() { Type = name, Tag = string.Empty };
+            var jsonModel = new BlockJsonModel() { Type = blockName, Tag = string.IsNullOrWhiteSpace(tag) ? string.Empty : tag };
 
             if (blockReadModel?.Arguments != null && blockReadModel.Arguments.Any())
             {
@@ -175,7 +214,8 @@
                     Description = data.Description,
                     DataType = data.Type,
                     Min = data.Min,
-                    Max = data.Max
+                    Max = data.Max,
+                    Value = string.IsNullOrWhiteSpace(data.Value) ? string.Empty : data.Value
                 }).ToList();
 
                 jsonModel.Args.AddRange(args);

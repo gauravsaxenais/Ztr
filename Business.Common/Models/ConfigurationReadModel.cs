@@ -25,6 +25,15 @@
         public DeviceReadModel Device { get; set; }
 
         /// <summary>
+        /// Gets or sets the network.
+        /// </summary>
+        /// <value>
+        /// The network.
+        /// </value>
+        public Dictionary<string, object> Network { get; set; } =
+            new Dictionary<string, object>();
+
+        /// <summary>
         /// Converts to string.
         /// </summary>
         /// <returns>
