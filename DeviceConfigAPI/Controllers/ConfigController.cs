@@ -5,9 +5,7 @@
     using EnsureThat;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
-    using System;
     using System.Threading.Tasks;
-    using ZTR.Framework.Business;
     using ZTR.Framework.Service;
 
     /// <summary>Config Controller - This service is responsible for generating the config toml.</summary>
@@ -46,8 +44,7 @@
 
             var result = await _manager.CreateConfigAsync(json).ConfigureAwait(false);
 
-            var apiResponse = new ApiResponse(status: true, data: result);
-            return Ok(apiResponse);
+            return Ok(result);
         }
     }
 }

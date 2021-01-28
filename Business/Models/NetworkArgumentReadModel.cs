@@ -58,8 +58,7 @@ namespace Business.Models
         /// </returns>
         public object Clone()
         {
-            var other = (NetworkArgumentReadModel)MemberwiseClone();
-
+            var other = new NetworkArgumentReadModel();
             DeepCopy(other);
 
             return other;
@@ -67,6 +66,7 @@ namespace Business.Models
 
         private void DeepCopy(NetworkArgumentReadModel other)
         {
+            other.Id = Id;
             other.Name = Name;
             other.Label = Label;
             other.Description = Description;

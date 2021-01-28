@@ -46,16 +46,13 @@
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllFirmwareVersions([Required] string deviceType)
         {
-            ApiResponse apiResponse;
             var prefix = nameof(FirmwareVersionController);
 
             _logger.LogInformation($"{prefix}: Getting list of all firmware versions");
             var result = await _manager.GetAllFirmwareVersionsAsync(deviceType).ConfigureAwait(false);
             _logger.LogInformation($"{prefix}: Successfully retrieved list of all firmware versions");
 
-            apiResponse = new ApiResponse(status: true, data: result);
-
-            return Ok(apiResponse);
+            return Ok(result);
         }
     }
 }

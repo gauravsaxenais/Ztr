@@ -1,9 +1,8 @@
-﻿using System.Linq;
-
-namespace Business.Models
+﻿namespace Business.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     ///   Returns list of arguments for block as a json.

@@ -8,7 +8,6 @@
     using Nett;
     using Parsers.ProtoParser.Parser;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
     using ZTR.Framework.Business;
@@ -97,8 +96,6 @@
         {
             _logger.LogInformation($"{Prefix}: method name: {nameof(MergeValuesWithModulesAsync)} Merging default values with list of modules in parallel...");
 
-            var stopWatch = new Stopwatch();
-            stopWatch.Start();
             var moduleReadModels = listOfModules.ToList();
 
             var modulesTasks = new List<Task>();
@@ -109,12 +106,6 @@
             }
 
             await Task.WhenAll(modulesTasks);
-
-            stopWatch.Stop();
-
-            var elapsed = stopWatch.Elapsed;
-            _logger.LogInformation(
-                $"{Prefix}: method name: {nameof(MergeValuesWithModulesAsync)} Total time taken for all modules: {elapsed:m\\:ss\\.ff}");
         }
 
         private async Task MergeDefaultValuesWithModuleAsync(string defaultValueFromTomlFile, ModuleReadModel module)

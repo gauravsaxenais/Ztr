@@ -59,12 +59,10 @@
             var prefix = nameof(ConfigCreateFromController);
 
             _logger.LogInformation($"{prefix}: Getting list of modules and blocks from config.toml file.");
-
             var result = await _manager.GenerateConfigTomlModelAsync(configTomlFile).ConfigureAwait(false);
-            var apiResponse = new ApiResponse(status: true, data: result);
             _logger.LogInformation($"{prefix}: Successfully retrieved list of modules and blocks from config.toml file.");
             
-            return Ok(apiResponse);
+            return Ok(result);
         }
     }
 }

@@ -8,7 +8,6 @@
     using Microsoft.Extensions.Logging;
     using Models;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Text;
@@ -63,16 +62,8 @@
             _logger.LogInformation($"{prefix}: methodName: {nameof(GenerateConfigTomlModelAsync)} Getting list of modules and blocks from config.toml file.");
             var configTomlFileContent = ReadAsString(configTomlFile);
 
-            var stopWatch = new Stopwatch();
-            stopWatch.Start();
             var modules = await GetModulesAsync(configTomlFileContent).ConfigureAwait(false);
             var blocks = await GetBlocksAsync(configTomlFileContent).ConfigureAwait(false);
-            stopWatch.Stop();
-
-            var elapsed = stopWatch.Elapsed;
-
-            _logger.LogInformation(
-                $"{Prefix}: method name: {nameof(GenerateConfigTomlModelAsync)} Total time taken for blocks and modules: {elapsed:m\\:ss\\.ff}");
             return new { modules, blocks };
         }
 

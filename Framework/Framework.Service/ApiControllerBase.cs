@@ -20,7 +20,7 @@
         /// </returns>
         public override OkObjectResult Ok([ActionResultObjectValue] object value)
         {
-            return value is ApiResponse response ? base.Ok(response) : base.Ok(new ApiResponse { Success = true, Data = value });
+            return base.Ok(new ApiResponse { Success = true, Data = value });
         }
     }
 }

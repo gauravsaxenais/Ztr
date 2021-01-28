@@ -57,9 +57,8 @@
                 $"{prefix}: Getting list of modules for firmware version: {firmwareVersion} and device type: {deviceType}");
 
             var result = await _manager.GetAllModulesAsync(firmwareVersion, deviceType).ConfigureAwait(false);
-
-            var apiResponse = new ApiResponse(true, result);
-            return Ok(apiResponse);
+            
+            return Ok(result);
         }
     }
 }

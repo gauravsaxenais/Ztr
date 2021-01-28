@@ -52,8 +52,7 @@
 
             var result = await _manager.GetAllDevicesAsync().ConfigureAwait(false);
 
-            var apiResponse = new ApiResponse(status: true, data: result);
-            return Ok(apiResponse);
+            return Ok(result);
         }
     }
 }

@@ -9,6 +9,7 @@
     using ZTR.Framework.Service;
 
     /// <summary>Block Controller - This service is responsible for getting arguments in network blocks.</summary>
+    [System.ComponentModel.Description("Block Controller Service")]
     [Produces(SupportedContentTypes.Json, SupportedContentTypes.Xml)]
     [Consumes(SupportedContentTypes.Json, SupportedContentTypes.Xml)]
     [QueryRoute]
@@ -16,8 +17,7 @@
     {
         private readonly IBlockManager _manager;
         private readonly ILogger<BlockController> _logger;
-        private const string Prefix = nameof(BlockController);
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="BlockController"/> class.
         /// </summary>
@@ -46,8 +46,7 @@
             _logger.LogInformation($"{prefix}: Getting list of blocks.");
             var result = await _manager.GetBlocksAsync().ConfigureAwait(false);
 
-            var apiResponse = new ApiResponse(status: true, data: result);
-            return Ok(apiResponse);
+            return Ok(result);
         }
     }
 }

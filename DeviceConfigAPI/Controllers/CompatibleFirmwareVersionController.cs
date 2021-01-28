@@ -7,11 +7,9 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
-    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Threading.Tasks;
-    using ZTR.Framework.Business;
     using ZTR.Framework.Service;
 
     /// <summary>
@@ -56,9 +54,8 @@
             _logger.LogInformation($"{prefix}: Getting list of compatible firmware versions based on a firmware version.");
 
             var result = await _manager.GetCompatibleFirmwareVersionsAsync(module).ConfigureAwait(false);
-            var apiResponse = new ApiResponse(status: true, data: result);
-
-            return Ok(apiResponse);
+            
+            return Ok(result);
         }
     }
 }
