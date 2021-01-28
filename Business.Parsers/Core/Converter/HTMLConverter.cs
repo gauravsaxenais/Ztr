@@ -65,10 +65,18 @@ namespace Business.Parsers.Core.Converter
             {
                 if (source.Keys.Any(u => u.Compares(item.Key)))
                 {
-                    dictionary.Add(item.Key, source[item.Key]);
+                    dictionary.Add(item.Key, source[source.Keys.First(u => u.Compares(item.Key))]);
                 }
-               
+                if (item.Value is T t)
+                {
+                    var d = CreateDictionary(t, source);
+                    if (d.Count > 0)
+                    {
+                        dictionary.Add(item.Key,d);
+                    }
+                }               
             }
+
             return (T)dictionary;
 
         }
@@ -102,13 +110,13 @@ namespace Business.Parsers.Core.Converter
                 {
                     var d = TryMerge(input, source, item.Value);
                     dictionary.Add(item.Key, d);                   
-                    return;
+                    break;
                 }
                 if(item.Key.Compares("name") && item.Value is string && key.Compares(item.Value.ToString()) )
                 {
                     var d = TryMerge(input,source, input);
-                    dictionary.Add(item.Key, d);                  
-                    return;
+                   // dictionary.Add(item.Key, d);                  
+                    break;
                 }
 
                 if (item.Value is object[] s)
