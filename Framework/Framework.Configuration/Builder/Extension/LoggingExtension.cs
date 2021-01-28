@@ -40,7 +40,7 @@
                 .WriteTo.File(
                     defaultLogFilePath,
                     fileSizeLimitBytes: defaultLogFileSizeInBytes,
-                    rollingInterval: RollingInterval.Day,
+                    rollingInterval: RollingInterval.Hour,
                     rollOnFileSizeLimit: true,
                     retainedFileCountLimit: 15,
                     shared: true,

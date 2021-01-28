@@ -208,10 +208,11 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Business.RequestHandlers.Interfaces.IBlockManager.GetListOfBlocksAsync">
+        <member name="M:Business.RequestHandlers.Interfaces.IBlockManager.GetBlocksFromFileAsync(System.String)">
             <summary>
             Gets the list of blocks asynchronous.
             </summary>
+            <param name="configTomlFileContent">Content of the configuration toml file.</param>
             <returns></returns>
         </member>
         <member name="T:Business.RequestHandlers.Interfaces.ICompatibleFirmwareVersionManager">
@@ -344,10 +345,11 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Business.RequestHandlers.Managers.BlockManager.GetListOfBlocksAsync">
+        <member name="M:Business.RequestHandlers.Managers.BlockManager.GetBlocksFromFileAsync(System.String)">
             <summary>
             Gets the list of blocks asynchronous.
             </summary>
+            <param name="configTomlFileContent">Content of the configuration toml file.</param>
             <returns></returns>
         </member>
         <member name="M:Business.RequestHandlers.Managers.BlockManager.GetModulesAsync(Business.Models.BlockReadModel)">

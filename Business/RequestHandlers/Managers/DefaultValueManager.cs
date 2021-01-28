@@ -70,6 +70,9 @@
         {
             _logger.LogInformation($"{Prefix}: Getting default values for {firmwareVersion} and {deviceType}.");
 
+            // Clone repository here.
+            await _moduleServiceManager.CloneGitHubRepoAsync().ConfigureAwait(false);
+
             // read default values from toml file defaults.toml
             var defaultValueFromTomlFile =
                 await _moduleServiceManager.GetDefaultTomlFileContentAsync(firmwareVersion, deviceType).ConfigureAwait(false);

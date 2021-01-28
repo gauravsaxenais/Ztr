@@ -84,7 +84,7 @@
 
         private async Task<IEnumerable<BlockJsonModel>> GetBlocksAsync(string configTomlFileContent)
         {
-            var blocks = await _blockManager.GetListOfBlocksAsync().ConfigureAwait(false);
+            var blocks = await _blockManager.GetBlocksFromFileAsync(configTomlFileContent).ConfigureAwait(false);
             return blocks;
         }
 

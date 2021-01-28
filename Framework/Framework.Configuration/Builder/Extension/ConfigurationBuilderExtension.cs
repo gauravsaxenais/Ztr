@@ -18,7 +18,7 @@
         /// <returns></returns>
         public static IConfigurationBuilder AddAppConfiguration(this IConfigurationBuilder configuration, string environmentName, string[] args)
         {
-            string fileName = $"appsettings.{environmentName}.json";
+            var fileName = $"appsettings.{environmentName}.json";
 
             configuration.AddJsonFile(JsonFileName, false, true)
                 .AddJsonFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName), true, true)

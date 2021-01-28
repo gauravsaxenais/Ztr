@@ -188,6 +188,21 @@
             _repository?.Dispose();
         }
 
+        /// <summary>
+        /// This method checks whether a folder 
+        /// exists in a local directory
+        /// and if there is ".git" sub folder
+        /// within the same.
+        /// </summary>
+        /// <returns>
+        /// true: if a folder and ".git" folder is present.
+        /// false: if a folder and ".git" folder isn't present.
+        /// </returns>
+        public bool IsExistsContentRepositoryDirectory()
+        {
+            return Directory.Exists(_gitConnection.GitLocalFolder) && IsGitSubDirPresent(_gitConnection.GitLocalFolder);
+        }
+
         #endregion
 
         #region Private methods
@@ -239,21 +254,6 @@
             return await Task.FromResult(tagNames);
         }
 
-        /// <summary>
-        /// Sorts the tags.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="tags">The tags.</param>
-        /// <param name="order">The order.</param>
-        /// <param name="selector">The selector.</param>
-        /// <param name="where">The where.</param>
-        /// <returns></returns>
-        private static List<T> SortTags<T>(IEnumerable<Tag> tags, Func<Tag, object> order, Func<Tag, T> selector, Func<Tag, bool> where = null)
-        {
-            return where == null ? tags.OrderByDescending(order).Select(selector).ToList() :
-                tags.Where(where).OrderByDescending(order).Select(selector).ToList();
-        }
-
         private string GetBlobFromFile(TreeEntry treeEntry)
         {
             var blob = (Blob)treeEntry?.Target;
@@ -284,21 +284,6 @@
             }
 
             return null;
-        }
-
-        /// <summary>
-        /// This method checks whether a folder 
-        /// exists in a local directory
-        /// and if there is ".git" sub folder
-        /// within the same.
-        /// </summary>
-        /// <returns>
-        /// true: if a folder and ".git" folder is present.
-        /// false: if a folder and ".git" folder isn't present.
-        /// </returns>
-        private bool IsExistsContentRepositoryDirectory()
-        {
-            return Directory.Exists(_gitConnection.GitLocalFolder) && IsGitSubDirPresent(_gitConnection.GitLocalFolder);
         }
 
         /// <summary>

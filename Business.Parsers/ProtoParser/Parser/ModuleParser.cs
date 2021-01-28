@@ -77,6 +77,7 @@
                             }
 
                             listOfData.Add(tempJsonModel);
+                            break;
                         }
                     }
                 }
@@ -150,23 +151,22 @@
 
         private void RemoveEmptyArrays(List<JsonField> listOfData)
         {
-            if (listOfData != null)
+            if (listOfData != null && listOfData.Any())
             {
-                for (int index = 0; index < listOfData.Count; index ++)
+                var arrayTypes = listOfData.Where(x => x.DataType == "array").ToList();
+
+                for (int index = 0; index < arrayTypes.Count(); index++)
                 {
-                    if (listOfData[index].DataType == "array")
-                    {
-                        var fields = listOfData[index].Fields;
-                        var arrays = listOfData[index].Arrays;
+                    var fields = arrayTypes[index].Fields;
+                    var arrays = arrayTypes[index].Arrays;
 
-                        RemoveEmptyArrays(fields);
-                        arrays.ForEach(RemoveEmptyArrays);
+                    RemoveEmptyArrays(fields);
+                    arrays.ForEach(RemoveEmptyArrays);
 
-                        fields.Clear();
-                        arrays.Clear();
+                    fields.Clear();
+                    arrays.Clear();
 
-                        listOfData.RemoveAt(index);
-                    }
+                    listOfData.RemoveAll(t => t.Name == arrayTypes[index].Name);
                 }
             }
 

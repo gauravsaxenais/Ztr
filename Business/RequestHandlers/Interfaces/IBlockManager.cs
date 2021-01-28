@@ -19,7 +19,8 @@
         /// <summary>
         /// Gets the list of blocks asynchronous.
         /// </summary>
+        /// <param name="configTomlFileContent">Content of the configuration toml file.</param>
         /// <returns></returns>
-        Task<List<BlockJsonModel>> GetListOfBlocksAsync();
+        Task<List<BlockJsonModel>> GetBlocksFromFileAsync(string configTomlFileContent);
     }
 }
