@@ -53,9 +53,8 @@
         public async Task<IActionResult> CreateFromHtml(string device, string firmware, IFormFile htmlfile)
         {
             var toml = await _manager.CreateFromHtmlAsync(device, firmware, htmlfile);
-
             var result = await _creator.GenerateConfigTomlModelAsync(toml);
-            return Ok(toml);
+            return Ok(result);
         }
     }
 }

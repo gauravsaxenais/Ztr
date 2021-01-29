@@ -134,16 +134,26 @@
 
             }
 
-           input = Regex.Replace(input, @"(\[.*\])", m =>
-              InArray(m.Groups[1].Value), 
+         
+            input = Regex.Replace(input, @"(\[.*\])", m =>
+              InArray(m.Groups[1].Value),
               RegexOptions.Singleline | RegexOptions.IgnoreCase);
+
+            input = Regex.Replace(input, @"(\{.*\[)", m =>
+               m.Groups[1].Value.RemoveNewline(),
+              RegexOptions.Singleline | RegexOptions.IgnoreCase);
+
+            input = Regex.Replace(input, @"(\].*\})", m =>
+              m.Groups[1].Value.RemoveNewline(),
+             RegexOptions.Singleline | RegexOptions.IgnoreCase);
+
 
             ////[\s\S]*?
             //input = Regex.Replace(input, @"("+o+ @": \{.*\})", m =>
             //     InArray(m.Groups[1].Value),
             //     RegexOptions.Singleline | RegexOptions.IgnoreCase);
 
-           
+
             return input;
         }
         private string Neutralize(string input)

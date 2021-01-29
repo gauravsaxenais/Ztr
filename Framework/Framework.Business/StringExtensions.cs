@@ -138,7 +138,7 @@
         }
         public static string CleanHTML(this string input)
         {
-            return input.RemoveNewline().Replace("&nbsp;", "");
+            return input.RemoveNewline().Replace("&nbsp;", "").ToInt().ToString();
         }
 
         public static string ToHex(this string str)

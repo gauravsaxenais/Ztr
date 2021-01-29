@@ -44,7 +44,7 @@
         {
             var dictionary = _htmlparser.ToConverted(_config.GetHtml());
             var contents = _builder.ToTOML(dictionary, ValueScheme.Quoted);
-            contents = contents.Replace("\r", string.Empty);
+          
             return await Task.FromResult(contents);
         }
 
