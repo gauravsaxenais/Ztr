@@ -7,6 +7,7 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Logging;
     using Models;
+    using Nett;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -56,11 +57,20 @@
         /// <returns></returns>
         public async Task<object> GenerateConfigTomlModelAsync(IFormFile configTomlFile)
         {
-            EnsureArg.IsNotNull(configTomlFile);
-            var prefix = nameof(ConfigCreateFromManager);
-
-            _logger.LogInformation($"{prefix}: methodName: {nameof(GenerateConfigTomlModelAsync)} Getting list of modules and blocks from config.toml file.");
+            EnsureArg.IsNotNull(configTomlFile);           
             var configTomlFileContent = ReadAsString(configTomlFile);
+            return await GenerateConfigTomlModelAsync(configTomlFileContent);
+        }
+
+        /// <summary>
+        /// Returns the list of all modules and blocks from config.toml.
+        /// </summary>
+        /// <param name="configTomlFileContent">config.toml as string.</param>
+        /// <returns></returns>
+        public async Task<object> GenerateConfigTomlModelAsync(string configTomlFileContent)
+        {            
+            var prefix = nameof(ConfigCreateFromManager);
+            _logger.LogInformation($"{prefix}: methodName: {nameof(GenerateConfigTomlModelAsync)} Getting list of modules and blocks from config.toml file.");
 
             var modules = await GetModulesAsync(configTomlFileContent).ConfigureAwait(false);
             var blocks = await GetBlocksAsync(configTomlFileContent).ConfigureAwait(false);
@@ -97,25 +107,7 @@
             return blocks;
         }
 
-        /// <summary>
-        /// Reads as string.
-        /// </summary>
-        /// <param name="file">The file.</param>
-        /// <returns></returns>
-        private string ReadAsString(IFormFile file)
-        {
-            var result = new StringBuilder();
-            using (var reader = new StreamReader(file.OpenReadStream()))
-            {
-                while (reader.Peek() >= 0)
-                {
-                    result.AppendLine(reader.ReadLine());
-                }
-            }
-
-            return result.ToString();
-        }
-
+        
         /// <summary>
         /// Gets the list of modules.
         /// </summary>

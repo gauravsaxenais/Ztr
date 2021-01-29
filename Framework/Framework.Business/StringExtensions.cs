@@ -130,5 +130,34 @@
 
             return index == -1 ? input : input.Substring(0, index);
         }
+
+        public static int ToInt(this string input)
+        {
+            int val;
+            return int.TryParse(input, out val) ? val : 0; 
+        }
+        public static string CleanHTML(this string input)
+        {
+            return input.RemoveNewline().Replace("&nbsp;", "").ToInt().ToString();
+        }
+
+        public static string ToHex(this string str)
+        {
+            return str.ToInt().ToString("X");
+        }        
+        public static string FromHex(this string hexString)
+        {
+            int result;
+            if (int.TryParse(hexString, NumberStyles.HexNumber, null,out result))
+            {
+                return result.ToString();
+            };
+            return hexString;
+        }
+        public static bool Compares(this string str, string input)
+        {
+            return str.ToLower() == input.ToLower() ;
+        }
+
     }
 }

@@ -15,5 +15,12 @@
         /// <param name="configTomlFile">The firmware version.</param>
         /// <returns></returns>
         Task<object> GenerateConfigTomlModelAsync(IFormFile configTomlFile);
+
+        /// <summary>
+        /// Gets the default values all modules asynchronous.
+        /// </summary>
+        /// <param name="configTomlFileContent">The firmware version.</param>
+        /// <returns></returns>
+        Task<object> GenerateConfigTomlModelAsync(string configTomlFileContent);
     }
 }

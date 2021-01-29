@@ -9,6 +9,7 @@
     {
         private readonly ConvertConfig _config;
         private readonly IJsonConverter _parser;
+        private readonly IHTMLConverter _htmlparser;
         private readonly IBuilder<IDictionary<string, object>> _builder;
 
         /// <summary>
@@ -17,10 +18,11 @@
         /// <param name="parser">The parser.</param>
         /// <param name="builder">The builder.</param>
         /// <param name="config">The configuration.</param>
-        public ConverterService(IJsonConverter parser, IBuilder<IDictionary<string, object>> builder, ConvertConfig config)
+        public ConverterService(IJsonConverter parser, IHTMLConverter htmlparser, IBuilder<IDictionary<string, object>> builder, ConvertConfig config)
         {
             _config = config;
             _parser = parser;
+            _htmlparser = htmlparser;
             _builder = builder;
         }
 
@@ -36,6 +38,14 @@
             contents += Environment.NewLine + GenerateToml(model.Block, ValueScheme.Quoted);
 
             return await Task.FromResult(contents);            
+        }
+
+        public async Task<string> CreateFromHtmlAsync(string device, string firmware, string html)
+        {
+            var dictionary = _htmlparser.ToConverted(html);
+            var contents = _builder.ToTOML(dictionary, ValueScheme.Quoted);
+          
+            return await Task.FromResult(contents);
         }
 
         /// <summary>

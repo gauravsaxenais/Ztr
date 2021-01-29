@@ -134,16 +134,26 @@
 
             }
 
-           input = Regex.Replace(input, @"(\[.*\])", m =>
-              InArray(m.Groups[1].Value), 
+         
+            input = Regex.Replace(input, @"(\[.*\])", m =>
+              InArray(m.Groups[1].Value),
               RegexOptions.Singleline | RegexOptions.IgnoreCase);
+
+            input = Regex.Replace(input, @"(\{.*\[)", m =>
+               m.Groups[1].Value.RemoveNewline(),
+              RegexOptions.Singleline | RegexOptions.IgnoreCase);
+
+            input = Regex.Replace(input, @"(\].*\})", m =>
+              m.Groups[1].Value.RemoveNewline(),
+             RegexOptions.Singleline | RegexOptions.IgnoreCase);
+
 
             ////[\s\S]*?
             //input = Regex.Replace(input, @"("+o+ @": \{.*\})", m =>
             //     InArray(m.Groups[1].Value),
             //     RegexOptions.Singleline | RegexOptions.IgnoreCase);
 
-           
+
             return input;
         }
         private string Neutralize(string input)
@@ -160,6 +170,33 @@
                 .Replace("\\r\\n", Environment.NewLine)
                 .Replace("\\n", Environment.NewLine);
             return UnQuote(input);
+        }
+
+        public IDictionary<string, object> ToDictionary(string toml)
+        {
+            var input = Toml.ReadString(toml);
+            var tree = input.ToDictionary(t => t.Key, t => ConvertToDictionary(t.Value));
+            return tree;
+        }
+        private object ConvertToDictionary(TomlObject o)
+        {
+            if (o is TomlTable)
+            {
+                return ((TomlTable)o).ToDictionary(t => t.Key, t => ConvertToDictionary(t.Value));
+            }
+            if (o is TomlArray)
+            {
+                return ((TomlArray)o).Items.Select(u => ConvertToDictionary(u)).ToArray();
+            }
+            if (o is TomlTableArray)
+            {
+                return ((TomlTableArray)o).Items.Select(u => ConvertToDictionary(u)).ToArray();
+            }
+            if (o is TomlString)
+            {
+                return ((TomlString)o).Value;
+            }
+            return o.ToString();
         }
     }
 }
