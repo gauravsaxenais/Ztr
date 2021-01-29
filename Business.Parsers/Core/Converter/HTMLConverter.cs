@@ -93,9 +93,9 @@ namespace Business.Parsers.Core.Converter
                 return converted;
             }
 
-            if (source.Value is T t)
+            if (source.Value is T t && target is T tarDic)
             {
-                TraverseSource(t, (T)target);
+                TraverseSource(t, tarDic);
             }
 
             return target;
@@ -239,7 +239,7 @@ namespace Business.Parsers.Core.Converter
             var obj = ToObject(h1.NextSibling);
             if (obj != null)
             {
-                _tree.Add(root, obj);
+                AddKeyValue(_tree, root, obj);              
             }
         }
         private ConverterNode GetValue(HtmlNode node, string tag)
@@ -282,13 +282,16 @@ namespace Business.Parsers.Core.Converter
                     return null;
                 }
                 pickerNode = GetValue(pickerNode.SerialNode, "table");
-                var obj = ToData(pickerNode.TagNode);
-                if (obj != null)
+                if (pickerNode.TagNode != null)
                 {
-                    AddKeyValue(t, key, obj);
+                    var obj = ToData(pickerNode.TagNode);
+                    if (obj != null)
+                    {
+                        AddKeyValue(t, key, obj);
+                    }
                 }
 
-                node = pickerNode.SerialNode.NextSibling;
+                node = pickerNode.SerialNode?.NextSibling;
             }
             return t;
         }
@@ -318,7 +321,7 @@ namespace Business.Parsers.Core.Converter
                     int key = 1;
                     t = new Tree();
                     foreach (var td in tr.Descendants("td"))
-                    {
+                    {                     
                         AddKeyValue(t, keys[key], td.InnerText.CleanHTML());
                         key++;
                     }
@@ -330,14 +333,15 @@ namespace Business.Parsers.Core.Converter
             }
             return trees.ToArray();
         }
-        private void AddKeyValue(Tree dictionary, string key, object value)
+        private void AddKeyValue(IDictionary<string,object> dictionary, string key, object value)
         {
-            key = key.CleanHTML();
+                  
             if (string.IsNullOrEmpty(key))
             {
                 return;
             }
-            if (dictionary.Keys.Contains(key))
+            key = key.CleanHTML();
+            if (dictionary.Keys.Any(o => o.Compares(key)))
             {
                 return;
             }
@@ -349,7 +353,7 @@ namespace Business.Parsers.Core.Converter
                 {
                     value = value.ToString().FromHex();
                 }
-            }
+            }            
             dictionary.Add(key, value);
 
         }

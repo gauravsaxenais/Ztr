@@ -8,6 +8,7 @@
     using Parsers.Core.Converter;
     using System.Threading.Tasks;
     using ZTR.Framework.Business;
+    using ZTR.Framework.Business.File.FileReaders;
 
     /// <summary>
     ///   <br />
@@ -47,7 +48,7 @@
         /// </summary>      
         public async Task<string> CreateFromHtmlAsync(string device, string firmware, IFormFile htmlfile)
         {
-            var html = string.Empty;//ReadAsString(htmlfile);
+            var html = FileReaderExtensions.ReadAsString(htmlfile);
             return await _service.CreateFromHtmlAsync(device, firmware, html);
         }
 
