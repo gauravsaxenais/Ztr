@@ -4,70 +4,6 @@
         <name>Business</name>
     </assembly>
     <members>
-        <member name="T:Business.Configuration.DeviceGitConnectionOptions">
-            <summary>
-            This class maps to configuration in appsettings.json file.
-            </summary>
-            <seealso cref="T:ZTR.Framework.Business.GitConnectionOptions" />
-        </member>
-        <member name="P:Business.Configuration.DeviceGitConnectionOptions.DeviceToml">
-            <summary>
-            Gets or sets the device toml.
-            </summary>
-            <value>
-            The device toml.
-            </value>
-        </member>
-        <member name="M:Business.Configuration.DeviceGitConnectionOptions.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:Business.Configuration.DeviceGitConnectionOptions"/> class.
-            </summary>
-        </member>
-        <member name="M:Business.Configuration.DeviceGitConnectionOptions.#ctor(System.String,System.String,System.String,System.String)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Business.Configuration.DeviceGitConnectionOptions"/> class.
-            </summary>
-            <param name="gitLocalFolder">The git local folder.</param>
-            <param name="userName">Name of the user.</param>
-            <param name="password">The password.</param>
-            <param name="gitRepositoryUrl">The git repository URL.</param>
-        </member>
-        <member name="M:Business.Configuration.DeviceGitConnectionOptions.ToString">
-            <summary>
-            Converts to string.
-            </summary>
-            <returns>
-            A <see cref="T:System.String" /> that represents this instance.
-            </returns>
-        </member>
-        <member name="T:Business.Configuration.FirmwareVersionGitConnectionOptions">
-            <summary>
-            This class maps to configuration in appsettings.json file.
-            </summary>
-            <seealso cref="T:ZTR.Framework.Business.GitConnectionOptions" />
-        </member>
-        <member name="M:Business.Configuration.FirmwareVersionGitConnectionOptions.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:Business.Configuration.FirmwareVersionGitConnectionOptions"/> class.
-            </summary>
-        </member>
-        <member name="M:Business.Configuration.FirmwareVersionGitConnectionOptions.#ctor(System.String,System.String,System.String,System.String)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Business.Configuration.FirmwareVersionGitConnectionOptions"/> class.
-            </summary>
-            <param name="gitLocalFolder">The git local folder.</param>
-            <param name="userName">Name of the user.</param>
-            <param name="password">The password.</param>
-            <param name="gitRepositoryUrl">The git repository URL.</param>
-        </member>
-        <member name="M:Business.Configuration.FirmwareVersionGitConnectionOptions.ToString">
-            <summary>
-            Converts to string.
-            </summary>
-            <returns>
-            A <see cref="T:System.String" /> that represents this instance.
-            </returns>
-        </member>
         <member name="T:Business.Models.BlockJsonModel">
             <summary>
               Returns list of arguments for block as a json.
@@ -581,12 +517,11 @@
             <seealso cref="T:ZTR.Framework.Business.Manager" />
             <seealso cref="T:Business.RequestHandlers.Interfaces.IDeviceTypeManager" />
         </member>
-        <member name="M:Business.RequestHandlers.Managers.DeviceTypeManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DeviceTypeManager},Business.Configuration.DeviceGitConnectionOptions,Business.GitRepository.Interfaces.IDeviceServiceManager)">
+        <member name="M:Business.RequestHandlers.Managers.DeviceTypeManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DeviceTypeManager},Business.GitRepository.Interfaces.IDeviceServiceManager)">
             <summary>
             Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.DeviceTypeManager"/> class.
             </summary>
             <param name="logger">The logger.</param>
-            <param name="deviceGitConnectionOptions">The device git connection options.</param>
             <param name="deviceServiceManager">The device service manager.</param>
         </member>
         <member name="M:Business.RequestHandlers.Managers.DeviceTypeManager.GetAllDevicesAsync">
@@ -602,12 +537,6 @@
             <param name="deviceType">Type of the device.</param>
             <returns></returns>
         </member>
-        <member name="M:Business.RequestHandlers.Managers.DeviceTypeManager.SetGitRepoConnection">
-            <summary>
-            Sets the git repo connection.
-            </summary>
-            <exception cref="T:ZTR.Framework.Business.Models.CustomArgumentException">Current directory path is not valid.</exception>
-        </member>
         <member name="T:Business.RequestHandlers.Managers.FirmwareVersionManager">
             <summary>
             Returns firmware version information.
@@ -615,13 +544,12 @@
             <seealso cref="T:ZTR.Framework.Business.Manager" />
             <seealso cref="T:Business.RequestHandlers.Interfaces.IFirmwareVersionManager" />
         </member>
-        <member name="M:Business.RequestHandlers.Managers.FirmwareVersionManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DeviceTypeManager},Business.GitRepository.Interfaces.IFirmwareVersionServiceManager,Business.Configuration.FirmwareVersionGitConnectionOptions,Business.RequestHandlers.Interfaces.IDeviceTypeManager)">
+        <member name="M:Business.RequestHandlers.Managers.FirmwareVersionManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DeviceTypeManager},Business.GitRepository.Interfaces.IFirmwareVersionServiceManager,Business.RequestHandlers.Interfaces.IDeviceTypeManager)">
             <summary>
             Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.FirmwareVersionManager"/> class.
             </summary>
             <param name="logger">The logger.</param>
             <param name="firmwareVersionServiceManager">The firmware version service manager.</param>
-            <param name="firmwareVersionGitConnection">The firmware version git connection.</param>
             <param name="deviceTypeManager">The device type manager.</param>
         </member>
         <member name="M:Business.RequestHandlers.Managers.FirmwareVersionManager.GetAllFirmwareVersionsAsync(System.String)">
@@ -629,12 +557,6 @@
             Gets all firmware versions asynchronous.
             </summary>
             <returns></returns>
-        </member>
-        <member name="M:Business.RequestHandlers.Managers.FirmwareVersionManager.SetGitRepoConnection">
-            <summary>
-            Sets the git repo connection.
-            </summary>
-            <exception cref="T:ZTR.Framework.Business.Models.CustomArgumentException">Current directory path is not valid.</exception>
         </member>
         <member name="T:Business.RequestHandlers.Managers.ModuleManager">
             <summary>

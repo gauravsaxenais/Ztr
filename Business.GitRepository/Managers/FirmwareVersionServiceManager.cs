@@ -1,4 +1,7 @@
-﻿namespace Business.GitRepository.Managers
+﻿using System.IO;
+using Business.Common.Configuration;
+
+namespace Business.GitRepository.Managers
 {
     using EnsureThat;
     using Interfaces;
@@ -19,21 +22,27 @@
         private readonly IGitRepositoryManager _gitRepoManager;
         private readonly ILogger<FirmwareVersionServiceManager> _logger;
         private const string Prefix = nameof(FirmwareVersionServiceManager);
+        private readonly FirmwareVersionGitConnectionOptions _firmwareVersionGitConnectionOptions;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FirmwareVersionServiceManager"/> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
+        /// <param name="firmwareVersionGitConnection">The firmware version git connection.</param>
         /// <param name="gitRepoManager">The git repo manager.</param>
         /// <param name="deviceServiceManager">The device service manager.</param>
-        public FirmwareVersionServiceManager(ILogger<FirmwareVersionServiceManager> logger, IGitRepositoryManager gitRepoManager, IDeviceServiceManager deviceServiceManager) : base(logger)
+        public FirmwareVersionServiceManager(ILogger<FirmwareVersionServiceManager> logger, FirmwareVersionGitConnectionOptions firmwareVersionGitConnection, IGitRepositoryManager gitRepoManager, IDeviceServiceManager deviceServiceManager) : base(logger)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
             EnsureArg.IsNotNull(gitRepoManager, nameof(gitRepoManager));
             EnsureArg.IsNotNull(deviceServiceManager, nameof(deviceServiceManager));
+            EnsureArg.IsNotNull(firmwareVersionGitConnection, nameof(firmwareVersionGitConnection));
 
             _logger = logger;
             _gitRepoManager = gitRepoManager;
+            _firmwareVersionGitConnectionOptions = firmwareVersionGitConnection;
+
+            SetGitRepoConnection(_firmwareVersionGitConnectionOptions);
         }
 
         /// <summary>
@@ -60,11 +69,31 @@
         }
 
         /// <summary>
+        /// Sets the git repo URL.
+        /// </summary>
+        /// <param name="gitUrl">The git URL.</param>
+        public void SetGitRepoUrl(string gitUrl)
+        {
+            EnsureArg.IsNotEmptyOrWhiteSpace(gitUrl);
+
+            _firmwareVersionGitConnectionOptions.GitRemoteLocation = gitUrl;
+            _gitRepoManager.SetConnectionOptions(_firmwareVersionGitConnectionOptions);
+        }
+
+        /// <summary>
         /// Sets the git repo connection.
         /// </summary>
         /// <exception cref="CustomArgumentException">Current directory path is not valid.</exception>
-        public void SetGitRepoConnection(GitConnectionOptions connectionOptions)
+        private void SetGitRepoConnection(GitConnectionOptions connectionOptions)
         {
+            var currentDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+
+            if (currentDirectory == null)
+            {
+                throw new CustomArgumentException("Current directory path is not valid.");
+            }
+
+            _firmwareVersionGitConnectionOptions.GitLocalFolder = Path.Combine(currentDirectory, _firmwareVersionGitConnectionOptions.GitLocalFolder);
             _gitRepoManager.SetConnectionOptions(connectionOptions);
         }
     }

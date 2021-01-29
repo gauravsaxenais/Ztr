@@ -1,5 +1,6 @@
 ﻿namespace Business.GitRepository.Managers
 {
+    using Common.Configuration;
     using EnsureThat;
     using Interfaces;
     using Microsoft.Extensions.Logging;
@@ -22,29 +23,34 @@
         private readonly IGitRepositoryManager _gitRepoManager;
         private readonly ILogger<DeviceServiceManager> _logger;
         private const string Prefix = nameof(DeviceServiceManager);
+        private readonly DeviceGitConnectionOptions _devicesGitConnectionOptions;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DeviceServiceManager"/> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
+        /// <param name="deviceGitConnectionOptions">The device git connection options.</param>
         /// <param name="gitRepoManager">The git repo manager.</param>
-        public DeviceServiceManager(ILogger<DeviceServiceManager> logger, IGitRepositoryManager gitRepoManager) : base(logger)
+        public DeviceServiceManager(ILogger<DeviceServiceManager> logger, DeviceGitConnectionOptions deviceGitConnectionOptions, IGitRepositoryManager gitRepoManager) : base(logger)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
             EnsureArg.IsNotNull(gitRepoManager, nameof(gitRepoManager));
+            EnsureArg.IsNotNull(deviceGitConnectionOptions, nameof(deviceGitConnectionOptions));
 
             _logger = logger;
             _gitRepoManager = gitRepoManager;
+            _devicesGitConnectionOptions = deviceGitConnectionOptions;
+
+            SetGitRepoConnection(_devicesGitConnectionOptions);
         }
 
         /// <summary>
         /// Gets all devices asynchronous.
         /// </summary>
-        /// <param name="filePath">The file path.</param>
         /// <returns></returns>
-        public async Task<IEnumerable<string>> GetAllDevicesAsync(string filePath)
+        public async Task<IEnumerable<string>> GetAllDevicesAsync()
         {
-            var dictionaryDevices = await GetListOfDevicesAsync(filePath).ConfigureAwait(false);
+            var dictionaryDevices = await GetListOfDevicesAsync().ConfigureAwait(false);
 
             var listOfDevices = dictionaryDevices.SelectMany(x => x)
                 .Where(y => y.Key == "name")
@@ -66,16 +72,12 @@
         }
 
         /// <summary>
-        /// Sets the git repo connection.
+        /// Gets the list of devices asynchronous.
         /// </summary>
-        /// <exception cref="CustomArgumentException">Current directory path is not valid.</exception>
-        public void SetGitRepoConnection(GitConnectionOptions connectionOptions)
+        /// <returns></returns>
+        public async Task<List<Dictionary<string, object>>> GetListOfDevicesAsync()
         {
-            _gitRepoManager.SetConnectionOptions(connectionOptions);
-        }
-
-        public async Task<List<Dictionary<string, object>>> GetListOfDevicesAsync(string filePath)
-        {
+            string filePath = _devicesGitConnectionOptions.DeviceToml;
             var tomlSettings = TomlFileReader.LoadLowerCaseTomlSettings();
             var fileContent
                 = await File.ReadAllTextAsync(filePath);
@@ -86,6 +88,25 @@
             var dictionaryDevices = (Dictionary<string, object>[])dictionary["devices"];
 
             return dictionaryDevices.ToList();
+        }
+
+        /// <summary>
+        /// Sets the git repo connection.
+        /// </summary>
+        /// <exception cref="CustomArgumentException">Current directory path is not valid.</exception>
+        private void SetGitRepoConnection(GitConnectionOptions connectionOptions)
+        {
+            var currentDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+
+            if (currentDirectory == null)
+            {
+                throw new CustomArgumentException("Current directory path is not valid.");
+            }
+
+            _devicesGitConnectionOptions.GitLocalFolder = Path.Combine(currentDirectory, _devicesGitConnectionOptions.GitLocalFolder);
+            _devicesGitConnectionOptions.DeviceToml = Path.Combine(_devicesGitConnectionOptions.GitLocalFolder, _devicesGitConnectionOptions.DeviceToml);
+
+            _gitRepoManager.SetConnectionOptions(connectionOptions);
         }
     }
 }

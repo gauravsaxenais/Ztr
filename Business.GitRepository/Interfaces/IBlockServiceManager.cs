@@ -1,6 +1,5 @@
 ﻿namespace Business.GitRepository.Interfaces
 {
-    using Common.Configuration;
     using System.Collections.Generic;
     using System.IO;
     using System.Threading.Tasks;
