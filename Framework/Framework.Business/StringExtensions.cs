@@ -57,7 +57,6 @@
         /// <returns></returns>
         public static string RemoveNewline(this string input)
         {
-            EnsureArg.IsNotNullOrWhiteSpace(input, nameof(input));
             input = input
                 .Replace("\n", string.Empty)
                 .Replace("\r", string.Empty);
@@ -138,7 +137,7 @@
         }
         public static string CleanHTML(this string input)
         {
-            return input.RemoveNewline().Replace("&nbsp;", "").ToInt().ToString();
+            return input.RemoveNewline().Replace("&nbsp;", "").Trim();
         }
 
         public static string ToHex(this string str)
