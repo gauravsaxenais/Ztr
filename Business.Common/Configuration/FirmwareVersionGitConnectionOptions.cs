@@ -1,4 +1,4 @@
-﻿namespace Business.Configuration
+﻿namespace Business.Common.Configuration
 {
     using ZTR.Framework.Business;
 
