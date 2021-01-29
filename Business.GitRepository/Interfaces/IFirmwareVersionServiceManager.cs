@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using ZTR.Framework.Business;
 
     /// <summary>
     /// Git repo wrapper for devices.
@@ -16,15 +15,15 @@
         Task<IEnumerable<string>> GetAllFirmwareVersionsAsync();
 
         /// <summary>
-        /// Sets the git repo connection.
-        /// </summary>
-        /// <param name="connectionOptions">The connection options.</param>
-        void SetGitRepoConnection(GitConnectionOptions connectionOptions);
-
-        /// <summary>
         /// Clones the git hub repo asynchronous.
         /// </summary>
         /// <returns></returns>
         Task CloneGitHubRepoAsync();
+
+        /// <summary>
+        /// Sets the git repo URL.
+        /// </summary>
+        /// <param name="gitUrl">The git URL.</param>
+        void SetGitRepoUrl(string gitUrl);
     }
 }
