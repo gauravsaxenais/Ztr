@@ -1,23 +1,23 @@
-﻿using System.IO;
-using Business.Common.Configuration;
-
-namespace Business.GitRepository.Managers
+﻿namespace Business.GitRepository.Managers
 {
+    using Common.Configuration;
     using EnsureThat;
     using Interfaces;
     using Microsoft.Extensions.Logging;
     using System.Collections.Generic;
+    using System.IO;
     using System.Threading.Tasks;
     using ZTR.Framework.Business;
     using ZTR.Framework.Business.Models;
+    using ZTR.Framework.Configuration;
 
     /// <summary>
     /// FirmwareVersion Service Manager
     /// </summary>
     /// <seealso cref="Manager" />
     /// <seealso cref="IFirmwareVersionServiceManager" />
-    /// <seealso cref="IServiceManager{FirmwareVersionGitConnectionOptions}" />
-    public class FirmwareVersionServiceManager : Manager, IFirmwareVersionServiceManager, IServiceManager<GitConnectionOptions>
+    /// <seealso cref="IServiceManager" />
+    public class FirmwareVersionServiceManager : Manager, IFirmwareVersionServiceManager, IServiceManager
     {
         private readonly IGitRepositoryManager _gitRepoManager;
         private readonly ILogger<FirmwareVersionServiceManager> _logger;

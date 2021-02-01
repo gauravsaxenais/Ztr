@@ -22,7 +22,7 @@
     /// <seealso cref="IModuleServiceManager" />
     /// <seealso cref="Manager" />
     /// <seealso cref="IModuleServiceManager" />
-    public class ModuleServiceManager : Manager, IModuleServiceManager, IServiceManager<GitConnectionOptions>
+    public class ModuleServiceManager : Manager, IModuleServiceManager, IServiceManager
     {
         private readonly string protoFileName = "module.proto";
         private readonly IGitRepositoryManager _gitRepoManager;

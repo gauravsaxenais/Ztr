@@ -1,7 +1,5 @@
-﻿namespace ZTR.Framework.Business
+﻿namespace ZTR.Framework.Configuration
 {
-    using Configuration;
-
     /// <summary>
     /// A base class for GitConnectionOptions.
     /// </summary>

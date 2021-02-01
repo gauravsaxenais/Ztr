@@ -442,7 +442,7 @@
         </member>
         <member name="T:Business.RequestHandlers.Managers.ConfigManager">
             <summary>
-            Creates a
+            ConfigManager service.
             </summary>
             <seealso cref="T:ZTR.Framework.Business.Manager" />
             <seealso cref="T:Business.RequestHandlers.Interfaces.IConfigManager" />

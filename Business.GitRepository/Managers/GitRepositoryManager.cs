@@ -10,9 +10,9 @@
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
-    using ZTR.Framework.Business;
     using ZTR.Framework.Business.File;
     using ZTR.Framework.Business.Models;
+    using ZTR.Framework.Configuration;
     using Blob = LibGit2Sharp.Blob;
 
     /// <summary>
