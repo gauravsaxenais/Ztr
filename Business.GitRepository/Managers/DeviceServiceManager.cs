@@ -19,7 +19,7 @@
     /// </summary>
     /// <seealso cref="Manager" />
     /// <seealso cref="IDeviceServiceManager" />
-    public class DeviceServiceManager : Manager, IDeviceServiceManager, IServiceManager
+    public class DeviceServiceManager : ServiceManager, IDeviceServiceManager
     {
         private readonly IGitRepositoryManager _gitRepoManager;
         private readonly ILogger<DeviceServiceManager> _logger;
@@ -32,7 +32,7 @@
         /// <param name="logger">The logger.</param>
         /// <param name="deviceGitConnectionOptions">The device git connection options.</param>
         /// <param name="gitRepoManager">The git repo manager.</param>
-        public DeviceServiceManager(ILogger<DeviceServiceManager> logger, DeviceGitConnectionOptions deviceGitConnectionOptions, IGitRepositoryManager gitRepoManager) : base(logger)
+        public DeviceServiceManager(ILogger<DeviceServiceManager> logger, DeviceGitConnectionOptions deviceGitConnectionOptions, IGitRepositoryManager gitRepoManager) : base(logger, deviceGitConnectionOptions, gitRepoManager)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
             EnsureArg.IsNotNull(gitRepoManager, nameof(gitRepoManager));
@@ -95,7 +95,7 @@
         /// Sets the git repo connection.
         /// </summary>
         /// <exception cref="CustomArgumentException">Current directory path is not valid.</exception>
-        private void SetGitRepoConnection(GitConnectionOptions connectionOptions)
+        private void SetGitRepoConnection(IGitConnectionOptions connectionOptions)
         {
             var currentDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
 

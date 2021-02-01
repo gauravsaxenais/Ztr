@@ -23,7 +23,7 @@
     public sealed class GitRepositoryManager : IGitRepositoryManager, IDisposable
     {
         #region Fields
-        private GitConnectionOptions _gitConnection;
+        private IGitConnectionOptions _gitConnection;
         private CloneOptions _cloneOptions;
         private const string GitFolder = ".git";
         private const string TextMimeType = "text/plain";
@@ -37,7 +37,7 @@
         /// Sets the connection options.
         /// </summary>
         /// <param name="gitConnection">The git connection.</param>
-        public void SetConnectionOptions(GitConnectionOptions gitConnection)
+        public void SetConnectionOptions(IGitConnectionOptions gitConnection)
         {
             EnsureArg.IsNotNull(gitConnection);
             EnsureArg.IsNotEmptyOrWhiteSpace(gitConnection.GitLocalFolder);

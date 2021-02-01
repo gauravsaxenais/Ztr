@@ -18,7 +18,7 @@
     /// <seealso cref="Manager" />
     /// <seealso cref="IBlockServiceManager" />
     /// <seealso cref="IServiceManager" />
-    public class BlockServiceManager : Manager, IBlockServiceManager, IServiceManager
+    public class BlockServiceManager : ServiceManager, IBlockServiceManager
     {
         private readonly IGitRepositoryManager _gitRepoManager;
         private readonly ILogger<BlockServiceManager> _logger;
@@ -31,7 +31,7 @@
         /// <param name="logger">The logger.</param>
         /// <param name="moduleGitConnectionOptions">The module git connection options.</param>
         /// <param name="gitRepoManager">The git repo manager.</param>
-        public BlockServiceManager(ILogger<BlockServiceManager> logger, ModuleBlockGitConnectionOptions moduleGitConnectionOptions, IGitRepositoryManager gitRepoManager) : base(logger)
+        public BlockServiceManager(ILogger<BlockServiceManager> logger, ModuleBlockGitConnectionOptions moduleGitConnectionOptions, IGitRepositoryManager gitRepoManager) : base(logger, moduleGitConnectionOptions, gitRepoManager)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
             EnsureArg.IsNotNull(gitRepoManager, nameof(gitRepoManager));
@@ -41,7 +41,6 @@
             _gitRepoManager = gitRepoManager;
 
             _moduleGitConnectionOptions = moduleGitConnectionOptions;
-            SetGitRepoConnection(moduleGitConnectionOptions);
         }
 
         /// <summary>
@@ -103,24 +102,6 @@
             return fileContent;
         }
 
-        /// <summary>
-        /// Sets the git repo connection.
-        /// </summary>
-        /// <param name="moduleGitConnectionOptions">The module git connection options.</param>
-        /// <exception cref="CustomArgumentException">Current directory path is not valid.</exception>
-        private void SetGitRepoConnection(ModuleBlockGitConnectionOptions moduleGitConnectionOptions)
-        {
-            var currentDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-
-            if (currentDirectory == null)
-            {
-                throw new CustomArgumentException("Current directory path is not valid.");
-            }
-
-            _moduleGitConnectionOptions.GitLocalFolder = Path.Combine(currentDirectory, moduleGitConnectionOptions.GitLocalFolder);
-            _moduleGitConnectionOptions.BlockConfig = Path.Combine(currentDirectory, moduleGitConnectionOptions.GitLocalFolder, moduleGitConnectionOptions.BlockConfig);
-
-            _gitRepoManager.SetConnectionOptions(_moduleGitConnectionOptions);
-        }
+        // _moduleGitConnectionOptions.BlockConfig = Path.Combine(currentDirectory, moduleGitConnectionOptions.GitLocalFolder, moduleGitConnectionOptions.BlockConfig);
     }
 }

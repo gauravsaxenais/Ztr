@@ -13,7 +13,6 @@
     using System.Threading.Tasks;
     using ZTR.Framework.Business;
     using ZTR.Framework.Business.File.FileReaders;
-    using ZTR.Framework.Business.Models;
 
     /// <summary>
     /// Wrapper for GitRepoManager.
@@ -22,7 +21,7 @@
     /// <seealso cref="IModuleServiceManager" />
     /// <seealso cref="Manager" />
     /// <seealso cref="IModuleServiceManager" />
-    public class ModuleServiceManager : Manager, IModuleServiceManager, IServiceManager
+    public class ModuleServiceManager : ServiceManager, IModuleServiceManager
     {
         private readonly string protoFileName = "module.proto";
         private readonly IGitRepositoryManager _gitRepoManager;
@@ -36,7 +35,7 @@
         /// <param name="logger">The logger.</param>
         /// <param name="moduleGitConnectionOptions">The module git connection options.</param>
         /// <param name="gitRepoManager">The git repo manager.</param>
-        public ModuleServiceManager(ILogger<ModuleServiceManager> logger, ModuleBlockGitConnectionOptions moduleGitConnectionOptions, IGitRepositoryManager gitRepoManager) : base(logger)
+        public ModuleServiceManager(ILogger<ModuleServiceManager> logger, ModuleBlockGitConnectionOptions moduleGitConnectionOptions, IGitRepositoryManager gitRepoManager) : base(logger, moduleGitConnectionOptions, gitRepoManager)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
             EnsureArg.IsNotNull(gitRepoManager, nameof(gitRepoManager));
@@ -45,30 +44,10 @@
             _logger = logger;
             _gitRepoManager = gitRepoManager;
             _moduleGitConnectionOptions = moduleGitConnectionOptions;
-
-            SetGitRepoConnection(_moduleGitConnectionOptions);
         }
 
-        /// <summary>
-        /// Sets the git repo connection.
-        /// </summary>
-        /// <param name="moduleGitConnectionOptions">The module git connection options.</param>
-        /// <exception cref="CustomArgumentException">Current directory path is not valid.</exception>
-        public void SetGitRepoConnection(ModuleBlockGitConnectionOptions moduleGitConnectionOptions)
-        {
-            var currentDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-
-            if (currentDirectory == null)
-            {
-                throw new CustomArgumentException("Current directory path is not valid.");
-            }
-
-            _moduleGitConnectionOptions.GitLocalFolder = Path.Combine(currentDirectory, _moduleGitConnectionOptions.GitLocalFolder);
-            _moduleGitConnectionOptions.DefaultTomlConfiguration.DeviceFolder = Path.Combine(_moduleGitConnectionOptions.GitLocalFolder, _moduleGitConnectionOptions.DefaultTomlConfiguration.DeviceFolder);
-            _moduleGitConnectionOptions.ModulesConfig = Path.Combine(currentDirectory, _moduleGitConnectionOptions.GitLocalFolder, _moduleGitConnectionOptions.ModulesConfig);
-
-            _gitRepoManager.SetConnectionOptions(moduleGitConnectionOptions);
-        }
+        //_moduleGitConnectionOptions.DefaultTomlConfiguration.DeviceFolder = Path.Combine(_moduleGitConnectionOptions.GitLocalFolder, _moduleGitConnectionOptions.DefaultTomlConfiguration.DeviceFolder);
+        //_moduleGitConnectionOptions.ModulesConfig = Path.Combine(currentDirectory, _moduleGitConnectionOptions.GitLocalFolder, _moduleGitConnectionOptions.ModulesConfig);
 
         /// <summary>
         /// Gets all modules asynchronous.

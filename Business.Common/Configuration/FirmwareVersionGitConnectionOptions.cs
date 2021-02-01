@@ -6,8 +6,13 @@
     /// This class maps to configuration in appsettings.json file.
     /// </summary>
     /// <seealso cref="GitConnectionOptions" />
-    public sealed class FirmwareVersionGitConnectionOptions : GitConnectionOptions
+    public sealed class FirmwareVersionGitConnectionOptions : IGitConnectionOptions
     {
+        public string GitLocalFolder { get; set; }
+        public string UserName { get; set; }
+        public string Password { get; set; }
+        public string GitRemoteLocation { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FirmwareVersionGitConnectionOptions"/> class.
         /// </summary>
@@ -22,9 +27,13 @@
         /// <param name="userName">Name of the user.</param>
         /// <param name="password">The password.</param>
         /// <param name="gitRepositoryUrl">The git repository URL.</param>
-        public FirmwareVersionGitConnectionOptions(string gitLocalFolder, string userName, string password, string gitRepositoryUrl) :
-            base(gitLocalFolder, userName, password, gitRepositoryUrl)
+        public FirmwareVersionGitConnectionOptions(string gitLocalFolder, string userName, string password, string gitRepositoryUrl)
+
         {
+            GitLocalFolder = gitLocalFolder;
+            UserName = userName;
+            Password = password;
+            GitRemoteLocation = gitRepositoryUrl;
         }
 
         /// <summary>

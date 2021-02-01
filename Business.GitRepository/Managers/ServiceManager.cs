@@ -1,39 +1,42 @@
-﻿namespace Business.GitRepository.Interfaces
+﻿namespace Business.GitRepository.Managers
 {
     using EnsureThat;
-    using Managers;
+    using Interfaces;
     using Microsoft.Extensions.Logging;
     using System.IO;
+    using System.Threading.Tasks;
     using ZTR.Framework.Business;
     using ZTR.Framework.Business.Models;
     using ZTR.Framework.Configuration;
 
     public class ServiceManager : Manager, IServiceManager
     {
-        private readonly GitConnectionOptions _connectionOptions;
-        private readonly IGitRepositoryManager _gitRepoManager;
+        private readonly IGitConnectionOptions _connectionOptions;
         private readonly ILogger<ServiceManager> _logger;
+        private readonly IGitRepositoryManager _repoManager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DeviceServiceManager"/> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
         /// <param name="gitConnectionOptions">The device git connection options.</param>
-        /// <param name="gitRepoManager">The git repo manager.</param>
-        public ServiceManager(ILogger<ServiceManager> logger, GitConnectionOptions gitConnectionOptions, IGitRepositoryManager gitRepoManager) : base(logger)
+        public ServiceManager(ILogger<ServiceManager> logger, IGitConnectionOptions gitConnectionOptions, IGitRepositoryManager repoManager) : base(logger)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
-            EnsureArg.IsNotNull(gitRepoManager, nameof(gitRepoManager));
             EnsureArg.IsNotNull(gitConnectionOptions, nameof(gitConnectionOptions));
+            EnsureArg.IsNotNull(repoManager, nameof(repoManager));
 
             _logger = logger;
-            _gitRepoManager = gitRepoManager;
             _connectionOptions = gitConnectionOptions;
-
-            SetConnection(_connectionOptions);
+            _repoManager = repoManager;
         }
 
-        private void SetConnection(GitConnectionOptions connectionOptions)
+        /// <summary>
+        /// Sets the connection.
+        /// </summary>
+        /// <param name="connectionOptions">The connection options.</param>
+        /// <exception cref="CustomArgumentException">Current directory path is not valid.</exception>
+        public async Task SetConnection(IGitConnectionOptions connectionOptions)
         {
             _logger.LogInformation("Setting git repository connection");
             var currentDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
@@ -45,7 +48,13 @@
 
             _connectionOptions.GitLocalFolder = Path.Combine(currentDirectory, connectionOptions.GitLocalFolder);
 
-            _gitRepoManager.SetConnectionOptions(connectionOptions);
+            await SetupDependenciesAsync().ConfigureAwait(false);
+            _repoManager.SetConnectionOptions(_connectionOptions);
+        }
+
+        protected virtual Task SetupDependenciesAsync()
+        {
+            return Task.CompletedTask;
         }
     }
 }

@@ -41,12 +41,6 @@
         string GetProtoFiles(ModuleReadModel module);
 
         /// <summary>
-        /// Sets the git repo connection.
-        /// </summary>
-        /// <param name="moduleGitConnectionOptions">The module git connection options.</param>
-        void SetGitRepoConnection(ModuleBlockGitConnectionOptions moduleGitConnectionOptions);
-
-        /// <summary>
         /// Clones the git hub repo asynchronous.
         /// </summary>
         /// <returns></returns>

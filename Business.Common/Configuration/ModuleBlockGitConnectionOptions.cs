@@ -5,8 +5,13 @@
     /// <summary>
     /// This class maps to the connection options in appsettings.json file.
     /// </summary>
-    public sealed class ModuleBlockGitConnectionOptions : GitConnectionOptions
+    public sealed class ModuleBlockGitConnectionOptions : IGitConnectionOptions
     {
+        public string GitLocalFolder { get; set; }
+        public string UserName { get; set; }
+        public string Password { get; set; }
+        public string GitRemoteLocation { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ModuleBlockGitConnectionOptions"/> class.
         /// </summary>
@@ -22,9 +27,12 @@
         /// <param name="password">The password.</param>
         /// <param name="gitRepositoryUrl">The git repository URL.</param>
         /// <param name="tomlConfiguration">The toml configuration.</param>
-        public ModuleBlockGitConnectionOptions(string gitLocalFolder, string userName, string password, string gitRepositoryUrl, TomlConfigurationFile tomlConfiguration) :
-            base(gitLocalFolder, userName, password, gitRepositoryUrl)
+        public ModuleBlockGitConnectionOptions(string gitLocalFolder, string userName, string password, string gitRepositoryUrl, TomlConfigurationFile tomlConfiguration)
         {
+            GitLocalFolder = gitLocalFolder;
+            UserName = userName;
+            Password = password;
+            GitRemoteLocation = gitRepositoryUrl;
             DefaultTomlConfiguration = tomlConfiguration;
         }
 

@@ -5,11 +5,8 @@
     using Interfaces;
     using Microsoft.Extensions.Logging;
     using System.Collections.Generic;
-    using System.IO;
     using System.Threading.Tasks;
     using ZTR.Framework.Business;
-    using ZTR.Framework.Business.Models;
-    using ZTR.Framework.Configuration;
 
     /// <summary>
     /// FirmwareVersion Service Manager
@@ -41,8 +38,6 @@
             _logger = logger;
             _gitRepoManager = gitRepoManager;
             _firmwareVersionGitConnectionOptions = firmwareVersionGitConnection;
-
-            SetGitRepoConnection(_firmwareVersionGitConnectionOptions);
         }
 
         /// <summary>
@@ -78,23 +73,6 @@
 
             _firmwareVersionGitConnectionOptions.GitRemoteLocation = gitUrl;
             _gitRepoManager.SetConnectionOptions(_firmwareVersionGitConnectionOptions);
-        }
-
-        /// <summary>
-        /// Sets the git repo connection.
-        /// </summary>
-        /// <exception cref="CustomArgumentException">Current directory path is not valid.</exception>
-        private void SetGitRepoConnection(GitConnectionOptions connectionOptions)
-        {
-            var currentDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-
-            if (currentDirectory == null)
-            {
-                throw new CustomArgumentException("Current directory path is not valid.");
-            }
-
-            _firmwareVersionGitConnectionOptions.GitLocalFolder = Path.Combine(currentDirectory, _firmwareVersionGitConnectionOptions.GitLocalFolder);
-            _gitRepoManager.SetConnectionOptions(connectionOptions);
         }
     }
 }
