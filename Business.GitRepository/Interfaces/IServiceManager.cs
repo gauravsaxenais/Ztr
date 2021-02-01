@@ -7,7 +7,7 @@
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <seealso cref="IManager" />
-    public interface IServiceManager<T> where T : GitConnectionOptions
+    public interface IServiceManager
     {
     }
 }

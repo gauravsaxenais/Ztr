@@ -1,6 +1,6 @@
 ﻿namespace Business.Common.Configuration
 {
-    using ZTR.Framework.Business;
+    using ZTR.Framework.Configuration;
 
     /// <summary>
     /// This class maps to the connection options in appsettings.json file.

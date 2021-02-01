@@ -12,13 +12,14 @@
     using ZTR.Framework.Business;
     using ZTR.Framework.Business.File.FileReaders;
     using ZTR.Framework.Business.Models;
+    using ZTR.Framework.Configuration;
 
     /// <summary>
     /// Device list wrapper for devices.
     /// </summary>
     /// <seealso cref="Manager" />
     /// <seealso cref="IDeviceServiceManager" />
-    public class DeviceServiceManager : Manager, IDeviceServiceManager, IServiceManager<GitConnectionOptions>
+    public class DeviceServiceManager : Manager, IDeviceServiceManager, IServiceManager
     {
         private readonly IGitRepositoryManager _gitRepoManager;
         private readonly ILogger<DeviceServiceManager> _logger;

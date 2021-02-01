@@ -2,8 +2,8 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using ZTR.Framework.Business;
     using ZTR.Framework.Business.File;
+    using ZTR.Framework.Configuration;
 
     /// <summary>
     /// Git repo manager - clones a repo and gets all the tags.

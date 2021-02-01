@@ -17,8 +17,8 @@
     /// </summary>
     /// <seealso cref="Manager" />
     /// <seealso cref="IBlockServiceManager" />
-    /// <seealso cref="IServiceManager{GitConnectionOptions}" />
-    public class BlockServiceManager : Manager, IBlockServiceManager, IServiceManager<GitConnectionOptions>
+    /// <seealso cref="IServiceManager" />
+    public class BlockServiceManager : Manager, IBlockServiceManager, IServiceManager
     {
         private readonly IGitRepositoryManager _gitRepoManager;
         private readonly ILogger<BlockServiceManager> _logger;
