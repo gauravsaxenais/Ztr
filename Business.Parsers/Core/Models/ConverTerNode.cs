@@ -1,6 +1,7 @@
 ﻿namespace Business.Parsers.Core.Models
 {
     using HtmlAgilityPack;
+    using System.Collections.Generic;
 
     /// <summary>
     /// Config Read Model.
@@ -21,7 +22,7 @@
         /// <value>
         /// The block.
         /// </value>
-        public HtmlNode TagNode { get; set; }
+        public IEnumerable<HtmlNode> TagNode { get; set; }
         /// <summary>
         /// Gets or sets the version.
         /// </summary>

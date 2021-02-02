@@ -263,30 +263,35 @@ namespace Business.Parsers.Core.Converter
                 AddKeyValue(_tree, root, obj, true);              
             }
         }
-        private ConverterNode GetValue(HtmlNode node, string tag)
+        private ConverterNode GetValue(HtmlNode node, string tag, string stoptag)
         {
             var result = new ConverterNode();
             var sibling = node;
             result.Key = string.Empty;
-            while (sibling != null && !sibling.Name.Compares("h1"))
+            var tags = new List<HtmlNode>();
+            while (sibling != null && !sibling.Name.Compares("h1") )
             {
-                var name = sibling.Descendants(tag).FirstOrDefault();
                 if (sibling.Name.Compares(tag))
                 {
                     result.Key = sibling.InnerText;
                     result.SerialNode = sibling;
-                    result.TagNode = sibling;
+                    result.TagNode = new []{ sibling };
                     break;
                 }
-                if (name != null && name.Name.Compares(tag))
+                var name = sibling.Descendants(tag);
+                if (name.Any(o => o.Name.Compares(tag)))
                 {
-                    result.Key = name.InnerText;
+                    tags.AddRange(name);
                     result.SerialNode = sibling;
-                    result.TagNode = name;
+                }
+                result.Key = name.FirstOrDefault()?.InnerText;
+                result.TagNode = tags;
+                
+                sibling = sibling.NextSibling;
+                if(sibling == null || sibling.Name.Compares(stoptag))
+                {
                     break;
                 }
-
-                sibling = sibling.NextSibling;
             }
             return result;
         }
@@ -296,19 +301,23 @@ namespace Business.Parsers.Core.Converter
             Tree t = new Tree();
             while (node != null && !node.Name.Compares("h1"))
             {
-                pickerNode = GetValue(node, "h2");
+                pickerNode = GetValue(node, "h2", "h1");
                 string key = pickerNode.Key;
                 if (string.IsNullOrEmpty(key))
                 {
                     return null;
                 }
-                pickerNode = GetValue(pickerNode.SerialNode, "table");
-                if (pickerNode.TagNode != null)
+                pickerNode = GetValue(pickerNode.SerialNode, "table", "h2");
+                if (pickerNode.TagNode.Any())
                 {
-                    var obj = ToData(pickerNode.TagNode);
-                    if (obj != null)
+                    List<Tree> obj = new List<Tree>();
+                    pickerNode.TagNode.ToList().ForEach(o =>
                     {
-                        AddKeyValue(t, key, obj, true);
+                        obj.AddRange(ToData(o));                        
+                    });
+                    if (obj.Any())
+                    {
+                        AddKeyValue(t, key, obj.ToArray(), true);
                     }
                 }
 
