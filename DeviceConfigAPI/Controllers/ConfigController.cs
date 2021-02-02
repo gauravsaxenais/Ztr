@@ -66,7 +66,7 @@
             [MaxFileSize(1 * 1024 * 1024)]
             [AllowedExtensions(new[] { ".html" })] IFormFile htmlFile)
         {
-            var toml = await _manager.CreateFromHtmlAsync("", "", htmlFile);
+            var toml = await _manager.CreateFromHtmlAsync(htmlFile);
 
             var result = await _creator.GenerateConfigTomlModelAsync(toml);
             return Ok(result);

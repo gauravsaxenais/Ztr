@@ -46,11 +46,9 @@
         /// <summary>
         /// Creates from HTML asynchronous.
         /// </summary>
-        /// <param name="device">The device.</param>
-        /// <param name="firmware">The firmware.</param>
-        /// <param name="htmlFile">The htmlFile.</param>
+        /// <param name="htmlFile">The HTML file.</param>
         /// <returns></returns>
-        public async Task<string> CreateFromHtmlAsync(string device, string firmware, IFormFile htmlFile)
+        public async Task<string> CreateFromHtmlAsync(IFormFile htmlFile)
         {
             var html = FileReaderExtensions.ReadAsString(htmlFile);
             return await _service.CreateFromHtmlAsync(html);
