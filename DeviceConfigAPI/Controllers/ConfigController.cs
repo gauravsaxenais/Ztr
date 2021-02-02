@@ -55,8 +55,8 @@
         public async Task<IActionResult> CreateFromHtml(IFormFile htmlfile)
         {
             var toml = await _manager.CreateFromHtmlAsync("", "", htmlfile);
-           // var result = await _creator.GenerateConfigTomlModelAsync(toml);
-            return Ok(toml);
+            var result = await _creator.GenerateConfigTomlModelAsync(toml);
+            return Ok(result);
         }
     }
 }

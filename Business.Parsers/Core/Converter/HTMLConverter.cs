@@ -35,7 +35,7 @@ namespace Business.Parsers.Core.Converter
             var toml = _config.GetBaseToml();
             _tomlTree = _builder.ToDictionary(toml);
             //RemoveModule(_tomlTree, false);
-            RemoveArrays(_tomlTree);
+            //RemoveArrays(_tomlTree);
             MergeValues();
 
             return _tomlTree;
@@ -103,15 +103,17 @@ namespace Business.Parsers.Core.Converter
         }
         private object TryMerge<T>(T input, KeyValuePair<string, object> source, object target) where T : IDictionary<string, object>
         {
-           
-            if (source.Value is T[] s && target is T[] tar)
+
+            if (source.Value is T[] s && target is object[] tar)
             {
-                var to = tar.First();
-                var converted = s.Select(o => CreateDictionary(to, o))
-                                 .Where(o=> o.Count > 0)
+                if (tar.First() is T to)
+                { 
+                 var converted = s.Select(o => CreateDictionary(to, o))
+                                 .Where(o => o.Count > 0)
                                  .ToArray();
 
-                return converted;
+                 return converted;
+              }
             }
 
             if (source.Value is T t && target is T tarDic)
