@@ -34,8 +34,8 @@ namespace Business.Parsers.Core.Converter
 
             var toml = _config.GetBaseToml();
             _tomlTree = _builder.ToDictionary(toml);
-            RemoveModule(_tomlTree, false);
-            RemoveArrays(_tomlTree);
+            //RemoveModule(_tomlTree, false);
+            //RemoveArrays(_tomlTree);
             MergeValues();
 
             return _tomlTree;
@@ -58,14 +58,35 @@ namespace Business.Parsers.Core.Converter
                 TraverseTarget(tree, item.Key, item);  
             }
         }
+        private  bool TryGetKeyValue(IDictionary<string, object> converted, string key,out string value)
+        {
+            bool result = false;
+            value = string.Empty;
+            if(converted.Keys.Any(u => u.Compares(key)))
+            {
+                value = converted[converted.Keys.First(u => u.Compares(key))].ToString();
+                result = true;
+            }
+            return result;
+        }
         private T CreateDictionary<T>(T from, T source) where T : IDictionary<string, object>
         {
+            IDictionary<string, object> converted = new Dictionary<string, object>();
+            source.ToDictionary(t =>
+            {
+                var m = GetMapped(t.Key, t.Value);
+                converted.Add(m);
+                return t.Key;
+            });
+           
             IDictionary<string, object> dictionary = new Dictionary<string, object>();
             foreach (var item in from)
             {
-                if (source.Keys.Any(u => u.Compares(item.Key)))
+                string value;               
+                var found = TryGetKeyValue(converted, item.Key, out value);
+                if (found)
                 {
-                    dictionary.Add(item.Key, source[source.Keys.First(u => u.Compares(item.Key))]);
+                    dictionary.Add(item.Key, value);
                 }
                 if (item.Value is T t)
                 {
@@ -82,15 +103,17 @@ namespace Business.Parsers.Core.Converter
         }
         private object TryMerge<T>(T input, KeyValuePair<string, object> source, object target) where T : IDictionary<string, object>
         {
-           
-            if (source.Value is T[] s && target is T[] tar)
+
+            if (source.Value is T[] s && target is object[] tar)
             {
-                var to = tar.First();
-                var converted = s.Select(o => CreateDictionary(to, o))
-                                 .Where(o=> o.Count > 0)
+                if (tar.First() is T to)
+                { 
+                 var converted = s.Select(o => CreateDictionary(to, o))
+                                 .Where(o => o.Count > 0)
                                  .ToArray();
 
-                return converted;
+                 return converted;
+              }
             }
 
             if (source.Value is T t && target is T tarDic)
@@ -239,33 +262,38 @@ namespace Business.Parsers.Core.Converter
             var obj = ToObject(h1.NextSibling);
             if (obj != null)
             {
-                AddKeyValue(_tree, root, obj);              
+                AddKeyValue(_tree, root, obj, true);              
             }
         }
-        private ConverterNode GetValue(HtmlNode node, string tag)
+        private ConverterNode GetValue(HtmlNode node, string tag, string stoptag)
         {
             var result = new ConverterNode();
             var sibling = node;
             result.Key = string.Empty;
-            while (sibling != null && !sibling.Name.Compares("h1"))
+            var tags = new List<HtmlNode>();
+            while (sibling != null && !sibling.Name.Compares("h1") )
             {
-                var name = sibling.Descendants(tag).FirstOrDefault();
                 if (sibling.Name.Compares(tag))
                 {
                     result.Key = sibling.InnerText;
                     result.SerialNode = sibling;
-                    result.TagNode = sibling;
+                    result.TagNode = new []{ sibling };
                     break;
                 }
-                if (name != null && name.Name.Compares(tag))
+                var name = sibling.Descendants(tag);
+                if (name.Any(o => o.Name.Compares(tag)))
                 {
-                    result.Key = name.InnerText;
+                    tags.AddRange(name);
                     result.SerialNode = sibling;
-                    result.TagNode = name;
+                }
+                result.Key = name.FirstOrDefault()?.InnerText;
+                result.TagNode = tags;
+                
+                sibling = sibling.NextSibling;
+                if(sibling == null || sibling.Name.Compares(stoptag))
+                {
                     break;
                 }
-
-                sibling = sibling.NextSibling;
             }
             return result;
         }
@@ -275,19 +303,23 @@ namespace Business.Parsers.Core.Converter
             Tree t = new Tree();
             while (node != null && !node.Name.Compares("h1"))
             {
-                pickerNode = GetValue(node, "h2");
+                pickerNode = GetValue(node, "h2", "h1");
                 string key = pickerNode.Key;
                 if (string.IsNullOrEmpty(key))
                 {
                     return null;
                 }
-                pickerNode = GetValue(pickerNode.SerialNode, "table");
-                if (pickerNode.TagNode != null)
+                pickerNode = GetValue(pickerNode.SerialNode, "table", "h2");
+                if (pickerNode.TagNode.Any())
                 {
-                    var obj = ToData(pickerNode.TagNode);
-                    if (obj != null)
+                    List<Tree> obj = new List<Tree>();
+                    pickerNode.TagNode.ToList().ForEach(o =>
                     {
-                        AddKeyValue(t, key, obj);
+                        obj.AddRange(ToData(o));                        
+                    });
+                    if (obj.Any())
+                    {
+                        AddKeyValue(t, key, obj.ToArray(), true);
                     }
                 }
 
@@ -322,7 +354,7 @@ namespace Business.Parsers.Core.Converter
                     t = new Tree();
                     foreach (var td in tr.Descendants("td"))
                     {                     
-                        AddKeyValue(t, keys[key], td.InnerText.CleanHTML());
+                        AddKeyValue(t, keys[key], td.InnerText.CleanHTML(), false);
                         key++;
                     }
                     if (t.Count > 0)
@@ -333,7 +365,7 @@ namespace Business.Parsers.Core.Converter
             }
             return trees.ToArray();
         }
-        private void AddKeyValue(IDictionary<string,object> dictionary, string key, object value)
+        private void AddKeyValue(IDictionary<string,object> dictionary, string key, object value, bool enablemap)
         {
                   
             if (string.IsNullOrEmpty(key))
@@ -345,18 +377,29 @@ namespace Business.Parsers.Core.Converter
             {
                 return;
             }
-            var m = _map.FirstOrDefault(o => o.From.Compares(key));
-            if(m!=null)
+            if (enablemap)
             {
-                key = m.To;
-                if(value is string && m.From.ToLower().Contains("hex"))
-                {
-                    value = value.ToString().FromHex();
-                }
-            }            
+                var k = GetMapped(key, value);
+                key = k.Key;
+                value = k.Value;
+            }
             dictionary.Add(key, value);
 
         }
+        private KeyValuePair<string,object> GetMapped(string key, object value)
+        {
+            var m = _map.FirstOrDefault(o => o.From.Compares(key));
+            if (m != null)
+            {
+                key = m.To;
+                if (value is string && m.From.ToLower().Contains("hex"))
+                {
+                    value = value.ToString().FromHex();
+                }
+            }
+            return KeyValuePair.Create(key, value);
+        }
+       
         private void CleanToCompatible(ref string html)
         {
             foreach (var o in _config.HTMLTags.Tags)
