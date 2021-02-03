@@ -32,13 +32,16 @@
         private bool RemoveProperties<T>(T input) where T : ITree, new()
         {
 
-            var isForOmit = _omitKeys.Any(o => input.Any(u =>
-                                                            u.Key.ToLower() == o.Property.ToLower() &&
-                                                            u.Value.ToString().ToLower() == o.Value.ToLower()
-                                                         ));
-            if (isForOmit)
+            if (!_config.EnableHidden)
             {
-                return true;
+                var isForOmit = _omitKeys.Any(o => input.Any(u =>
+                                                                u.Key.ToLower() == o.Property.ToLower() &&
+                                                                u.Value.ToString().ToLower() == o.Value.ToLower()
+                                                             ));
+                if (isForOmit)
+                {
+                    return true;
+                }
             }
 
             T dictionary = new T();
@@ -119,7 +122,7 @@
             {
                 foreach (var o in @object)
                 {
-                    dictionary.Add(o.Key, ToDictionary(o.Value));
+                    dictionary.Add(o.Key.ToLower(), ToDictionary(o.Value));
                 }
             }
 

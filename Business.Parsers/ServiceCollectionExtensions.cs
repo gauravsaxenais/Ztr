@@ -12,7 +12,7 @@
             services.AddScoped<ConverterService>();
             services.AddScoped<IJsonConverter, DictionaryConverter>();
             services.AddScoped<IHTMLConverter, HTMLConverter>();
-            services.AddScoped<IBuilder<IDictionary<string, object>>, TomlBuilder>();
+            services.AddScoped<IBuilder<ITree>, TomlBuilder>();
             services.AddScoped<IProtoMessageParser, ProtoMessageParser>();
             services.AddScoped<ICustomMessageParser, CustomMessageParser>();
             services.AddScoped<IModuleParser, ModuleParser>();

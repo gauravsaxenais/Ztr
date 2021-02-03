@@ -37,6 +37,7 @@
             EnsureArg.IsNotNull(logger, nameof(logger));
 
             _logger = logger;
+            EnableHidden = false;
             InitiateRule();
         }
         internal string GetHtml()
@@ -59,17 +60,9 @@
             var tags = mapping.Split(Environment.NewLine);
             var map = tags.Where(o => o.StartsWith("map:")).Select(o => new ConfigMap(o)).ToArray();
             return map;
-        }
-        internal string GetBaseToml()
-        {
-
-            string toml = string.Empty;
-            if (File.Exists(TomlPath))
-            {
-                toml = File.ReadAllText(TomlPath);
-            }
-            return toml;
-        }
+        }       
+        internal string BaseToml { get; set; }
+        internal bool EnableHidden { get; set; }
         void InitiateRule()
         {
             string setting = string.Empty;

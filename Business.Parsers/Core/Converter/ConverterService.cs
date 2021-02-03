@@ -10,7 +10,7 @@
         private readonly ConvertConfig _config;
         private readonly IJsonConverter _parser;
         private readonly IHTMLConverter _htmlParser;
-        private readonly IBuilder<IDictionary<string, object>> _builder;
+        private readonly IBuilder<ITree> _builder;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConverterService"/> class.
@@ -19,7 +19,7 @@
         /// <param name="htmlParser">The HTML parser.</param>
         /// <param name="builder">The builder.</param>
         /// <param name="config">The configuration.</param>
-        public ConverterService(IJsonConverter parser, IHTMLConverter htmlParser, IBuilder<IDictionary<string, object>> builder, ConvertConfig config)
+        public ConverterService(IJsonConverter parser, IHTMLConverter htmlParser, IBuilder<ITree> builder, ConvertConfig config)
         {
             _config = config;
             _parser = parser;
@@ -32,8 +32,9 @@
         /// </summary>
         /// <param name="model">The model.</param>
         /// <returns></returns>
-        public async Task<string> CreateConfigTomlAsync(ConfigReadModel model)
+        public async Task<string> CreateConfigTomlAsync(ConfigReadModel model, bool enableHidden = false)
         {
+            _config.EnableHidden = enableHidden;
             string contents = GenerateToml(model.Version, ValueScheme.UnQuoted);
             contents += GenerateToml(model.Module, ValueScheme.UnQuoted) + Environment.NewLine;
             contents += Environment.NewLine + GenerateToml(model.Block, ValueScheme.Quoted);
@@ -46,8 +47,9 @@
         /// </summary>
         /// <param name="html">The HTML.</param>
         /// <returns></returns>
-        public async Task<string> CreateFromHtmlAsync(string html)
+        public async Task<string> CreateFromHtmlAsync(string html, string baseToml)
         {
+            _config.BaseToml = baseToml;
             var dictionary = _htmlParser.ToConverted(html);
             var contents = _builder.ToTOML(dictionary, ValueScheme.Quoted);
 
@@ -65,7 +67,7 @@
         }
 
         private string GenerateToml(string jsonContent, ValueScheme scheme)
-        {
+        {          
             var dictionary = _parser.ToConverted(jsonContent);
             var contents = _builder.ToTOML(dictionary, scheme);
 

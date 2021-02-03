@@ -1,7 +1,9 @@
 ﻿namespace Business.RequestHandlers.Interfaces
 {
+    using Business.Common.Models;
     using Business.Parsers.Core.Models;
     using Microsoft.AspNetCore.Http;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -28,6 +30,6 @@
         /// </summary>
         /// <param name="htmlFile">The HTML file.</param>
         /// <returns></returns>
-        Task<string> CreateFromHtmlAsync(IFormFile htmlFile);
+        Task<string> CreateFromHtmlAsync(IFormFile htmlFile, IEnumerable<ModuleReadModel> values);
     }
 }

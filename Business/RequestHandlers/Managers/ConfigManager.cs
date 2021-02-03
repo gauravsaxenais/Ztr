@@ -1,11 +1,14 @@
 ﻿namespace Business.RequestHandlers.Managers
 {
+    using Business.Common.Models;
     using Business.Parsers.Core.Models;
     using EnsureThat;
     using Interfaces;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Logging;
+    using Newtonsoft.Json;
     using Parsers.Core.Converter;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using ZTR.Framework.Business;
     using ZTR.Framework.Business.File.FileReaders;
@@ -48,10 +51,13 @@
         /// </summary>
         /// <param name="htmlFile">The HTML file.</param>
         /// <returns></returns>
-        public async Task<string> CreateFromHtmlAsync(IFormFile htmlFile)
+        public async Task<string> CreateFromHtmlAsync(IFormFile htmlFile, IEnumerable<ModuleReadModel> values)
         {
-            var html = FileReaderExtensions.ReadAsString(htmlFile);
-            return await _service.CreateFromHtmlAsync(html);
+            var module = new { module = values };
+            var model = new ConfigReadModel { Module = JsonConvert.SerializeObject(module), Block = "{}", Version = "{}" };
+            var baseToml = await _service.CreateConfigTomlAsync(model, true);
+            var html = FileReaderExtensions.ReadAsString(htmlFile);            
+            return await _service.CreateFromHtmlAsync(html, baseToml);
         }
 
         /// <summary>

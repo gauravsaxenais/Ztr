@@ -18,21 +18,21 @@ namespace Business.Parsers.Core.Converter
         private HtmlDocument _document;
         private ITree _tree;
         private IEnumerable<ConfigMap> _map;
-        private IDictionary<string, object> _tomlTree;
-        private IBuilder<IDictionary<string, object>> _builder;
-        public HTMLConverter(ConvertConfig config, IBuilder<IDictionary<string, object>> builder)
+        private ITree _tomlTree;
+        private IBuilder<ITree> _builder;
+        public HTMLConverter(ConvertConfig config, IBuilder<ITree> builder)
         {
             _config = config;
             _tree = new Tree();
             _builder = builder;
         }
-        public IDictionary<string,object> ToConverted(string html)
+        public ITree ToConverted(string html)
         {
             _map = _config.GetMapping();
             CleanToCompatible(ref html);
             ToDictionary(html);
 
-            var toml = _config.GetBaseToml();
+            var toml = _config.BaseToml;
             _tomlTree = _builder.ToDictionary(toml);
             //RemoveModule(_tomlTree, false);
             //RemoveArrays(_tomlTree);
@@ -51,14 +51,14 @@ namespace Business.Parsers.Core.Converter
         {           
             TraverseSource(_tree, _tomlTree);
         }
-        private void TraverseSource<T>(T input, T tree) where T : IDictionary<string, object>
+        private void TraverseSource<T>(T input, T tree) where T : ITree
         {
             foreach (var item in input)
             {       
                 TraverseTarget(tree, item.Key, item);  
             }
         }
-        private  bool TryGetKeyValue(IDictionary<string, object> converted, string key,out string value)
+        private  bool TryGetKeyValue(ITree converted, string key,out string value)
         {
             bool result = false;
             value = string.Empty;
@@ -69,9 +69,9 @@ namespace Business.Parsers.Core.Converter
             }
             return result;
         }
-        private T CreateDictionary<T>(T from, T source) where T : IDictionary<string, object>
+        private T CreateDictionary<T>(T from, T source) where T : ITree
         {
-            IDictionary<string, object> converted = new Dictionary<string, object>();
+            ITree converted = new Tree();
             source.ToDictionary(t =>
             {
                 var m = GetMapped(t.Key, t.Value);
@@ -79,7 +79,7 @@ namespace Business.Parsers.Core.Converter
                 return t.Key;
             });
            
-            IDictionary<string, object> dictionary = new Dictionary<string, object>();
+            ITree dictionary = new Tree();
             foreach (var item in from)
             {
                 string value;               
@@ -101,7 +101,7 @@ namespace Business.Parsers.Core.Converter
             return (T)dictionary;
 
         }
-        private object TryMerge<T>(T input, KeyValuePair<string, object> source, object target) where T : IDictionary<string, object>
+        private object TryMerge<T>(T input, KeyValuePair<string, object> source, object target) where T : ITree
         {
 
             if (source.Value is T[] s && target is object[] tar)
@@ -124,7 +124,7 @@ namespace Business.Parsers.Core.Converter
             return target;
         }
 
-        private void TraverseTarget<T>(T input, string key, KeyValuePair<string, object> source) where T : IDictionary<string, object>
+        private void TraverseTarget<T>(T input, string key, KeyValuePair<string, object> source) where T : ITree
         {
             Tree dictionary = new Tree();
             foreach (var item in input)
@@ -161,7 +161,7 @@ namespace Business.Parsers.Core.Converter
                 input[item.Key] = item.Value;
             }
         }
-        private bool RemoveModule<T>(T input, bool removing) where T : IDictionary<string, object>
+        private bool RemoveModule<T>(T input, bool removing) where T : ITree
         {
             var dictionary = new Dictionary<string, object>();
             foreach (var item in input)

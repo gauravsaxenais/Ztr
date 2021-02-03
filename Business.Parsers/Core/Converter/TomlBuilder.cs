@@ -10,7 +10,7 @@
     using System.Text.RegularExpressions;
     using ZTR.Framework.Business;
 
-    public class TomlBuilder : IBuilder<IDictionary<string,object>>
+    public class TomlBuilder : IBuilder<ITree>
     {
         private readonly ConvertConfig _config;
         private ValueScheme _scheme;
@@ -18,16 +18,16 @@
         {
             _config = config;           
         }
-        public string ToTOML(IDictionary<string, object> content, ValueScheme scheme)
+        public string ToTOML(ITree content, ValueScheme scheme)
         {
             _scheme = scheme;
             Process(content, ConversionScheme.Object);
             var toml = Neutralize(Toml.WriteString(content));
             return toml;
         }     
-        private void Process<T>(T input, ConversionScheme scheme) where T : IDictionary<string, object>
+        private void Process<T>(T input, ConversionScheme scheme) where T : ITree
         {
-            IDictionary<string, object> dictionary = new Dictionary<string, object>();
+            ITree dictionary = new Tree();
             foreach (var item in input)
             {
                 if(scheme == ConversionScheme.Inline)
@@ -139,15 +139,7 @@
               InArray(m.Groups[1].Value),
               RegexOptions.Singleline | RegexOptions.IgnoreCase);
 
-            input = Regex.Replace(input, @"(\{.*\[)", m =>
-               m.Groups[1].Value.RemoveNewline(),
-              RegexOptions.Singleline | RegexOptions.IgnoreCase);
-
-            input = Regex.Replace(input, @"(\].*\})", m =>
-              m.Groups[1].Value.RemoveNewline(),
-             RegexOptions.Singleline | RegexOptions.IgnoreCase);
-
-
+            
             ////[\s\S]*?
             //input = Regex.Replace(input, @"("+o+ @": \{.*\})", m =>
             //     InArray(m.Groups[1].Value),
@@ -172,17 +164,27 @@
             return UnQuote(input);
         }
 
-        public IDictionary<string, object> ToDictionary(string toml)
+        public ITree ToDictionary(string toml)
         {
             var input = Toml.ReadString(toml);
-            var tree = input.ToDictionary(t => t.Key, t => ConvertToDictionary(t.Value));
-            return tree;
+            ITree result = new Tree();
+            input.ToDictionary(t => {
+                result.Add(t.Key, ConvertToDictionary(t.Value));
+                return t.Key;
+            });
+            return result;
+
         }
         private object ConvertToDictionary(TomlObject o)
         {
             if (o is TomlTable)
             {
-                return ((TomlTable)o).ToDictionary(t => t.Key, t => ConvertToDictionary(t.Value));
+                ITree result = new Tree();
+                ((TomlTable)o).ToDictionary(t => {
+                    result.Add(t.Key, ConvertToDictionary(t.Value));
+                    return t.Key;
+                });
+                return result;               
             }
             if (o is TomlArray)
             {

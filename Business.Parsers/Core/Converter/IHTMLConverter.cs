@@ -4,7 +4,8 @@ using System.Text;
 
 namespace Business.Parsers.Core.Converter
 {
-    public interface IHTMLConverter : IConverter<IDictionary<string,object>>
+    public interface IHTMLConverter : IConverter<ITree>
     {
+       
     }
 }
