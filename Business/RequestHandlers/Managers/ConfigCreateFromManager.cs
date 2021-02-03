@@ -87,10 +87,9 @@
 
             // Clone repo here.
             await _moduleServiceManager.CloneGitRepoAsync().ConfigureAwait(false);
-        
-            var modules = await GetModulesAsync(configTomlFileContent).ConfigureAwait(false);
-            var blocks = await GetBlocksAsync(configTomlFileContent).ConfigureAwait(false);
-            return new { modules, blocks };
+            var data = await GenerateConfigTomlModelWithoutGitAsync(configTomlFileContent).ConfigureAwait(false);
+
+            return data;
         }
 
         /// <summary>
