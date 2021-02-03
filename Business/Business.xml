@@ -228,13 +228,11 @@
             <param name="properties">The properties.</param>
             <returns></returns>
         </member>
-        <member name="M:Business.RequestHandlers.Interfaces.IConfigManager.CreateFromHtmlAsync(System.String,System.String,Microsoft.AspNetCore.Http.IFormFile)">
+        <member name="M:Business.RequestHandlers.Interfaces.IConfigManager.CreateFromHtmlAsync(Microsoft.AspNetCore.Http.IFormFile,System.Collections.Generic.IEnumerable{Business.Common.Models.ModuleReadModel})">
             <summary>
             Creates from HTML asynchronous.
             </summary>
-            <param name="device">The device.</param>
-            <param name="firmware">The firmware.</param>
-            <param name="htmlFile">The htmlFile.</param>
+            <param name="htmlFile">The HTML file.</param>
             <returns></returns>
         </member>
         <member name="T:Business.RequestHandlers.Interfaces.IDefaultValueManager">
@@ -461,13 +459,11 @@
             <param name="model">The model.</param>
             <returns></returns>
         </member>
-        <member name="M:Business.RequestHandlers.Managers.ConfigManager.CreateFromHtmlAsync(System.String,System.String,Microsoft.AspNetCore.Http.IFormFile)">
+        <member name="M:Business.RequestHandlers.Managers.ConfigManager.CreateFromHtmlAsync(Microsoft.AspNetCore.Http.IFormFile,System.Collections.Generic.IEnumerable{Business.Common.Models.ModuleReadModel})">
             <summary>
             Creates from HTML asynchronous.
             </summary>
-            <param name="device">The device.</param>
-            <param name="firmware">The firmware.</param>
-            <param name="htmlFile">The htmlFile.</param>
+            <param name="htmlFile">The HTML file.</param>
             <returns></returns>
         </member>
         <member name="M:Business.RequestHandlers.Managers.ConfigManager.UpdateTomlConfig(System.String)">

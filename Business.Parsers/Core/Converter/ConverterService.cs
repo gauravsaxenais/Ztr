@@ -32,8 +32,9 @@
         /// </summary>
         /// <param name="model">The model.</param>
         /// <returns></returns>
-        public async Task<string> CreateConfigTomlAsync(ConfigReadModel model)
+        public async Task<string> CreateConfigTomlAsync(ConfigReadModel model, bool enableHidden = false)
         {
+            _config.EnableHidden = enableHidden;
             string contents = GenerateToml(model.Version, ValueScheme.UnQuoted);
             contents += GenerateToml(model.Module, ValueScheme.UnQuoted) + Environment.NewLine;
             contents += Environment.NewLine + GenerateToml(model.Block, ValueScheme.Quoted);
@@ -46,8 +47,9 @@
         /// </summary>
         /// <param name="html">The HTML.</param>
         /// <returns></returns>
-        public async Task<string> CreateFromHtmlAsync(string html)
+        public async Task<string> CreateFromHtmlAsync(string html, string baseToml)
         {
+            _config.BaseToml = baseToml;
             var dictionary = _htmlParser.ToConverted(html);
             var contents = _builder.ToTOML(dictionary, ValueScheme.Quoted);
 

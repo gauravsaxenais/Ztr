@@ -6,5 +6,6 @@ namespace Business.Parsers.Core.Converter
 {
     public interface IHTMLConverter : IConverter<IDictionary<string,object>>
     {
+       
     }
 }

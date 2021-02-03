@@ -32,7 +32,7 @@ namespace Business.Parsers.Core.Converter
             CleanToCompatible(ref html);
             ToDictionary(html);
 
-            var toml = _config.GetBaseToml();
+            var toml = _config.BaseToml;
             _tomlTree = _builder.ToDictionary(toml);
             //RemoveModule(_tomlTree, false);
             //RemoveArrays(_tomlTree);

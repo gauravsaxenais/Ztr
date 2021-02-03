@@ -28,5 +28,6 @@
         /// The version.
         /// </value>
         public string Version { get; set; }
+
     }
 }
