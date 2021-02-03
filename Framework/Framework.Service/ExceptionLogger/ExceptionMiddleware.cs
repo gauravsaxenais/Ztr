@@ -69,7 +69,7 @@
             }
             else
             {
-                error = new ErrorMessage<ErrorType>(ErrorType.ServerError, Resource.ExceptionMessage);
+                error = new ErrorMessage<ErrorType>(ErrorType.ServerError, new Exception(Resource.ExceptionMessage));
             }
 
             var response = new ApiResponse { Success = false, Error = error };
