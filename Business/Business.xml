@@ -177,13 +177,6 @@
             <param name="configTomlFileContent">Content of the configuration toml file.</param>
             <returns></returns>
         </member>
-        <member name="M:Business.RequestHandlers.Interfaces.IBlockManager.GetBlocksFromFileWithoutGitAsync(System.String)">
-            <summary>
-            Gets the blocks from file without git asynchronous.
-            </summary>
-            <param name="configTomlFileContent">Content of the configuration toml file.</param>
-            <returns></returns>
-        </member>
         <member name="T:Business.RequestHandlers.Interfaces.ICompatibleFirmwareVersionManager">
             <summary>
             This Manager returns a list of all compatible firmware versions.
@@ -331,13 +324,6 @@
             <param name="configTomlFileContent">Content of the configuration toml file.</param>
             <returns></returns>
         </member>
-        <member name="M:Business.RequestHandlers.Managers.BlockManager.GetBlocksFromFileWithoutGitAsync(System.String)">
-            <summary>
-            Gets the list of blocks asynchronous.
-            </summary>
-            <param name="configTomlFileContent">Content of the configuration toml file.</param>
-            <returns></returns>
-        </member>
         <member name="M:Business.RequestHandlers.Managers.BlockManager.ProcessBlockFileAsync(System.Collections.Generic.IDictionary{System.String,System.String})">
             <summary>
             Processes the block file asynchronous.
@@ -440,13 +426,6 @@
             <returns></returns>
         </member>
         <member name="M:Business.RequestHandlers.Managers.ConfigCreateFromManager.GetBlocksAsync(System.String)">
-            <summary>
-            Gets the blocks asynchronous.
-            </summary>
-            <param name="configTomlFileContent">Content of the configuration toml file.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.RequestHandlers.Managers.ConfigCreateFromManager.GetBlocksWithoutGitAsync(System.String)">
             <summary>
             Gets the blocks asynchronous.
             </summary>

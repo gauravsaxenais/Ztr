@@ -24,12 +24,5 @@
         /// <param name="configTomlFileContent">Content of the configuration toml file.</param>
         /// <returns></returns>
         Task<List<BlockJsonModel>> GetBlocksFromFileAsync(string configTomlFileContent);
-
-        /// <summary>
-        /// Gets the blocks from file without git asynchronous.
-        /// </summary>
-        /// <param name="configTomlFileContent">Content of the configuration toml file.</param>
-        /// <returns></returns>
-        Task<List<BlockJsonModel>> GetBlocksFromFileWithoutGitAsync(string configTomlFileContent);
     }
 }

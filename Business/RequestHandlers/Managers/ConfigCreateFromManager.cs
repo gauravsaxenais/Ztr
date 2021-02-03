@@ -70,7 +70,8 @@
             _logger.LogInformation($"{prefix}: methodName: {nameof(GenerateConfigTomlModelAsync)} Getting list of modules and blocks from config.toml file.");
 
             var modules = await GetModulesAsync(configTomlFileContent).ConfigureAwait(false);
-            var blocks = await GetBlocksWithoutGitAsync(configTomlFileContent).ConfigureAwait(false);
+            var blocks = await GetBlocksAsync(configTomlFileContent).ConfigureAwait(false);
+
             return new { modules, blocks };
         }
 
@@ -86,6 +87,7 @@
 
             // Clone repo here.
             await _moduleServiceManager.CloneGitRepoAsync().ConfigureAwait(false);
+        
             var modules = await GetModulesAsync(configTomlFileContent).ConfigureAwait(false);
             var blocks = await GetBlocksAsync(configTomlFileContent).ConfigureAwait(false);
             return new { modules, blocks };
@@ -115,17 +117,6 @@
         private async Task<IEnumerable<BlockJsonModel>> GetBlocksAsync(string configTomlFileContent)
         {
             var blocks = await _blockManager.GetBlocksFromFileAsync(configTomlFileContent).ConfigureAwait(false);
-            return blocks;
-        }
-
-        /// <summary>
-        /// Gets the blocks asynchronous.
-        /// </summary>
-        /// <param name="configTomlFileContent">Content of the configuration toml file.</param>
-        /// <returns></returns>
-        private async Task<IEnumerable<BlockJsonModel>> GetBlocksWithoutGitAsync(string configTomlFileContent)
-        {
-            var blocks = await _blockManager.GetBlocksFromFileWithoutGitAsync(configTomlFileContent).ConfigureAwait(false);
             return blocks;
         }
 
