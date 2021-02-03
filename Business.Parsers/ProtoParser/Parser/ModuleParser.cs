@@ -178,7 +178,6 @@
             var objType = obj.GetType();
             return objType.GetTypeInfo().IsValueType;
         }
-
         private object GetFieldValue(object field)
         {
             object result;
@@ -191,25 +190,28 @@
                 var arrayResult = "[";
                 var element = ((IEnumerable)field).Cast<object>().FirstOrDefault();
 
-                if (IsValueType(element))
+                if (element != null)
                 {
-                    var fields = (IEnumerable)field;
-
-                    foreach (var tempItem in fields)
+                    if (IsValueType(element))
                     {
-                        arrayResult += tempItem + ",";
+                        var fields = (IEnumerable)field;
+
+                        foreach (var tempItem in fields)
+                        {
+                            arrayResult += tempItem + ",";
+                        }
+
+                        arrayResult += arrayResult.TrimEnd(',');
                     }
 
-                    arrayResult += arrayResult.TrimEnd(',');
-                }
+                    else if (stringType.IsInstanceOfType(element))
+                    {
+                        var stringFields = ((IEnumerable)field).Cast<object>()
+                                                                    .Select(x => x.ToString())
+                                                                    .ToArray();
 
-                else if (stringType.IsInstanceOfType(element))
-                {
-                    var stringFields = ((IEnumerable)field).Cast<object>()
-                                                                .Select(x => x.ToString())
-                                                                .ToArray();
-
-                    arrayResult += string.Join(",", stringFields);
+                        arrayResult += string.Join(",", stringFields);
+                    }
                 }
 
                 arrayResult += "]";
