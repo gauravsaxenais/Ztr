@@ -18,7 +18,7 @@
         /// Clones the git hub repo asynchronous.
         /// </summary>
         /// <returns></returns>
-        Task CloneGitHubRepoAsync();
+        Task CloneGitRepoAsync();
 
         /// <summary>
         /// Sets the git repo URL.

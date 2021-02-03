@@ -10,7 +10,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using ZTR.Framework.Business;
-    using ZTR.Framework.Business.Models;
+    using ZTR.Framework.Configuration;
 
     /// <summary>
     /// BlockServiceManager
@@ -18,12 +18,10 @@
     /// <seealso cref="Manager" />
     /// <seealso cref="IBlockServiceManager" />
     /// <seealso cref="IServiceManager" />
-    public class BlockServiceManager : Manager, IBlockServiceManager, IServiceManager
+    public class BlockServiceManager : ServiceManager, IBlockServiceManager
     {
-        private readonly IGitRepositoryManager _gitRepoManager;
         private readonly ILogger<BlockServiceManager> _logger;
         private const string Prefix = nameof(BlockServiceManager);
-        private readonly ModuleBlockGitConnectionOptions _moduleGitConnectionOptions;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BlockServiceManager"/> class.
@@ -31,17 +29,11 @@
         /// <param name="logger">The logger.</param>
         /// <param name="moduleGitConnectionOptions">The module git connection options.</param>
         /// <param name="gitRepoManager">The git repo manager.</param>
-        public BlockServiceManager(ILogger<BlockServiceManager> logger, ModuleBlockGitConnectionOptions moduleGitConnectionOptions, IGitRepositoryManager gitRepoManager) : base(logger)
+        public BlockServiceManager(ILogger<BlockServiceManager> logger, ModuleBlockGitConnectionOptions moduleGitConnectionOptions, IGitRepositoryManager gitRepoManager) : base(logger, moduleGitConnectionOptions, gitRepoManager)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
-            EnsureArg.IsNotNull(gitRepoManager, nameof(gitRepoManager));
-            EnsureArg.IsNotNull(moduleGitConnectionOptions, nameof(moduleGitConnectionOptions));
 
             _logger = logger;
-            _gitRepoManager = gitRepoManager;
-
-            _moduleGitConnectionOptions = moduleGitConnectionOptions;
-            SetGitRepoConnection(moduleGitConnectionOptions);
         }
 
         /// <summary>
@@ -50,8 +42,8 @@
         /// <returns></returns>
         public async Task<IEnumerable<FileInfo>> GetAllBlockFilesAsync()
         {
-            string blockConfigPath = _moduleGitConnectionOptions.BlockConfig;
             _logger.LogInformation($"{Prefix}: method name: {nameof(GetAllBlockFilesAsync)} Getting list of all blocks.");
+            string blockConfigPath = ((ModuleBlockGitConnectionOptions)ConnectionOptions).BlockConfig;
             var blockConfigDirectory = new DirectoryInfo(blockConfigPath);
             var filesInDirectory = blockConfigDirectory.EnumerateFiles();
 
@@ -64,9 +56,7 @@
         /// <returns></returns>
         public async Task CloneGitRepoAsync()
         {
-            _logger.LogInformation($"{Prefix}: Cloning github repository.");
-            await _gitRepoManager.CloneRepositoryAsync().ConfigureAwait(false);
-            _logger.LogInformation($"{Prefix}: Github repository cloning is successful.");
+            await CloneGitHubRepoAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -78,7 +68,7 @@
         public async Task<string> GetDefaultTomlFileContentAsync(string firmwareVersion, string deviceType)
         {
             _logger.LogInformation($"{Prefix} method name: {nameof(GetDefaultTomlFileContentAsync)}: Getting default value from toml file for {firmwareVersion}, {deviceType}.");
-            var defaultPath = _moduleGitConnectionOptions.DefaultTomlConfiguration.DefaultTomlFile;
+            var defaultPath = ((ModuleBlockGitConnectionOptions)ConnectionOptions).DefaultTomlConfiguration.DefaultTomlFile;
             var defaultValueFromTomlFile = await GetFileContentFromPath(firmwareVersion, deviceType, defaultPath).ConfigureAwait(false);
 
             return defaultValueFromTomlFile;
@@ -86,7 +76,7 @@
 
         private async Task<string> GetFileContentFromPath(string firmwareVersion, string deviceType, string path)
         {
-            var listOfFiles = await _gitRepoManager
+            var listOfFiles = await RepoManager
                 .GetFileDataFromTagAsync(firmwareVersion, path)
                 .ConfigureAwait(false);
 
@@ -104,23 +94,14 @@
         }
 
         /// <summary>
-        /// Sets the git repo connection.
+        /// Setups the dependencies.
         /// </summary>
-        /// <param name="moduleGitConnectionOptions">The module git connection options.</param>
-        /// <exception cref="CustomArgumentException">Current directory path is not valid.</exception>
-        private void SetGitRepoConnection(ModuleBlockGitConnectionOptions moduleGitConnectionOptions)
+        protected override void SetupDependencies(GitConnectionOptions connectionOptions)
         {
-            var currentDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            var moduleBlockGitConnectionOptions = (ModuleBlockGitConnectionOptions)connectionOptions;
 
-            if (currentDirectory == null)
-            {
-                throw new CustomArgumentException("Current directory path is not valid.");
-            }
-
-            _moduleGitConnectionOptions.GitLocalFolder = Path.Combine(currentDirectory, moduleGitConnectionOptions.GitLocalFolder);
-            _moduleGitConnectionOptions.BlockConfig = Path.Combine(currentDirectory, moduleGitConnectionOptions.GitLocalFolder, moduleGitConnectionOptions.BlockConfig);
-
-            _gitRepoManager.SetConnectionOptions(_moduleGitConnectionOptions);
+            moduleBlockGitConnectionOptions.BlockConfig = Path.Combine(AppPath,
+                moduleBlockGitConnectionOptions.GitLocalFolder, moduleBlockGitConnectionOptions.BlockConfig);
         }
     }
 }

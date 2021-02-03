@@ -190,28 +190,6 @@
             <param name="deviceType">Type of the device.</param>
             <returns></returns>
         </member>
-        <member name="T:Service.Controllers.ModuleController">
-            <summary>
-            This class return the list of modules and their
-            name and uuid information.
-            </summary>
-            <seealso cref="T:Microsoft.AspNetCore.Mvc.ControllerBase" />
-        </member>
-        <member name="M:Service.Controllers.ModuleController.#ctor(Business.RequestHandlers.Interfaces.IModuleManager,Microsoft.Extensions.Logging.ILogger{Service.Controllers.ModuleController})">
-            <summary>
-            Initializes a new instance of the <see cref="T:Service.Controllers.ModuleController"/> class.
-            </summary>
-            <param name="manager">The manager.</param>
-            <param name="logger">The logger.</param>
-        </member>
-        <member name="M:Service.Controllers.ModuleController.GetAllModules(System.String,System.String)">
-            <summary>
-            Gets all modules.
-            </summary>
-            <param name="firmwareVersion">firmware version or tag in github.</param>
-            <param name="deviceType">device type e.g. M3, M7.</param>
-            <returns><see cref="T:System.Collections.Generic.IEnumerable`1"/> representing the result of the operation.</returns>
-        </member>
         <member name="T:Service.Program">
             <summary>
               Entry point of the application.

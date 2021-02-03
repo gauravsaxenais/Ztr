@@ -10,7 +10,7 @@
         private readonly ConvertConfig _config;
         private readonly IJsonConverter _parser;
         private readonly IHTMLConverter _htmlParser;
-        private readonly IBuilder<IDictionary<string, object>> _builder;
+        private readonly IBuilder<ITree> _builder;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConverterService"/> class.
@@ -19,7 +19,7 @@
         /// <param name="htmlParser">The HTML parser.</param>
         /// <param name="builder">The builder.</param>
         /// <param name="config">The configuration.</param>
-        public ConverterService(IJsonConverter parser, IHTMLConverter htmlParser, IBuilder<IDictionary<string, object>> builder, ConvertConfig config)
+        public ConverterService(IJsonConverter parser, IHTMLConverter htmlParser, IBuilder<ITree> builder, ConvertConfig config)
         {
             _config = config;
             _parser = parser;
@@ -67,7 +67,7 @@
         }
 
         private string GenerateToml(string jsonContent, ValueScheme scheme)
-        {
+        {          
             var dictionary = _parser.ToConverted(jsonContent);
             var contents = _builder.ToTOML(dictionary, scheme);
 

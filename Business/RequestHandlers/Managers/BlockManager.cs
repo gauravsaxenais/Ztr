@@ -76,9 +76,6 @@
         /// <returns></returns>
         public async Task<List<BlockJsonModel>> GetBlocksFromFileAsync(string configTomlFileContent)
         {
-            // clone repo here.
-            await _blockServiceManager.CloneGitRepoAsync().ConfigureAwait(false);
-
             var blocks = await GetBlocksAsync(configTomlFileContent);
 
             return blocks;

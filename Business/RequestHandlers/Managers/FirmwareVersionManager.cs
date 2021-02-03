@@ -50,7 +50,7 @@
             _firmwareVersionServiceManager.SetGitRepoUrl(gitUrl);
 
             // clone git repository.
-            await _firmwareVersionServiceManager.CloneGitHubRepoAsync().ConfigureAwait(false);
+            await _firmwareVersionServiceManager.CloneGitRepoAsync().ConfigureAwait(false);
             var listFirmwareVersions = await _firmwareVersionServiceManager.GetAllFirmwareVersionsAsync()
                 .ConfigureAwait(false);
 

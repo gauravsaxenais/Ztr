@@ -69,7 +69,7 @@
         {
             var json = await _defaultmanager.GetDefaultValuesAllModulesAsync("1.0.38", "M7");
             var toml = await _manager.CreateFromHtmlAsync(htmlFile, json);
-            var result = await _creator.GenerateConfigTomlModelAsync(toml);
+            var result = await _creator.GenerateConfigTomlModelWithoutGitAsync(toml);
 
             return Ok(result);
         }

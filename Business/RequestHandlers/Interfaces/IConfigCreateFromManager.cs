@@ -22,5 +22,12 @@
         /// <param name="configTomlFileContent">The firmware version.</param>
         /// <returns></returns>
         Task<object> GenerateConfigTomlModelAsync(string configTomlFileContent);
+
+        /// <summary>
+        /// Generates the configuration toml model without git asynchronous.
+        /// </summary>
+        /// <param name="configTomlFileContent">Content of the configuration toml file.</param>
+        /// <returns></returns>
+        Task<object> GenerateConfigTomlModelWithoutGitAsync(string configTomlFileContent);
     }
 }

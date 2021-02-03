@@ -71,7 +71,7 @@
 
             _logger.LogInformation($"{Prefix}: methodName: {nameof(GetDefaultValuesAllModulesAsync)} Cloning git repository for {firmwareVersion} and {deviceType}.");
             // Clone repository here.
-            await _moduleServiceManager.CloneGitHubRepoAsync().ConfigureAwait(false);
+            await _moduleServiceManager.CloneGitRepoAsync().ConfigureAwait(false);
 
             // read default values from toml file defaults.toml
             var defaultValueFromTomlFile =

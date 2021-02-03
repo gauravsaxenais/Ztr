@@ -1,7 +1,6 @@
 ﻿namespace Business.GitRepository.Interfaces
 {
     using Business.Common.Models;
-    using Common.Configuration;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
@@ -41,15 +40,9 @@
         string GetProtoFiles(ModuleReadModel module);
 
         /// <summary>
-        /// Sets the git repo connection.
-        /// </summary>
-        /// <param name="moduleGitConnectionOptions">The module git connection options.</param>
-        void SetGitRepoConnection(ModuleBlockGitConnectionOptions moduleGitConnectionOptions);
-
-        /// <summary>
         /// Clones the git hub repo asynchronous.
         /// </summary>
         /// <returns></returns>
-        Task CloneGitHubRepoAsync();
+        Task CloneGitRepoAsync();
     }
 }

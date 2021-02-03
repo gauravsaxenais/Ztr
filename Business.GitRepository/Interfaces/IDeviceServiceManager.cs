@@ -8,11 +8,7 @@
     /// </summary>
     public interface IDeviceServiceManager
     {
-        /// <summary>
-        /// Clones the git hub repo asynchronous.
-        /// </summary>
-        /// <returns></returns>
-        Task CloneGitHubRepoAsync();
+        Task CloneGitRepoAsync();
 
         /// <summary>
         /// Gets all devices asynchronous.

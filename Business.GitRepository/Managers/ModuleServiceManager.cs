@@ -13,7 +13,7 @@
     using System.Threading.Tasks;
     using ZTR.Framework.Business;
     using ZTR.Framework.Business.File.FileReaders;
-    using ZTR.Framework.Business.Models;
+    using ZTR.Framework.Configuration;
 
     /// <summary>
     /// Wrapper for GitRepoManager.
@@ -22,11 +22,9 @@
     /// <seealso cref="IModuleServiceManager" />
     /// <seealso cref="Manager" />
     /// <seealso cref="IModuleServiceManager" />
-    public class ModuleServiceManager : Manager, IModuleServiceManager, IServiceManager
+    public class ModuleServiceManager : ServiceManager, IModuleServiceManager
     {
         private readonly string protoFileName = "module.proto";
-        private readonly IGitRepositoryManager _gitRepoManager;
-        private readonly ModuleBlockGitConnectionOptions _moduleGitConnectionOptions;
         private readonly ILogger<ModuleServiceManager> _logger;
         private const string Prefix = nameof(ModuleServiceManager);
 
@@ -36,38 +34,11 @@
         /// <param name="logger">The logger.</param>
         /// <param name="moduleGitConnectionOptions">The module git connection options.</param>
         /// <param name="gitRepoManager">The git repo manager.</param>
-        public ModuleServiceManager(ILogger<ModuleServiceManager> logger, ModuleBlockGitConnectionOptions moduleGitConnectionOptions, IGitRepositoryManager gitRepoManager) : base(logger)
+        public ModuleServiceManager(ILogger<ModuleServiceManager> logger, ModuleBlockGitConnectionOptions moduleGitConnectionOptions, IGitRepositoryManager gitRepoManager) : base(logger, moduleGitConnectionOptions, gitRepoManager)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
-            EnsureArg.IsNotNull(gitRepoManager, nameof(gitRepoManager));
-            EnsureArg.IsNotNull(moduleGitConnectionOptions, nameof(moduleGitConnectionOptions));
-
+            
             _logger = logger;
-            _gitRepoManager = gitRepoManager;
-            _moduleGitConnectionOptions = moduleGitConnectionOptions;
-
-            SetGitRepoConnection(_moduleGitConnectionOptions);
-        }
-
-        /// <summary>
-        /// Sets the git repo connection.
-        /// </summary>
-        /// <param name="moduleGitConnectionOptions">The module git connection options.</param>
-        /// <exception cref="CustomArgumentException">Current directory path is not valid.</exception>
-        public void SetGitRepoConnection(ModuleBlockGitConnectionOptions moduleGitConnectionOptions)
-        {
-            var currentDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-
-            if (currentDirectory == null)
-            {
-                throw new CustomArgumentException("Current directory path is not valid.");
-            }
-
-            _moduleGitConnectionOptions.GitLocalFolder = Path.Combine(currentDirectory, _moduleGitConnectionOptions.GitLocalFolder);
-            _moduleGitConnectionOptions.DefaultTomlConfiguration.DeviceFolder = Path.Combine(_moduleGitConnectionOptions.GitLocalFolder, _moduleGitConnectionOptions.DefaultTomlConfiguration.DeviceFolder);
-            _moduleGitConnectionOptions.ModulesConfig = Path.Combine(currentDirectory, _moduleGitConnectionOptions.GitLocalFolder, _moduleGitConnectionOptions.ModulesConfig);
-
-            _gitRepoManager.SetConnectionOptions(moduleGitConnectionOptions);
         }
 
         /// <summary>
@@ -78,9 +49,9 @@
         /// <returns></returns>
         public async Task<List<ModuleReadModel>> GetAllModulesAsync(string firmwareVersion, string deviceType)
         {
-            string moduleFilePath = _moduleGitConnectionOptions.ModulesConfig;
-            string deviceTomlFilePath = _moduleGitConnectionOptions.DefaultTomlConfiguration.DeviceTomlFile;
-            string metaTomlFilePath = _moduleGitConnectionOptions.MetaToml;
+            string moduleFilePath = ((ModuleBlockGitConnectionOptions)ConnectionOptions).ModulesConfig;
+            string deviceTomlFilePath = ((ModuleBlockGitConnectionOptions)ConnectionOptions).DefaultTomlConfiguration.DeviceTomlFile;
+            string metaTomlFilePath = ((ModuleBlockGitConnectionOptions)ConnectionOptions).MetaToml;
 
             _logger.LogInformation($"{Prefix}: method name: {nameof(GetAllModulesAsync)} Getting list of all modules {firmwareVersion} {deviceType}.");
             var listOfModules = await GetListOfModulesAsync(firmwareVersion, deviceType, deviceTomlFilePath).ConfigureAwait(false);
@@ -104,7 +75,7 @@
         /// <returns></returns>
         public async Task<List<string>> GetTagsEarlierThanThisTagAsync(string firmwareVersion)
         {
-            var listOfTags = await _gitRepoManager.GetTagsEarlierThanThisTagAsync(firmwareVersion).ConfigureAwait(false);
+            var listOfTags = await RepoManager.GetTagsEarlierThanThisTagAsync(firmwareVersion).ConfigureAwait(false);
 
             return listOfTags;
         }
@@ -118,7 +89,7 @@
         public async Task<string> GetDefaultTomlFileContentAsync(string firmwareVersion, string deviceType)
         {
             _logger.LogInformation($"{Prefix} method name: {nameof(GetDefaultTomlFileContentAsync)}: Getting default value from toml file for {firmwareVersion}, {deviceType}.");
-            var defaultPath = _moduleGitConnectionOptions.DefaultTomlConfiguration.DefaultTomlFile;
+            var defaultPath = ((ModuleBlockGitConnectionOptions)ConnectionOptions).DefaultTomlConfiguration.DefaultTomlFile;
             var defaultValueFromTomlFile = await GetFileContentFromPath(firmwareVersion, deviceType, defaultPath).ConfigureAwait(false);
 
             return defaultValueFromTomlFile;
@@ -127,11 +98,9 @@
         /// <summary>
         /// Clones the git hub repo asynchronous.
         /// </summary>
-        public async Task CloneGitHubRepoAsync()
+        public async Task CloneGitRepoAsync()
         {
-            _logger.LogInformation($"{Prefix}: Cloning github repository.");
-            await _gitRepoManager.CloneRepositoryAsync().ConfigureAwait(false);
-            _logger.LogInformation($"{Prefix}: Github repository cloning is successful.");
+            await CloneGitHubRepoAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -143,7 +112,7 @@
         {
             EnsureArg.IsNotNull(module);
 
-            string moduleFilePath = _moduleGitConnectionOptions.ModulesConfig;
+            string moduleFilePath = ((ModuleBlockGitConnectionOptions)ConnectionOptions).ModulesConfig;
             var moduleFolder = FileReaderExtensions.GetSubDirectoryPath(moduleFilePath, module.Name);
 
             if (string.IsNullOrWhiteSpace(moduleFolder))
@@ -242,7 +211,7 @@
 
         private async Task<string> GetFileContentFromPath(string firmwareVersion, string deviceType, string path)
         {
-            var listOfFiles = await _gitRepoManager
+            var listOfFiles = await RepoManager
                 .GetFileDataFromTagAsync(firmwareVersion, path)
                 .ConfigureAwait(false);
 
@@ -257,6 +226,13 @@
             }
 
             return fileContent;
+        }
+
+        protected override void SetupDependencies(GitConnectionOptions connectionOptions)
+        {
+            var moduleGitConnectionOptions = (ModuleBlockGitConnectionOptions)connectionOptions;
+            moduleGitConnectionOptions.DefaultTomlConfiguration.DeviceFolder = Path.Combine(AppPath, moduleGitConnectionOptions.GitLocalFolder, moduleGitConnectionOptions.DefaultTomlConfiguration.DeviceFolder);
+            moduleGitConnectionOptions.ModulesConfig = Path.Combine(AppPath, moduleGitConnectionOptions.GitLocalFolder, moduleGitConnectionOptions.ModulesConfig);
         }
     }
 }

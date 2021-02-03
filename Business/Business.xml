@@ -209,6 +209,13 @@
             <param name="configTomlFileContent">The firmware version.</param>
             <returns></returns>
         </member>
+        <member name="M:Business.RequestHandlers.Interfaces.IConfigCreateFromManager.GenerateConfigTomlModelWithoutGitAsync(System.String)">
+            <summary>
+            Generates the configuration toml model without git asynchronous.
+            </summary>
+            <param name="configTomlFileContent">Content of the configuration toml file.</param>
+            <returns></returns>
+        </member>
         <member name="T:Business.RequestHandlers.Interfaces.IConfigManager">
             <summary>
             Config Generator interface methods.
@@ -284,19 +291,6 @@
             <summary>
             Gets all firmware versions asynchronous.
             </summary>
-            <param name="deviceType">Type of the device.</param>
-            <returns></returns>
-        </member>
-        <member name="T:Business.RequestHandlers.Interfaces.IModuleManager">
-            <summary>
-            get list of all the modules, their name and uuid information.
-            </summary>
-        </member>
-        <member name="M:Business.RequestHandlers.Interfaces.IModuleManager.GetAllModulesAsync(System.String,System.String)">
-            <summary>
-            Gets all modules asynchronous.
-            </summary>
-            <param name="firmwareVersion">The firmware version.</param>
             <param name="deviceType">Type of the device.</param>
             <returns></returns>
         </member>
@@ -408,6 +402,13 @@
             Returns the list of all modules and blocks from config.toml.
             </summary>
             <param name="configTomlFile">config.toml as string.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.RequestHandlers.Managers.ConfigCreateFromManager.GenerateConfigTomlModelWithoutGitAsync(System.String)">
+            <summary>
+            Returns the list of all modules and blocks from config.toml.
+            </summary>
+            <param name="configTomlFileContent">config.toml as string.</param>
             <returns></returns>
         </member>
         <member name="M:Business.RequestHandlers.Managers.ConfigCreateFromManager.GenerateConfigTomlModelAsync(System.String)">
@@ -556,28 +557,6 @@
             <summary>
             Gets all firmware versions asynchronous.
             </summary>
-            <returns></returns>
-        </member>
-        <member name="T:Business.RequestHandlers.Managers.ModuleManager">
-            <summary>
-            Returns list of all the modules.
-            </summary>
-            <seealso cref="T:ZTR.Framework.Business.Manager" />
-            <seealso cref="T:Business.RequestHandlers.Interfaces.IModuleManager" />
-        </member>
-        <member name="M:Business.RequestHandlers.Managers.ModuleManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.ModuleManager},Business.GitRepository.Interfaces.IModuleServiceManager)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.ModuleManager"/> class.
-            </summary>
-            <param name="logger">The logger.</param>
-            <param name="moduleServiceManager">The module service manager.</param>
-        </member>
-        <member name="M:Business.RequestHandlers.Managers.ModuleManager.GetAllModulesAsync(System.String,System.String)">
-            <summary>
-            Gets all modules asynchronous.
-            </summary>
-            <param name="firmwareVersion">The firmware version.</param>
-            <param name="deviceType">Type of the device.</param>
             <returns></returns>
         </member>
     </members>
