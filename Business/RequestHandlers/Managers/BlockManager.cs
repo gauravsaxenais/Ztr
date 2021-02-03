@@ -77,7 +77,6 @@
         public async Task<List<BlockJsonModel>> GetBlocksFromFileAsync(string configTomlFileContent)
         {
             var blocks = await GetBlocksAsync(configTomlFileContent);
-
             return blocks;
         }
 
