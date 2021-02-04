@@ -90,6 +90,7 @@
             <summary>
             Initializes a new instance of the <see cref="T:Service.Controllers.ConfigController"/> class.
             </summary>
+            <param name="defaultmanager">The defaultmanager.</param>
             <param name="creator">The creator.</param>
             <param name="manager">The manager.</param>
             <param name="logger">The logger.</param>
@@ -101,11 +102,13 @@
             <param name="json">The json.</param>
             <returns></returns>
         </member>
-        <member name="M:Service.Controllers.ConfigController.CreateFromHtml(Microsoft.AspNetCore.Http.IFormFile)">
+        <member name="M:Service.Controllers.ConfigController.CreateFromHtml(Microsoft.AspNetCore.Http.IFormFile,System.String,System.String)">
             <summary>
             Creates from HTML.
             </summary>
-            <param name="htmlFile">The html file.</param>
+            <param name="htmlFile">The HTML file.</param>
+            <param name="deviceType">Type of the device.</param>
+            <param name="firmwareVersion">The firmware version.</param>
             <returns></returns>
         </member>
         <member name="T:Service.Controllers.ConfigCreateFromController">

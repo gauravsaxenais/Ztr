@@ -68,17 +68,27 @@
             {
                 try
                 {
-                    if (IsExistsContentRepositoryDirectory())
+                    // clone only when there is a change.
+                    var isNotChanged = IsGitRepoUnChanged();
+                    
+                    if (isNotChanged)
                     {
-                        DeleteReadOnlyDirectory(_gitConnection.GitLocalFolder);
+                        _repository = new Repository(_gitConnection.GitLocalFolder);
                     }
+                    else
+                    {
+                        if (IsExistsContentRepositoryDirectory())
+                        {
+                            DeleteReadOnlyDirectory(_gitConnection.GitLocalFolder);
+                        }
 
-                    Directory.CreateDirectory(_gitConnection.GitLocalFolder);
+                        Directory.CreateDirectory(_gitConnection.GitLocalFolder);
 
-                    Repository.Clone(_gitConnection.GitRemoteLocation, _gitConnection.GitLocalFolder,
-                        _cloneOptions);
+                        Repository.Clone(_gitConnection.GitRemoteLocation, _gitConnection.GitLocalFolder,
+                            _cloneOptions);
 
-                    _repository = new Repository(_gitConnection.GitLocalFolder);
+                        _repository = new Repository(_gitConnection.GitLocalFolder);
+                    }
                 }
                 catch (LibGit2SharpException ex)
                 {
@@ -206,6 +216,24 @@
         #endregion
 
         #region Private methods
+
+        private bool IsGitRepoUnChanged()
+        {
+            var hasChanged = false;
+            if(IsExistsContentRepositoryDirectory())
+            {
+                using (var repo = new Repository(_gitConnection.GitLocalFolder))
+                {
+                    Branch master = repo.Branches["master"];
+                    if(master.IsTracking && master.TrackingDetails != null)
+                    {
+                        hasChanged = master.TrackingDetails.AheadBy == 0 && master.TrackingDetails.BehindBy == 0;
+                    }
+                }
+            }
+
+            return hasChanged;
+        }
 
         private void GetContentOfFiles(IRepository repo, Tree tree, ICollection<ExportFileResultModel> contentFromFiles)
         {

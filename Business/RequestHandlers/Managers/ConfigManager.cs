@@ -50,6 +50,7 @@
         /// Creates from HTML asynchronous.
         /// </summary>
         /// <param name="htmlFile">The HTML file.</param>
+        /// <param name="values">The values.</param>
         /// <returns></returns>
         public async Task<string> CreateFromHtmlAsync(IFormFile htmlFile, IEnumerable<ModuleReadModel> values)
         {
