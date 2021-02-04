@@ -24,11 +24,10 @@
     {
         #region Fields
         private GitConnectionOptions _gitConnection;
-        private CloneOptions _cloneOptions;
         private const string GitFolder = ".git";
         private const string TextMimeType = "text/plain";
         private Repository _repository;
-        private UsernamePasswordCredentials _credentials;
+        private UsernamePasswordCredentials _userNamePasswordCredentials;
         private readonly object _syncRoot = new object();
         #endregion
 
@@ -45,16 +44,11 @@
 
             _gitConnection = gitConnection;
 
-            _credentials = new UsernamePasswordCredentials()
+            _userNamePasswordCredentials = new UsernamePasswordCredentials()
             {
                 Username = gitConnection.UserName,
                 Password = gitConnection.Password
             };
-
-            var credentialsProvider = new CredentialsHandler((url, usernameFromUrl, types) => _credentials);
-
-            _cloneOptions = new CloneOptions() { CredentialsProvider = credentialsProvider };
-            _cloneOptions.CertificateCheck += (certificate, valid, host) => true;
         }
 
         /// <summary>
@@ -69,14 +63,17 @@
                 try
                 {
                     // clone only when there is a change.
-                    var isNotChanged = IsGitRepoUnChanged();
-                    
-                    if (isNotChanged)
+                    if (IsExistsContentRepositoryDirectory())
                     {
-                        _repository = new Repository(_gitConnection.GitLocalFolder);
+                        GetLatestFromRepository();
                     }
                     else
                     {
+                        var credentialsProvider = new CredentialsHandler((url, usernameFromUrl, types) => _userNamePasswordCredentials);
+
+                        var cloneOptions = new CloneOptions() { CredentialsProvider = credentialsProvider };
+                        cloneOptions.CertificateCheck += (certificate, valid, host) => true;
+
                         if (IsExistsContentRepositoryDirectory())
                         {
                             DeleteReadOnlyDirectory(_gitConnection.GitLocalFolder);
@@ -85,7 +82,7 @@
                         Directory.CreateDirectory(_gitConnection.GitLocalFolder);
 
                         Repository.Clone(_gitConnection.GitRemoteLocation, _gitConnection.GitLocalFolder,
-                            _cloneOptions);
+                            cloneOptions);
 
                         _repository = new Repository(_gitConnection.GitLocalFolder);
                     }
@@ -217,22 +214,25 @@
 
         #region Private methods
 
-        private bool IsGitRepoUnChanged()
+        private void GetLatestFromRepository()
         {
-            var hasChanged = false;
-            if(IsExistsContentRepositoryDirectory())
-            {
-                using (var repo = new Repository(_gitConnection.GitLocalFolder))
-                {
-                    Branch master = repo.Branches["master"];
-                    if(master.IsTracking && master.TrackingDetails != null)
-                    {
-                        hasChanged = master.TrackingDetails.AheadBy == 0 && master.TrackingDetails.BehindBy == 0;
-                    }
-                }
-            }
+            _repository = new Repository(_gitConnection.GitLocalFolder);
 
-            return hasChanged;
+            var network = _repository.Network.Remotes.First();
+            var refSpecs = new List<string>() { network.FetchRefSpecs.First().Specification };
+
+            var fetchOptions = new FetchOptions { TagFetchMode = TagFetchMode.All };
+
+            try
+            {
+                fetchOptions.CredentialsProvider += (_url, _user, _cred) => new DefaultCredentials();
+                _repository.Network.Fetch(network.Name, refSpecs, fetchOptions);
+            }
+            catch (Exception)
+            {
+                fetchOptions.CredentialsProvider = (_url, _user, _cred) => _userNamePasswordCredentials;
+                _repository.Network.Fetch(network.Name, refSpecs, fetchOptions);
+            }
         }
 
         private void GetContentOfFiles(IRepository repo, Tree tree, ICollection<ExportFileResultModel> contentFromFiles)

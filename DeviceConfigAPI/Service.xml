@@ -107,8 +107,8 @@
             Creates from HTML.
             </summary>
             <param name="htmlFile">The HTML file.</param>
-            <param name="deviceType">Type of the device.</param>
-            <param name="firmwareVersion">The firmware version.</param>
+            <param name="device">The device.</param>
+            <param name="firmware">The firmware.</param>
             <returns></returns>
         </member>
         <member name="T:Service.Controllers.ConfigCreateFromController">

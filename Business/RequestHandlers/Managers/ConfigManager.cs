@@ -58,6 +58,7 @@
             var model = new ConfigReadModel { Module = JsonConvert.SerializeObject(module), Block = "{}", Version = "{}" };
             var baseToml = await _service.CreateConfigTomlAsync(model, true);
             var html = FileReaderExtensions.ReadAsString(htmlFile);            
+
             return await _service.CreateFromHtmlAsync(html, baseToml);
         }
 
