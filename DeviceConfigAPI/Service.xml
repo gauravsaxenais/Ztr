@@ -90,6 +90,7 @@
             <summary>
             Initializes a new instance of the <see cref="T:Service.Controllers.ConfigController"/> class.
             </summary>
+            <param name="defaultmanager">The defaultmanager.</param>
             <param name="creator">The creator.</param>
             <param name="manager">The manager.</param>
             <param name="logger">The logger.</param>

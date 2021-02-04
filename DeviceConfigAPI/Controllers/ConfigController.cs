@@ -22,9 +22,11 @@
         private readonly ILogger<ConfigController> _logger;
         private readonly IConfigCreateFromManager _creator;
         private readonly IDefaultValueManager _defaultmanager;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigController"/> class.
         /// </summary>
+        /// <param name="defaultmanager">The defaultmanager.</param>
         /// <param name="creator">The creator.</param>
         /// <param name="manager">The manager.</param>
         /// <param name="logger">The logger.</param>
@@ -57,7 +59,9 @@
         /// <summary>
         /// Creates from HTML.
         /// </summary>
-        /// <param name="htmlFile">The html file.</param>
+        /// <param name="htmlFile">The HTML file.</param>
+        /// <param name="deviceType">Type of the device.</param>
+        /// <param name="firmwareVersion">The firmware version.</param>
         /// <returns></returns>
         [HttpPost(nameof(CreateFromHtml))]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status200OK)]
@@ -65,9 +69,9 @@
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateFromHtml([Required]
             [MaxFileSize(1 * 1024 * 1024)]
-            [AllowedExtensions(new[] { ".html" })] IFormFile htmlFile)
+            [AllowedExtensions(new[] { ".html" })] IFormFile htmlFile, string deviceType, string firmwareVersion)
         {
-            var json = await _defaultmanager.GetDefaultValuesAllModulesAsync("1.0.38", "M7");
+            var json = await _defaultmanager.GetDefaultValuesAllModulesAsync(firmwareVersion, deviceType);
             var toml = await _manager.CreateFromHtmlAsync(htmlFile, json);
             var result = await _creator.GenerateConfigTomlModelWithoutGitAsync(toml);
 

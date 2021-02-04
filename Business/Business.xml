@@ -240,6 +240,7 @@
             Creates from HTML asynchronous.
             </summary>
             <param name="htmlFile">The HTML file.</param>
+            <param name="values">The values.</param>
             <returns></returns>
         </member>
         <member name="T:Business.RequestHandlers.Interfaces.IDefaultValueManager">
@@ -465,6 +466,7 @@
             Creates from HTML asynchronous.
             </summary>
             <param name="htmlFile">The HTML file.</param>
+            <param name="values">The values.</param>
             <returns></returns>
         </member>
         <member name="M:Business.RequestHandlers.Managers.ConfigManager.UpdateTomlConfig(System.String)">
