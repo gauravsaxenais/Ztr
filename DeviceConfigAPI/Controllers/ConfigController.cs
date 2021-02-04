@@ -60,8 +60,8 @@
         /// Creates from HTML.
         /// </summary>
         /// <param name="htmlFile">The HTML file.</param>
-        /// <param name="deviceType">Type of the device.</param>
-        /// <param name="firmwareVersion">The firmware version.</param>
+        /// <param name="device">The device.</param>
+        /// <param name="firmware">The firmware.</param>
         /// <returns></returns>
         [HttpPost(nameof(CreateFromHtml))]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status200OK)]
@@ -69,9 +69,9 @@
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateFromHtml([Required]
             [MaxFileSize(1 * 1024 * 1024)]
-            [AllowedExtensions(new[] { ".html" })] IFormFile htmlFile, string deviceType, string firmwareVersion)
+            [AllowedExtensions(new[] { ".html" })] IFormFile htmlFile, string device, string firmware)
         {
-            var json = await _defaultmanager.GetDefaultValuesAllModulesAsync(firmwareVersion, deviceType);
+            var json = await _defaultmanager.GetDefaultValuesAllModulesAsync(firmware, device);
             var toml = await _manager.CreateFromHtmlAsync(htmlFile, json);
             var result = await _creator.GenerateConfigTomlModelWithoutGitAsync(toml);
 
