@@ -130,33 +130,58 @@
             return index == -1 ? input : input.Substring(0, index);
         }
 
+        /// <summary>
+        /// Converts the string representation of a number to an integer.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <returns></returns>
         public static int ToInt(this string input)
         {
             int val;
-            return int.TryParse(input, out val) ? val : 0; 
+            return int.TryParse(input, out val) ? val : 0;
         }
+
+        /// <summary>
+        /// Cleans the HTML.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <returns></returns>
         public static string CleanHTML(this string input)
         {
             return input.RemoveNewline().Replace("&nbsp;", "").Trim();
         }
 
+        /// <summary>
+        /// Converts to hex.
+        /// </summary>
+        /// <param name="str">The string.</param>
+        /// <returns></returns>
         public static string ToHex(this string str)
         {
             return str.ToInt().ToString("X");
-        }        
+        }
+        /// <summary>
+        /// Froms the hexadecimal.
+        /// </summary>
+        /// <param name="hexString">The hexadecimal string.</param>
+        /// <returns></returns>
         public static string FromHex(this string hexString)
         {
-            int result;
-            if (int.TryParse(hexString, NumberStyles.HexNumber, null,out result))
+            if (int.TryParse(hexString, NumberStyles.HexNumber, null, out int result))
             {
                 return result.ToString();
             };
             return hexString;
         }
+        /// <summary>
+        /// Compareses the specified input.
+        /// </summary>
+        /// <param name="str">The string.</param>
+        /// <param name="input">The input.</param>
+        /// <returns></returns>
         public static bool Compares(this string str, string input)
         {
-            return str.ToLower() == input.ToLower() ;
+            return string.Equals(str, input, StringComparison.OrdinalIgnoreCase);
         }
-
     }
 }
