@@ -85,7 +85,8 @@
             var blocksFromGitRepository = await BatchProcessBlockFilesAsync().ConfigureAwait(false);
 
             var dataFromFile = TomlFileReader.ReadDataFromString<ConfigurationReadModel>(configTomlFileContent);
-            dataFromFile.Network.TryGetValue("blocks", out var blocksContent);        
+            dataFromFile.Network.TryGetValue("blocks", out var blocksContent);
+            var blocksFromFile = new List<BlockJsonModel>();
 
             if (blocksContent is Dictionary<string, object>[] dictionaries)
             {
@@ -94,14 +95,15 @@
                     dictionary.TryGetValue("type", out var type);
                     dictionary.TryGetValue("tag", out var tag);
                     dictionary.TryGetValue("args", out var argument);
-                    
+
                     var tempBlock = blocksFromGitRepository.FirstOrDefault(x => x.Type == (string)type);
 
                     if (tempBlock != null)
                     {
-                        tempBlock.Tag = tag == null ? string.Empty : tag.ToString();
+                        var block = (BlockJsonModel)tempBlock.Clone();
+                        block.Tag = tag == null ? string.Empty : tag.ToString();
 
-                        var arguments = tempBlock.Args;
+                        var arguments = block.Args;
                         if (argument is Dictionary<string, object> args)
                         {
                             foreach (var (key, value) in args)
@@ -114,12 +116,22 @@
                                 }
                             }
                         }
+
+                        blocksFromFile.Add(block);
                     }
                 }
             }
 
-            FixIndex(blocksFromGitRepository);
-            return blocksFromGitRepository;
+            foreach (var jsonModel in blocksFromGitRepository)
+            {
+                if (!blocksFromFile.Contains(jsonModel))
+                {
+                    blocksFromFile.Add(jsonModel);
+                }
+            }
+
+            FixIndex(blocksFromFile);
+            return blocksFromFile;
         }
 
         /// <summary>
@@ -253,7 +265,7 @@
         {
             for (var index = 0; index < listOfData.Count(); index++)
             {
-                listOfData[index].Id = index;
+                listOfData.ElementAt(index).Id = index;
             }
         }
 
