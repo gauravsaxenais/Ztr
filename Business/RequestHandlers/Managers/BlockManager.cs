@@ -101,6 +101,7 @@
                     if (tempBlock != null)
                     {
                         var block = (BlockJsonModel)tempBlock.Clone();
+                        block.Tag = tag == null ? string.Empty : tag.ToString();
 
                         var arguments = block.Args;
                         if (argument is Dictionary<string, object> args)
@@ -118,6 +119,14 @@
 
                         blocksFromFile.Add(block);
                     }
+                }
+            }
+
+            foreach (var jsonModel in blocksFromGitRepository)
+            {
+                if (!blocksFromFile.Contains(jsonModel))
+                {
+                    blocksFromFile.Add(jsonModel);
                 }
             }
 
@@ -140,7 +149,7 @@
                 var blockReadModel = Toml.ReadString<BlockReadModel>(data.Value, tomlSettings);
                 var blockFileName = Path.GetFileNameWithoutExtension(data.Key);
 
-                var blockTask = GetBlockAsync(blockReadModel, tag: string.Empty, blockFileName);
+                var blockTask = GetBlockAsync(blockReadModel, blockFileName);
                 var modulesTask = GetModulesAsync(blockReadModel);
 
                 await Task.WhenAll(blockTask, modulesTask);
@@ -183,8 +192,6 @@
                                                         .OrderBy(item => item.Type)
                                                         .ToList();
 
-            FixIndex(blocks);
-
             return blocks;
         }
 
@@ -224,12 +231,11 @@
         /// Gets the block asynchronous.
         /// </summary>
         /// <param name="blockReadModel">The block read model.</param>
-        /// <param name="tag">The tag.</param>
         /// <param name="blockName">Name of the block.</param>
         /// <returns></returns>
-        private async Task<BlockJsonModel> GetBlockAsync(BlockReadModel blockReadModel, string tag, string blockName)
+        private async Task<BlockJsonModel> GetBlockAsync(BlockReadModel blockReadModel, string blockName)
         {
-            var jsonModel = new BlockJsonModel() { Type = blockName, Tag = string.IsNullOrWhiteSpace(tag) ? string.Empty : tag };
+            var jsonModel = new BlockJsonModel() { Type = blockName };
 
             if (blockReadModel?.Arguments != null && blockReadModel.Arguments.Any())
             {
@@ -259,7 +265,7 @@
         {
             for (var index = 0; index < listOfData.Count(); index++)
             {
-                listOfData[index].Id = index;
+                listOfData.ElementAt(index).Id = index;
             }
         }
 

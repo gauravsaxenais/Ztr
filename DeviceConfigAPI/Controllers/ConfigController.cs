@@ -69,7 +69,7 @@
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateFromHtml([Required]
             [MaxFileSize(1 * 1024 * 1024)]
-            [AllowedExtensions(new[] { ".html" })] IFormFile htmlFile, string device, string firmware)
+            [AllowedExtensions(new[] { ".html" })] IFormFile htmlFile, [Required, FromForm] string device, [Required, FromForm] string firmware)
         {
             var json = await _defaultmanager.GetDefaultValuesAllModulesAsync(firmware, device);
             var toml = await _manager.CreateFromHtmlAsync(htmlFile, json);
