@@ -29,15 +29,19 @@
         {
             if (IsValueEmpty(value) && dictionary.ContainsKey(_config.Arrays))
             {
-                value = ((object[])dictionary[_config.Arrays]).ToList().Select(o =>
+                var ary = (object[])dictionary[_config.Arrays];
+                if (ary.Length > 0)
                 {
-                    if (o is object[] v)
+                    value = ary.ToList().Select(o =>
                     {
-                        var res = Convert(v);
-                        return res;
-                    }
-                    return null;
-                }).ToArray();
+                        if (o is object[] v)
+                        {
+                            var res = Convert(v);
+                            return res;
+                        }
+                        return null;
+                    }).ToArray();
+                }
             }
             return value;
         }
