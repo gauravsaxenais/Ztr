@@ -2,7 +2,8 @@
 Steps to host the backend API
 ---------------------------------------------------------------
 
-Run docker build with the dockerfile provided (path: /DeviceConfigAPI/dockerfile) and following the steps below: 
+Run docker build with the dockerfile provided (path: /DeviceConfigAPI/dockerfile) and following the steps below:
+Note: Steps 1-6 are not required for first time.
 
 1. Enter command - docker container ls -a
 2. Enter command - docker stop "m7-prod"
@@ -15,7 +16,8 @@ api                                    prod               2bd6320d3a3d   About a
 <none>                                 <none>            e818098a076a   About an hour ago   1.41GB
 6. Remove image using command - docker image rm -f "api:prod"
 7. Build image using command  - docker build -t api:prod -f DeviceConfigApi/Dockerfile . (there is a . at the end)
-8. Run image using command -    docker run -d -it -p 5000:80/tcp --name m7-prod api:prod
+8. The following command will run app in a container that you can access in your web browser at http://<<VM IP>:5000.
+Run image using command - docker run -d -it -p 5000:80/tcp --name m7-prod api:prod
 
 You should see the following console output as the application starts:
 Hosting environment: Production
