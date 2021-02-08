@@ -75,7 +75,6 @@
         /// </returns>
         public static bool IsNumber(this string input)
         {
-            EnsureArg.IsNotNullOrWhiteSpace(input, nameof(input));
             return decimal.TryParse(input, out _);
         }
 
@@ -86,7 +85,6 @@
         /// <returns></returns>
         public static string RemoveQuotes(this string input)
         {
-            EnsureArg.IsNotNullOrWhiteSpace(input, nameof(input));
             return input.Replace(@"""", string.Empty);
         }
 
