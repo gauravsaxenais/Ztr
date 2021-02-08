@@ -12,8 +12,8 @@ namespace Business.Parsers.Core.Models
         public ConfigMap(string mapping)
         {
             var t = mapping.Replace("map:", string.Empty).RemoveNewline().Split(':');
-            From = t[0];
-            To = t[1];
+            From = t[0]?.Trim();
+            To = t[1].Trim();
         }
         /// <summary>
         /// Gets or sets the module.
