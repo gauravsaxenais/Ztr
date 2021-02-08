@@ -248,13 +248,6 @@
             <param name="configTomlFile">The firmware version.</param>
             <returns></returns>
         </member>
-        <member name="M:Business.RequestHandlers.Interfaces.IConfigCreateFromManager.GenerateConfigTomlModelAsync(System.String)">
-            <summary>
-            Gets the default values all modules asynchronous.
-            </summary>
-            <param name="configTomlFileContent">The firmware version.</param>
-            <returns></returns>
-        </member>
         <member name="M:Business.RequestHandlers.Interfaces.IConfigCreateFromManager.GenerateConfigTomlModelWithoutGitAsync(System.String)">
             <summary>
             Generates the configuration toml model without git asynchronous.
@@ -451,13 +444,6 @@
             <returns></returns>
         </member>
         <member name="M:Business.RequestHandlers.Managers.ConfigCreateFromManager.GenerateConfigTomlModelWithoutGitAsync(System.String)">
-            <summary>
-            Returns the list of all modules and blocks from config.toml.
-            </summary>
-            <param name="configTomlFileContent">config.toml as string.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.RequestHandlers.Managers.ConfigCreateFromManager.GenerateConfigTomlModelAsync(System.String)">
             <summary>
             Returns the list of all modules and blocks from config.toml.
             </summary>

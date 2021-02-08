@@ -76,8 +76,38 @@
         /// <returns></returns>
         public async Task<List<BlockJsonModel>> GetBlocksFromFileAsync(string configTomlFileContent)
         {
-            var blocks = await GetBlocksAsync(configTomlFileContent);
-            return blocks;
+            var dataFromFile = TomlFileReader.ReadDataFromString<ConfigurationReadModel>(configTomlFileContent);
+            dataFromFile.Network.TryGetValue("blocks", out var blocksContent);
+            var blocksFromFile = new List<BlockJsonModel>();
+
+            if (blocksContent is Dictionary<string, object>[] dictionaries)
+            {
+                foreach (var dictionary in dictionaries)
+                {
+                    dictionary.TryGetValue("type", out var type);
+                    dictionary.TryGetValue("tag", out var tag);
+                    dictionary.TryGetValue("args", out var argument);
+
+                    var block = new BlockJsonModel
+                    {
+                        Tag = tag == null ? string.Empty : tag.ToString(),
+                        Type = type == null ? string.Empty : type.ToString()
+                    };
+
+                    if (argument is Dictionary<string, object> args)
+                    {
+                        foreach (var (key, value) in args)
+                        {
+                            block.Args.Add(new NetworkArgumentReadModel { Name = key, Value = (string)value });
+                        }
+                    }
+
+                    blocksFromFile.Add(block);
+                }
+            }
+
+            FixIndex(blocksFromFile);
+            return await Task.FromResult(blocksFromFile);
         }
 
         private async Task<List<BlockJsonModel>> GetBlocksAsync(string configTomlFileContent)
