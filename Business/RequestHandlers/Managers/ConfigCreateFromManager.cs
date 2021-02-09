@@ -54,9 +54,9 @@
         /// <returns></returns>
         public async Task<object> GenerateConfigTomlModelAsync(IFormFile configTomlFile)
         {
-            EnsureArg.IsNotNull(configTomlFile);           
+            EnsureArg.IsNotNull(configTomlFile);
             var configTomlFileContent = FileReaderExtensions.ReadAsString(configTomlFile);
-            return await GenerateConfigTomlModelWithoutGitAsync(configTomlFileContent);
+            return await GenerateConfigTomlModelAsync(configTomlFileContent);
         }
 
         /// <summary>
@@ -73,6 +73,23 @@
             var blocks = await GetBlocksAsync(configTomlFileContent).ConfigureAwait(false);
 
             return new { modules, blocks };
+        }
+
+        /// <summary>
+        /// Returns the list of all modules and blocks from config.toml.
+        /// </summary>
+        /// <param name="configTomlFileContent">config.toml as string.</param>
+        /// <returns></returns>
+        public async Task<object> GenerateConfigTomlModelAsync(string configTomlFileContent)
+        {
+            var prefix = nameof(ConfigCreateFromManager);
+            _logger.LogInformation($"{prefix}: methodName: {nameof(GenerateConfigTomlModelAsync)} Getting list of modules and blocks from config.toml file.");
+
+            // Clone repo here.
+            await _moduleServiceManager.CloneGitRepoAsync().ConfigureAwait(false);
+            var data = await GenerateConfigTomlModelWithoutGitAsync(configTomlFileContent).ConfigureAwait(false);
+
+            return data;
         }
 
         /// <summary>
