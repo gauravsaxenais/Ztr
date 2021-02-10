@@ -6,8 +6,6 @@
     using Configuration;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Rewrite;
-    using Microsoft.Extensions.DependencyInjection;
-    using Security;
     using Swashbuckle.AspNetCore.SwaggerUI;
 
     /// <summary>
@@ -58,23 +56,11 @@
         private static void ConfigureSwaggerUI(this IApplicationBuilder app, Action<SwaggerUIOptions> configureEndPoints, bool isOpenAuth)
         {
             app.UseSwagger();
-            var securityOptions = app.ApplicationServices.GetRequiredService<SecurityOptions>();
             app.UseSwaggerUI(swaggerUIOptions =>
             {
                 configureEndPoints(swaggerUIOptions);
                 swaggerUIOptions.DisplayOperationId();
                 swaggerUIOptions.DocExpansion(DocExpansion.None);
-
-                if (isOpenAuth)
-                {
-                    swaggerUIOptions.OAuthClientId(securityOptions.TokenSecurityOptions.SwaggerClientId);
-
-                    // if dev then the pre-populate the secret. In all other environments require users to enter it
-                    if (ApplicationConfiguration.IsDevelopment)
-                    {
-                        swaggerUIOptions.OAuthClientSecret(securityOptions.TokenSecurityOptions.SwaggerClientSecret.GuidToString());
-                    }
-                }
             });
 
             app.UseRewriter(new RewriteOptions().AddRedirect("^$", "swagger"));

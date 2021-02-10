@@ -40,8 +40,7 @@ namespace Service
                 .DefaultAppConfiguration(
                 new[]
                 {
-                    typeof(ApplicationOptions).Assembly,
-                    typeof(SecurityOptions).Assembly,
+                    typeof(ApplicationOptions).Assembly,                   
                     typeof(ModuleBlockGitConnectionOptions).Assembly,
                     typeof(DeviceGitConnectionOptions).Assembly
                 }, args)
