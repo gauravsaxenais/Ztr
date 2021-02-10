@@ -8,7 +8,6 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Threading;
     using System.Threading.Tasks;
     using ZTR.Framework.Business.File;
     using ZTR.Framework.Business.Models;
@@ -73,11 +72,6 @@
 
                         var cloneOptions = new CloneOptions() { CredentialsProvider = credentialsProvider };
                         cloneOptions.CertificateCheck += (certificate, valid, host) => true;
-
-                        if (IsExistsContentRepositoryDirectory())
-                        {
-                            DeleteReadOnlyDirectory(_gitConnection.GitLocalFolder);
-                        }
 
                         Directory.CreateDirectory(_gitConnection.GitLocalFolder);
 
@@ -323,60 +317,6 @@
         private bool IsGitSubDirPresent(string pathToRep)
         {
             return Directory.Exists(Path.Combine(pathToRep, GitFolder));
-        }
-
-        /// <summary>
-        /// Recursively deletes a directory as well as any subdirectories and files. If the files are read-only, they are flagged as normal and then deleted.
-        /// </summary>
-        /// <param name="directory">The name of the directory to remove.</param>
-        private void DeleteReadOnlyDirectory(string directory)
-        {
-            var directoryInfos = new Stack<DirectoryInfo>();
-            var root = new DirectoryInfo(directory);
-            directoryInfos.Push(root);
-
-            while (directoryInfos.Count > 0)
-            {
-                var fol = directoryInfos.Pop();
-                fol.Attributes &= ~(FileAttributes.Archive | FileAttributes.ReadOnly | FileAttributes.Hidden);
-
-                foreach (var d in fol.GetDirectories())
-                {
-                    directoryInfos.Push(d);
-                }
-
-                foreach (var f in fol.GetFiles())
-                {
-                    f.Attributes &= ~(FileAttributes.Archive | FileAttributes.ReadOnly | FileAttributes.Hidden);
-                    f.Delete();
-                }
-            }
-
-            SafeDeleteDirectory(root.FullName);
-        }
-
-        private void SafeDeleteDirectory(string destinationDirectory)
-        {
-            const int tries = 10;
-            for (var index = 1; index <= tries; index++)
-            {
-                try
-                {
-                    Directory.Delete(destinationDirectory, true);
-                }
-                catch (DirectoryNotFoundException)
-                {
-                    return;
-                }
-                catch (IOException)
-                {
-                    Thread.Sleep(10);
-                    continue;
-                }
-                return;
-            }
-
-            throw new CustomArgumentException($"There is an issue accessing the git repository.");
         }
 
         #endregion

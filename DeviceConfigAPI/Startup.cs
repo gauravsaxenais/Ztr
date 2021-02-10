@@ -29,7 +29,7 @@
         /// <param name="configuration">The configuration.</param>
         public Startup(IConfiguration configuration)
         {
-            this.Configuration = configuration;
+            Configuration = configuration;
         }
 
         /// <summary>

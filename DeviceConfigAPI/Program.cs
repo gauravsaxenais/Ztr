@@ -16,9 +16,6 @@ namespace Service
     /// </summary>
     public class Program
     {
-        private const string JsonFileName = "appsettings.json";
-        private static string _environment = EnvironmentVariable.Development.ToString();
-
         /// <summary>
         /// Defines the entry point of the application.
         /// </summary>
@@ -26,7 +23,6 @@ namespace Service
         public static void Main(string[] args)
         {
             Console.Title = ApiConstants.ApiName;
-            SetEnvironment();
 
             // logging has been added from LoggingExtensions using Serilog.
             // refer to Framework.Configuration -> Extension -> LoggingExtension.
@@ -41,7 +37,6 @@ namespace Service
         public static IHostBuilder CreateHostBuilder(string[] args)
         {
             return Host.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration((hostingContext, configuration) => configuration.AddAppConfiguration(_environment, null))
                 .DefaultAppConfiguration(
                 new[]
                 {
@@ -54,19 +49,6 @@ namespace Service
                 {
                     webBuilder.UseStartup<Startup>();
                 });
-        }
-
-        private static void SetEnvironment()
-        {
-            try
-            {
-                var config = new ConfigurationBuilder().AddJsonFile(JsonFileName, false).Build();
-                _environment = config.GetSection("Environment").Value;
-            }
-            catch (Exception)
-            {
-                _environment = EnvironmentVariable.Development.ToString();
-            }
         }
     }
 }

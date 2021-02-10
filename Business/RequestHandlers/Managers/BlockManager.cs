@@ -64,7 +64,7 @@
             var defaultValueFromTomlFile =
                 await _blockServiceManager.GetDefaultTomlFileContentAsync(firmwareVersion, deviceType).ConfigureAwait(false);
 
-            var blocks = await GetBlocksAsync(defaultValueFromTomlFile).ConfigureAwait(false);
+            var blocks = await GetBlocksAsync(defaultValueFromTomlFile, false).ConfigureAwait(false);
 
             return new { blocks };
         }
@@ -76,41 +76,10 @@
         /// <returns></returns>
         public async Task<List<BlockJsonModel>> GetBlocksFromFileAsync(string configTomlFileContent)
         {
-            var dataFromFile = TomlFileReader.ReadDataFromString<ConfigurationReadModel>(configTomlFileContent);
-            dataFromFile.Network.TryGetValue("blocks", out var blocksContent);
-            var blocksFromFile = new List<BlockJsonModel>();
-
-            if (blocksContent is Dictionary<string, object>[] dictionaries)
-            {
-                foreach (var dictionary in dictionaries)
-                {
-                    dictionary.TryGetValue("type", out var type);
-                    dictionary.TryGetValue("tag", out var tag);
-                    dictionary.TryGetValue("args", out var argument);
-
-                    var block = new BlockJsonModel
-                    {
-                        Tag = tag == null ? string.Empty : tag.ToString(),
-                        Type = type == null ? string.Empty : type.ToString()
-                    };
-
-                    if (argument is Dictionary<string, object> args)
-                    {
-                        foreach (var (key, value) in args)
-                        {
-                            block.Args.Add(new NetworkArgumentReadModel { Name = key, Value = (string)value });
-                        }
-                    }
-
-                    blocksFromFile.Add(block);
-                }
-            }
-
-            FixIndex(blocksFromFile);
-            return await Task.FromResult(blocksFromFile);
+            return await GetBlocksAsync(configTomlFileContent, true);
         }
 
-        private async Task<List<BlockJsonModel>> GetBlocksAsync(string configTomlFileContent)
+        private async Task<List<BlockJsonModel>> GetBlocksAsync(string configTomlFileContent, bool addonlyConfigTomlBlocks)
         {
             var blocksFromGitRepository = await BatchProcessBlockFilesAsync().ConfigureAwait(false);
 
@@ -152,11 +121,14 @@
                 }
             }
 
-            foreach (var jsonModel in blocksFromGitRepository)
+            if (!addonlyConfigTomlBlocks)
             {
-                if (!blocksFromFile.Contains(jsonModel))
+                foreach (var jsonModel in blocksFromGitRepository)
                 {
-                    blocksFromFile.Add(jsonModel);
+                    if (!blocksFromFile.Contains(jsonModel))
+                    {
+                        blocksFromFile.Add(jsonModel);
+                    }
                 }
             }
 
