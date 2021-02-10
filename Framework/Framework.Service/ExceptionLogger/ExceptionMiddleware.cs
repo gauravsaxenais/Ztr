@@ -1,13 +1,8 @@
 ﻿namespace ZTR.Framework.Service.ExceptionLogger
 {
     using System;
-    using System.Diagnostics;
-    using System.Linq;
     using System.Threading.Tasks;
-    using ContentTypes;
-    using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
     using Service;
@@ -19,6 +14,12 @@
         private readonly IHostEnvironment _hostingEnvironment;
         private readonly ILogger<ExceptionMiddleware> _logger;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExceptionMiddleware"/> class.
+        /// </summary>
+        /// <param name="requestDelegate">The request delegate.</param>
+        /// <param name="hostingEnvironment">The hosting environment.</param>
+        /// <param name="logger">The logger.</param>
         public ExceptionMiddleware(RequestDelegate requestDelegate, IHostEnvironment hostingEnvironment, ILogger<ExceptionMiddleware> logger)
         {
             _requestDelegate = requestDelegate;
@@ -26,6 +27,10 @@
             _logger = logger;
         }
 
+        /// <summary>
+        /// Invokes the asynchronous.
+        /// </summary>
+        /// <param name="httpContext">The HTTP context.</param>
         public async Task InvokeAsync(HttpContext httpContext)
         {
             try
@@ -60,7 +65,5 @@
 
             await WriteResponse(context, exceptionResponse, response);
         }
-
-
     }
 }

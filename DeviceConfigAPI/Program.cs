@@ -7,8 +7,6 @@ namespace Service
     using Microsoft.Extensions.Hosting;
     using System;
     using ZTR.Framework.Configuration;
-    using ZTR.Framework.Configuration.Builder.Extension;
-    using ZTR.Framework.Security;
     using ZTR.Framework.Service;
 
     /// <summary>
@@ -16,6 +14,8 @@ namespace Service
     /// </summary>
     public class Program
     {
+        private const string JsonFileName = "appsettings.json";
+
         /// <summary>
         /// Defines the entry point of the application.
         /// </summary>
@@ -23,6 +23,7 @@ namespace Service
         public static void Main(string[] args)
         {
             Console.Title = ApiConstants.ApiName;
+            SetEnvironment();
 
             // logging has been added from LoggingExtensions using Serilog.
             // refer to Framework.Configuration -> Extension -> LoggingExtension.
@@ -40,7 +41,7 @@ namespace Service
                 .DefaultAppConfiguration(
                 new[]
                 {
-                    typeof(ApplicationOptions).Assembly,                   
+                    typeof(ApplicationOptions).Assembly,
                     typeof(ModuleBlockGitConnectionOptions).Assembly,
                     typeof(DeviceGitConnectionOptions).Assembly
                 }, args)
@@ -48,6 +49,20 @@ namespace Service
                 {
                     webBuilder.UseStartup<Startup>();
                 });
+        }
+
+        private static void SetEnvironment()
+        {
+            try
+            {
+                var config = new ConfigurationBuilder().AddJsonFile(JsonFileName, false).Build();
+                var _environment = config.GetSection("Environment").Value;
+                Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", _environment);
+            }
+            catch (Exception)
+            {
+                Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", Environments.Production);
+            }
         }
     }
 }

@@ -96,23 +96,19 @@
         private bool HasGeneratedCSharpFile(string outputFolder, string protoFilePath, params string[] args)
         {
             string protocPath = GetProtoCompilerPath();
-
             string protoFileName = Path.GetFileName(protoFilePath);
             string protoFolder = Path.GetDirectoryName(protoFilePath);
-
             string arguments = $" --proto_path={protoFolder} --csharp_out={outputFolder} --error_format=gcc {protoFileName} {string.Join(" ", args)}";
 
             Monitor.Enter(LockObject);
             try
             {
                 _logger.LogInformation($"Inside method: {nameof(HasGeneratedCSharpFile)}. Now generating cs file.");
-
                 using (var process = new ProcessExecutor(protocPath))
                 {
                     process.Run(arguments);
                     process.Wait();
                 }
-
                 _logger.LogInformation($"Inside method: {nameof(HasGeneratedCSharpFile)}. cs file generated successfully.");
             }
             catch (Exception ex)
@@ -203,6 +199,13 @@
                 .IsAssignableFrom(objectType);
         }
 
+        /// <summary>
+        /// Generates the DLL from cs file asynchronous.
+        /// </summary>
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="outputFolderPath">The output folder path.</param>
+        /// <returns></returns>
+        /// <exception cref="ApplicationException">Error in compiling cs file to dll. " + fileName</exception>
         private async Task<string> GenerateDllFromCsFileAsync(string fileName, string outputFolderPath)
         {
             _logger.LogInformation($"Inside method: {nameof(GenerateDllFromCsFileAsync)}. Generating dll for {fileName} and outputFolder: {outputFolderPath}");

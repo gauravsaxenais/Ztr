@@ -27,7 +27,8 @@ FROM build AS publish
 RUN dotnet publish "Service.csproj" -c Release -o /app/publish
 
 FROM base AS final
-ENV ASPNETCORE_ENVIRONMENT "Development"
 WORKDIR /app
+RUN mkdir Temp
+RUN chmod -R 777 /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Service.dll"]
