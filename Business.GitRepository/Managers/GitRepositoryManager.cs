@@ -56,7 +56,7 @@
         /// </summary>
         /// <exception cref="Exception">
         /// </exception>/
-        public async Task CloneRepositoryAsync()
+        public async Task InitRepositoryAsync()
         {
             lock (_syncRoot)
             {
@@ -67,28 +67,15 @@
                 }
                 else
                 {
-                    //RemoteCertificateValidationCallback certificateValidationCallback = (sender, certificate, chain, errors) => { return true; };
-                    //ServicePointManager.ServerCertificateValidationCallback = certificateValidationCallback;
-                    //GlobalSettings.RegisterSmartSubtransport<MockSmartSubtransport>("https");
-
-                    Directory.CreateDirectory(_gitConnection.GitLocalFolder);
-                    var cloneOptions = new CloneOptions();
-                    cloneOptions.CertificateCheck += (certificate, valid, host) => true;
                     try
                     {
-                        cloneOptions.CredentialsProvider += (_url, _user, _cred) => new DefaultCredentials();
-                        Repository.Clone(_gitConnection.GitRemoteLocation, _gitConnection.GitLocalFolder,
-                        cloneOptions);
+                        Directory.CreateDirectory(_gitConnection.GitLocalFolder);
+                        CloneRepository();
                     }
-                    catch (LibGit2SharpException)
+                    catch (Exception)
                     {
-                        cloneOptions.CredentialsProvider = (_url, _user, _cred) => _userNamePasswordCredentials;
-                        Repository.Clone(_gitConnection.GitRemoteLocation, _gitConnection.GitLocalFolder,
-                        cloneOptions);
+                        CloneRepositoryWithoutHttps();
                     }
-
-                    _repository = new Repository(_gitConnection.GitLocalFolder);
-                    //ServicePointManager.ServerCertificateValidationCallback -= certificateValidationCallback;
                 }
             }
 
@@ -146,7 +133,7 @@
 
                 if (!IsExistsContentRepositoryDirectory())
                 {
-                    await CloneRepositoryAsync().ConfigureAwait(false);
+                    await InitRepositoryAsync().ConfigureAwait(false);
                 }
 
                 _repository = new Repository(_gitConnection.GitLocalFolder);
@@ -203,6 +190,39 @@
         #endregion
 
         #region Private methods
+
+        private void CloneRepository()
+        {
+            var cloneOptions = new CloneOptions();
+            cloneOptions.CertificateCheck += (certificate, valid, host) => true;
+
+            cloneOptions.CredentialsProvider = (_url, _user, _cred) => new DefaultCredentials();
+            cloneOptions.CredentialsProvider += (_url, _user, _cred) => _userNamePasswordCredentials;
+            Repository.Clone(_gitConnection.GitRemoteLocation, _gitConnection.GitLocalFolder,
+            cloneOptions);
+
+            _repository = new Repository(_gitConnection.GitLocalFolder);
+        }
+
+        private void CloneRepositoryWithoutHttps()
+        {
+            SmartSubtransportRegistration<MockSmartSubtransport> registration = null;
+            RemoteCertificateValidationCallback certificateValidationCallback = (sender, certificate, chain, errors) => { return true; };
+
+            try
+            {
+                ServicePointManager.ServerCertificateValidationCallback = certificateValidationCallback;
+                registration = GlobalSettings.RegisterSmartSubtransport<MockSmartSubtransport>("https");
+
+                CloneRepository();
+            }
+            finally
+            {
+                GlobalSettings.UnregisterSmartSubtransport(registration);
+                ServicePointManager.ServerCertificateValidationCallback -= certificateValidationCallback;
+            }
+        }
+
         private void GetLatestFromRepository()
         {
             _repository = new Repository(_gitConnection.GitLocalFolder);
@@ -349,9 +369,9 @@
 
             private class MockSmartSubtransportStream : SmartSubtransportStream
             {
-                private static int MAX_REDIRECTS = 5;
+                private readonly static int MAX_REDIRECTS = 5;
 
-                private MemoryStream postBuffer = new MemoryStream();
+                private readonly MemoryStream postBuffer = new MemoryStream();
                 private Stream responseStream;
 
                 public MockSmartSubtransportStream(MockSmartSubtransport parent, string endpointUrl, bool isPost, string contentType)
@@ -380,6 +400,15 @@
                     set;
                 }
 
+                /// <summary>
+                /// Writes the content of a given stream to the transport.
+                /// </summary>
+                /// <param name="dataStream">The stream with the data to write to the transport.</param>
+                /// <param name="length">The number of bytes to read from <paramref name="dataStream" />.</param>
+                /// <returns>
+                /// The error code to propagate back to the native code that requested this operation. 0 is expected, and exceptions may be thrown.
+                /// </returns>
+                /// <exception cref="EndOfStreamException">Could not write buffer (short read)</exception>
                 public override int Write(Stream dataStream, long length)
                 {
                     byte[] buffer = new byte[4096];
@@ -458,7 +487,13 @@
 
                     return response;
                 }
-
+                /// <summary>
+                /// Reads the specified data stream.
+                /// </summary>
+                /// <param name="dataStream">The data stream.</param>
+                /// <param name="length">The length.</param>
+                /// <param name="readTotal">The read total.</param>
+                /// <returns></returns>
                 public override int Read(Stream dataStream, long length, out long readTotal)
                 {
                     byte[] buffer = new byte[4096];

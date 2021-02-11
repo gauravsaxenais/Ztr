@@ -43,7 +43,7 @@
         protected async Task CloneGitHubRepoAsync()
         {
             _logger.LogInformation($"Cloning github repository.");
-            await RepoManager.CloneRepositoryAsync().ConfigureAwait(false);
+            await RepoManager.InitRepositoryAsync().ConfigureAwait(false);
             _logger.LogInformation($"Github repository cloning is successful.");
         }
 

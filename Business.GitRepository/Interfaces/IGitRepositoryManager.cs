@@ -20,7 +20,7 @@
         /// Clones the repository asynchronous.
         /// </summary>
         /// <returns></returns>
-        Task CloneRepositoryAsync();
+        Task InitRepositoryAsync();
 
         /// <summary>
         /// Loads the tag names asynchronous.
