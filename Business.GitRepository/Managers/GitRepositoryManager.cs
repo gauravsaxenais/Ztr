@@ -67,9 +67,9 @@
                 }
                 else
                 {
-                    RemoteCertificateValidationCallback certificateValidationCallback = (sender, certificate, chain, errors) => { return true; };
-                    ServicePointManager.ServerCertificateValidationCallback = certificateValidationCallback;
-                    GlobalSettings.RegisterSmartSubtransport<MockSmartSubtransport>("https");
+                    //RemoteCertificateValidationCallback certificateValidationCallback = (sender, certificate, chain, errors) => { return true; };
+                    //ServicePointManager.ServerCertificateValidationCallback = certificateValidationCallback;
+                    //GlobalSettings.RegisterSmartSubtransport<MockSmartSubtransport>("https");
 
                     Directory.CreateDirectory(_gitConnection.GitLocalFolder);
                     var cloneOptions = new CloneOptions();
@@ -88,7 +88,7 @@
                     }
 
                     _repository = new Repository(_gitConnection.GitLocalFolder);
-                    ServicePointManager.ServerCertificateValidationCallback -= certificateValidationCallback;
+                    //ServicePointManager.ServerCertificateValidationCallback -= certificateValidationCallback;
                 }
             }
 
