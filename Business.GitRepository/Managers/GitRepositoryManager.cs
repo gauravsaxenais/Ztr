@@ -59,27 +59,33 @@
         {
             lock (_syncRoot)
             {
-                
-                    // clone only when there is a change.
-                    if (IsExistsContentRepositoryDirectory())
+
+                // clone only when there is a change.
+                if (IsExistsContentRepositoryDirectory())
+                {
+                    GetLatestFromRepository();
+                }
+                else
+                {
+                    Directory.CreateDirectory(_gitConnection.GitLocalFolder);
+
+                    var cloneOptions = new CloneOptions();
+                    cloneOptions.CertificateCheck += (certificate, valid, host) => true;
+                    try
                     {
-                        GetLatestFromRepository();
-                    }
-                    else
-                    {
-                        var credentialsProvider = new CredentialsHandler((url, usernameFromUrl, types) => _userNamePasswordCredentials);
-
-                        var cloneOptions = new CloneOptions() { CredentialsProvider = credentialsProvider };
-                        cloneOptions.CertificateCheck += (certificate, valid, host) => true;
-
-                        Directory.CreateDirectory(_gitConnection.GitLocalFolder);
-
+                        cloneOptions.CredentialsProvider += (_url, _user, _cred) => new DefaultCredentials();
                         Repository.Clone(_gitConnection.GitRemoteLocation, _gitConnection.GitLocalFolder,
-                            cloneOptions);
-
-                        _repository = new Repository(_gitConnection.GitLocalFolder);
+                        cloneOptions);
                     }
-               
+                    catch (Exception)
+                    {
+                        cloneOptions.CredentialsProvider = (_url, _user, _cred) => _userNamePasswordCredentials;
+                        Repository.Clone(_gitConnection.GitRemoteLocation, _gitConnection.GitLocalFolder,
+                        cloneOptions);
+                    }
+
+                    _repository = new Repository(_gitConnection.GitLocalFolder);
+                }
             }
 
             await Task.CompletedTask;

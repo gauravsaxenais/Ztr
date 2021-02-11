@@ -8,6 +8,9 @@
     using Service;
     using ZTR.Framework.Business;
 
+    /// <summary>
+    /// Exception middleware class.
+    /// </summary>
     public class ExceptionMiddleware
     {
         private readonly RequestDelegate _requestDelegate;

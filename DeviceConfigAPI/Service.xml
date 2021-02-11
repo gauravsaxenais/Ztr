@@ -195,7 +195,7 @@
         </member>
         <member name="T:Service.Program">
             <summary>
-              Entry point of the application.
+            Entry point of the application.
             </summary>
         </member>
         <member name="M:Service.Program.Main(System.String[])">

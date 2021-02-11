@@ -1,7 +1,7 @@
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
 
 # Update and install required dependencies
-RUN apt-get update && apt-get install -y git autoconf libtool make automake unzip build-essential
+RUN apt-get update && apt-get install -y git autoconf libtool make automake unzip build-essential protobuf-compiler
 
 WORKDIR /app
 EXPOSE 80
@@ -27,8 +27,7 @@ FROM build AS publish
 RUN dotnet publish "Service.csproj" -c Release -o /app/publish
 
 FROM base AS final
+ENV ASPNETCORE_ENVIRONMENT "Production"
 WORKDIR /app
-RUN mkdir Temp
-RUN chmod -R 777 /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Service.dll"]

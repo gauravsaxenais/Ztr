@@ -10,6 +10,10 @@
     using ZTR.Framework.Business.Models;
     using ZTR.Framework.Configuration;
 
+    /// <summary>
+    /// Error message class.
+    /// </summary>
+    /// <typeparam name="TErrorCode">The type of the error code.</typeparam>
     public class ErrorMessage<TErrorCode>
         where TErrorCode : Enum
     {
@@ -95,6 +99,9 @@
             Message = validationFailure.ErrorMessage;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ErrorMessage{TErrorCode}"/> class.
+        /// </summary>
         protected ErrorMessage()
         {
         }
