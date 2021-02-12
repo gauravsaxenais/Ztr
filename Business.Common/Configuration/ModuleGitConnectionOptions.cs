@@ -21,20 +21,10 @@
         /// <param name="userName">Name of the user.</param>
         /// <param name="password">The password.</param>
         /// <param name="gitRepositoryUrl">The git repository URL.</param>
-        /// <param name="tomlConfiguration">The toml configuration.</param>
-        public ModuleGitConnectionOptions(string gitLocalFolder, string userName, string password, string gitRepositoryUrl, TomlConfigurationFile tomlConfiguration) :
+        public ModuleGitConnectionOptions(string gitLocalFolder, string userName, string password, string gitRepositoryUrl) :
             base(gitLocalFolder, userName, password, gitRepositoryUrl)
         {
-            DefaultTomlConfiguration = tomlConfiguration;
         }
-
-        /// <summary>
-        /// Gets or sets the toml configuration.
-        /// </summary>
-        /// <value>
-        /// The toml configuration.
-        /// </value>
-        public TomlConfigurationFile DefaultTomlConfiguration { get; set; }
 
         /// <summary>
         /// Gets or sets the meta toml.
@@ -52,7 +42,7 @@
         /// </returns>
         public override string ToString()
         {
-            return $"ModuleGitConnectionOptions($ GitLocalFolder: {GitLocalFolder} GitRepoUrl: {GitRemoteLocation} TomlConfiguration: {DefaultTomlConfiguration} MetaFile: {MetaToml} )";
+            return $"ModuleGitConnectionOptions($ GitLocalFolder: {GitLocalFolder} GitRepoUrl: {GitRemoteLocation} MetaFile: {MetaToml} )";
         }
     }
 }

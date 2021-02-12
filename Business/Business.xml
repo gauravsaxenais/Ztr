@@ -349,13 +349,13 @@
             <seealso cref="T:ZTR.Framework.Business.Manager" />
             <seealso cref="T:Business.RequestHandlers.Interfaces.IBlockManager" />
         </member>
-        <member name="M:Business.RequestHandlers.Managers.BlockManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.BlockManager},Business.GitRepository.Interfaces.IBlockServiceManager,Business.GitRepository.Interfaces.IModuleServiceManager)">
+        <member name="M:Business.RequestHandlers.Managers.BlockManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.BlockManager},Business.GitRepository.Interfaces.IBlockServiceManager,Business.GitRepository.Interfaces.IFirmwareVersionServiceManager)">
             <summary>
             Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.BlockManager"/> class.
             </summary>
             <param name="logger">The logger.</param>
             <param name="blockServiceManager">The block service manager.</param>
-            <param name="moduleServiceManager">The module service manager.</param>
+            <param name="firmwareVersionServiceManager">The module service manager.</param>
         </member>
         <member name="M:Business.RequestHandlers.Managers.BlockManager.GetBlocksAsync(System.String,System.String)">
             <summary>
@@ -413,12 +413,12 @@
             <seealso cref="T:ZTR.Framework.Business.Manager" />
             <seealso cref="T:Business.RequestHandlers.Interfaces.ICompatibleFirmwareVersionManager" />
         </member>
-        <member name="M:Business.RequestHandlers.Managers.CompatibleFirmwareVersionManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DefaultValueManager},Business.GitRepository.Interfaces.IModuleServiceManager)">
+        <member name="M:Business.RequestHandlers.Managers.CompatibleFirmwareVersionManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DefaultValueManager},Business.GitRepository.Interfaces.IFirmwareVersionServiceManager)">
             <summary>
             Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.CompatibleFirmwareVersionManager"/> class.
             </summary>
             <param name="logger">The logger.</param>
-            <param name="moduleServiceManager">The module service manager.</param>
+            <param name="firmwareVersionServiceManager">The firmware version service manager.</param>
         </member>
         <member name="M:Business.RequestHandlers.Managers.CompatibleFirmwareVersionManager.GetCompatibleFirmwareVersionsAsync(Business.Models.CompatibleFirmwareVersionReadModel)">
             <summary>
@@ -534,7 +534,7 @@
             <seealso cref="T:ZTR.Framework.Business.Manager" />
             <seealso cref="T:Business.RequestHandlers.Interfaces.IDefaultValueManager" />
         </member>
-        <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DefaultValueManager},Business.GitRepository.Interfaces.IModuleServiceManager,Business.Parsers.ProtoParser.Parser.IProtoMessageParser,Business.Parsers.ProtoParser.Parser.ICustomMessageParser,Business.Parsers.ProtoParser.Parser.IModuleParser)">
+        <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.DefaultValueManager},Business.GitRepository.Interfaces.IModuleServiceManager,Business.Parsers.ProtoParser.Parser.IProtoMessageParser,Business.Parsers.ProtoParser.Parser.ICustomMessageParser,Business.GitRepository.Interfaces.IFirmwareVersionServiceManager,Business.Parsers.ProtoParser.Parser.IModuleParser)">
             <summary>
             Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.DefaultValueManager"/> class.
             </summary>
@@ -542,6 +542,7 @@
             <param name="moduleServiceManager">The module service manager.</param>
             <param name="protoParser">The proto parser.</param>
             <param name="customMessageParser">The custom message parser.</param>
+            <param name="firmwareVersionServiceManager">The firmware version service manager.</param>
             <param name="moduleParser">The module parser.</param>
         </member>
         <member name="M:Business.RequestHandlers.Managers.DefaultValueManager.GetDefaultValuesAllModulesAsync(System.String,System.String)">

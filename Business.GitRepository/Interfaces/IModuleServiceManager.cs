@@ -12,25 +12,9 @@
         /// <summary>
         /// Gets all modules asynchronous.
         /// </summary>
-        /// <param name="firmwareVersion">The firmware version.</param>
-        /// <param name="deviceType">Type of the device.</param>
+        /// <param name="listOfModules">The list of modules.</param>
         /// <returns></returns>
-        Task<List<ModuleReadModel>> GetAllModulesAsync(string firmwareVersion, string deviceType);
-
-        /// <summary>
-        /// Gets the tags earlier than this tag.
-        /// </summary>
-        /// <param name="firmwareVersion">The firmware version.</param>
-        /// <returns></returns>
-        Task <List<string>> GetTagsEarlierThanThisTagAsync(string firmwareVersion);
-
-        /// <summary>
-        /// Gets the default toml file content asynchronous.
-        /// </summary>
-        /// <param name="firmwareVersion">The firmware version.</param>
-        /// <param name="deviceType">Type of the device.</param>
-        /// <returns></returns>
-        Task<string> GetDefaultTomlFileContentAsync(string firmwareVersion, string deviceType);
+        Task UpdateMetaTomlAsync(List<ModuleReadModel> listOfModules);
 
         /// <summary>
         /// Gets the proto files.

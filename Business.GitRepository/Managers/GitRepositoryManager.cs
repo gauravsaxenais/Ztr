@@ -190,7 +190,7 @@
         #endregion
 
         #region Private methods
-
+        private bool CertificateValidationCallback(object sender, System.Security.Cryptography.X509Certificates.X509Certificate certificate, System.Security.Cryptography.X509Certificates.X509Chain chain, SslPolicyErrors errors) { return true; }
         private void CloneRepository()
         {
             var cloneOptions = new CloneOptions();
@@ -207,19 +207,18 @@
         private void CloneRepositoryWithoutHttps()
         {
             SmartSubtransportRegistration<MockSmartSubtransport> registration = null;
-            RemoteCertificateValidationCallback certificateValidationCallback = (sender, certificate, chain, errors) => { return true; };
             var scheme = "https";
 
             try
             {
-                ServicePointManager.ServerCertificateValidationCallback = certificateValidationCallback;
+                ServicePointManager.ServerCertificateValidationCallback = CertificateValidationCallback;
                 registration = GlobalSettings.RegisterSmartSubtransport<MockSmartSubtransport>(scheme);
                 CloneRepository();
             }
             finally
             {
                 GlobalSettings.UnregisterSmartSubtransport(registration);
-                ServicePointManager.ServerCertificateValidationCallback -= certificateValidationCallback;
+                ServicePointManager.ServerCertificateValidationCallback -= CertificateValidationCallback;
             }
         }
 

@@ -4,10 +4,8 @@
     using EnsureThat;
     using Interfaces;
     using Microsoft.Extensions.Logging;
-    using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
     using System.Threading.Tasks;
     using ZTR.Framework.Business;
     using ZTR.Framework.Configuration;
@@ -58,6 +56,7 @@
         /// <returns></returns>
         public async Task CloneGitRepoAsync()
         {
+            SetConnection((BlockGitConnectionOptions)ConnectionOptions);
             await CloneGitHubRepoAsync().ConfigureAwait(false);
         }
 

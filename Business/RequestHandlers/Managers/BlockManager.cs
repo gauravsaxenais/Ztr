@@ -24,7 +24,7 @@
     {
         #region Private Variables
         private readonly IBlockServiceManager _blockServiceManager;
-        private readonly IModuleServiceManager _moduleServiceManager;
+        private readonly IFirmwareVersionServiceManager _firmwareVersionServiceManager;
         private readonly ILogger<BlockManager> _logger;
         private const string Prefix = nameof(BlockManager);
         #endregion
@@ -36,15 +36,15 @@
         /// </summary>
         /// <param name="logger">The logger.</param>
         /// <param name="blockServiceManager">The block service manager.</param>
-        /// <param name="moduleServiceManager">The module service manager.</param>
-        public BlockManager(ILogger<BlockManager> logger, IBlockServiceManager blockServiceManager, IModuleServiceManager moduleServiceManager) : base(logger)
+        /// <param name="firmwareVersionServiceManager">The module service manager.</param>
+        public BlockManager(ILogger<BlockManager> logger, IBlockServiceManager blockServiceManager, IFirmwareVersionServiceManager firmwareVersionServiceManager) : base(logger)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
             EnsureArg.IsNotNull(blockServiceManager, nameof(blockServiceManager));
-            EnsureArg.IsNotNull(moduleServiceManager, nameof(moduleServiceManager));
+            EnsureArg.IsNotNull(firmwareVersionServiceManager, nameof(firmwareVersionServiceManager));
 
             _blockServiceManager = blockServiceManager;
-            _moduleServiceManager = moduleServiceManager;
+            _firmwareVersionServiceManager = firmwareVersionServiceManager;
             _logger = logger;
         }
         #endregion
@@ -65,11 +65,11 @@
             await _blockServiceManager.CloneGitRepoAsync().ConfigureAwait(false);
             
             // clone repo here.
-            await _moduleServiceManager.CloneGitRepoAsync().ConfigureAwait(false);
+            await _firmwareVersionServiceManager.CloneGitRepoAsync().ConfigureAwait(false);
 
             // read default values from toml file defaults.toml
             var defaultValueFromTomlFile =
-                await _moduleServiceManager.GetDefaultTomlFileContentAsync(firmwareVersion, deviceType).ConfigureAwait(false);
+                await _firmwareVersionServiceManager.GetDefaultTomlFileContentAsync(firmwareVersion, deviceType).ConfigureAwait(false);
             var blocks = await GetBlocksAsync(defaultValueFromTomlFile, false).ConfigureAwait(false);
 
             return new { blocks };
@@ -82,6 +82,8 @@
         /// <returns></returns>
         public async Task<List<BlockJsonModel>> GetBlocksFromFileAsync(string configTomlFileContent)
         {
+            // clone repo here.
+            await _blockServiceManager.CloneGitRepoAsync().ConfigureAwait(false);
             return await GetBlocksAsync(configTomlFileContent, true);
         }
 

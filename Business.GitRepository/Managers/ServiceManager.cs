@@ -12,7 +12,6 @@
     public class ServiceManager : Manager, IServiceManager
     {
         private readonly ILogger<ServiceManager> _logger;
-
         protected string AppPath { get; }
         protected IGitRepositoryManager RepoManager { get; set; }
         protected GitConnectionOptions ConnectionOptions { get; set; }
