@@ -70,6 +70,7 @@
             _logger.LogInformation($"{Prefix}: methodName: {nameof(GetDefaultValuesAllModulesAsync)} Getting default values for {firmwareVersion} and {deviceType}.");
 
             _logger.LogInformation($"{Prefix}: methodName: {nameof(GetDefaultValuesAllModulesAsync)} Cloning git repository for {firmwareVersion} and {deviceType}.");
+
             // Clone repository here.
             await _moduleServiceManager.CloneGitRepoAsync().ConfigureAwait(false);
 

@@ -37,7 +37,8 @@ namespace Service
                 new[]
                 {
                     typeof(ApplicationOptions).Assembly,
-                    typeof(ModuleBlockGitConnectionOptions).Assembly,
+                    typeof(ModuleGitConnectionOptions).Assembly,
+                    typeof(BlockGitConnectionOptions).Assembly,
                     typeof(DeviceGitConnectionOptions).Assembly
                 }, args)
                 .ConfigureWebHostDefaults(webBuilder =>

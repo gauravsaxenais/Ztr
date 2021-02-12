@@ -24,6 +24,7 @@
     {
         #region Private Variables
         private readonly IBlockServiceManager _blockServiceManager;
+        private readonly IModuleServiceManager _moduleServiceManager;
         private readonly ILogger<BlockManager> _logger;
         private const string Prefix = nameof(BlockManager);
         #endregion
@@ -35,12 +36,15 @@
         /// </summary>
         /// <param name="logger">The logger.</param>
         /// <param name="blockServiceManager">The block service manager.</param>
-        public BlockManager(ILogger<BlockManager> logger, IBlockServiceManager blockServiceManager) : base(logger)
+        /// <param name="moduleServiceManager">The module service manager.</param>
+        public BlockManager(ILogger<BlockManager> logger, IBlockServiceManager blockServiceManager, IModuleServiceManager moduleServiceManager) : base(logger)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
             EnsureArg.IsNotNull(blockServiceManager, nameof(blockServiceManager));
+            EnsureArg.IsNotNull(moduleServiceManager, nameof(moduleServiceManager));
 
             _blockServiceManager = blockServiceManager;
+            _moduleServiceManager = moduleServiceManager;
             _logger = logger;
         }
         #endregion
@@ -59,11 +63,13 @@
 
             // clone repo here.
             await _blockServiceManager.CloneGitRepoAsync().ConfigureAwait(false);
+            
+            // clone repo here.
+            await _moduleServiceManager.CloneGitRepoAsync().ConfigureAwait(false);
 
             // read default values from toml file defaults.toml
             var defaultValueFromTomlFile =
-                await _blockServiceManager.GetDefaultTomlFileContentAsync(firmwareVersion, deviceType).ConfigureAwait(false);
-
+                await _moduleServiceManager.GetDefaultTomlFileContentAsync(firmwareVersion, deviceType).ConfigureAwait(false);
             var blocks = await GetBlocksAsync(defaultValueFromTomlFile, false).ConfigureAwait(false);
 
             return new { blocks };
@@ -82,7 +88,6 @@
         private async Task<List<BlockJsonModel>> GetBlocksAsync(string configTomlFileContent, bool addonlyConfigTomlBlocks)
         {
             var blocksFromGitRepository = await BatchProcessBlockFilesAsync().ConfigureAwait(false);
-
             var dataFromFile = TomlFileReader.ReadDataFromString<ConfigurationReadModel>(configTomlFileContent);
             dataFromFile.Network.TryGetValue("blocks", out var blocksContent);
             var blocksFromFile = new List<BlockJsonModel>();
@@ -215,7 +220,9 @@
                     if (item.Any(char.IsWhiteSpace))
                     {
                         if (!item.Split(' ').Last().Contains('$'))
+                        {
                             modules.Add(item.Split(' ').Last());
+                        }
                     }
 
                     else

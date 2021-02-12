@@ -34,7 +34,7 @@
         /// <param name="logger">The logger.</param>
         /// <param name="moduleGitConnectionOptions">The module git connection options.</param>
         /// <param name="gitRepoManager">The git repo manager.</param>
-        public ModuleServiceManager(ILogger<ModuleServiceManager> logger, ModuleBlockGitConnectionOptions moduleGitConnectionOptions, IGitRepositoryManager gitRepoManager) : base(logger, moduleGitConnectionOptions, gitRepoManager)
+        public ModuleServiceManager(ILogger<ModuleServiceManager> logger, ModuleGitConnectionOptions moduleGitConnectionOptions, IGitRepositoryManager gitRepoManager) : base(logger, moduleGitConnectionOptions, gitRepoManager)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
             
@@ -49,9 +49,9 @@
         /// <returns></returns>
         public async Task<List<ModuleReadModel>> GetAllModulesAsync(string firmwareVersion, string deviceType)
         {
-            string moduleFilePath = ((ModuleBlockGitConnectionOptions)ConnectionOptions).ModulesConfig;
-            string deviceTomlFilePath = ((ModuleBlockGitConnectionOptions)ConnectionOptions).DefaultTomlConfiguration.DeviceTomlFile;
-            string metaTomlFilePath = ((ModuleBlockGitConnectionOptions)ConnectionOptions).MetaToml;
+            string deviceTomlFilePath = ((ModuleGitConnectionOptions)ConnectionOptions).DefaultTomlConfiguration.DeviceTomlFile;
+            string metaTomlFilePath = ((ModuleGitConnectionOptions)ConnectionOptions).MetaToml;
+            string moduleFilePath = ((ModuleGitConnectionOptions)ConnectionOptions).GitLocalFolder;
 
             _logger.LogInformation($"{Prefix}: method name: {nameof(GetAllModulesAsync)} Getting list of all modules {firmwareVersion} {deviceType}.");
             var listOfModules = await GetListOfModulesAsync(firmwareVersion, deviceType, deviceTomlFilePath).ConfigureAwait(false);
@@ -76,7 +76,6 @@
         public async Task<List<string>> GetTagsEarlierThanThisTagAsync(string firmwareVersion)
         {
             var listOfTags = await RepoManager.GetTagsEarlierThanThisTagAsync(firmwareVersion).ConfigureAwait(false);
-
             return listOfTags;
         }
 
@@ -89,7 +88,7 @@
         public async Task<string> GetDefaultTomlFileContentAsync(string firmwareVersion, string deviceType)
         {
             _logger.LogInformation($"{Prefix} method name: {nameof(GetDefaultTomlFileContentAsync)}: Getting default value from toml file for {firmwareVersion}, {deviceType}.");
-            var defaultPath = ((ModuleBlockGitConnectionOptions)ConnectionOptions).DefaultTomlConfiguration.DefaultTomlFile;
+            var defaultPath = ((ModuleGitConnectionOptions)ConnectionOptions).DefaultTomlConfiguration.DefaultTomlFile;
             var defaultValueFromTomlFile = await GetFileContentFromPath(firmwareVersion, deviceType, defaultPath).ConfigureAwait(false);
 
             return defaultValueFromTomlFile;
@@ -112,7 +111,7 @@
         {
             EnsureArg.IsNotNull(module);
 
-            string moduleFilePath = ((ModuleBlockGitConnectionOptions)ConnectionOptions).ModulesConfig;
+            string moduleFilePath = ((ModuleGitConnectionOptions)ConnectionOptions).GitLocalFolder;
             var moduleFolder = FileReaderExtensions.GetSubDirectoryPath(moduleFilePath, module.Name);
 
             if (string.IsNullOrWhiteSpace(moduleFolder))
@@ -230,9 +229,9 @@
 
         protected override void SetupDependencies(GitConnectionOptions connectionOptions)
         {
-            var moduleGitConnectionOptions = (ModuleBlockGitConnectionOptions)connectionOptions;
+            var moduleGitConnectionOptions = (ModuleGitConnectionOptions)connectionOptions;
+            moduleGitConnectionOptions.GitLocalFolder = Path.Combine(AppPath, moduleGitConnectionOptions.GitLocalFolder);
             moduleGitConnectionOptions.DefaultTomlConfiguration.DeviceFolder = Path.Combine(AppPath, moduleGitConnectionOptions.GitLocalFolder, moduleGitConnectionOptions.DefaultTomlConfiguration.DeviceFolder);
-            moduleGitConnectionOptions.ModulesConfig = Path.Combine(AppPath, moduleGitConnectionOptions.GitLocalFolder, moduleGitConnectionOptions.ModulesConfig);
         }
     }
 }

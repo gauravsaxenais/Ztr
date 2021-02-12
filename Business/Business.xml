@@ -349,12 +349,13 @@
             <seealso cref="T:ZTR.Framework.Business.Manager" />
             <seealso cref="T:Business.RequestHandlers.Interfaces.IBlockManager" />
         </member>
-        <member name="M:Business.RequestHandlers.Managers.BlockManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.BlockManager},Business.GitRepository.Interfaces.IBlockServiceManager)">
+        <member name="M:Business.RequestHandlers.Managers.BlockManager.#ctor(Microsoft.Extensions.Logging.ILogger{Business.RequestHandlers.Managers.BlockManager},Business.GitRepository.Interfaces.IBlockServiceManager,Business.GitRepository.Interfaces.IModuleServiceManager)">
             <summary>
             Initializes a new instance of the <see cref="T:Business.RequestHandlers.Managers.BlockManager"/> class.
             </summary>
             <param name="logger">The logger.</param>
             <param name="blockServiceManager">The block service manager.</param>
+            <param name="moduleServiceManager">The module service manager.</param>
         </member>
         <member name="M:Business.RequestHandlers.Managers.BlockManager.GetBlocksAsync(System.String,System.String)">
             <summary>

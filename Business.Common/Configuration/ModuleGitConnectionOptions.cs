@@ -5,12 +5,12 @@
     /// <summary>
     /// This class maps to the connection options in appsettings.json file.
     /// </summary>
-    public sealed class ModuleBlockGitConnectionOptions : GitConnectionOptions
+    public sealed class ModuleGitConnectionOptions : GitConnectionOptions
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ModuleBlockGitConnectionOptions"/> class.
+        /// Initializes a new instance of the <see cref="ModuleGitConnectionOptions"/> class.
         /// </summary>
-        public ModuleBlockGitConnectionOptions()
+        public ModuleGitConnectionOptions()
         {
         }
 
@@ -22,7 +22,7 @@
         /// <param name="password">The password.</param>
         /// <param name="gitRepositoryUrl">The git repository URL.</param>
         /// <param name="tomlConfiguration">The toml configuration.</param>
-        public ModuleBlockGitConnectionOptions(string gitLocalFolder, string userName, string password, string gitRepositoryUrl, TomlConfigurationFile tomlConfiguration) :
+        public ModuleGitConnectionOptions(string gitLocalFolder, string userName, string password, string gitRepositoryUrl, TomlConfigurationFile tomlConfiguration) :
             base(gitLocalFolder, userName, password, gitRepositoryUrl)
         {
             DefaultTomlConfiguration = tomlConfiguration;
@@ -35,22 +35,6 @@
         /// The toml configuration.
         /// </value>
         public TomlConfigurationFile DefaultTomlConfiguration { get; set; }
-
-        /// <summary>
-        /// Gets or sets the modules configuration folder.
-        /// </summary>
-        /// <value>
-        /// The modules configuration.
-        /// </value>
-        public string ModulesConfig { get; set; }
-
-        /// <summary>
-        /// Gets or sets the block configuration.
-        /// </summary>
-        /// <value>
-        /// The block configuration.
-        /// </value>
-        public string BlockConfig { get; set; }
 
         /// <summary>
         /// Gets or sets the meta toml.
@@ -68,7 +52,7 @@
         /// </returns>
         public override string ToString()
         {
-            return $"DeviceGitConnectionOptions($ GitLocalFolder: {GitLocalFolder} GitRepoUrl: {GitRemoteLocation} ModulesConfig: {this.ModulesConfig} BlockConfig: {BlockConfig} TomlConfiguration: {DefaultTomlConfiguration} MetaFile: {MetaToml} )";
+            return $"ModuleGitConnectionOptions($ GitLocalFolder: {GitLocalFolder} GitRepoUrl: {GitRemoteLocation} TomlConfiguration: {DefaultTomlConfiguration} MetaFile: {MetaToml} )";
         }
     }
 }

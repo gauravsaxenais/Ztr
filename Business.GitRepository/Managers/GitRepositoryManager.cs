@@ -140,7 +140,7 @@
 
                 var repoTag = _repository.Tags.FirstOrDefault(item => item.FriendlyName == tag);
 
-                var commitForTag = GetAllCommitsForTag(repoTag);
+                ObjectId commitForTag = GetAllCommitsForTag(repoTag);
 
                 // Let's enumerate all the reachable commits (similarly to `git log --all`)
                 foreach (var commit in _repository.Commits.QueryBy(new CommitFilter
@@ -208,12 +208,12 @@
         {
             SmartSubtransportRegistration<MockSmartSubtransport> registration = null;
             RemoteCertificateValidationCallback certificateValidationCallback = (sender, certificate, chain, errors) => { return true; };
+            var scheme = "https";
 
             try
             {
                 ServicePointManager.ServerCertificateValidationCallback = certificateValidationCallback;
-                registration = GlobalSettings.RegisterSmartSubtransport<MockSmartSubtransport>("https");
-
+                registration = GlobalSettings.RegisterSmartSubtransport<MockSmartSubtransport>(scheme);
                 CloneRepository();
             }
             finally
