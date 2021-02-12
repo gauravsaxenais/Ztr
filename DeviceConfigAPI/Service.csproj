@@ -79,12 +79,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="configsetting\config.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="configsetting\convert.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -58,7 +58,7 @@
                 mapping = File.ReadAllText(MapperPath);
             }
             var tags = mapping.Split(Environment.NewLine);
-            var map = tags.Where(o => o.StartsWith("map:")).Select(o => new ConfigMap(o)).ToArray();
+            var map = tags.Where(o => o.StartsWith("map:")).Select(o => new ConfigMap(o)).Distinct().ToArray();
             return map;
         }       
         internal string BaseToml { get; set; }

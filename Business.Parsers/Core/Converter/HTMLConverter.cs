@@ -58,16 +58,13 @@ namespace Business.Parsers.Core.Converter
                 TraverseTarget(tree, item.Key, item);  
             }
         }
-        private  bool TryGetKeyValue(ITree converted, string key,out string value)
+        private void TryGetKeyValue(ITree converted, string key,out string value)
         {
-            bool result = false;
             value = string.Empty;
             if(converted.Keys.Any(u => u.Compares(key)))
             {
-                value = converted[converted.Keys.First(u => u.Compares(key))].ToString();
-                result = true;
+                value = converted[converted.Keys.First(u => u.Compares(key))].ToString();                
             }
-            return result;
         }
         private T CreateDictionary<T>(T from, T source) where T : ITree
         {
@@ -75,19 +72,13 @@ namespace Business.Parsers.Core.Converter
             source.ToDictionary(t =>
             {
                 var m = GetMapped(t.Key, t.Value);
-                converted.Add(m);
+                m.ForEach(o => converted.Add(o));                
                 return t.Key;
             });
            
             ITree dictionary = new Tree();
             foreach (var item in from)
-            {
-                string value;               
-                var found = TryGetKeyValue(converted, item.Key, out value);
-                if (found)
-                {
-                    dictionary.Add(item.Key, value);
-                }
+            {               
                 if (item.Value is T t)
                 {
                     var d = CreateDictionary(t, source);
@@ -95,7 +86,13 @@ namespace Business.Parsers.Core.Converter
                     {
                         dictionary.Add(item.Key,d);
                     }
-                }               
+                } 
+                else
+                {
+                    string value;
+                    TryGetKeyValue(converted, item.Key, out value);
+                    dictionary.Add(item.Key, value);
+                }
             }
 
             return (T)dictionary;
@@ -372,32 +369,37 @@ namespace Business.Parsers.Core.Converter
             {
                 return;
             }
-            key = key.CleanHTML();
+            key = key.CleanHTML().Replace(" ",string.Empty);
             if (dictionary.Keys.Any(o => o.Compares(key)))
             {
                 return;
             }
             if (enablemap)
             {
-                var k = GetMapped(key, value);
+                var k = GetMapped(key, value).First();
                 key = k.Key;
                 value = k.Value;
             }
             dictionary.Add(key, value);
 
         }
-        private KeyValuePair<string,object> GetMapped(string key, object value)
-        {
-            var m = _map.FirstOrDefault(o => o.From.Compares(key));
-            if (m != null)
+        private List<KeyValuePair<string,object>> GetMapped(string key, object value)
+        {           
+            var res = _map.Where(o => o.From.Compares(key)).Select(m =>
             {
                 key = m.To;
                 if (value is string && m.From.ToLower().Contains("hex"))
                 {
                     value = value.ToString().FromHex();
                 }
+                return KeyValuePair.Create(key, value);
+            }).ToList();
+
+            if(!res.Any())
+            {
+                res.Add(KeyValuePair.Create(key, value));
             }
-            return KeyValuePair.Create(key, value);
+            return res;
         }
        
         private void CleanToCompatible(ref string html)
