@@ -22,10 +22,20 @@
         /// <param name="userName">Name of the user.</param>
         /// <param name="password">The password.</param>
         /// <param name="gitRepositoryUrl">The git repository URL.</param>
-        public FirmwareVersionGitConnectionOptions(string gitLocalFolder, string userName, string password, string gitRepositoryUrl) :
+        /// <param name="tomlConfiguration">The toml configuration.</param>
+        public FirmwareVersionGitConnectionOptions(string gitLocalFolder, string userName, string password, string gitRepositoryUrl, TomlConfigurationFile tomlConfiguration) :
             base(gitLocalFolder, userName, password, gitRepositoryUrl)
         {
+            DefaultTomlConfiguration = tomlConfiguration;
         }
+
+        /// <summary>
+        /// Gets or sets the toml configuration.
+        /// </summary>
+        /// <value>
+        /// The toml configuration.
+        /// </value>
+        public TomlConfigurationFile DefaultTomlConfiguration { get; set; }
 
         /// <summary>
         /// Converts to string.
@@ -35,7 +45,7 @@
         /// </returns>
         public override string ToString()
         {
-            return $"FirmwareVersionGitConnectionOptions($ GitLocalFolder: {GitLocalFolder} GitRepoUrl: {GitRemoteLocation})";
+            return $"FirmwareVersionGitConnectionOptions($ GitLocalFolder: {GitLocalFolder} TomlConfiguration: {DefaultTomlConfiguration} GitRepoUrl: {GitRemoteLocation})";
         }
     }
 }

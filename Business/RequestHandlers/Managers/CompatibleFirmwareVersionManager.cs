@@ -19,20 +19,20 @@
     /// <seealso cref="ICompatibleFirmwareVersionManager" />
     public class CompatibleFirmwareVersionManager : Manager, ICompatibleFirmwareVersionManager
     {
-        private readonly IModuleServiceManager _moduleServiceManager;
+        private readonly IFirmwareVersionServiceManager _firmwareVersionServiceManager;
         private readonly ILogger _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CompatibleFirmwareVersionManager"/> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
-        /// <param name="moduleServiceManager">The module service manager.</param>
-        public CompatibleFirmwareVersionManager(ILogger<DefaultValueManager> logger, IModuleServiceManager moduleServiceManager) : base(logger)
+        /// <param name="firmwareVersionServiceManager">The firmware version service manager.</param>
+        public CompatibleFirmwareVersionManager(ILogger<DefaultValueManager> logger, IFirmwareVersionServiceManager firmwareVersionServiceManager) : base(logger)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
-            EnsureArg.IsNotNull(moduleServiceManager, nameof(moduleServiceManager));
+            EnsureArg.IsNotNull(firmwareVersionServiceManager, nameof(firmwareVersionServiceManager));
 
-            _moduleServiceManager = moduleServiceManager;
+            _firmwareVersionServiceManager = firmwareVersionServiceManager;
             _logger = logger;
         }
 
@@ -52,12 +52,11 @@
             var firmwareVersions = new List<string>();
 
             _logger.LogInformation($"{prefix}: methodName: {nameof(GetCompatibleFirmwareVersionsAsync)} Getting list of compatible firmware versions based on a firmware version.");
-
-            var listOfTags = await _moduleServiceManager.GetTagsEarlierThanThisTagAsync(module.FirmwareVersion).ConfigureAwait(false);
+            var listOfTags = await _firmwareVersionServiceManager.GetTagsEarlierThanThisTagAsync(module.FirmwareVersion).ConfigureAwait(false);
 
             foreach (var tag in listOfTags)
             {
-                var moduleList = await _moduleServiceManager.GetAllModulesAsync(tag, module.DeviceType).ConfigureAwait(false);
+                var moduleList = await _firmwareVersionServiceManager.GetListOfModulesAsync(tag, module.DeviceType).ConfigureAwait(false);
 
                 var contained = module.Modules.Intersect(moduleList, new ModuleReadModelComparer()).Count() == module.Modules.Count();
 

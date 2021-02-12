@@ -26,6 +26,7 @@
     public class DefaultValueManager : Manager, IDefaultValueManager
     {
         private readonly IModuleServiceManager _moduleServiceManager;
+        private readonly IFirmwareVersionServiceManager _firmwareVersionServiceManager;
         private readonly IProtoMessageParser _protoParser;
         private readonly ICustomMessageParser _customMessageParser;
         private readonly IModuleParser _moduleParser;
@@ -39,20 +40,24 @@
         /// <param name="moduleServiceManager">The module service manager.</param>
         /// <param name="protoParser">The proto parser.</param>
         /// <param name="customMessageParser">The custom message parser.</param>
+        /// <param name="firmwareVersionServiceManager">The firmware version service manager.</param>
         /// <param name="moduleParser">The module parser.</param>
         public DefaultValueManager(ILogger<DefaultValueManager> logger,
                                     IModuleServiceManager moduleServiceManager,
                                     IProtoMessageParser protoParser,
                                     ICustomMessageParser customMessageParser,
+                                    IFirmwareVersionServiceManager firmwareVersionServiceManager,
                                     IModuleParser moduleParser) : base(logger)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
             EnsureArg.IsNotNull(moduleServiceManager, nameof(moduleServiceManager));
+            EnsureArg.IsNotNull(firmwareVersionServiceManager, nameof(firmwareVersionServiceManager));
             EnsureArg.IsNotNull(protoParser, nameof(protoParser));
             EnsureArg.IsNotNull(customMessageParser, nameof(customMessageParser));
             EnsureArg.IsNotNull(moduleParser, nameof(moduleParser));
 
             _moduleServiceManager = moduleServiceManager;
+            _firmwareVersionServiceManager = firmwareVersionServiceManager;
             _protoParser = protoParser;
             _customMessageParser = customMessageParser;
             _moduleParser = moduleParser;
@@ -68,19 +73,22 @@
         public async Task<IEnumerable<ModuleReadModel>> GetDefaultValuesAllModulesAsync(string firmwareVersion, string deviceType)
         {
             _logger.LogInformation($"{Prefix}: methodName: {nameof(GetDefaultValuesAllModulesAsync)} Getting default values for {firmwareVersion} and {deviceType}.");
-
             _logger.LogInformation($"{Prefix}: methodName: {nameof(GetDefaultValuesAllModulesAsync)} Cloning git repository for {firmwareVersion} and {deviceType}.");
+
             // Clone repository here.
             await _moduleServiceManager.CloneGitRepoAsync().ConfigureAwait(false);
+            await _firmwareVersionServiceManager.CloneGitRepoAsync().ConfigureAwait(false);
 
             // read default values from toml file defaults.toml
             var defaultValueFromTomlFile =
-                await _moduleServiceManager.GetDefaultTomlFileContentAsync(firmwareVersion, deviceType).ConfigureAwait(false);
+                await _firmwareVersionServiceManager.GetDefaultTomlFileContentAsync(firmwareVersion, deviceType).ConfigureAwait(false);
 
             _logger.LogInformation($"{Prefix}: methodName: {nameof(GetDefaultValuesAllModulesAsync)} Getting list of modules {firmwareVersion} and {deviceType}.");
 
+            var listOfModules = await _firmwareVersionServiceManager.GetListOfModulesAsync(firmwareVersion, deviceType).ConfigureAwait(false);
+
             // get list of all modules.
-            var listOfModules = await _moduleServiceManager.GetAllModulesAsync(firmwareVersion, deviceType).ConfigureAwait(false);
+            await _moduleServiceManager.UpdateMetaTomlAsync(listOfModules).ConfigureAwait(false);
 
             _logger.LogInformation($"{Prefix}: methodName: {nameof(GetDefaultValuesAllModulesAsync)} Merging default values with module information. {firmwareVersion} and {deviceType}.");
             await MergeValuesWithModulesAsync(defaultValueFromTomlFile, listOfModules);

@@ -93,7 +93,7 @@
             }
 
             // fix the indexes
-            FixIndex((listOfData));
+            FixIndex(listOfData);
 
             return listOfData;
         }

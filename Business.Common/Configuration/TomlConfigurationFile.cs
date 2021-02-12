@@ -43,7 +43,7 @@
         /// <returns></returns>
         public override string ToString()
         {
-            return $"TomlConfigurationFile($ {this.DeviceFolder} {this.TomlConfigFolder} {this.DeviceTomlFile} {this.DeviceFolder})";
+            return $"TomlConfigurationFile($ {DeviceFolder} {TomlConfigFolder} {DeviceTomlFile} {DeviceFolder})";
         }
     }
 }

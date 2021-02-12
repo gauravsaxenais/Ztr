@@ -1,5 +1,6 @@
 ﻿namespace Business.GitRepository.Interfaces
 {
+    using Business.Common.Models;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
@@ -25,5 +26,36 @@
         /// </summary>
         /// <param name="gitUrl">The git URL.</param>
         void SetGitRepoUrl(string gitUrl);
+
+        /// <summary>
+        /// Gets the tags earlier than this tag.
+        /// </summary>
+        /// <param name="firmwareVersion">The firmware version.</param>
+        /// <returns></returns>
+        Task<List<string>> GetTagsEarlierThanThisTagAsync(string firmwareVersion);
+
+        /// <summary>
+        /// Gets the default toml file content asynchronous.
+        /// </summary>
+        /// <param name="firmwareVersion">The firmware version.</param>
+        /// <param name="deviceType">Type of the device.</param>
+        /// <returns></returns>
+        Task<string> GetDefaultTomlFileContentAsync(string firmwareVersion, string deviceType);
+
+        /// <summary>
+        /// Gets the default toml file content asynchronous.
+        /// </summary>
+        /// <param name="firmwareVersion">The firmware version.</param>
+        /// <param name="deviceType">Type of the device.</param>
+        /// <returns></returns>
+        Task<string> GetDeviceTomlFileContentAsync(string firmwareVersion, string deviceType);
+
+        /// <summary>
+        /// Gets the list of modules asynchronous.
+        /// </summary>
+        /// <param name="firmwareVersion">The firmware version.</param>
+        /// <param name="deviceType">Type of the device.</param>
+        /// <returns></returns>
+        Task<List<ModuleReadModel>> GetListOfModulesAsync(string firmwareVersion, string deviceType);
     }
 }

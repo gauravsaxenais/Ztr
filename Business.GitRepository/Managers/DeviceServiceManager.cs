@@ -40,6 +40,7 @@
         /// </summary>
         public async Task CloneGitRepoAsync()
         {
+            SetConnection((DeviceGitConnectionOptions)ConnectionOptions);
             await CloneGitHubRepoAsync().ConfigureAwait(false);
         }
 
@@ -68,11 +69,9 @@
         {
             string filePath = ((DeviceGitConnectionOptions)ConnectionOptions).DeviceToml;
             var tomlSettings = TomlFileReader.LoadLowerCaseTomlSettings();
-            var fileContent
-                = await File.ReadAllTextAsync(filePath);
+            var fileContent = await File.ReadAllTextAsync(filePath);
 
             var fileData = Toml.ReadString(fileContent, tomlSettings);
-
             var dictionary = fileData.ToDictionary();
             var dictionaryDevices = (Dictionary<string, object>[])dictionary["devices"];
 

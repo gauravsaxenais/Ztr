@@ -20,13 +20,5 @@
         /// </summary>
         /// <returns></returns>
         Task CloneGitRepoAsync();
-
-        /// <summary>
-        /// Gets the default toml file content asynchronous.
-        /// </summary>
-        /// <param name="firmwareVersion">The firmware version.</param>
-        /// <param name="deviceType">Type of the device.</param>
-        /// <returns></returns>
-        Task<string> GetDefaultTomlFileContentAsync(string firmwareVersion, string deviceType);
     }
 }
