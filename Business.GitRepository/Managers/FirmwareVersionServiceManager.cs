@@ -46,9 +46,19 @@
         {
             _logger.LogInformation(
                 $"{Prefix} method name: {nameof(GetAllFirmwareVersionsAsync)}: Getting list of all firmware versions for deviceType.");
-            var firmwareVersions = await RepoManager.GetAllTagNamesAsync().ConfigureAwait(false);
+            var specConfigFolder = ((FirmwareVersionGitConnectionOptions)ConnectionOptions).DefaultTomlConfiguration.TomlConfigFolder;
+            var firmwareVersions = await RepoManager.GetAllTagNamesAsync(specConfigFolder).ConfigureAwait(false);
+            var firmwareVersionsWithSpecFolder = new List<string>();
 
-            return firmwareVersions;
+            foreach(var version in firmwareVersions)
+            {
+                var isPresent = await RepoManager.IsFolderPresentInTag(version, specConfigFolder).ConfigureAwait(false);
+                if(isPresent)
+                {
+                    firmwareVersionsWithSpecFolder.Add(version);
+                }
+            }
+            return firmwareVersionsWithSpecFolder;
         }
 
         /// <summary>
@@ -76,22 +86,21 @@
         /// Gets the default toml file content asynchronous.
         /// </summary>
         /// <param name="firmwareVersion">The firmware version.</param>
-        /// <param name="deviceType">Type of the device.</param>
         /// <returns></returns>
-        public async Task<string> GetDefaultTomlFileContentAsync(string firmwareVersion, string deviceType)
+        public async Task<string> GetDefaultTomlFileContentAsync(string firmwareVersion)
         {
-            _logger.LogInformation($"{Prefix} method name: {nameof(GetDefaultTomlFileContentAsync)}: Getting default value from toml file for {firmwareVersion}, {deviceType}.");
+            _logger.LogInformation($"{Prefix} method name: {nameof(GetDefaultTomlFileContentAsync)}: Getting default value from toml file for {firmwareVersion}.");
             var defaultPath = ((FirmwareVersionGitConnectionOptions)ConnectionOptions).DefaultTomlConfiguration.DefaultTomlFile;
-            var defaultValueFromTomlFile = await GetFileContentFromPath(firmwareVersion, deviceType, defaultPath).ConfigureAwait(false);
+            var defaultValueFromTomlFile = await GetFileContentFromPath(firmwareVersion, defaultPath).ConfigureAwait(false);
 
             return defaultValueFromTomlFile;
         }
 
-        public async Task<string> GetDeviceTomlFileContentAsync(string firmwareVersion, string deviceType)
+        public async Task<string> GetDeviceTomlFileContentAsync(string firmwareVersion)
         {
-            _logger.LogInformation($"{Prefix} method name: {nameof(GetDeviceTomlFileContentAsync)}: Getting device value from toml file for {firmwareVersion}, {deviceType}.");
+            _logger.LogInformation($"{Prefix} method name: {nameof(GetDeviceTomlFileContentAsync)}: Getting device value from toml file for {firmwareVersion}.");
             var devicesPath = ((FirmwareVersionGitConnectionOptions)ConnectionOptions).DefaultTomlConfiguration.DeviceTomlFile;
-            var deviceValueFromTomlFile = await GetFileContentFromPath(firmwareVersion, deviceType, devicesPath).ConfigureAwait(false);
+            var deviceValueFromTomlFile = await GetFileContentFromPath(firmwareVersion, devicesPath).ConfigureAwait(false);
 
             return deviceValueFromTomlFile;
         }
@@ -108,6 +117,29 @@
         }
 
         /// <summary>
+        /// Gets the tags with device file modified.
+        /// </summary>
+        /// <param name="fromTags">From tags.</param>
+        /// <param name="mainTag">The main tag.</param>
+        /// <returns></returns>
+        public async Task<List<string>> GetTagsWithNoDeviceFileModified(List<string> fromTags, string mainTag)
+        {
+            var listOfTags = new List<string>();
+            var deviceFile = ((FirmwareVersionGitConnectionOptions)ConnectionOptions).DefaultTomlConfiguration.DeviceTomlFile;
+
+            foreach(var fromTag in fromTags)
+            {
+                if(!RepoManager.IsFileChangedBetweenTags(fromTag, mainTag, deviceFile))
+                {
+                    listOfTags.Add(fromTag);
+                }
+            }
+
+            await Task.CompletedTask;
+            return listOfTags;
+        }
+
+        /// <summary>
         /// Gets the list of modules asynchronous.
         /// </summary>
         /// <param name="firmwareVersion">The firmware version.</param>
@@ -117,7 +149,7 @@
         public async Task<List<ModuleReadModel>> GetListOfModulesAsync(string firmwareVersion, string deviceType)
         {
             var listOfModules = new List<ModuleReadModel>();
-            var fileContent = await GetDeviceTomlFileContentAsync(firmwareVersion, deviceType)
+            var fileContent = await GetDeviceTomlFileContentAsync(firmwareVersion)
                 .ConfigureAwait(false);
 
             if (!string.IsNullOrWhiteSpace(fileContent))
@@ -139,19 +171,17 @@
         /// <param name="deviceType">Type of the device.</param>
         /// <param name="path">The path.</param>
         /// <returns></returns>
-        private async Task<string> GetFileContentFromPath(string firmwareVersion, string deviceType, string path)
+        private async Task<string> GetFileContentFromPath(string firmwareVersion, string path)
         {
-            var listOfFiles = await RepoManager
+            var fileContent = string.Empty;
+
+            var file = await RepoManager
                 .GetFileDataFromTagAsync(firmwareVersion, path)
                 .ConfigureAwait(false);
 
-            // case insensitive search.
-            var deviceTypeFile = listOfFiles.FirstOrDefault(p => p.FileName?.IndexOf(deviceType, StringComparison.OrdinalIgnoreCase) >= 0);
-            var fileContent = string.Empty;
-
-            if (deviceTypeFile != null)
+            if (file != null)
             {
-                fileContent = System.Text.Encoding.UTF8.GetString(deviceTypeFile.Data);
+                fileContent = System.Text.Encoding.UTF8.GetString(file.Data);
             }
             return fileContent;
         }
@@ -159,7 +189,6 @@
         protected override void SetupDependencies(GitConnectionOptions connectionOptions)
         {
             var firmwareVersionGitConnectionOptions = (FirmwareVersionGitConnectionOptions)connectionOptions;
-            firmwareVersionGitConnectionOptions.DefaultTomlConfiguration.TomlConfigFolder = Path.Combine(AppPath, firmwareVersionGitConnectionOptions.GitLocalFolder, firmwareVersionGitConnectionOptions.DefaultTomlConfiguration.TomlConfigFolder);
             firmwareVersionGitConnectionOptions.DefaultTomlConfiguration.DeviceTomlFile = Path.Combine(firmwareVersionGitConnectionOptions.DefaultTomlConfiguration.TomlConfigFolder, firmwareVersionGitConnectionOptions.DefaultTomlConfiguration.DeviceTomlFile);
             firmwareVersionGitConnectionOptions.DefaultTomlConfiguration.DefaultTomlFile = Path.Combine(firmwareVersionGitConnectionOptions.DefaultTomlConfiguration.TomlConfigFolder, firmwareVersionGitConnectionOptions.DefaultTomlConfiguration.DefaultTomlFile);
         }

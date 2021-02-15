@@ -9,8 +9,10 @@
     using System.Linq;
     using System.Net;
     using System.Net.Security;
+    using System.Text;
     using System.Threading.Tasks;
     using ZTR.Framework.Business.File;
+    using ZTR.Framework.Business.File.FileReaders;
     using ZTR.Framework.Business.Models;
     using ZTR.Framework.Configuration;
     using Blob = LibGit2Sharp.Blob;
@@ -83,13 +85,15 @@
         }
 
         /// <summary>
-        /// Loads the tag names asynchronous.
+        /// Gets all tag names asynchronous.
         /// </summary>
+        /// <param name="folder">The folder.</param>
         /// <returns></returns>
-        public async Task<List<string>> GetAllTagNamesAsync()
+        public async Task<List<string>> GetAllTagNamesAsync(string folder)
         {
             var tags = await GetAllTagsAsync().ConfigureAwait(false);
             var tagNames = tags.Select(x => x.Item1).ToList();
+
             return tagNames;
         }
 
@@ -120,49 +124,38 @@
         /// for a particular tag.
         /// </summary>
         /// <param name="tag">Tag like 1.0.7 etc. in github.</param>
-        /// <param name="fileName">file name to search</param>
+        /// <param name="pathToFile">path to file</param>
         /// <returns></returns>
-        public async Task<IEnumerable<ExportFileResultModel>> GetFileDataFromTagAsync(string tag, string fileName)
+        public async Task<ExportFileResultModel> GetFileDataFromTagAsync(string tag, string pathToFile)
         {
-            EnsureArg.IsNotEmptyOrWhiteSpace(tag);
-            EnsureArg.IsNotEmptyOrWhiteSpace(fileName);
+            EnsureArg.IsNotEmptyOrWhiteSpace(tag, nameof(tag));
+            EnsureArg.IsNotEmptyOrWhiteSpace(pathToFile, nameof(pathToFile));
 
-            try
-            {
-                var listOfContentFiles = new List<ExportFileResultModel>();
+            var listOfContentFiles = await GetAllFilesForTag(tag).ConfigureAwait(false);
+            var file = listOfContentFiles.FirstOrDefault(p =>
+                            p.FileName?.IndexOf(pathToFile, StringComparison.OrdinalIgnoreCase) >= 0);
 
-                if (!IsExistsContentRepositoryDirectory())
-                {
-                    await InitRepositoryAsync().ConfigureAwait(false);
-                }
+            return file;
+        }
 
-                _repository = new Repository(_gitConnection.GitLocalFolder);
+        /// <summary>
+        /// Determines whether [is folder present in tag] [the specified tag].
+        /// </summary>
+        /// <param name="tag">The tag.</param>
+        /// <param name="folderName">Name of the folder.</param>
+        /// <returns></returns>
+        public async Task<bool> IsFolderPresentInTag(string tag, string folderName)
+        {
+            EnsureArg.IsNotEmptyOrWhiteSpace(tag, nameof(tag));
+            EnsureArg.IsNotEmptyOrWhiteSpace(folderName, nameof(folderName));
 
-                var repoTag = _repository.Tags.FirstOrDefault(item => item.FriendlyName == tag);
+            folderName = FileReaderExtensions.NormalizeFolderPath(folderName);
 
-                ObjectId commitForTag = GetAllCommitsForTag(repoTag);
+            var listOfContentFiles = await GetAllFilesForTag(tag).ConfigureAwait(false);
+            var isPresent = listOfContentFiles.Any(p =>
+                            p.FileName.IndexOf(folderName, StringComparison.OrdinalIgnoreCase) >= 0);
 
-                // Let's enumerate all the reachable commits (similarly to `git log --all`)
-                foreach (var commit in _repository.Commits.QueryBy(new CommitFilter
-                { IncludeReachableFrom = _repository.Refs }))
-                {
-                    if (commit.Id == commitForTag)
-                    {
-                        GetContentOfFiles(_repository, commit.Tree, listOfContentFiles);
-
-                        // case insensitive search.
-                        listOfContentFiles = listOfContentFiles.Where(p =>
-                            p.FileName?.IndexOf(fileName, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
-                    }
-                }
-
-                return listOfContentFiles;
-            }
-
-            catch (LibGit2SharpException exception)
-            {
-                throw new CustomArgumentException($"Unable to get file for a particular {tag} from git repo.", exception);
-            }
+            return isPresent;
         }
 
         /// <summary>
@@ -187,9 +180,73 @@
         {
             return Directory.Exists(_gitConnection.GitLocalFolder) && IsGitSubDirPresent(_gitConnection.GitLocalFolder);
         }
+
+        /// <summary>
+        /// Determines whether [is file changed between tags] [the specified tag from].
+        /// </summary>
+        /// <param name="tagFrom">The tag from.</param>
+        /// <param name="tagTo">The tag to.</param>
+        /// <param name="filePath">The file path.</param>
+        /// <returns>
+        ///   <c>true</c> if [is file changed between tags] [the specified tag from]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsFileChangedBetweenTags(string tagFrom, string tagTo, string filePath)
+        {
+            filePath = FileReaderExtensions.NormalizeFolderPath(filePath);
+            Tag toTag = _repository.Tags[tagTo];
+            Tag fromTag = _repository.Tags[tagFrom];
+
+            var commitFrom = _repository.Lookup<Commit>(fromTag.Target.Sha);
+            var commitTo = _repository.Lookup<Commit>(toTag.Target.Sha);
+
+            IEnumerable<TreeEntryChanges> modifiedChanges = _repository.Diff.Compare<TreeChanges>(commitFrom.Tree, commitTo.Tree).Modified;
+            var modifiedPaths = modifiedChanges.Select(entry => FileReaderExtensions.NormalizeFolderPath(entry.Path)).ToList();
+            var result = modifiedPaths.Any(temp => temp.IndexOf(filePath, StringComparison.OrdinalIgnoreCase) >= 0);
+
+            return result;
+        }
+
         #endregion
 
         #region Private methods
+
+        private async Task<List<ExportFileResultModel>> GetAllFilesForTag(string tag)
+        {
+            EnsureArg.IsNotEmptyOrWhiteSpace(tag);
+
+            try
+            {
+                var listOfContentFiles = new List<ExportFileResultModel>();
+
+                if (!IsExistsContentRepositoryDirectory())
+                {
+                    await InitRepositoryAsync().ConfigureAwait(false);
+                }
+
+                _repository = new Repository(_gitConnection.GitLocalFolder);
+
+                var repoTag = _repository.Tags.FirstOrDefault(item => item.FriendlyName == tag);
+                ObjectId commitForTag = GetCommitForTag(repoTag);
+
+                // Let's enumerate all the reachable commits (similarly to `git log --all`)
+                foreach (var commit in _repository.Commits.QueryBy(new CommitFilter
+                { IncludeReachableFrom = commitForTag }))
+                {
+                    if (commit.Id == commitForTag)
+                    {
+                        GetContentOfFiles(commit.Tree, listOfContentFiles);
+                        break;
+                    }
+                }
+
+                return listOfContentFiles;
+            }
+            catch (LibGit2SharpException)
+            {
+                throw;
+            }
+        }
+
         private bool CertificateValidationCallback(object sender, System.Security.Cryptography.X509Certificates.X509Certificate certificate, System.Security.Cryptography.X509Certificates.X509Chain chain, SslPolicyErrors errors) { return true; }
         private void CloneRepository()
         {
@@ -240,22 +297,22 @@
             }
         }
 
-        private void GetContentOfFiles(IRepository repo, Tree tree, ICollection<ExportFileResultModel> contentFromFiles)
+        private void GetContentOfFiles(Tree tree, ICollection<ExportFileResultModel> contentFromFiles)
         {
+            _repository = new Repository(_gitConnection.GitLocalFolder);
             foreach (var treeEntry in tree)
             {
                 var gitObject = treeEntry.Target;
-                var path = treeEntry.Path;
+                var path = FileReaderExtensions.NormalizeFolderPath(treeEntry.Path);
 
                 if (treeEntry.TargetType == TreeEntryTargetType.Tree)
                 {
-                    GetContentOfFiles(repo, (Tree)gitObject, contentFromFiles);
+                    GetContentOfFiles((Tree)gitObject, contentFromFiles);
                 }
-
                 else if (treeEntry.TargetType == TreeEntryTargetType.Blob)
                 {
                     var blob = GetBlobFromFile(treeEntry);
-                    contentFromFiles.Add(new ExportFileResultModel(TextMimeType, System.Text.Encoding.UTF8.GetBytes(blob), path));
+                    contentFromFiles.Add(new ExportFileResultModel(TextMimeType, Encoding.UTF8.GetBytes(blob), path));
                 }
             }
         }
@@ -263,7 +320,6 @@
         private async Task<List<(string, DateTimeOffset)>> GetAllTagsAsync()
         {
             var tags = new List<Tag>();
-
             _repository = new Repository(_gitConnection.GitLocalFolder);
 
             // Add new tags.
@@ -303,7 +359,7 @@
             return content;
         }
 
-        private ObjectId GetAllCommitsForTag(Tag tag)
+        private ObjectId GetCommitForTag(Tag tag)
         {
             EnsureArg.IsNotNull(tag);
             var peeledTarget = tag.PeeledTarget;
@@ -317,6 +373,25 @@
             }
 
             return null;
+        }
+
+        private void GetCommitsBetweenTags(Tag tagFrom, Tag tagTo)
+        {
+            _repository = new Repository(_gitConnection.GitLocalFolder);
+
+            var cf = new CommitFilter
+            {
+                SortBy = CommitSortStrategies.Reverse | CommitSortStrategies.Time,
+                ExcludeReachableFrom = tagFrom.Target.Sha,
+                IncludeReachableFrom = tagTo.Target.Sha
+            };
+
+            var commits = _repository.Commits.QueryBy(cf);
+
+            foreach (var result in commits)
+            {
+                //Process commits here.
+            }
         }
 
         /// <summary>

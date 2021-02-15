@@ -80,7 +80,7 @@
 
             // read default values from toml file defaults.toml
             var defaultValueFromTomlFile =
-                await _firmwareVersionServiceManager.GetDefaultTomlFileContentAsync(firmwareVersion, deviceType).ConfigureAwait(false);
+                await _firmwareVersionServiceManager.GetDefaultTomlFileContentAsync(firmwareVersion).ConfigureAwait(false);
 
             _logger.LogInformation($"{Prefix}: methodName: {nameof(GetDefaultValuesAllModulesAsync)} Getting list of modules {firmwareVersion} and {deviceType}.");
             var listOfModules = await _firmwareVersionServiceManager.GetListOfModulesAsync(firmwareVersion, deviceType).ConfigureAwait(false);

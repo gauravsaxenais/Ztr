@@ -23,10 +23,11 @@
         Task InitRepositoryAsync();
 
         /// <summary>
-        /// Loads the tag names asynchronous.
+        /// Gets all tag names asynchronous.
         /// </summary>
+        /// <param name="folder">The folder.</param>
         /// <returns></returns>
-        Task<List<string>> GetAllTagNamesAsync();
+        Task<List<string>> GetAllTagNamesAsync(string folder);
 
         /// <summary>
         /// Gets the tags earlier than this tag asynchronous.
@@ -41,6 +42,25 @@
         /// <param name="tag">The tag.</param>
         /// <param name="fileName">Name of the file.</param>
         /// <returns></returns>
-        Task<IEnumerable<ExportFileResultModel>> GetFileDataFromTagAsync(string tag, string fileName);
+        Task<ExportFileResultModel> GetFileDataFromTagAsync(string tag, string pathToFile);
+
+        /// <summary>
+        /// Determines whether [is file changed between tags] [the specified tag from].
+        /// </summary>
+        /// <param name="tagFrom">The tag from.</param>
+        /// <param name="tagTo">The tag to.</param>
+        /// <param name="filePath">The file path.</param>
+        /// <returns>
+        ///   <c>true</c> if [is file changed between tags] [the specified tag from]; otherwise, <c>false</c>.
+        /// </returns>
+        bool IsFileChangedBetweenTags(string tagFrom, string tagTo, string filePath);
+
+        /// <summary>
+        /// Determines whether [is folder present in tag] [the specified tag].
+        /// </summary>
+        /// <param name="tag">The tag.</param>
+        /// <param name="folderName">Name of the folder.</param>
+        /// <returns></returns>
+        Task<bool> IsFolderPresentInTag(string tag, string folderName);
     }
 }

@@ -52,7 +52,6 @@
         {
             var prefix = nameof(CompatibleFirmwareVersionController);
             _logger.LogInformation($"{prefix}: Getting list of compatible firmware versions based on a firmware version.");
-
             var result = await _manager.GetCompatibleFirmwareVersionsAsync(module).ConfigureAwait(false);
             
             return Ok(result);

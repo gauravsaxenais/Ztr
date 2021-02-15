@@ -69,7 +69,7 @@
 
             // read default values from toml file defaults.toml
             var defaultValueFromTomlFile =
-                await _firmwareVersionServiceManager.GetDefaultTomlFileContentAsync(firmwareVersion, deviceType).ConfigureAwait(false);
+                await _firmwareVersionServiceManager.GetDefaultTomlFileContentAsync(firmwareVersion).ConfigureAwait(false);
             var blocks = await GetBlocksAsync(defaultValueFromTomlFile, false).ConfigureAwait(false);
 
             return new { blocks };
