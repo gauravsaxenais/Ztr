@@ -5,7 +5,7 @@
 #then run dos2unix file.sh
 #then run this chmod +x file.sh to change permissions.
 #then finally run bash file.sh
-CONTAINER_NAME="m7-qa"
+CONTAINER_NAME="m7-qa" 
 IMAGE_NAME="api:qa"
 OLD="$(docker ps --all --quiet --filter=name="$CONTAINER_NAME")"
 if [ -n "$OLD" ]; then
