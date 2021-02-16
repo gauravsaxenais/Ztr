@@ -47,16 +47,12 @@
 
                     else
                     {
-                        var listOfFields = GetFieldsFromValue(field, dicItem.Kvp.Value);
-                        listOfData.RemoveAll(item => item.Name == field.Name);
-
-                        var tempJsonModel = new JsonField
+                        field.Arrays.Clear();
+                        if (dicItem.Kvp.Value is T[] repeatedValues)
                         {
-                            Name = field.Name,
-                            IsVisible = true,
-                            DataType = "field"
-                        };
-                        tempJsonModel.Arrays.AddRange(new List<List<JsonField>>() { listOfFields });
+                            repeatedValues.ToList().ForEach(item =>
+                                field.Arrays.Add(GetFieldsFromValue(field, item)));
+                        }
                     }
                 }
 
@@ -165,9 +161,14 @@
                 {
                     var tempJsonModel = new JsonField
                     {
-                        Name = field.Name,
-                        IsVisible = true,
-                        DataType = "field"
+                        Name = clonedField.Name,
+                        Value = clonedField.Value,
+                        Min = clonedField.Min,
+                        Max = clonedField.Max,
+                        DataType = clonedField.DataType,
+                        DefaultValue = clonedField.DefaultValue,
+                        IsVisible = false,
+                        IsRepeated = clonedField.IsRepeated
                     };
                     tempJsonModel.Arrays.Add(new List<JsonField>() { jsonField });
                     fields.Add(tempJsonModel);
@@ -244,38 +245,36 @@
 
         private List<JsonField> GetFieldsFromValue(JsonField jsonField, object field)
         {
-            var fields = ((IEnumerable)field).Cast<object>().Select(x => x).ToList(); 
-
-            var listofFields = new List<JsonField>();
             var fieldType = field.GetType();
+            var listOfFields = new List<JsonField>();
+            bool isDictionary = fieldType.IsGenericType && fieldType.GetGenericTypeDefinition() == typeof(Dictionary<,>);
 
-            // just a sanity check to ensure field is an array.
-            if (fieldType.IsArray)
+            // if field is a dictionary
+            if(isDictionary)
             {
-                if(!fields.Any())
-                {
-                    listofFields.Add(jsonField);
-                }
+                var fields = (Dictionary<string, object>)field;
+                var clonedJsonField = (JsonField)jsonField.Clone();
 
                 foreach (var tempItem in fields)
                 {
                     var newField = new JsonField()
                     {
-                        Name = jsonField.Name,
-                        Value = tempItem,
-                        Min = jsonField.Min,
-                        Max = jsonField.Max,
-                        DataType = jsonField.DataType,
-                        DefaultValue = jsonField.DefaultValue,
+                        Name = clonedJsonField.Name,
+                        Value = tempItem.Value,
+                        Min = clonedJsonField.Min,
+                        Max = clonedJsonField.Max,
+                        DataType = clonedJsonField.DataType,
+                        DefaultValue = clonedJsonField.DefaultValue,
                         IsVisible = true,
-                        IsRepeated = jsonField.IsRepeated
+                        IsRepeated = clonedJsonField.IsRepeated
                     };
-                    listofFields.Add(newField);
-                }
-            }
 
-            return listofFields;
-            #endregion
+                    listOfFields.Add(newField);
+                }
+            }      
+                
+            return listOfFields;
         }
+        #endregion
     }
 }

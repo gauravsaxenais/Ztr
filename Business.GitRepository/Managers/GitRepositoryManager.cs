@@ -13,7 +13,6 @@
     using System.Threading.Tasks;
     using ZTR.Framework.Business.File;
     using ZTR.Framework.Business.File.FileReaders;
-    using ZTR.Framework.Business.Models;
     using ZTR.Framework.Configuration;
     using Blob = LibGit2Sharp.Blob;
 
@@ -95,27 +94,6 @@
             var tagNames = tags.Select(x => x.Item1).ToList();
 
             return tagNames;
-        }
-
-        /// <summary>
-        /// Gets the tags earlier than this tag asynchronous.
-        /// </summary>
-        /// <param name="tagName">Name of the tag.</param>
-        /// <returns></returns>
-        public async Task<List<string>> GetTagsEarlierThanThisTagAsync(string tagName)
-        {
-            try
-            {
-                var tags = await GetAllTagsAsync().ConfigureAwait(false);
-                var tag = tags.FirstOrDefault(x => x.Item1 == tagName);
-                var tagNames = tags.Where(x => x.Item2 < tag.Item2).Select(x => x.Item1).ToList();
-
-                return tagNames;
-            }
-            catch (LibGit2SharpException ex)
-            {
-                throw new CustomArgumentException($"Unable to get tags earlier than {tagName} from git repo.", ex);
-            }
         }
 
         /// <summary>
@@ -211,7 +189,6 @@
         #endregion
 
         #region Private methods
-
         private async Task<List<ExportFileResultModel>> GetAllFilesForTag(string tag)
         {
             EnsureArg.IsNotEmptyOrWhiteSpace(tag);
@@ -232,7 +209,7 @@
 
                 // Let's enumerate all the reachable commits (similarly to `git log --all`)
                 foreach (var commit in _repository.Commits.QueryBy(new CommitFilter
-                { IncludeReachableFrom = commitForTag }))
+                { IncludeReachableFrom = _repository.Refs }))
                 {
                     if (commit.Id == commitForTag)
                     {

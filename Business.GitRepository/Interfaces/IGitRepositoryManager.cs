@@ -30,13 +30,6 @@
         Task<List<string>> GetAllTagNamesAsync(string folder);
 
         /// <summary>
-        /// Gets the tags earlier than this tag asynchronous.
-        /// </summary>
-        /// <param name="tagName">Name of the tag.</param>
-        /// <returns></returns>
-        Task<List<string>> GetTagsEarlierThanThisTagAsync(string tagName);
-
-        /// <summary>
         /// Gets the file data from tag asynchronous.
         /// </summary>
         /// <param name="tag">The tag.</param>

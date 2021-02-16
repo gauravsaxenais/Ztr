@@ -28,13 +28,6 @@
         void SetGitRepoUrl(string gitUrl);
 
         /// <summary>
-        /// Gets the tags earlier than this tag.
-        /// </summary>
-        /// <param name="firmwareVersion">The firmware version.</param>
-        /// <returns></returns>
-        Task<List<string>> GetTagsEarlierThanThisTagAsync(string firmwareVersion);
-
-        /// <summary>
         /// Gets the default toml file content asynchronous.
         /// </summary>
         /// <param name="firmwareVersion">The firmware version.</param>
@@ -63,6 +56,6 @@
         /// <param name="fromTags">From tags.</param>
         /// <param name="mainTag">The main tag.</param>
         /// <returns></returns>
-        Task<List<string>> GetTagsWithNoDeviceFileModified(List<string> fromTags, string mainTag);
+        Task<List<string>> GetTagsWithNoDeviceFileModified(IEnumerable<string> fromTags, string mainTag);
     }
 }

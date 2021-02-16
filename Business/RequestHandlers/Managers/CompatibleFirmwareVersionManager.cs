@@ -6,6 +6,7 @@
     using Interfaces;
     using Microsoft.Extensions.Logging;
     using Models;
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -49,17 +50,22 @@
             EnsureArg.HasItems(module.Modules);
 
             var prefix = nameof(CompatibleFirmwareVersionManager);
-            var firmwareVersions = new List<string>();
+            var firmwareVersions = new HashSet<string>();
 
             _logger.LogInformation($"{prefix}: methodName: {nameof(GetCompatibleFirmwareVersionsAsync)} Getting list of compatible firmware versions based on a firmware version.");
-            var listOfTags = await _firmwareVersionServiceManager.GetTagsEarlierThanThisTagAsync(module.FirmwareVersion).ConfigureAwait(false);
-            
-            foreach (var tag in listOfTags)
+            _logger.LogInformation($"{prefix}: methodName: {nameof(GetCompatibleFirmwareVersionsAsync)}Clonging firmware version git repository.");
+            await _firmwareVersionServiceManager.CloneGitRepoAsync().ConfigureAwait(false);
+
+            var listOfTags = await _firmwareVersionServiceManager.GetAllFirmwareVersionsAsync().ConfigureAwait(false);
+            var filteredList = listOfTags.Where(x => !string.Equals(x, module.FirmwareVersion, StringComparison.OrdinalIgnoreCase));
+
+            var tagsWithNoDeviceFileModified = await _firmwareVersionServiceManager.GetTagsWithNoDeviceFileModified(filteredList, module.FirmwareVersion);
+            firmwareVersions.UnionWith(tagsWithNoDeviceFileModified);
+            filteredList = filteredList.Except(tagsWithNoDeviceFileModified);
+            foreach (var tag in filteredList)
             {
                 var moduleList = await _firmwareVersionServiceManager.GetListOfModulesAsync(tag, module.DeviceType).ConfigureAwait(false);
-
                 var contained = module.Modules.Intersect(moduleList, new ModuleReadModelComparer()).Count() == module.Modules.Count();
-
                 if (contained)
                 {
                     firmwareVersions.Add(tag);

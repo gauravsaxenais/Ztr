@@ -105,23 +105,12 @@
         }
 
         /// <summary>
-        /// Gets the tags earlier than this tag.
-        /// </summary>
-        /// <param name="firmwareVersion">The firmware version.</param>
-        /// <returns></returns>
-        public async Task<List<string>> GetTagsEarlierThanThisTagAsync(string firmwareVersion)
-        {
-            var listOfTags = await RepoManager.GetTagsEarlierThanThisTagAsync(firmwareVersion).ConfigureAwait(false);
-            return listOfTags;
-        }
-
-        /// <summary>
         /// Gets the tags with device file modified.
         /// </summary>
         /// <param name="fromTags">From tags.</param>
         /// <param name="mainTag">The main tag.</param>
         /// <returns></returns>
-        public async Task<List<string>> GetTagsWithNoDeviceFileModified(List<string> fromTags, string mainTag)
+        public async Task<List<string>> GetTagsWithNoDeviceFileModified(IEnumerable<string> fromTags, string mainTag)
         {
             var listOfTags = new List<string>();
             var firmwareVersionConnectionOptions = ((FirmwareVersionGitConnectionOptions)ConnectionOptions);
