@@ -1,5 +1,6 @@
 ﻿namespace Business.Parsers.ProtoParser.Models
 {
+    using Newtonsoft.Json;
     using System;
 
     public class Field : ICloneable
@@ -18,6 +19,7 @@
 
         public string DataType { get; set; }
 
+        [JsonIgnore]
         public bool IsRepeated { get; set; }
 
         public object Clone()

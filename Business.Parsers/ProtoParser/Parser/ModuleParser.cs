@@ -9,6 +9,13 @@
 
     public class ModuleParser : IModuleParser
     {
+        /// <summary>
+        /// Merges the toml with proto message.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="configValues">The configuration values.</param>
+        /// <param name="protoParsedMessage">The proto parsed message.</param>
+        /// <returns></returns>
         public List<JsonField> MergeTomlWithProtoMessage<T>(T configValues, ProtoParsedMessage protoParsedMessage) where T : Dictionary<string, object>
         {
             var listOfData = new List<JsonField>();
@@ -42,7 +49,14 @@
                     {
                         var listOfFields = GetFieldsFromValue(field, dicItem.Kvp.Value);
                         listOfData.RemoveAll(item => item.Name == field.Name);
-                        listOfData.AddRange(listOfFields);
+
+                        var tempJsonModel = new JsonField
+                        {
+                            Name = field.Name,
+                            IsVisible = true,
+                            DataType = "field"
+                        };
+                        tempJsonModel.Arrays.AddRange(new List<List<JsonField>>() { listOfFields });
                     }
                 }
 
@@ -94,7 +108,6 @@
 
             // fix the indexes
             FixIndex(listOfData);
-
             return listOfData;
         }
 
@@ -132,20 +145,39 @@
         private IEnumerable<JsonField> GetFieldsFromProtoMessage(ProtoParsedMessage protoParsedMessage)
         {
             EnsureArg.IsNotNull(protoParsedMessage);
-
-            return protoParsedMessage.Fields.Select(field => (Field)field.Clone())
-                .Select(newField => new JsonField
+            var fields = new List<JsonField>();
+            foreach (var field in protoParsedMessage.Fields)
+            {
+                var clonedField = (Field)field.Clone();
+                var jsonField = new JsonField()
                 {
-                    Name = newField.Name,
-                    Value = newField.Value,
-                    Min = newField.Min,
-                    Max = newField.Max,
-                    DataType = newField.DataType,
-                    DefaultValue = newField.DefaultValue,
+                    Name = clonedField.Name,
+                    Value = clonedField.Value,
+                    Min = clonedField.Min,
+                    Max = clonedField.Max,
+                    DataType = clonedField.DataType,
+                    DefaultValue = clonedField.DefaultValue,
                     IsVisible = false,
-                    IsRepeated = newField.IsRepeated
-                })
-                .ToList();
+                    IsRepeated = clonedField.IsRepeated
+                };
+
+                if (field.IsRepeated)
+                {
+                    var tempJsonModel = new JsonField
+                    {
+                        Name = field.Name,
+                        IsVisible = true,
+                        DataType = "field"
+                    };
+                    tempJsonModel.Arrays.Add(new List<JsonField>() { jsonField });
+                    fields.Add(tempJsonModel);
+                }
+                else
+                {
+                    fields.Add(jsonField);
+                }
+            }
+            return fields;
         }
         #endregion
 

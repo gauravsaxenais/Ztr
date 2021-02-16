@@ -132,6 +132,8 @@
             EnsureArg.IsNotEmptyOrWhiteSpace(pathToFile, nameof(pathToFile));
 
             var listOfContentFiles = await GetAllFilesForTag(tag).ConfigureAwait(false);
+            pathToFile = FileReaderExtensions.NormalizeFolderPath(pathToFile);
+
             var file = listOfContentFiles.FirstOrDefault(p =>
                             p.FileName?.IndexOf(pathToFile, StringComparison.OrdinalIgnoreCase) >= 0);
 
@@ -297,6 +299,11 @@
             }
         }
 
+        /// <summary>
+        /// Gets the content of files.
+        /// </summary>
+        /// <param name="tree">The tree.</param>
+        /// <param name="contentFromFiles">The content from files.</param>
         private void GetContentOfFiles(Tree tree, ICollection<ExportFileResultModel> contentFromFiles)
         {
             _repository = new Repository(_gitConnection.GitLocalFolder);
@@ -368,30 +375,10 @@
             {
                 // We're not interested by Tags pointing at Blobs or Trees
                 var commitId = peeledTarget.Id;
-
                 return commitId;
             }
 
             return null;
-        }
-
-        private void GetCommitsBetweenTags(Tag tagFrom, Tag tagTo)
-        {
-            _repository = new Repository(_gitConnection.GitLocalFolder);
-
-            var cf = new CommitFilter
-            {
-                SortBy = CommitSortStrategies.Reverse | CommitSortStrategies.Time,
-                ExcludeReachableFrom = tagFrom.Target.Sha,
-                IncludeReachableFrom = tagTo.Target.Sha
-            };
-
-            var commits = _repository.Commits.QueryBy(cf);
-
-            foreach (var result in commits)
-            {
-                //Process commits here.
-            }
         }
 
         /// <summary>

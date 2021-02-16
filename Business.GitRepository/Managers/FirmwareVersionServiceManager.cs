@@ -5,14 +5,12 @@
     using EnsureThat;
     using Interfaces;
     using Microsoft.Extensions.Logging;
-    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
     using ZTR.Framework.Business;
     using ZTR.Framework.Business.File.FileReaders;
-    using ZTR.Framework.Configuration;
 
     /// <summary>
     /// FirmwareVersion Service Manager
@@ -77,7 +75,6 @@
         public void SetGitRepoUrl(string gitUrl)
         {
             EnsureArg.IsNotEmptyOrWhiteSpace(gitUrl);
-
             ConnectionOptions.GitRemoteLocation = gitUrl;
             RepoManager.SetConnectionOptions(ConnectionOptions);
         }
@@ -90,16 +87,18 @@
         public async Task<string> GetDefaultTomlFileContentAsync(string firmwareVersion)
         {
             _logger.LogInformation($"{Prefix} method name: {nameof(GetDefaultTomlFileContentAsync)}: Getting default value from toml file for {firmwareVersion}.");
-            var defaultPath = ((FirmwareVersionGitConnectionOptions)ConnectionOptions).DefaultTomlConfiguration.DefaultTomlFile;
-            var defaultValueFromTomlFile = await GetFileContentFromPath(firmwareVersion, defaultPath).ConfigureAwait(false);
+            var firmwareVersionConnectionOptions = ((FirmwareVersionGitConnectionOptions)ConnectionOptions);
+            var defaultPath = Path.Combine(firmwareVersionConnectionOptions.DefaultTomlConfiguration.TomlConfigFolder, firmwareVersionConnectionOptions.DefaultTomlConfiguration.DefaultTomlFile);
 
+            var defaultValueFromTomlFile = await GetFileContentFromPath(firmwareVersion, defaultPath).ConfigureAwait(false);
             return defaultValueFromTomlFile;
         }
 
         public async Task<string> GetDeviceTomlFileContentAsync(string firmwareVersion)
         {
             _logger.LogInformation($"{Prefix} method name: {nameof(GetDeviceTomlFileContentAsync)}: Getting device value from toml file for {firmwareVersion}.");
-            var devicesPath = ((FirmwareVersionGitConnectionOptions)ConnectionOptions).DefaultTomlConfiguration.DeviceTomlFile;
+            var firmwareVersionConnectionOptions = ((FirmwareVersionGitConnectionOptions)ConnectionOptions);
+            var devicesPath = Path.Combine(firmwareVersionConnectionOptions.DefaultTomlConfiguration.TomlConfigFolder, firmwareVersionConnectionOptions.DefaultTomlConfiguration.DeviceTomlFile);
             var deviceValueFromTomlFile = await GetFileContentFromPath(firmwareVersion, devicesPath).ConfigureAwait(false);
 
             return deviceValueFromTomlFile;
@@ -125,11 +124,12 @@
         public async Task<List<string>> GetTagsWithNoDeviceFileModified(List<string> fromTags, string mainTag)
         {
             var listOfTags = new List<string>();
-            var deviceFile = ((FirmwareVersionGitConnectionOptions)ConnectionOptions).DefaultTomlConfiguration.DeviceTomlFile;
+            var firmwareVersionConnectionOptions = ((FirmwareVersionGitConnectionOptions)ConnectionOptions);
+            var devicesPath = Path.Combine(firmwareVersionConnectionOptions.DefaultTomlConfiguration.TomlConfigFolder, firmwareVersionConnectionOptions.DefaultTomlConfiguration.DeviceTomlFile);
 
-            foreach(var fromTag in fromTags)
+            foreach (var fromTag in fromTags)
             {
-                if(!RepoManager.IsFileChangedBetweenTags(fromTag, mainTag, deviceFile))
+                if(!RepoManager.IsFileChangedBetweenTags(fromTag, mainTag, devicesPath))
                 {
                     listOfTags.Add(fromTag);
                 }
@@ -184,13 +184,6 @@
                 fileContent = System.Text.Encoding.UTF8.GetString(file.Data);
             }
             return fileContent;
-        }
-
-        protected override void SetupDependencies(GitConnectionOptions connectionOptions)
-        {
-            var firmwareVersionGitConnectionOptions = (FirmwareVersionGitConnectionOptions)connectionOptions;
-            firmwareVersionGitConnectionOptions.DefaultTomlConfiguration.DeviceTomlFile = Path.Combine(firmwareVersionGitConnectionOptions.DefaultTomlConfiguration.TomlConfigFolder, firmwareVersionGitConnectionOptions.DefaultTomlConfiguration.DeviceTomlFile);
-            firmwareVersionGitConnectionOptions.DefaultTomlConfiguration.DefaultTomlFile = Path.Combine(firmwareVersionGitConnectionOptions.DefaultTomlConfiguration.TomlConfigFolder, firmwareVersionGitConnectionOptions.DefaultTomlConfiguration.DefaultTomlFile);
         }
     }
 }
