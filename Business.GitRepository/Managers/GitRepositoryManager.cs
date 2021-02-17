@@ -172,6 +172,10 @@
         /// </returns>
         public bool IsFileChangedBetweenTags(string tagFrom, string tagTo, string filePath)
         {
+            EnsureArg.IsNotEmptyOrWhiteSpace(tagFrom, nameof(tagFrom));
+            EnsureArg.IsNotEmptyOrWhiteSpace(tagTo, nameof(tagTo));
+            EnsureArg.IsNotEmptyOrWhiteSpace(filePath, nameof(filePath));
+
             filePath = FileReaderExtensions.NormalizeFolderPath(filePath);
             Tag toTag = _repository.Tags[tagTo];
             Tag fromTag = _repository.Tags[tagFrom];
@@ -501,7 +505,7 @@
                         {
                             postBuffer.Seek(0, SeekOrigin.Begin);
 
-                            using (Stream requestStream = request.GetRequestStream())
+                            using (var requestStream = request.GetRequestStream())
                             {
                                 postBuffer.WriteTo(requestStream);
                             }

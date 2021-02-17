@@ -15,7 +15,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <OutputPath></OutputPath>
-    <NoWarn>1701;1702;1591</NoWarn>
+    <NoWarn>1701;1702</NoWarn>
     <DocumentationFile>obj\Debug\netcoreapp3.1\ZTR.Framework.Service.xml</DocumentationFile>
   </PropertyGroup>
 

@@ -73,7 +73,7 @@
         public async Task<IEnumerable<ModuleReadModel>> GetDefaultValuesAllModulesAsync(string firmwareVersion, string deviceType)
         {
             _logger.LogInformation($"{Prefix}: methodName: {nameof(GetDefaultValuesAllModulesAsync)} Getting default values for {firmwareVersion} and {deviceType}.");
-            _logger.LogInformation($"{Prefix}: methodName: {nameof(GetDefaultValuesAllModulesAsync)}Clonging firmware version git repository.");
+            _logger.LogInformation($"{Prefix}: methodName: {nameof(GetDefaultValuesAllModulesAsync)} Cloning firmware version git repository.");
             await _firmwareVersionServiceManager.CloneGitRepoAsync().ConfigureAwait(false);
 
             // read default values from toml file defaults.toml

@@ -1,6 +1,8 @@
 ﻿namespace ZTR.Framework.Configuration.Builder.Abstraction
 {
-    #pragma warning disable CS1591
+    /// <summary>
+    /// This interface maps with appsettings file.
+    /// </summary>
     public interface IConfigurationOptions
     {
         /// <summary>
@@ -11,5 +13,4 @@
         /// </value>
         string SectionName { get; }
     }
-    #pragma warning restore CS1591
 }

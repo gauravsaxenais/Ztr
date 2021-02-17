@@ -53,15 +53,15 @@
             var firmwareVersions = new HashSet<string>();
 
             _logger.LogInformation($"{prefix}: methodName: {nameof(GetCompatibleFirmwareVersionsAsync)} Getting list of compatible firmware versions based on a firmware version.");
-            _logger.LogInformation($"{prefix}: methodName: {nameof(GetCompatibleFirmwareVersionsAsync)}Clonging firmware version git repository.");
+            _logger.LogInformation($"{prefix}: methodName: {nameof(GetCompatibleFirmwareVersionsAsync)} Cloning firmware version git repository.");
             await _firmwareVersionServiceManager.CloneGitRepoAsync().ConfigureAwait(false);
 
             var listOfTags = await _firmwareVersionServiceManager.GetAllFirmwareVersionsAsync().ConfigureAwait(false);
             var filteredList = listOfTags.Where(x => !string.Equals(x, module.FirmwareVersion, StringComparison.OrdinalIgnoreCase));
-
             var tagsWithNoDeviceFileModified = await _firmwareVersionServiceManager.GetTagsWithNoDeviceFileModified(filteredList, module.FirmwareVersion);
             firmwareVersions.UnionWith(tagsWithNoDeviceFileModified);
             filteredList = filteredList.Except(tagsWithNoDeviceFileModified);
+
             foreach (var tag in filteredList)
             {
                 var moduleList = await _firmwareVersionServiceManager.GetListOfModulesAsync(tag, module.DeviceType).ConfigureAwait(false);
@@ -70,10 +70,7 @@
                 {
                     firmwareVersions.Add(tag);
                 }
-
-                else break;
             }
-
             return firmwareVersions;
         }
     }

@@ -8,15 +8,35 @@
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Hosting;
 
-    #pragma warning disable CS1591 
+    /// <summary>
+    /// Application Configuration class for environments.
+    /// </summary>
     public static class ApplicationConfiguration
     {
         private static readonly string _currentEnvironment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
+        /// <summary>
+        /// Gets a value indicating whether this instance is development.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is development; otherwise, <c>false</c>.
+        /// </value>
         public static bool IsDevelopment => IsEnvironment(Environments.Development);
 
+        /// <summary>
+        /// Gets a value indicating whether this instance is production.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is production; otherwise, <c>false</c>.
+        /// </value>
         public static bool IsProduction => IsEnvironment(Environments.Production);
 
+        /// <summary>
+        /// Gets a value indicating whether this instance is staging.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is staging; otherwise, <c>false</c>.
+        /// </value>
         public static bool IsStaging => IsEnvironment(Environments.Staging);
 
         /// <summary>
@@ -89,5 +109,4 @@
                 .Where(t => typeof(IConfigurationOptions).IsAssignableFrom(t) && t.IsClass && !t.IsAbstract));
         }
     }
-    #pragma warning restore CS1591
 }
