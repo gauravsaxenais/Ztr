@@ -59,17 +59,6 @@
             return firmwareVersionsWithSpecFolder;
         }
 
-        private async Task<List<KeyValuePair<string, bool>>> HasFirmwareVersionSpecFolder(List<string> firmwareVersions, string specConfigFolder)
-        {
-            var results = new List<KeyValuePair<string, bool>>();
-            foreach(var version in firmwareVersions)
-            {
-                var isPresent = await RepoManager.IsFolderPresentInTag(version, specConfigFolder).ConfigureAwait(false);
-                results.Add(new KeyValuePair<string, bool>(version, isPresent));
-            }
-            return results;
-        }
-
         /// <summary>
         /// Clones the git hub repo asynchronous.
         /// </summary>
@@ -111,7 +100,6 @@
             var firmwareVersionConnectionOptions = ((FirmwareVersionGitConnectionOptions)ConnectionOptions);
             var devicesPath = Path.Combine(firmwareVersionConnectionOptions.DefaultTomlConfiguration.TomlConfigFolder, firmwareVersionConnectionOptions.DefaultTomlConfiguration.DeviceTomlFile);
             var deviceValueFromTomlFile = await GetFileContentFromPath(firmwareVersion, devicesPath).ConfigureAwait(false);
-
             return deviceValueFromTomlFile;
         }
 
@@ -168,7 +156,6 @@
         /// Gets the file content from path.
         /// </summary>
         /// <param name="firmwareVersion">The firmware version.</param>
-        /// <param name="deviceType">Type of the device.</param>
         /// <param name="path">The path.</param>
         /// <returns></returns>
         private async Task<string> GetFileContentFromPath(string firmwareVersion, string path)

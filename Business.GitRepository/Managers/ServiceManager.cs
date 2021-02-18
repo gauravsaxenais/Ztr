@@ -50,7 +50,6 @@
         /// Sets the connection.
         /// </summary>
         /// <param name="connectionOptions">The connection options.</param>
-        /// <exception cref="CustomArgumentException">Current directory path is not valid.</exception>
         public void SetConnection(GitConnectionOptions connectionOptions)
         {
             _logger.LogInformation("Setting git repository connection");          
@@ -65,12 +64,6 @@
         private string GetCurrentAppPath()
         {
             var currentDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-
-            if (currentDirectory == null)
-            {
-                throw new CustomArgumentException("Current directory path is not valid.");
-            }
-
             return currentDirectory;
         }
     }
