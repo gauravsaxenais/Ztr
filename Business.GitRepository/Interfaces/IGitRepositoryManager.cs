@@ -25,9 +25,8 @@
         /// <summary>
         /// Gets all tag names asynchronous.
         /// </summary>
-        /// <param name="folder">The folder.</param>
         /// <returns></returns>
-        Task<List<string>> GetAllTagNamesAsync(string folder);
+        Task<List<string>> GetAllTagNamesAsync();
 
         /// <summary>
         /// Gets the file data from tag asynchronous.

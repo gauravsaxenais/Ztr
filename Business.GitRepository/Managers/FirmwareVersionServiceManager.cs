@@ -22,7 +22,7 @@
     {
         private readonly ILogger<FirmwareVersionServiceManager> _logger;
         private const string Prefix = nameof(FirmwareVersionServiceManager);
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FirmwareVersionServiceManager"/> class.
         /// </summary>
@@ -45,18 +45,29 @@
             _logger.LogInformation(
                 $"{Prefix} method name: {nameof(GetAllFirmwareVersionsAsync)}: Getting list of all firmware versions for deviceType.");
             var specConfigFolder = ((FirmwareVersionGitConnectionOptions)ConnectionOptions).DefaultTomlConfiguration.TomlConfigFolder;
-            var firmwareVersions = await RepoManager.GetAllTagNamesAsync(specConfigFolder).ConfigureAwait(false);
-            var firmwareVersionsWithSpecFolder = new List<string>();
+            var firmwareVersions = await RepoManager.GetAllTagNamesAsync().ConfigureAwait(false);
+            var firmwareVersionsWithSpecFolder = new List<string>();         
+            Parallel.ForEach(firmwareVersions, async firmwareVersion => 
+            {
+                var isPresent = await RepoManager.IsFolderPresentInTag(firmwareVersion, specConfigFolder).ConfigureAwait(false);
+                if (isPresent)
+                {
+                    firmwareVersionsWithSpecFolder.Add(firmwareVersion);
+                }
+            });
+            
+            return firmwareVersionsWithSpecFolder;
+        }
 
+        private async Task<List<KeyValuePair<string, bool>>> HasFirmwareVersionSpecFolder(List<string> firmwareVersions, string specConfigFolder)
+        {
+            var results = new List<KeyValuePair<string, bool>>();
             foreach(var version in firmwareVersions)
             {
                 var isPresent = await RepoManager.IsFolderPresentInTag(version, specConfigFolder).ConfigureAwait(false);
-                if(isPresent)
-                {
-                    firmwareVersionsWithSpecFolder.Add(version);
-                }
+                results.Add(new KeyValuePair<string, bool>(version, isPresent));
             }
-            return firmwareVersionsWithSpecFolder;
+            return results;
         }
 
         /// <summary>
@@ -118,7 +129,7 @@
 
             foreach (var fromTag in fromTags)
             {
-                if(!RepoManager.IsFileChangedBetweenTags(fromTag, mainTag, devicesPath))
+                if (!RepoManager.IsFileChangedBetweenTags(fromTag, mainTag, devicesPath))
                 {
                     listOfTags.Add(fromTag);
                 }

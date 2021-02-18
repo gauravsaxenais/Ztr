@@ -67,7 +67,14 @@
                 // and local repository matches remote repo details
                 if (IsExistsLocalRepositoryDirectory() && IsLocalRepositorySameAsRemote())
                 {
-                    GetLatestFromRepository();
+                    try
+                    {
+                        GetLatestFromRepository();
+                    }
+                    catch(LibGit2SharpException)
+                    {
+                        ActionOnRepositoryWithoutHttps(GetLatestFromRepository);
+                    }
                 }
                 else
                 {
@@ -80,9 +87,9 @@
                         Directory.CreateDirectory(_gitConnection.GitLocalFolder);
                         CloneRepository();
                     }
-                    catch (Exception)
+                    catch (LibGit2SharpException)
                     {
-                        CloneRepositoryWithoutHttps();
+                        ActionOnRepositoryWithoutHttps(CloneRepository);
                     }
                 }
             }
@@ -93,9 +100,8 @@
         /// <summary>
         /// Gets all tag names asynchronous.
         /// </summary>
-        /// <param name="folder">The folder.</param>
         /// <returns></returns>
-        public async Task<List<string>> GetAllTagNamesAsync(string folder)
+        public async Task<List<string>> GetAllTagNamesAsync()
         {
             var tags = await GetAllTagsAsync().ConfigureAwait(false);
             var tagNames = tags.Select(x => x.Item1).ToList();
@@ -191,20 +197,14 @@
             try
             {
                 var listOfContentFiles = new List<ExportFileResultModel>();
-
-                if (!IsExistsLocalRepositoryDirectory())
-                {
-                    await InitRepositoryAsync().ConfigureAwait(false);
-                }
-
+                
                 _repository = new Repository(_gitConnection.GitLocalFolder);
-
                 var repoTag = _repository.Tags.FirstOrDefault(item => item.FriendlyName == tag);
                 ObjectId commitForTag = GetCommitForTag(repoTag);
 
                 // Let's enumerate all the reachable commits (similarly to `git log --all`)
                 foreach (var commit in _repository.Commits.QueryBy(new CommitFilter
-                { IncludeReachableFrom = _repository.Refs }))
+                { IncludeReachableFrom = commitForTag }))
                 {
                     if (commit.Id == commitForTag)
                     {
@@ -212,7 +212,8 @@
                         break;
                     }
                 }
-
+                
+                await Task.CompletedTask;
                 return listOfContentFiles;
             }
             catch (LibGit2SharpException)
@@ -234,16 +235,15 @@
             _repository = new Repository(_gitConnection.GitLocalFolder);
         }
 
-        private void CloneRepositoryWithoutHttps()
+        private void ActionOnRepositoryWithoutHttps(Action action)
         {
             SmartSubtransportRegistration<MockSmartSubtransport> registration = null;
             var scheme = "https";
-
             try
             {
                 ServicePointManager.ServerCertificateValidationCallback = CertificateValidationCallback;
                 registration = GlobalSettings.RegisterSmartSubtransport<MockSmartSubtransport>(scheme);
-                CloneRepository();
+                action();
             }
             finally
             {
@@ -258,16 +258,10 @@
             var network = _repository.Network.Remotes.First();
             var refSpecs = new List<string>() { network.FetchRefSpecs.First().Specification };
             var fetchOptions = new FetchOptions { TagFetchMode = TagFetchMode.All };
-            try
-            {
-                fetchOptions.CredentialsProvider += (_url, _user, _cred) => new DefaultCredentials();
-                _repository.Network.Fetch(network.Name, refSpecs, fetchOptions);
-            }
-            catch (Exception)
-            {
-                fetchOptions.CredentialsProvider = (_url, _user, _cred) => _userNamePasswordCredentials;
-                _repository.Network.Fetch(network.Name, refSpecs, fetchOptions);
-            }
+            fetchOptions.CredentialsProvider = (_url, _user, _cred) => new DefaultCredentials();
+            fetchOptions.CredentialsProvider += (_url, _user, _cred) => _userNamePasswordCredentials;
+
+            _repository.Network.Fetch(network.Name, refSpecs, fetchOptions);
         }
 
         /// <summary>
@@ -393,14 +387,12 @@
         {
             EnsureArg.IsNotNull(tag);
             var peeledTarget = tag.PeeledTarget;
-
             if (peeledTarget is Commit)
             {
                 // We're not interested by Tags pointing at Blobs or Trees
                 var commitId = peeledTarget.Id;
                 return commitId;
             }
-
             return null;
         }
 
