@@ -73,7 +73,7 @@
         public async Task<IEnumerable<ModuleReadModel>> GetDefaultValuesAllModulesAsync(string firmwareVersion, string deviceType)
         {
             _logger.LogInformation($"{Prefix}: methodName: {nameof(GetDefaultValuesAllModulesAsync)} Getting default values for {firmwareVersion} and {deviceType}.");
-            _logger.LogInformation($"{Prefix}: methodName: {nameof(GetDefaultValuesAllModulesAsync)}Clonging firmware version git repository.");
+            _logger.LogInformation($"{Prefix}: methodName: {nameof(GetDefaultValuesAllModulesAsync)} Cloning firmware version git repository.");
             await _firmwareVersionServiceManager.CloneGitRepoAsync().ConfigureAwait(false);
 
             // read default values from toml file defaults.toml
@@ -101,15 +101,12 @@
         public async Task MergeValuesWithModulesAsync(string defaultValueFromTomlFile, IEnumerable<ModuleReadModel> listOfModules)
         {
             _logger.LogInformation($"{Prefix}: method name: {nameof(MergeValuesWithModulesAsync)} Merging default values with list of modules in parallel...");
-
             var moduleReadModels = listOfModules.ToList();
             var modulesTasks = new List<Task>();
-
             for (var index = 0; index < moduleReadModels.Count(); index++)
             {
                 modulesTasks.Add(MergeDefaultValuesWithModuleAsync(defaultValueFromTomlFile, moduleReadModels.ElementAt(index)));
             }
-
             await Task.WhenAll(modulesTasks);
         }
 

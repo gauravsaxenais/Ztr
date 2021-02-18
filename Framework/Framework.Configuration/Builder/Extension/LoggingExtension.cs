@@ -4,7 +4,9 @@
     using Microsoft.Extensions.Logging;
     using Serilog;
 
-    #pragma warning disable CS1591
+    /// <summary>
+    /// Logging extensions
+    /// </summary>
     public static class LoggingExtension
     {
         /// <summary>
@@ -51,5 +53,4 @@
             return loggingBuilder;
         }
     }
-    #pragma warning restore CS1591
 }

@@ -4,7 +4,9 @@
     using System.IO;
     using Microsoft.Extensions.Configuration;
 
-    #pragma warning disable CS1591
+    /// <summary>
+    /// ConfigurationBuilderExtension
+    /// </summary>
     public static class ConfigurationBuilderExtension
     {
         private const string JsonFileName = "appsettings.json";
@@ -32,5 +34,4 @@
             return configuration;
         }
     }
-    #pragma warning restore CS1591
 }

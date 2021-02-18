@@ -5,7 +5,9 @@
     using Extension;
     using Microsoft.Extensions.Configuration;
 
-    #pragma warning disable CS1591
+    /// <summary>
+    /// Abstract app builder class.
+    /// </summary>
     public abstract class AbstractAppBuilder
     {
         /// <summary>
@@ -28,5 +30,4 @@
             }
         }
     }
-    #pragma warning restore CS1591
 }

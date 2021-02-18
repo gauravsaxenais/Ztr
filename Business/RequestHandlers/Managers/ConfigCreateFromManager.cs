@@ -131,9 +131,7 @@
             var data = TomlFileReader.ReadDataFromString<ConfigurationReadModel>(configTomlFile);
 
             var listOfModules = data.Module;
-
             listOfModules = listOfModules.Select((module, index) => new ModuleReadModel { Id = index, Config = module.Config, Name = module.Name, UUID = module.UUID }).ToList();
-
             return listOfModules;
         }
     }

@@ -3,7 +3,10 @@
     using System;
     using System.Collections.Generic;
 
-    #pragma warning disable CS1591
+    /// <summary>
+    /// Interface for AppBuilder
+    /// </summary>
+    /// <typeparam name="TBuilder">The type of the builder.</typeparam>
     public interface IAppBuilder<TBuilder>
     {
         /// <summary>
@@ -39,5 +42,4 @@
         /// <returns></returns>
         TBuilder ConfigureServices(TBuilder builder, List<IConfigurationOptions> configurationOptions);
     }
-    #pragma warning restore CS1591
 }
