@@ -25,9 +25,7 @@
         public object Clone()
         {
             var other = (Field)MemberwiseClone();
-
             DeepCopy(other);
-
             return other;
         }
 

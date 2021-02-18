@@ -10,7 +10,9 @@
     using System.Net;
     using System.Net.Security;
     using System.Text;
+    using System.Threading;
     using System.Threading.Tasks;
+    using ZTR.Framework.Business;
     using ZTR.Framework.Business.File;
     using ZTR.Framework.Business.File.FileReaders;
     using ZTR.Framework.Configuration;
@@ -62,7 +64,8 @@
             lock (_syncRoot)
             {
                 // clone only when there is a change.
-                if (IsExistsContentRepositoryDirectory())
+                // and local repository matches remote repo details
+                if (IsExistsLocalRepositoryDirectory() && IsLocalRepositorySameAsRemote())
                 {
                     GetLatestFromRepository();
                 }
@@ -70,6 +73,10 @@
                 {
                     try
                     {
+                        if (Directory.Exists(_gitConnection.GitLocalFolder))
+                        {
+                            DeleteDirectory(_gitConnection.GitLocalFolder);
+                        }
                         Directory.CreateDirectory(_gitConnection.GitLocalFolder);
                         CloneRepository();
                     }
@@ -139,29 +146,6 @@
         }
 
         /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        public void Dispose()
-        {
-            _repository?.Dispose();
-        }
-
-        /// <summary>
-        /// This method checks whether a folder 
-        /// exists in a local directory
-        /// and if there is ".git" sub folder
-        /// within the same.
-        /// </summary>
-        /// <returns>
-        /// true: if a folder and ".git" folder is present.
-        /// false: if a folder and ".git" folder isn't present.
-        /// </returns>
-        public bool IsExistsContentRepositoryDirectory()
-        {
-            return Directory.Exists(_gitConnection.GitLocalFolder) && IsGitSubDirPresent(_gitConnection.GitLocalFolder);
-        }
-
-        /// <summary>
         /// Determines whether [is file changed between tags] [the specified tag from].
         /// </summary>
         /// <param name="tagFrom">The tag from.</param>
@@ -190,6 +174,13 @@
             return result;
         }
 
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            _repository?.Dispose();
+        }
         #endregion
 
         #region Private methods
@@ -201,7 +192,7 @@
             {
                 var listOfContentFiles = new List<ExportFileResultModel>();
 
-                if (!IsExistsContentRepositoryDirectory())
+                if (!IsExistsLocalRepositoryDirectory())
                 {
                     await InitRepositoryAsync().ConfigureAwait(false);
                 }
@@ -229,7 +220,6 @@
                 throw;
             }
         }
-
         private bool CertificateValidationCallback(object sender, System.Security.Cryptography.X509Certificates.X509Certificate certificate, System.Security.Cryptography.X509Certificates.X509Chain chain, SslPolicyErrors errors) { return true; }
         private void CloneRepository()
         {
@@ -277,6 +267,58 @@
             {
                 fetchOptions.CredentialsProvider = (_url, _user, _cred) => _userNamePasswordCredentials;
                 _repository.Network.Fetch(network.Name, refSpecs, fetchOptions);
+            }
+        }
+
+        /// <summary>
+        /// Recursively deletes a directory as well as any subdirectories and files. If the files are read-only, they are flagged as normal and then deleted.
+        /// </summary>
+        /// <param name="directory">The name of the directory to remove.</param>
+        private void DeleteDirectory(string directory)
+        {
+            var directoryInfos = new Stack<DirectoryInfo>();
+            var root = new DirectoryInfo(directory);
+            directoryInfos.Push(root);
+
+            while (directoryInfos.Count > 0)
+            {
+                var fol = directoryInfos.Pop();
+                fol.Attributes &= ~(FileAttributes.Archive | FileAttributes.ReadOnly | FileAttributes.Hidden);
+
+                foreach (var d in fol.GetDirectories())
+                {
+                    directoryInfos.Push(d);
+                }
+
+                foreach (var f in fol.GetFiles())
+                {
+                    f.Attributes &= ~(FileAttributes.Archive | FileAttributes.ReadOnly | FileAttributes.Hidden);
+                    f.Delete();
+                }
+            }
+
+            SafeDeleteDirectory(root.FullName);
+        }
+
+        private void SafeDeleteDirectory(string destinationDirectory)
+        {
+            const int tries = 10;
+            for (var index = 1; index <= tries; index++)
+            {
+                try
+                {
+                    Directory.Delete(destinationDirectory, true);
+                }
+                catch (DirectoryNotFoundException)
+                {
+                    return;
+                }
+                catch (IOException)
+                {
+                    Thread.Sleep(10);
+                    continue;
+                }
+                return;
             }
         }
 
@@ -371,6 +413,34 @@
         private bool IsGitSubDirPresent(string pathToRep)
         {
             return Directory.Exists(Path.Combine(pathToRep, GitFolder));
+        }
+
+        /// <summary>
+        /// This method checks whether a folder 
+        /// exists in a local directory
+        /// and if there is ".git" sub folder
+        /// within the same.
+        /// </summary>
+        /// <returns>
+        /// true: if a folder and ".git" folder is present.
+        /// false: if a folder and ".git" folder isn't present.
+        /// </returns>
+        private bool IsExistsLocalRepositoryDirectory()
+        {
+            return Directory.Exists(_gitConnection.GitLocalFolder) && IsGitSubDirPresent(_gitConnection.GitLocalFolder);
+        }
+
+        /// <summary>
+        /// Determines whether [is local repository of remote].
+        /// </summary>
+        /// <returns>
+        ///   <c>true</c> if [is local repository of remote]; otherwise, <c>false</c>.
+        /// </returns>
+        private bool IsLocalRepositorySameAsRemote()
+        {
+            _repository = new Repository(_gitConnection.GitLocalFolder);
+            var remoteURL = _repository.Network.Remotes.First().Url;
+            return remoteURL.Compares(_gitConnection.GitRemoteLocation);
         }
 
         private class MockSmartSubtransport : RpcSmartSubtransport

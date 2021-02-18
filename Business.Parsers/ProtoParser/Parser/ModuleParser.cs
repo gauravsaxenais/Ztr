@@ -24,14 +24,12 @@
             // in case there is no data, just return fields, repeated and non-repeated messages
             // as basic data.
             listOfData.AddRange(AddEmptyFieldsAndArrays(protoParsedMessage));
-
             if (configValues.Any())
             {
                 // remove repeated and non-repeated messages from the list
                 // and keep fields only.
                 RemoveEmptyArrays(listOfData);
             }
-
             foreach (var dicItem in configValues.Select((kvp, index) => new { Kvp = kvp, Index = index }))
             {
                 var field = listOfData.FirstOrDefault(x =>
@@ -41,18 +39,13 @@
                 {
                     if (!field.IsRepeated)
                     {
-                        field.Value = GetFieldValue(dicItem.Kvp.Value);
+                        field.Value = GetNonRepeatedFieldValue(dicItem.Kvp.Value);
                         field.IsVisible = true;
                     }
-
                     else
                     {
                         field.Arrays.Clear();
-                        if (dicItem.Kvp.Value is T[] repeatedValues)
-                        {
-                            repeatedValues.ToList().ForEach(item =>
-                                field.Arrays.Add(GetFieldsFromValue(field, item)));
-                        }
+                        field.Arrays.Add(GetRepeatedFieldValue(field, dicItem.Kvp.Value));
                     }
                 }
 
@@ -69,19 +62,16 @@
                                 IsVisible = true,
                                 DataType = "array"
                             };
-
                             if (dicItem.Kvp.Value is T[] repeatedValues)
                             {
                                 repeatedValues.ToList().ForEach(item =>
                                     tempJsonModel.Arrays.Add(MergeTomlWithProtoMessage(item, message)));
                             }
-
                             else if (dicItem.Kvp.Value is T nonRepeatedValues)
                             {
                                 var subArrayData = MergeTomlWithProtoMessage(nonRepeatedValues, message);
                                 tempJsonModel.Fields.AddRange(subArrayData);
                             }
-
                             else
                             {
                                 if (message.IsRepeated)
@@ -183,7 +173,6 @@
         #endregion
 
         #region Private helper methods
-
         private void FixIndex(IReadOnlyList<JsonField> listOfData)
         {
             for (var index = 0; index < listOfData.Count(); index++)
@@ -216,64 +205,42 @@
             // fix the indexes
             FixIndex(listOfData);
         }
-        private object GetFieldValue(object field)
+        private object GetNonRepeatedFieldValue(object fieldValue)
         {
+            var fieldType = fieldValue.GetType();
             object result;
-
-            var fieldType = field.GetType();
-
             if (fieldType.IsArray)
             {
-                var arrayResult = "[";
-
-                var stringFields = ((IEnumerable)field).Cast<object>()
-                                                                    .Select(x => x.ToString())
-                                                                    .ToArray();
-                arrayResult += string.Join(",", stringFields);
-                arrayResult += "]";
-
-                result = arrayResult;
+                var stringFields = ((IEnumerable)fieldValue).Cast<object>().ToList();
+                result = "[" + string.Join(",", stringFields + "]");
             }
-
-            else
-            {
-                result = field;
-            }
-
+            else result = fieldValue;
             return result;
         }
 
-        private List<JsonField> GetFieldsFromValue(JsonField jsonField, object field)
+        private List<JsonField> GetRepeatedFieldValue(JsonField field, object fieldValue)
         {
-            var fieldType = field.GetType();
-            var listOfFields = new List<JsonField>();
-            bool isDictionary = fieldType.IsGenericType && fieldType.GetGenericTypeDefinition() == typeof(Dictionary<,>);
-
-            // if field is a dictionary
-            if(isDictionary)
+            var fields = new List<JsonField>();
+            if (fieldValue.GetType().IsArray)
             {
-                var fields = (Dictionary<string, object>)field;
-                var clonedJsonField = (JsonField)jsonField.Clone();
-
-                foreach (var tempItem in fields)
+                var fieldValues = ((IEnumerable)fieldValue).Cast<object>().ToList();
+                foreach (var value in fieldValues)
                 {
-                    var newField = new JsonField()
+                    var clonedField = (JsonField)field.Clone();
+                    var newField = new JsonField
                     {
-                        Name = clonedJsonField.Name,
-                        Value = tempItem.Value,
-                        Min = clonedJsonField.Min,
-                        Max = clonedJsonField.Max,
-                        DataType = clonedJsonField.DataType,
-                        DefaultValue = clonedJsonField.DefaultValue,
+                        Value = value,
                         IsVisible = true,
-                        IsRepeated = clonedJsonField.IsRepeated
+                        Max = clonedField.Max,
+                        Min = clonedField.Min,
+                        Name = clonedField.Name,
+                        DefaultValue = clonedField.DefaultValue,
+                        DataType = clonedField.DataType
                     };
-
-                    listOfFields.Add(newField);
+                    fields.Add(newField);
                 }
-            }      
-                
-            return listOfFields;
+            }
+            return fields;
         }
         #endregion
     }
