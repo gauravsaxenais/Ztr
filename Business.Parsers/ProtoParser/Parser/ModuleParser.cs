@@ -48,7 +48,6 @@
                         field.Arrays.Add(GetRepeatedFieldValue(field, dicItem.Kvp.Value));
                     }
                 }
-
                 // we have a repeated / non repeated protoParsedMessage.
                 else
                 {
@@ -212,7 +211,7 @@
             if (fieldType.IsArray)
             {
                 var stringFields = ((IEnumerable)fieldValue).Cast<object>().ToList();
-                result = "[" + string.Join(",", stringFields + "]");
+                result = "[" + string.Join(",", stringFields) + "]";
             }
             else result = fieldValue;
             return result;
