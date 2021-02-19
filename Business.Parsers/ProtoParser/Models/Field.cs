@@ -6,7 +6,6 @@
     public class Field : ICloneable
     {
         public int Id { get; set; }
-
         public string Name { get; set; }
 
         public object Value { get; set; }

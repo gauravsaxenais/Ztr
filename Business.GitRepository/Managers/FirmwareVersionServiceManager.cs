@@ -44,7 +44,7 @@
         {
             _logger.LogInformation(
                 $"{Prefix} method name: {nameof(GetAllFirmwareVersionsAsync)}: Getting list of all firmware versions for deviceType.");
-            var specConfigFolder = ((FirmwareVersionGitConnectionOptions)ConnectionOptions).DefaultTomlConfiguration.TomlConfigFolder;
+            var specConfigFolder = ((FirmwareVersionGitConnectionOptions)ConnectionOptions).TomlConfiguration.TomlConfigFolder;
             var firmwareVersions = await RepoManager.GetAllTagNamesAsync().ConfigureAwait(false);
             var firmwareVersionsWithSpecFolder = new List<string>();
             Parallel.ForEach(firmwareVersions, async firmwareVersion =>
@@ -90,7 +90,7 @@
         {
             _logger.LogInformation($"{Prefix} method name: {nameof(GetDefaultTomlFileContentAsync)}: Getting default value from toml file for {firmwareVersion}.");
             var firmwareVersionConnectionOptions = (FirmwareVersionGitConnectionOptions)ConnectionOptions;
-            var defaultPath = Path.Combine(firmwareVersionConnectionOptions.DefaultTomlConfiguration.TomlConfigFolder, firmwareVersionConnectionOptions.DefaultTomlConfiguration.DefaultTomlFile);
+            var defaultPath = Path.Combine(firmwareVersionConnectionOptions.TomlConfiguration.TomlConfigFolder, firmwareVersionConnectionOptions.TomlConfiguration.DefaultTomlFile);
             var defaultValueFromTomlFile = await GetFileContentFromPath(firmwareVersion, defaultPath).ConfigureAwait(false);
             _logger.LogInformation($"{Prefix} method name: {nameof(GetDefaultTomlFileContentAsync)}: Successfully retrieved default value from toml file for {firmwareVersion}.");
 
@@ -101,7 +101,7 @@
         {
             _logger.LogInformation($"{Prefix} method name: {nameof(GetDeviceTomlFileContentAsync)}: Getting device value from toml file for {firmwareVersion}.");
             var firmwareVersionConnectionOptions = (FirmwareVersionGitConnectionOptions)ConnectionOptions;
-            var devicesPath = Path.Combine(firmwareVersionConnectionOptions.DefaultTomlConfiguration.TomlConfigFolder, firmwareVersionConnectionOptions.DefaultTomlConfiguration.DeviceTomlFile);
+            var devicesPath = Path.Combine(firmwareVersionConnectionOptions.TomlConfiguration.TomlConfigFolder, firmwareVersionConnectionOptions.TomlConfiguration.DeviceTomlFile);
             var deviceValueFromTomlFile = await GetFileContentFromPath(firmwareVersion, devicesPath).ConfigureAwait(false);
             return deviceValueFromTomlFile;
         }
@@ -116,7 +116,7 @@
         {
             var listOfTags = new List<string>();
             var firmwareVersionConnectionOptions = ((FirmwareVersionGitConnectionOptions)ConnectionOptions);
-            var devicesPath = Path.Combine(firmwareVersionConnectionOptions.DefaultTomlConfiguration.TomlConfigFolder, firmwareVersionConnectionOptions.DefaultTomlConfiguration.DeviceTomlFile);
+            var devicesPath = Path.Combine(firmwareVersionConnectionOptions.TomlConfiguration.TomlConfigFolder, firmwareVersionConnectionOptions.TomlConfiguration.DeviceTomlFile);
 
             foreach (var fromTag in fromTags)
             {

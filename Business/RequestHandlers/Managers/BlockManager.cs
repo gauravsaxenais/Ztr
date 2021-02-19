@@ -61,7 +61,7 @@
             _logger.LogInformation($"{Prefix}: methodName: {nameof(GetBlocksAsync)} Getting list of blocks for {firmwareVersion}.");
 
             // clone repo here.
-            await _blockServiceManager.CloneGitRepoAsync().ConfigureAwait(false);            
+            await _blockServiceManager.CloneGitRepoAsync().ConfigureAwait(false);
             // clone repo here.
             await _firmwareVersionServiceManager.CloneGitRepoAsync().ConfigureAwait(false);
             // read default values from toml file defaults.toml

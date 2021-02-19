@@ -26,7 +26,7 @@
         public FirmwareVersionGitConnectionOptions(string gitLocalFolder, string userName, string password, string gitRepositoryUrl, TomlConfigurationFile tomlConfiguration) :
             base(gitLocalFolder, userName, password, gitRepositoryUrl)
         {
-            DefaultTomlConfiguration = tomlConfiguration;
+            TomlConfiguration = tomlConfiguration;
         }
 
         /// <summary>
@@ -35,7 +35,7 @@
         /// <value>
         /// The toml configuration.
         /// </value>
-        public TomlConfigurationFile DefaultTomlConfiguration { get; set; }
+        public TomlConfigurationFile TomlConfiguration { get; set; }
 
         /// <summary>
         /// Converts to string.
@@ -45,7 +45,7 @@
         /// </returns>
         public override string ToString()
         {
-            return $"FirmwareVersionGitConnectionOptions($ GitLocalFolder: {GitLocalFolder} TomlConfiguration: {DefaultTomlConfiguration} GitRepoUrl: {GitRemoteLocation})";
+            return $"FirmwareVersionGitConnectionOptions($ GitLocalFolder: {GitLocalFolder} TomlConfiguration: {TomlConfiguration} GitRepoUrl: {GitRemoteLocation})";
         }
     }
 }

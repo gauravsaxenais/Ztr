@@ -44,7 +44,8 @@
         public async Task<List<FileInfo>> GetAllBlockFilesAsync()
         {
             _logger.LogInformation($"{Prefix}: method name: {nameof(GetAllBlockFilesAsync)} Getting list of all blocks.");
-            string blockConfigPath = ((BlockGitConnectionOptions)ConnectionOptions).GitLocalFolder;
+            var connectionOption = (BlockGitConnectionOptions)ConnectionOptions;
+            var blockConfigPath = Path.Combine(AppPath, connectionOption.GitLocalFolder, connectionOption.TomlConfiguration.TomlConfigFolder);
 
             var blockConfigDirectory = new DirectoryInfo(blockConfigPath);
             var filesInDirectory = blockConfigDirectory.EnumerateFiles().ToList();
