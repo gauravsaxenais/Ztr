@@ -89,7 +89,7 @@
         public async Task<string> GetDefaultTomlFileContentAsync(string firmwareVersion)
         {
             _logger.LogInformation($"{Prefix} method name: {nameof(GetDefaultTomlFileContentAsync)}: Getting default value from toml file for {firmwareVersion}.");
-            var firmwareVersionConnectionOptions = ((FirmwareVersionGitConnectionOptions)ConnectionOptions);
+            var firmwareVersionConnectionOptions = (FirmwareVersionGitConnectionOptions)ConnectionOptions;
             var defaultPath = Path.Combine(firmwareVersionConnectionOptions.DefaultTomlConfiguration.TomlConfigFolder, firmwareVersionConnectionOptions.DefaultTomlConfiguration.DefaultTomlFile);
             var defaultValueFromTomlFile = await GetFileContentFromPath(firmwareVersion, defaultPath).ConfigureAwait(false);
             _logger.LogInformation($"{Prefix} method name: {nameof(GetDefaultTomlFileContentAsync)}: Successfully retrieved default value from toml file for {firmwareVersion}.");
@@ -100,7 +100,7 @@
         public async Task<string> GetDeviceTomlFileContentAsync(string firmwareVersion)
         {
             _logger.LogInformation($"{Prefix} method name: {nameof(GetDeviceTomlFileContentAsync)}: Getting device value from toml file for {firmwareVersion}.");
-            var firmwareVersionConnectionOptions = ((FirmwareVersionGitConnectionOptions)ConnectionOptions);
+            var firmwareVersionConnectionOptions = (FirmwareVersionGitConnectionOptions)ConnectionOptions;
             var devicesPath = Path.Combine(firmwareVersionConnectionOptions.DefaultTomlConfiguration.TomlConfigFolder, firmwareVersionConnectionOptions.DefaultTomlConfiguration.DeviceTomlFile);
             var deviceValueFromTomlFile = await GetFileContentFromPath(firmwareVersion, devicesPath).ConfigureAwait(false);
             return deviceValueFromTomlFile;
@@ -164,11 +164,7 @@
         private async Task<string> GetFileContentFromPath(string firmwareVersion, string path)
         {
             var fileContent = string.Empty;
-
-            var file = await RepoManager
-                .GetFileDataFromTagAsync(firmwareVersion, path)
-                .ConfigureAwait(false);
-
+            var file = await RepoManager.GetFileDataFromTagAsync(firmwareVersion, path).ConfigureAwait(false);
             if (file != null)
             {
                 fileContent = System.Text.Encoding.UTF8.GetString(file.Data);

@@ -122,13 +122,9 @@
             EnsureArg.IsNotEmptyOrWhiteSpace(tag, nameof(tag));
             EnsureArg.IsNotEmptyOrWhiteSpace(pathToFile, nameof(pathToFile));
 
-            var listOfContentFiles = await GetAllFilesForTag(tag).ConfigureAwait(false);
             pathToFile = FileReaderExtensions.NormalizeFolderPath(pathToFile);
-
-            var file = listOfContentFiles.FirstOrDefault(p =>
-                            p.FileName?.IndexOf(pathToFile, StringComparison.OrdinalIgnoreCase) >= 0);
-
-            return file;
+            var contentFile = await GetFileForTag(tag, pathToFile).ConfigureAwait(false);
+            return contentFile;
         }
 
         /// <summary>
@@ -144,11 +140,8 @@
 
             folderName = FileReaderExtensions.NormalizeFolderPath(folderName);
 
-            var listOfContentFiles = await GetAllFilesForTag(tag).ConfigureAwait(false);
-            var isPresent = listOfContentFiles.Any(p =>
-                            p.FileName.IndexOf(folderName, StringComparison.OrdinalIgnoreCase) >= 0);
-
-            return isPresent;
+            var fileContent = await GetFileForTag(tag, folderName).ConfigureAwait(false);
+            return fileContent != null;
         }
 
         /// <summary>
@@ -190,16 +183,15 @@
         #endregion
 
         #region Private methods
-        private async Task<List<ExportFileResultModel>> GetAllFilesForTag(string tag)
+        private async Task<ExportFileResultModel> GetFileForTag(string tag, string pathToSearch)
         {
             EnsureArg.IsNotEmptyOrWhiteSpace(tag);
 
             try
             {
-                var listOfContentFiles = new List<ExportFileResultModel>();
-                
+                ExportFileResultModel fileResult = null;
                 _repository = new Repository(_gitConnection.GitLocalFolder);
-                var repoTag = _repository.Tags.FirstOrDefault(item => item.FriendlyName == tag);
+                var repoTag = _repository.Tags[tag];
                 ObjectId commitForTag = GetCommitForTag(repoTag);
 
                 // Let's enumerate all the reachable commits (similarly to `git log --all`)
@@ -208,13 +200,13 @@
                 {
                     if (commit.Id == commitForTag)
                     {
-                        GetContentOfFiles(commit.Tree, listOfContentFiles);
+                        fileResult = GetContentOfFiles(commit.Tree, pathToSearch);
                         break;
                     }
                 }
                 
                 await Task.CompletedTask;
-                return listOfContentFiles;
+                return fileResult;
             }
             catch (LibGit2SharpException)
             {
@@ -320,8 +312,9 @@
         /// Gets the content of files.
         /// </summary>
         /// <param name="tree">The tree.</param>
-        /// <param name="contentFromFiles">The content from files.</param>
-        private void GetContentOfFiles(Tree tree, ICollection<ExportFileResultModel> contentFromFiles)
+        /// <param name="filePathToSearch">The file path to search.</param>
+        /// <param name="contentFromFile">The content from file.</param>
+        private ExportFileResultModel GetContentOfFiles(Tree tree, string filePathToSearch)
         {
             _repository = new Repository(_gitConnection.GitLocalFolder);
             foreach (var treeEntry in tree)
@@ -329,16 +322,27 @@
                 var gitObject = treeEntry.Target;
                 var path = FileReaderExtensions.NormalizeFolderPath(treeEntry.Path);
 
+                ExportFileResultModel contentFromFile;
                 if (treeEntry.TargetType == TreeEntryTargetType.Tree)
                 {
-                    GetContentOfFiles((Tree)gitObject, contentFromFiles);
+                    contentFromFile = GetContentOfFiles((Tree)gitObject, filePathToSearch);
+                    if (contentFromFile != null)
+                    {
+                        return contentFromFile;
+                    }
                 }
                 else if (treeEntry.TargetType == TreeEntryTargetType.Blob)
                 {
-                    var blob = GetBlobFromFile(treeEntry);
-                    contentFromFiles.Add(new ExportFileResultModel(TextMimeType, Encoding.UTF8.GetBytes(blob), path));
+                    if (path.IndexOf(filePathToSearch, StringComparison.OrdinalIgnoreCase) >= 0)
+                    {
+                        var blob = GetBlobFromFile(treeEntry);
+                        contentFromFile = new ExportFileResultModel(TextMimeType, Encoding.UTF8.GetBytes(blob), path);
+                        return contentFromFile;
+                    }
                 }
             }
+
+            return null;
         }
 
         private async Task<List<(string, DateTimeOffset)>> GetAllTagsAsync()
@@ -363,7 +367,6 @@
                                                   .ThenByDescending(t => t.FriendlyName)
                                                   .Select(t => (t.FriendlyName, ((Commit)t.PeeledTarget).Author.When))
                                                   .ToList();
-
             return await Task.FromResult(tagNames);
         }
 
