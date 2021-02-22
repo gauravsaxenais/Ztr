@@ -13,7 +13,7 @@
         /// Gets all block files.
         /// </summary>
         /// <returns></returns>
-        Task<IEnumerable<FileInfo>> GetAllBlockFilesAsync();
+        Task<List<FileInfo>> GetAllBlockFilesAsync();
 
         /// <summary>
         /// Clones the git repo asynchronous.

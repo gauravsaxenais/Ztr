@@ -22,10 +22,19 @@
         /// <param name="password">The password.</param>
         /// <param name="gitRepositoryUrl">The git repository URL.</param>
         /// <param name="tomlConfiguration">The toml configuration.</param>
-        public BlockGitConnectionOptions(string gitLocalFolder, string userName, string password, string gitRepositoryUrl) :
+        public BlockGitConnectionOptions(string gitLocalFolder, string userName, string password, string gitRepositoryUrl, TomlConfigurationFile tomlConfiguration) :
             base(gitLocalFolder, userName, password, gitRepositoryUrl)
         {
+            TomlConfiguration = tomlConfiguration;
         }
+
+        /// <summary>
+        /// Gets or sets the toml configuration.
+        /// </summary>
+        /// <value>
+        /// The toml configuration.
+        /// </value>
+        public TomlConfigurationFile TomlConfiguration { get; set; }
 
         /// <summary>
         /// Converts to string.

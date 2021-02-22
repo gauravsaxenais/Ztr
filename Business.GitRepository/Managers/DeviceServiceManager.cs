@@ -40,8 +40,10 @@
         /// </summary>
         public async Task CloneGitRepoAsync()
         {
+            _logger.LogInformation($"Cloning github repository for devices.");
             SetConnection((DeviceGitConnectionOptions)ConnectionOptions);
             await CloneGitHubRepoAsync().ConfigureAwait(false);
+            _logger.LogInformation($"Github repository cloning is successful for devices.");
         }
 
         /// <summary>

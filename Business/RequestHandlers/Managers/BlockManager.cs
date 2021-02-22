@@ -55,18 +55,15 @@
         /// Gets the blocks asynchronous.
         /// </summary>
         /// <param name="firmwareVersion">The firmware version.</param>
-        /// <param name="deviceType">Type of the device.</param>
         /// <returns></returns>
-        public async Task<object> GetBlocksAsync(string firmwareVersion, string deviceType)
+        public async Task<object> GetBlocksAsync(string firmwareVersion)
         {
-            _logger.LogInformation($"{Prefix}: methodName: {nameof(GetBlocksAsync)} Getting list of blocks for {firmwareVersion} and {deviceType}.");
+            _logger.LogInformation($"{Prefix}: methodName: {nameof(GetBlocksAsync)} Getting list of blocks for {firmwareVersion}.");
 
             // clone repo here.
             await _blockServiceManager.CloneGitRepoAsync().ConfigureAwait(false);
-            
             // clone repo here.
             await _firmwareVersionServiceManager.CloneGitRepoAsync().ConfigureAwait(false);
-
             // read default values from toml file defaults.toml
             var defaultValueFromTomlFile =
                 await _firmwareVersionServiceManager.GetDefaultTomlFileContentAsync(firmwareVersion).ConfigureAwait(false);
@@ -179,27 +176,19 @@
         private async Task<List<BlockJsonModel>> BatchProcessBlockFilesAsync()
         {
             var batchSize = 4;
-
-            var blockFiles
-                = await _blockServiceManager.GetAllBlockFilesAsync().ConfigureAwait(false);
-
             var listOfRequests = new List<Task<List<BlockJsonModel>>>();
 
-            var fileModels = blockFiles.ToList();
-            for (var skip = 0; skip <= fileModels.Count(); skip += batchSize)
+            var blockFiles = await _blockServiceManager.GetAllBlockFilesAsync().ConfigureAwait(false);
+            for (var skip = 0; skip <= blockFiles.Count(); skip += batchSize)
             {
-                var files = fileModels.Skip(skip).Take(batchSize).ToList();
+                var files = blockFiles.Skip(skip).Take(batchSize).ToList();
                 var listOfData = await FileReaderExtensions.ReadContentsAsync(files);
-
                 listOfRequests.Add(ProcessBlockFileAsync(listOfData));
             }
 
             // This will run all the calls in parallel to gain some performance
             var allFinishedTasks = await Task.WhenAll(listOfRequests).ConfigureAwait(false);
-
-            var blocks = allFinishedTasks.SelectMany(x => x)
-                                                        .OrderBy(item => item.Type)
-                                                        .ToList();
+            var blocks = allFinishedTasks.SelectMany(x => x).OrderBy(item => item.Type).ToList();
 
             return blocks;
         }

@@ -6,6 +6,7 @@
     using Microsoft.Extensions.Logging;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Threading.Tasks;
     using ZTR.Framework.Business;
     using ZTR.Framework.Configuration;
@@ -21,6 +22,7 @@
         private readonly ILogger<BlockServiceManager> _logger;
         private readonly IModuleServiceManager _moduleServiceManager;
         private const string Prefix = nameof(BlockServiceManager);
+        private readonly string TomlFileExtension = ".toml";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BlockServiceManager"/> class.
@@ -39,15 +41,19 @@
         /// Gets all block files.
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<FileInfo>> GetAllBlockFilesAsync()
+        public async Task<List<FileInfo>> GetAllBlockFilesAsync()
         {
             _logger.LogInformation($"{Prefix}: method name: {nameof(GetAllBlockFilesAsync)} Getting list of all blocks.");
-            string blockConfigPath = ((BlockGitConnectionOptions)ConnectionOptions).GitLocalFolder;
+            var connectionOption = (BlockGitConnectionOptions)ConnectionOptions;
+            var blockConfigPath = Path.Combine(AppPath, connectionOption.GitLocalFolder, connectionOption.TomlConfiguration.TomlConfigFolder);
 
             var blockConfigDirectory = new DirectoryInfo(blockConfigPath);
-            var filesInDirectory = blockConfigDirectory.EnumerateFiles();
+            var filesInDirectory = blockConfigDirectory.EnumerateFiles().ToList();
 
-            return await Task.FromResult(filesInDirectory);
+            // return only files with .toml extension.
+            var blockFiles = filesInDirectory.Where(item => item.Extension.Compares(TomlFileExtension)).ToList();
+
+            return await Task.FromResult(blockFiles);
         }
 
         /// <summary>
@@ -56,8 +62,10 @@
         /// <returns></returns>
         public async Task CloneGitRepoAsync()
         {
+            _logger.LogInformation($"Cloning github repository for blocks.");
             SetConnection((BlockGitConnectionOptions)ConnectionOptions);
             await CloneGitHubRepoAsync().ConfigureAwait(false);
+            _logger.LogInformation($"Github repository cloning is successful for blocks.");
         }
 
         /// <summary>

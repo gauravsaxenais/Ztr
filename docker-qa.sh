@@ -12,6 +12,5 @@ if [ -n "$OLD" ]; then
   docker stop $OLD && docker rm $OLD
 fi
 sudo docker image rm -f $IMAGE_NAME
-docker rmi $(docker images -f dangling=true -q )
 sudo docker build --rm -t $IMAGE_NAME -f DeviceConfigAPI/Dockerfile .
 sudo docker run -d -it -p 5000:80/tcp --name $CONTAINER_NAME $IMAGE_NAME

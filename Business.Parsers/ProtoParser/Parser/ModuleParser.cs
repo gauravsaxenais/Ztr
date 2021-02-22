@@ -37,18 +37,10 @@
 
                 if (field != null)
                 {
-                    if (!field.IsRepeated)
-                    {
-                        field.Value = GetNonRepeatedFieldValue(dicItem.Kvp.Value);
-                        field.IsVisible = true;
-                    }
-                    else
-                    {
-                        field.Arrays.Clear();
-                        field.Arrays.Add(GetRepeatedFieldValue(field, dicItem.Kvp.Value));
-                    }
+                    field.Value = field.IsRepeated ? GetRepeatedFieldValue(dicItem.Kvp.Value) : GetFieldValue(dicItem.Kvp.Value);
+                    field.IsVisible = true;
+                    field.IsFieldRepeated = field.IsRepeated;
                 }
-
                 // we have a repeated / non repeated protoParsedMessage.
                 else
                 {
@@ -131,44 +123,27 @@
         private IEnumerable<JsonField> GetFieldsFromProtoMessage(ProtoParsedMessage protoParsedMessage)
         {
             EnsureArg.IsNotNull(protoParsedMessage);
-            var fields = new List<JsonField>();
+            var list = new List<JsonField>();
             foreach (var field in protoParsedMessage.Fields)
             {
                 var clonedField = (Field)field.Clone();
                 var jsonField = new JsonField()
                 {
                     Name = clonedField.Name,
-                    Value = clonedField.Value,
+                    Value = clonedField.IsRepeated ? new List<object>() { clonedField.DefaultValue } : clonedField.Value,
                     Min = clonedField.Min,
                     Max = clonedField.Max,
                     DataType = clonedField.DataType,
                     DefaultValue = clonedField.DefaultValue,
                     IsVisible = false,
-                    IsRepeated = clonedField.IsRepeated
+                    IsRepeated = clonedField.IsRepeated,
+                    IsFieldRepeated = clonedField.IsRepeated
                 };
 
-                if (field.IsRepeated)
-                {
-                    var tempJsonModel = new JsonField
-                    {
-                        Name = clonedField.Name,
-                        Value = clonedField.Value,
-                        Min = clonedField.Min,
-                        Max = clonedField.Max,
-                        DataType = clonedField.DataType,
-                        DefaultValue = clonedField.DefaultValue,
-                        IsVisible = false,
-                        IsRepeated = clonedField.IsRepeated
-                    };
-                    tempJsonModel.Arrays.Add(new List<JsonField>() { jsonField });
-                    fields.Add(tempJsonModel);
-                }
-                else
-                {
-                    fields.Add(jsonField);
-                }
+                list.Add(jsonField);
             }
-            return fields;
+
+            return list;
         }
         #endregion
 
@@ -194,10 +169,8 @@
 
                     RemoveEmptyArrays(fields);
                     arrays.ForEach(RemoveEmptyArrays);
-
                     fields.Clear();
                     arrays.Clear();
-
                     listOfData.RemoveAll(t => t.Name == arrayTypes[index].Name);
                 }
             }
@@ -205,42 +178,21 @@
             // fix the indexes
             FixIndex(listOfData);
         }
-        private object GetNonRepeatedFieldValue(object fieldValue)
+        private object GetFieldValue(object fieldValue)
         {
             var fieldType = fieldValue.GetType();
             object result;
             if (fieldType.IsArray)
             {
                 var stringFields = ((IEnumerable)fieldValue).Cast<object>().ToList();
-                result = "[" + string.Join(",", stringFields + "]");
+                result = "[" + string.Join(",", stringFields) + "]";
             }
             else result = fieldValue;
             return result;
         }
-
-        private List<JsonField> GetRepeatedFieldValue(JsonField field, object fieldValue)
+        private object GetRepeatedFieldValue(object fieldValue)
         {
-            var fields = new List<JsonField>();
-            if (fieldValue.GetType().IsArray)
-            {
-                var fieldValues = ((IEnumerable)fieldValue).Cast<object>().ToList();
-                foreach (var value in fieldValues)
-                {
-                    var clonedField = (JsonField)field.Clone();
-                    var newField = new JsonField
-                    {
-                        Value = value,
-                        IsVisible = true,
-                        Max = clonedField.Max,
-                        Min = clonedField.Min,
-                        Name = clonedField.Name,
-                        DefaultValue = clonedField.DefaultValue,
-                        DataType = clonedField.DataType
-                    };
-                    fields.Add(newField);
-                }
-            }
-            return fields;
+            return fieldValue.GetType().IsArray ? ((IEnumerable)fieldValue).Cast<object>().ToList() : new List<object>();
         }
         #endregion
     }

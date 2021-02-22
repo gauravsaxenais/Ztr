@@ -71,7 +71,7 @@
                     {
                         GetLatestFromRepository();
                     }
-                    catch(LibGit2SharpException)
+                    catch (LibGit2SharpException)
                     {
                         ActionOnRepositoryWithoutHttps(GetLatestFromRepository);
                     }
@@ -197,9 +197,9 @@
             try
             {
                 var listOfContentFiles = new List<ExportFileResultModel>();
-                
+
                 _repository = new Repository(_gitConnection.GitLocalFolder);
-                var repoTag = _repository.Tags.FirstOrDefault(item => item.FriendlyName == tag);
+                var repoTag = _repository.Tags[tag];
                 ObjectId commitForTag = GetCommitForTag(repoTag);
 
                 // Let's enumerate all the reachable commits (similarly to `git log --all`)
@@ -212,7 +212,7 @@
                         break;
                     }
                 }
-                
+
                 await Task.CompletedTask;
                 return listOfContentFiles;
             }

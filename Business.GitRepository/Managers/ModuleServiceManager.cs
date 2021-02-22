@@ -9,11 +9,9 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
     using System.Threading.Tasks;
     using ZTR.Framework.Business;
     using ZTR.Framework.Business.File.FileReaders;
-    using ZTR.Framework.Configuration;
 
     /// <summary>
     /// Wrapper for GitRepoManager.
@@ -63,8 +61,10 @@
         /// </summary>
         public async Task CloneGitRepoAsync()
         {
+            _logger.LogInformation($"Cloning github repository for modules.");
             SetConnection((ModuleGitConnectionOptions)ConnectionOptions);
             await CloneGitHubRepoAsync().ConfigureAwait(false);
+            _logger.LogInformation($"Github repository cloning is successful for modules.");
         }
 
         /// <summary>

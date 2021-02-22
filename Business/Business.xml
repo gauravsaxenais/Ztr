@@ -208,12 +208,11 @@
             and responsible for parsing toml files.
             </summary>
         </member>
-        <member name="M:Business.RequestHandlers.Interfaces.IBlockManager.GetBlocksAsync(System.String,System.String)">
+        <member name="M:Business.RequestHandlers.Interfaces.IBlockManager.GetBlocksAsync(System.String)">
             <summary>
             Gets the blocks asynchronous.
             </summary>
             <param name="firmwareVersion">The firmware version.</param>
-            <param name="deviceType">Type of the device.</param>
             <returns></returns>
         </member>
         <member name="M:Business.RequestHandlers.Interfaces.IBlockManager.GetBlocksFromFileAsync(System.String)">
@@ -357,12 +356,11 @@
             <param name="blockServiceManager">The block service manager.</param>
             <param name="firmwareVersionServiceManager">The module service manager.</param>
         </member>
-        <member name="M:Business.RequestHandlers.Managers.BlockManager.GetBlocksAsync(System.String,System.String)">
+        <member name="M:Business.RequestHandlers.Managers.BlockManager.GetBlocksAsync(System.String)">
             <summary>
             Gets the blocks asynchronous.
             </summary>
             <param name="firmwareVersion">The firmware version.</param>
-            <param name="deviceType">Type of the device.</param>
             <returns></returns>
         </member>
         <member name="M:Business.RequestHandlers.Managers.BlockManager.GetBlocksFromFileAsync(System.String)">
