@@ -15,6 +15,7 @@
     using ZTR.Framework.Business;
     using ZTR.Framework.Business.File;
     using ZTR.Framework.Business.File.FileReaders;
+    using ZTR.Framework.Business.Models;
     using ZTR.Framework.Configuration;
     using Blob = LibGit2Sharp.Blob;
 
@@ -200,6 +201,12 @@
 
                 _repository = new Repository(_gitConnection.GitLocalFolder);
                 var repoTag = _repository.Tags[tag];
+
+                if(repoTag == null)
+                {
+                    throw new CustomArgumentException("Firmware version is not valid.");
+                }
+
                 ObjectId commitForTag = GetCommitForTag(repoTag);
 
                 // Let's enumerate all the reachable commits (similarly to `git log --all`)
