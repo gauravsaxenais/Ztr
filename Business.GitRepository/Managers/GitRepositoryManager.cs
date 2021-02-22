@@ -204,7 +204,7 @@
 
                 if(repoTag == null)
                 {
-                    throw new CustomArgumentException("Firmware version is not valid.");
+                    throw new CustomArgumentException("Firmware version is not valid/present in the system.");
                 }
 
                 ObjectId commitForTag = GetCommitForTag(repoTag);
