@@ -6,6 +6,7 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
+    using Swashbuckle.AspNetCore.Annotations;
     using System.ComponentModel.DataAnnotations;
     using System.Threading.Tasks;
     using ZTR.Framework.Business;
@@ -13,9 +14,10 @@
 
     /// <summary>Config Controller - This service is responsible for generating the config toml.</summary>
     [System.ComponentModel.Description("Config Controller Service")]
-    [Produces(SupportedContentTypes.Json, SupportedContentTypes.Xml)]
-    [Consumes(SupportedContentTypes.Json, SupportedContentTypes.Xml, SupportedContentTypes.MultipartFormData)]
+    [Produces(SupportedContentTypes.Json)]
+    [Consumes(SupportedContentTypes.Json, SupportedContentTypes.MultipartFormData)]
     [QueryRoute]
+    [SwaggerTag("This service is responsible for generating the config.toml.")]
     public class ConfigController : ApiControllerBase
     {
         private readonly IConfigManager _manager;

@@ -5,6 +5,7 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
+    using Swashbuckle.AspNetCore.Annotations;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Threading.Tasks;
@@ -14,9 +15,10 @@
     /// This service returns the device information.
     /// </summary>
     [System.ComponentModel.Description("Firmware version Controller Service")]
-    [Produces(SupportedContentTypes.Json, SupportedContentTypes.Xml)]
-    [Consumes(SupportedContentTypes.Json, SupportedContentTypes.Xml)]
+    [Produces(SupportedContentTypes.Json)]
+    [Consumes(SupportedContentTypes.Json)]
     [QueryRoute]
+    [SwaggerTag("This service returns all the firmware versions for a particular device e.g. M7.")]
     public class FirmwareVersionController : ApiControllerBase
     {
         private readonly IFirmwareVersionManager _manager;
@@ -36,7 +38,7 @@
         }
 
         /// <summary>
-        /// Gets all firmware versions.
+        /// Displays a list of all firmware versions for a particular device.
         /// </summary>
         /// <param name="deviceType">Type of the device.</param>
         /// <returns></returns>

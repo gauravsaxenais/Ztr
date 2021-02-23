@@ -5,14 +5,16 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
+    using Swashbuckle.AspNetCore.Annotations;
     using System.ComponentModel.DataAnnotations;
     using System.Threading.Tasks;
     using ZTR.Framework.Service;
 
     /// <summary>Block Controller - This service is responsible for getting arguments in network blocks.</summary>
     [System.ComponentModel.Description("Block Controller Service")]
-    [Produces(SupportedContentTypes.Json, SupportedContentTypes.Xml)]
-    [Consumes(SupportedContentTypes.Json, SupportedContentTypes.Xml)]
+    [SwaggerTag("This service returns all the blocks from Blocks repository.")]
+    [Produces(SupportedContentTypes.Json)]
+    [Consumes(SupportedContentTypes.Json)]
     [QueryRoute]
     public class BlockController : ApiControllerBase
     {
@@ -34,7 +36,7 @@
         }
 
         /// <summary>
-        /// Gets all blocks.
+        /// Displays a list of all blocks.
         /// </summary>
         /// <param name="firmwareVersion">The firmware version.</param>
         /// <param name="deviceType">Type of the device.</param>

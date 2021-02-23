@@ -7,6 +7,7 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
+    using Swashbuckle.AspNetCore.Annotations;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Threading.Tasks;
@@ -17,9 +18,10 @@
     /// It takes input a firmware version and returns an array of firmware versions.
     /// </summary>
     /// <seealso cref="ApiControllerBase" />
+    [SwaggerTag("This service returns the list of compatible firmware versions for a particular firmware version.")]
     [System.ComponentModel.Description("Compatible Firmware Version Controller Service")]
-    [Produces(SupportedContentTypes.Json, SupportedContentTypes.Xml)]
-    [Consumes(SupportedContentTypes.Json, SupportedContentTypes.Xml, SupportedContentTypes.MultipartFormData)]
+    [Produces(SupportedContentTypes.Json)]
+    [Consumes(SupportedContentTypes.Json, SupportedContentTypes.MultipartFormData)]
     [QueryRoute]
     public class CompatibleFirmwareVersionController : ApiControllerBase
     {
@@ -40,7 +42,7 @@
         }
 
         /// <summary>
-        /// Gets the compatible firmware versions.
+        /// Displays a list of compatible firmware versions.
         /// </summary>
         /// <param name="module">The module.</param>
         /// <returns></returns>
