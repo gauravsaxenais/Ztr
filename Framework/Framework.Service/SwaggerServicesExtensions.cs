@@ -56,6 +56,8 @@
                     if (File.Exists(xmlPath))
                     {
                         swaggerOptions.IncludeXmlComments(xmlPath);
+                        // _OR_ enable the annotations on Controller classes [SwaggerTag], if no class comments present
+                        swaggerOptions.EnableAnnotations();
                         swaggerOptions.CustomOperationIds(e => $"{e.ActionDescriptor.RouteValues["controller"]}{e.ActionDescriptor.RouteValues["action"]}");
                     }
                 }

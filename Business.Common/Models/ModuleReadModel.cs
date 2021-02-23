@@ -60,7 +60,7 @@
         /// </returns>
         public override string ToString()
         {
-            return $"ModuleReadModel($ {this.Id} {this.Name} {this.UUID} {this.IconUrl} {this.Config})";
+            return $"ModuleReadModel($ {Id} {Name} {UUID} {IconUrl} {Config})";
         }
     }
 }

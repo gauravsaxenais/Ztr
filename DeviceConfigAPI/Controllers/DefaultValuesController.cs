@@ -6,6 +6,7 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
+    using Swashbuckle.AspNetCore.Annotations;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Threading.Tasks;
@@ -18,9 +19,10 @@
     /// </summary>
     /// <seealso cref="ControllerBase" />
     [System.ComponentModel.Description("Default Values Controller Service")]
-    [Produces(SupportedContentTypes.Json, SupportedContentTypes.Xml)]
-    [Consumes(SupportedContentTypes.Json, SupportedContentTypes.Xml)]
+    [Produces(SupportedContentTypes.Json)]
+    [Consumes(SupportedContentTypes.Json)]
     [QueryRoute]
+    [SwaggerTag("This service returns all the modules and their default values.")]
     public class DefaultValuesController : ApiControllerBase
     {
         private readonly IDefaultValueManager _manager;
@@ -41,7 +43,7 @@
         }
 
         /// <summary>
-        /// Gets default values for all the modules.
+        /// Displays a list of default values for all the modules.
         /// </summary>
         /// <returns>A <see cref="IEnumerable{ModuleReadModel}"/> representing the result of the operation.</returns>
         /// <param name="firmwareVersion">firmware version.</param>

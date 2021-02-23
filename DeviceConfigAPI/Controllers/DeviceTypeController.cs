@@ -5,6 +5,7 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
+    using Swashbuckle.AspNetCore.Annotations;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using ZTR.Framework.Service;
@@ -13,8 +14,9 @@
     /// This service returns the device information.
     /// </summary>
     [System.ComponentModel.Description("Device Type Controller Service")]
-    [Produces(SupportedContentTypes.Json, SupportedContentTypes.Xml)]
-    [Consumes(SupportedContentTypes.Json, SupportedContentTypes.Xml)]
+    [SwaggerTag("This service returns all the available devices.")]
+    [Produces(SupportedContentTypes.Json)]
+    [Consumes(SupportedContentTypes.Json)]
     [QueryRoute]
     public class DeviceTypeController : ApiControllerBase
     {
@@ -36,7 +38,7 @@
         }
 
         /// <summary>
-        /// Gets all devices.
+        /// Displays a list of all available devices.
         /// </summary>
         /// <returns>all devices.</returns>
         [HttpGet(nameof(GetAllDevices))]

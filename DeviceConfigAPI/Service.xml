@@ -56,7 +56,7 @@
         </member>
         <member name="M:Service.Controllers.BlockController.GetAllBlocks(System.String,System.String)">
             <summary>
-            Gets all blocks.
+            Displays a list of all blocks.
             </summary>
             <param name="firmwareVersion">The firmware version.</param>
             <param name="deviceType">Type of the device.</param>
@@ -78,7 +78,7 @@
         </member>
         <member name="M:Service.Controllers.CompatibleFirmwareVersionController.GetCompatibleFirmwareVersions(Business.Models.CompatibleFirmwareVersionReadModel)">
             <summary>
-            Gets the compatible firmware versions.
+            Displays a list of compatible firmware versions.
             </summary>
             <param name="module">The module.</param>
             <returns></returns>
@@ -113,7 +113,7 @@
         </member>
         <member name="T:Service.Controllers.ConfigCreateFromController">
             <summary>
-            This service returns all the modules and their default values.
+            This service returns all the modules and blocks.
             If any module doesn't have any default values, then
             only the attributes are returned.
             </summary>
@@ -128,7 +128,7 @@
         </member>
         <member name="M:Service.Controllers.ConfigCreateFromController.GetConfigTomlValues(Microsoft.AspNetCore.Http.IFormFile)">
             <summary>
-            Gets the configuration toml values.
+            Returns a list of modules and blocks for a config.toml.
             </summary>
             <param name="configTomlFile">The configuration toml file.</param>
             <returns></returns>
@@ -150,7 +150,7 @@
         </member>
         <member name="M:Service.Controllers.DefaultValuesController.GetAllDefaultValues(System.String,System.String)">
             <summary>
-            Gets default values for all the modules.
+            Displays a list of default values for all the modules.
             </summary>
             <returns>A <see cref="T:System.Collections.Generic.IEnumerable`1"/> representing the result of the operation.</returns>
             <param name="firmwareVersion">firmware version.</param>
@@ -170,7 +170,7 @@
         </member>
         <member name="M:Service.Controllers.DeviceTypeController.GetAllDevices">
             <summary>
-            Gets all devices.
+            Displays a list of all available devices.
             </summary>
             <returns>all devices.</returns>
         </member>
@@ -188,7 +188,7 @@
         </member>
         <member name="M:Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions(System.String)">
             <summary>
-            Gets all firmware versions.
+            Displays a list of all firmware versions for a particular device.
             </summary>
             <param name="deviceType">Type of the device.</param>
             <returns></returns>
