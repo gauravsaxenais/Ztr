@@ -34,7 +34,7 @@ namespace Business.Parsers.Core.Converter
 
             var toml = _config.BaseToml;
             _tomlTree = _builder.ToDictionary(toml);
-            //RemoveModule(_tomlTree, false);
+            RemoveModule(_tomlTree, false);
             //RemoveArrays(_tomlTree);
             MergeValues();
 
