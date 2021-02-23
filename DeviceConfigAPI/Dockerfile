@@ -33,7 +33,7 @@ FROM build AS publish
 RUN dotnet publish "Service.csproj" -c Release -o /app/publish
 
 FROM base AS final
-ENV ASPNETCORE_ENVIRONMENT "Staging"
+ENV ASPNETCORE_ENVIRONMENT "Production"
     
 WORKDIR /app
 COPY --from=publish /app/publish .
