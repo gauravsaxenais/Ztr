@@ -47,7 +47,7 @@
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers()
-                .AddNewtonsoftJson(options => options.SerializerSettings.Converters.Add(new StringEnumConverter()));
+                    .AddNewtonsoftJson(options => options.SerializerSettings.Converters.Add(new StringEnumConverter()));
 
             var swaggerAssemblies = new[]
             {
@@ -77,7 +77,7 @@
         {
             EnsureArg.IsNotNull(app);
 
-            if (ApplicationConfiguration.IsDevelopment)
+            if (ApplicationConfiguration.IsDevelopment || ApplicationConfiguration.IsStaging)
             {
                 app.UseDeveloperExceptionPage();
             }
