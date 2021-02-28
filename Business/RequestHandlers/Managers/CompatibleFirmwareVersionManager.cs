@@ -65,7 +65,7 @@
             foreach (var tag in filteredList)
             {
                 var moduleList = await _firmwareVersionServiceManager.GetListOfModulesAsync(tag, module.DeviceType).ConfigureAwait(false);
-                var contained = module.Modules.Intersect(moduleList, new ModuleReadModelComparer()).Count() == module.Modules.Count();
+                var contained = module.Modules.Intersect(moduleList, new ModuleReadModelComparer()).Count() == module.Modules.Count;
                 if (contained)
                 {
                     firmwareVersions.Add(tag);

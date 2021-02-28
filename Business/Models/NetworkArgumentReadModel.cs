@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Business.Models
+﻿namespace Business.Models
 {
     using Newtonsoft.Json;
 
@@ -8,7 +6,7 @@ namespace Business.Models
     /// <summary>
     ///   <br />
     /// </summary>
-    public class NetworkArgumentReadModel : ICloneable
+    public class NetworkArgumentReadModel
     {
         /// <summary>Gets or sets the identifier.</summary>
         /// <value>The identifier.</value>
@@ -48,33 +46,6 @@ namespace Business.Models
         /// <value>
         /// The value.
         /// </value>
-        public string Value { get; set; }
-
-        /// <summary>
-        /// Creates a new object that is a copy of the current instance.
-        /// </summary>
-        /// <returns>
-        /// A new object that is a copy of this instance.
-        /// </returns>
-        public object Clone()
-        {
-            var other = new NetworkArgumentReadModel();
-            DeepCopy(other);
-
-            return other;
-        }
-
-        private void DeepCopy(NetworkArgumentReadModel other)
-        {
-            other.Id = Id;
-            other.Name = Name;
-            other.Label = Label;
-            other.Description = Description;
-            other.Type = Type;
-            other.Value = Value;
-            other.Min = Min;
-            other.Max = Max;
-            other.DataType = DataType;
-        }
+        public string Value { get; set; }       
     }
 }

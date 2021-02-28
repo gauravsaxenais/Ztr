@@ -1,5 +1,6 @@
 ﻿namespace Service.Controllers
 {
+    using Business.GitRepository.Interfaces;
     using Business.Parsers.Core.Models;
     using Business.RequestHandlers.Interfaces;
     using EnsureThat;
@@ -8,6 +9,7 @@
     using Microsoft.Extensions.Logging;
     using Swashbuckle.AspNetCore.Annotations;
     using System.ComponentModel.DataAnnotations;
+    using System.Linq;
     using System.Threading.Tasks;
     using ZTR.Framework.Business;
     using ZTR.Framework.Service;
@@ -24,6 +26,7 @@
         private readonly ILogger<ConfigController> _logger;
         private readonly IConfigCreateFromManager _creator;
         private readonly IDefaultValueManager _defaultmanager;
+        private readonly IFirmwareVersionServiceManager _firmwareVersionServiceManager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigController"/> class.
@@ -73,8 +76,8 @@
             [MaxFileSize(1 * 1024 * 1024)]
             [AllowedExtensions(new[] { ".html" })] IFormFile htmlFile, [Required, FromForm] string device, [Required, FromForm] string firmware)
         {
-            var json = await _defaultmanager.GetDefaultValuesAllModulesAsync(firmware, device);
-            var toml = await _manager.CreateFromHtmlAsync(htmlFile, json);
+            var listOfModules = await _defaultmanager.GetDefaultValuesAllModulesAsync(firmware, device);
+            var toml = await _manager.CreateFromHtmlAsync(htmlFile, listOfModules);
             var result = await _creator.GenerateConfigTomlModelWithoutGitAsync(toml);
 
             return Ok(result);

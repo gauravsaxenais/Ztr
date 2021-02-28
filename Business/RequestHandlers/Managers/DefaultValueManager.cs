@@ -103,7 +103,7 @@
             _logger.LogInformation($"{Prefix}: method name: {nameof(MergeValuesWithModulesAsync)} Merging default values with list of modules in parallel...");
             var moduleReadModels = listOfModules.ToList();
             var modulesTasks = new List<Task>();
-            for (var index = 0; index < moduleReadModels.Count(); index++)
+            for (var index = 0; index < moduleReadModels.Count; index++)
             {
                 modulesTasks.Add(MergeDefaultValuesWithModuleAsync(defaultValueFromTomlFile, moduleReadModels.ElementAt(index)));
             }
@@ -143,7 +143,7 @@
             }
         }
 
-        private Dictionary<string, object> GetConfigValues(string fileContent, string moduleName)
+        private static Dictionary<string, object> GetConfigValues(string fileContent, string moduleName)
         {
             var tomlSettings = TomlFileReader.LoadLowerCaseTomlSettings();
             var fileData = Toml.ReadString(fileContent, tomlSettings);

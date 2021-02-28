@@ -150,7 +150,7 @@
             }
 
             // fix the indexes.
-            listOfModules.Select((item, index) => { item.Id = index; return item; }).ToList();
+            listOfModules = listOfModules.Select((item, index) => { item.Id = index; return item; }).ToList();
 
             return listOfModules;
         }

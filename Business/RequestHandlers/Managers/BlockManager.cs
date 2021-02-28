@@ -103,7 +103,7 @@
 
                     if (tempBlock != null)
                     {
-                        var block = (BlockJsonModel)tempBlock.Clone();
+                        var block = tempBlock.Copy();
                         block.Tag = tag == null ? string.Empty : tag.ToString();
 
                         var arguments = block.Args;
@@ -118,8 +118,7 @@
                                     updatedArgument.Value = (string)value;
                                 }
                             }
-                        }
-
+                        }                        
                         blocksFromFile.Add(block);
                     }
                 }
@@ -145,7 +144,7 @@
         /// </summary>
         /// <param name="filesData">The files data.</param>
         /// <returns></returns>
-        private async Task<List<BlockJsonModel>> ProcessBlockFileAsync(IDictionary<string, string> filesData)
+        private static async Task<List<BlockJsonModel>> ProcessBlockFileAsync(IDictionary<string, string> filesData)
         {
             var blocks = new List<BlockJsonModel>();
             var tomlSettings = TomlFileReader.LoadLowerCaseTomlSettings();
@@ -179,7 +178,7 @@
             var listOfRequests = new List<Task<List<BlockJsonModel>>>();
 
             var blockFiles = await _blockServiceManager.GetAllBlockFilesAsync().ConfigureAwait(false);
-            for (var skip = 0; skip <= blockFiles.Count(); skip += batchSize)
+            for (var skip = 0; skip <= blockFiles.Count; skip += batchSize)
             {
                 var files = blockFiles.Skip(skip).Take(batchSize).ToList();
                 var listOfData = await FileReaderExtensions.ReadContentsAsync(files);
@@ -197,7 +196,7 @@
         /// Gets the modules for blocks async.
         /// </summary>
         /// <returns>list of modules</returns>
-        private async Task<IEnumerable<string>> GetModulesAsync(BlockReadModel blockReadModel)
+        private static async Task<IEnumerable<string>> GetModulesAsync(BlockReadModel blockReadModel)
         {
             var modules = new HashSet<string>();
             const char delimiter = '.';
@@ -233,7 +232,7 @@
         /// <param name="blockReadModel">The block read model.</param>
         /// <param name="blockName">Name of the block.</param>
         /// <returns></returns>
-        private async Task<BlockJsonModel> GetBlockAsync(BlockReadModel blockReadModel, string blockName)
+        private static async Task<BlockJsonModel> GetBlockAsync(BlockReadModel blockReadModel, string blockName)
         {
             var jsonModel = new BlockJsonModel() { Type = blockName };
 
@@ -263,7 +262,7 @@
         /// <param name="listOfData">The list of data.</param>
         private static void FixIndex(IReadOnlyList<BlockJsonModel> listOfData)
         {
-            for (var index = 0; index < listOfData.Count(); index++)
+            for (var index = 0; index < listOfData.Count; index++)
             {
                 listOfData.ElementAt(index).Id = index;
             }
