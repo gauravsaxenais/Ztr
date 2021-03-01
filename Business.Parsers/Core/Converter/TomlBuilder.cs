@@ -119,19 +119,27 @@
                 var match = Regex.Matches(s, pattern);
                 if (match.Count >= 1 && match[0].Groups.Count >= 2)
                 {
+                    bool escaped = false;
                     match[0].Groups[1].Captures.ToList().ForEach(o =>
+                    {
+                        Regex.Replace(o.Value, @"(\{.*\})", n =>
                         {
-                            Regex.Replace(o.Value, @"(\{.*\})", n =>
-                            {
-                                s = s.Replace(n.Groups[1].Value, UnQuote(n.Groups[1].Value.RemoveNewline()));
-                                return string.Empty;
+                            escaped = true;
+                            s = s.Replace(n.Groups[1].Value, UnQuote(n.Groups[1].Value.RemoveNewline()));
+                            return string.Empty;
 
-                            }, RegexOptions.Singleline | RegexOptions.IgnoreCase);
+                        }, RegexOptions.Singleline | RegexOptions.IgnoreCase);
 
-                        });
+                    });
+
+                    if (!escaped)
+                    {
+                        s = s.RemoveNewline();
+                    }
+
                 }
+                
                 return s;
-
             }
 
          
