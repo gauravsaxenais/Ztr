@@ -57,12 +57,5 @@
         /// <param name="mainTag">The main tag.</param>
         /// <returns></returns>
         Task<List<string>> GetTagsWithNoDeviceFileModified(List<string> fromTags, string mainTag);
-        /// <summary>
-        /// Gets the tags with no device file modified1.
-        /// </summary>
-        /// <param name="fromTags">From tags.</param>
-        /// <param name="mainTag">The main tag.</param>
-        /// <returns></returns>
-        Task<List<string>> GetTagsWithNoDeviceFileModified1(List<string> fromTags, string mainTag);
     }
 }

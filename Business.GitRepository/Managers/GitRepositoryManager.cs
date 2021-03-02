@@ -102,10 +102,25 @@
         /// Gets all tag names asynchronous.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<string>> GetAllTagNamesAsync()
+        public async Task<Dictionary<string, DateTimeOffset>> GetAllTagNamesAsync()
         {
-            var tags = await GetAllTagsAsync().ConfigureAwait(false);
-            return tags;
+            var tags = new Dictionary<string, DateTimeOffset>();
+            _repository = new Repository(_gitConnection.GitLocalFolder);
+
+            // Add new tags.
+            foreach (var tag in _repository.Tags)
+            {
+                var peeledTarget = tag.PeeledTarget;
+
+                if (peeledTarget is Commit)
+                {
+                    // We're not interested by Tags pointing at Blobs or Trees
+                    // only interested in tags for a commit.
+                    tags.Add(tag.FriendlyName, ((Commit)tag.PeeledTarget).Author.When);
+                }
+            }
+
+            return await Task.FromResult(tags);
         }
 
         /// <summary>
@@ -412,31 +427,6 @@
                 }
             }
             return null;
-        }
-
-        private async Task<List<string>> GetAllTagsAsync()
-        {
-            var tags = new List<Tag>();
-            _repository = new Repository(_gitConnection.GitLocalFolder);
-
-            // Add new tags.
-            foreach (var tag in _repository.Tags)
-            {
-                var peeledTarget = tag.PeeledTarget;
-
-                if (peeledTarget is Commit)
-                {
-                    // We're not interested by Tags pointing at Blobs or Trees
-                    // only interested in tags for a commit.
-                    tags.Add(tag);
-                }
-            }
-
-            var tagNames = tags.OrderByDescending(t => ((Commit)t.PeeledTarget).Author.When)
-                                                  .Select(t => t.FriendlyName)
-                                                  .ToList();
-
-            return await Task.FromResult(tagNames);
         }
 
         private static string GetBlobFromFile(TreeEntry treeEntry)

@@ -57,7 +57,7 @@
             await _firmwareVersionServiceManager.CloneGitRepoAsync().ConfigureAwait(false);
 
             var listOfTags = await _firmwareVersionServiceManager.GetAllFirmwareVersionsAsync().ConfigureAwait(false);
-            var tagsWithNoDeviceFileModified = await _firmwareVersionServiceManager.GetTagsWithNoDeviceFileModified1(listOfTags, module.FirmwareVersion);
+            var tagsWithNoDeviceFileModified = await _firmwareVersionServiceManager.GetTagsWithNoDeviceFileModified(listOfTags, module.FirmwareVersion);
             firmwareVersions.UnionWith(tagsWithNoDeviceFileModified);
             listOfTags = listOfTags.Except(tagsWithNoDeviceFileModified).ToList();
             listOfTags = listOfTags.Where(x => !string.Equals(x, module.FirmwareVersion, StringComparison.OrdinalIgnoreCase)).ToList();
