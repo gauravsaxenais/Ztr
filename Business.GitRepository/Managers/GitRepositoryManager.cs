@@ -31,7 +31,6 @@
         private const string GitFolder = ".git";
         private const string TextMimeType = "text/plain";
         private Repository _repository;
-        private UsernamePasswordCredentials _userNamePasswordCredentials;
         private readonly object _syncRoot = new object();
         #endregion
 
@@ -47,12 +46,6 @@
             EnsureArg.IsNotEmptyOrWhiteSpace(gitConnection.GitRemoteLocation);
 
             _gitConnection = gitConnection;
-
-            _userNamePasswordCredentials = new UsernamePasswordCredentials()
-            {
-                Username = gitConnection.UserName,
-                Password = gitConnection.Password
-            };
         }
 
         /// <summary>
@@ -102,10 +95,25 @@
         /// Gets all tag names asynchronous.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<string>> GetAllTagNamesAsync()
+        public async Task<Dictionary<string, DateTimeOffset>> GetAllTagNamesAsync()
         {
-            var tags = await GetAllTagsAsync().ConfigureAwait(false);
-            return tags;
+            var tags = new Dictionary<string, DateTimeOffset>();
+            _repository = new Repository(_gitConnection.GitLocalFolder);
+
+            // Add new tags.
+            foreach (var tag in _repository.Tags)
+            {
+                var peeledTarget = tag.PeeledTarget;
+
+                if (peeledTarget is Commit)
+                {
+                    // We're not interested by Tags pointing at Blobs or Trees
+                    // only interested in tags for a commit.
+                    tags.Add(tag.FriendlyName, ((Commit)tag.PeeledTarget).Author.When);
+                }
+            }
+
+            return await Task.FromResult(tags);
         }
 
         /// <summary>
@@ -291,7 +299,6 @@
             cloneOptions.CertificateCheck += (certificate, valid, host) => true;
 
             cloneOptions.CredentialsProvider = (_url, _user, _cred) => new DefaultCredentials();
-            cloneOptions.CredentialsProvider += (_url, _user, _cred) => _userNamePasswordCredentials;
             Repository.Clone(_gitConnection.GitRemoteLocation, _gitConnection.GitLocalFolder,
             cloneOptions);
 
@@ -322,8 +329,6 @@
             var refSpecs = new List<string>() { network.FetchRefSpecs.First().Specification };
             var fetchOptions = new FetchOptions { TagFetchMode = TagFetchMode.All };
             fetchOptions.CredentialsProvider = (_url, _user, _cred) => new DefaultCredentials();
-            fetchOptions.CredentialsProvider += (_url, _user, _cred) => _userNamePasswordCredentials;
-
             _repository.Network.Fetch(network.Name, refSpecs, fetchOptions);
         }
 
@@ -412,31 +417,6 @@
                 }
             }
             return null;
-        }
-
-        private async Task<List<string>> GetAllTagsAsync()
-        {
-            var tags = new List<Tag>();
-            _repository = new Repository(_gitConnection.GitLocalFolder);
-
-            // Add new tags.
-            foreach (var tag in _repository.Tags)
-            {
-                var peeledTarget = tag.PeeledTarget;
-
-                if (peeledTarget is Commit)
-                {
-                    // We're not interested by Tags pointing at Blobs or Trees
-                    // only interested in tags for a commit.
-                    tags.Add(tag);
-                }
-            }
-
-            var tagNames = tags.OrderByDescending(t => ((Commit)t.PeeledTarget).Author.When)
-                                                  .Select(t => t.FriendlyName)
-                                                  .ToList();
-
-            return await Task.FromResult(tagNames);
         }
 
         private static string GetBlobFromFile(TreeEntry treeEntry)

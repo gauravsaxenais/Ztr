@@ -106,7 +106,7 @@
             <summary>
             Creates from HTML.
             </summary>
-            <param name="htmlFile">The HTML file.</param>
+            <param name="htmlFile">The HTML/XML file.</param>
             <param name="device">The device.</param>
             <param name="firmware">The firmware.</param>
             <returns></returns>

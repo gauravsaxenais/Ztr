@@ -51,18 +51,13 @@
         Task<List<ModuleReadModel>> GetListOfModulesAsync(string firmwareVersion, string deviceType);
 
         /// <summary>
-        /// Gets the tags with device file modified.
+        /// Gets the tags with no device file modified.
         /// </summary>
-        /// <param name="fromTags">From tags.</param>
+        /// <param name="tagList">The tag list.</param>
         /// <param name="mainTag">The main tag.</param>
+        /// <param name="deviceType">Type of the device.</param>
+        /// <param name="modules">The modules.</param>
         /// <returns></returns>
-        Task<List<string>> GetTagsWithNoDeviceFileModified(List<string> fromTags, string mainTag);
-        /// <summary>
-        /// Gets the tags with no device file modified1.
-        /// </summary>
-        /// <param name="fromTags">From tags.</param>
-        /// <param name="mainTag">The main tag.</param>
-        /// <returns></returns>
-        Task<List<string>> GetTagsWithNoDeviceFileModified1(List<string> fromTags, string mainTag);
+        Task<List<string>> GetCompatibleFirmwareVersions(List<string> tagList, string mainTag, string deviceType, List<ModuleReadModel> modules);
     }
 }

@@ -46,16 +46,16 @@
                 $"{Prefix} method name: {nameof(GetAllFirmwareVersionsAsync)}: Getting list of all firmware versions for deviceType.");
             var specConfigFolder = ((FirmwareVersionGitConnectionOptions)ConnectionOptions).TomlConfiguration.TomlConfigFolder;
             var firmwareVersions = await RepoManager.GetAllTagNamesAsync().ConfigureAwait(false);
-            var firmwareVersionsWithSpecFolder = new List<string>();
             Parallel.ForEach(firmwareVersions, async firmwareVersion =>
             {
-                var isPresent = await RepoManager.IsFolderPresentInTag(firmwareVersion, specConfigFolder).ConfigureAwait(false);
-                if (isPresent)
+                var isPresent = await RepoManager.IsFolderPresentInTag(firmwareVersion.Key, specConfigFolder).ConfigureAwait(false);
+                if (!isPresent)
                 {
-                    firmwareVersionsWithSpecFolder.Add(firmwareVersion);
+                    firmwareVersions.Remove(firmwareVersion.Key);
                 }
             });
 
+            var firmwareVersionsWithSpecFolder = firmwareVersions.OrderByDescending(item => item.Value).Select(item => item.Key).ToList();
             return firmwareVersionsWithSpecFolder;
         }
 
@@ -107,54 +107,48 @@
         }
 
         /// <summary>
-        /// Gets the tags with device file modified.
+        /// Gets the tags with no device file modified.
         /// </summary>
-        /// <param name="fromTags">From tags.</param>
+        /// <param name="tagList">The tag list.</param>
         /// <param name="mainTag">The main tag.</param>
+        /// <param name="deviceType">Type of the device.</param>
+        /// <param name="modules">The modules.</param>
         /// <returns></returns>
-        public async Task<List<string>> GetTagsWithNoDeviceFileModified(List<string> fromTags, string mainTag)
+        public async Task<List<string>> GetCompatibleFirmwareVersions(List<string> tagList, string mainTag, string deviceType, List<ModuleReadModel> modules)
         {
-            var listOfTags = new List<string>();
             var firmwareVersionConnectionOptions = (FirmwareVersionGitConnectionOptions)ConnectionOptions;
             var devicesPath = Path.Combine(firmwareVersionConnectionOptions.TomlConfiguration.TomlConfigFolder, firmwareVersionConnectionOptions.TomlConfiguration.DeviceTomlFile);
+            var finalList = new List<string>();
+            tagList = tagList.Where(x => x != mainTag).ToList();
 
-            foreach (var fromTag in fromTags)
+            for (int index = 0; index < tagList.Count; index++)
             {
-                if (!RepoManager.IsFileChangedBetweenTags(fromTag, mainTag, devicesPath))
+                var current = tagList[index];
+
+                var moduleList = await GetListOfModulesAsync(current, deviceType).ConfigureAwait(false);
+                var valid = modules.Intersect(moduleList, new ModuleReadModelComparer()).Count() == modules.Count;
+                if (valid)
                 {
-                    listOfTags.Add(fromTag);
+                    finalList.Add(current);
+                    bool changed = false;
+
+                    while (!changed && index < tagList.Count - 1)
+                    {
+                        ++index;
+                        changed = RepoManager.IsFileChangedBetweenTags(current, tagList[index], devicesPath);
+
+                        if (!changed)
+                            finalList.Add(tagList[index]);
+                    }
+                    if (index != tagList.Count - 1)
+                    { 
+                        index -= 1; 
+                    }
                 }
             }
 
             await Task.CompletedTask;
-            return listOfTags;
-        }
-
-        public async Task<List<string>> GetTagsWithNoDeviceFileModified1(List<string> tagList, string mainTag)
-        {
-            var listOfTags = new List<string>();
-            var firmwareVersionConnectionOptions = (FirmwareVersionGitConnectionOptions)ConnectionOptions;
-            var devicesPath = Path.Combine(firmwareVersionConnectionOptions.TomlConfiguration.TomlConfigFolder, firmwareVersionConnectionOptions.TomlConfiguration.DeviceTomlFile);
-            int index = -1;
-            _ = tagList.Any(x => { index++; return x == mainTag; });
-
-            for (int i = 1; i < index; i++)
-            {
-                if (!RepoManager.IsFileChangedBetweenTags(tagList[0], tagList[i], devicesPath))
-                {
-                    listOfTags.Add(tagList[i]);
-                }
-            }
-            for (int i = index + 1; i < tagList.Count; i++)
-            {
-                if (!RepoManager.IsFileChangedBetweenTags(mainTag, tagList[i], devicesPath))
-                {
-                    listOfTags.Add(tagList[i]);
-                }
-            }
-
-            await Task.CompletedTask;
-            return listOfTags;
+            return finalList;
         }
 
         /// <summary>

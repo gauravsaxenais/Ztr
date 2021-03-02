@@ -50,27 +50,16 @@
             EnsureArg.HasItems(module.Modules);
 
             var prefix = nameof(CompatibleFirmwareVersionManager);
-            var firmwareVersions = new HashSet<string>();
+            var firmwareVersions = new List<string>();
 
             _logger.LogInformation($"{prefix}: methodName: {nameof(GetCompatibleFirmwareVersionsAsync)} Getting list of compatible firmware versions based on a firmware version.");
             _logger.LogInformation($"{prefix}: methodName: {nameof(GetCompatibleFirmwareVersionsAsync)} Cloning firmware version git repository.");
             await _firmwareVersionServiceManager.CloneGitRepoAsync().ConfigureAwait(false);
 
             var listOfTags = await _firmwareVersionServiceManager.GetAllFirmwareVersionsAsync().ConfigureAwait(false);
-            var tagsWithNoDeviceFileModified = await _firmwareVersionServiceManager.GetTagsWithNoDeviceFileModified1(listOfTags, module.FirmwareVersion);
-            firmwareVersions.UnionWith(tagsWithNoDeviceFileModified);
-            listOfTags = listOfTags.Except(tagsWithNoDeviceFileModified).ToList();
             listOfTags = listOfTags.Where(x => !string.Equals(x, module.FirmwareVersion, StringComparison.OrdinalIgnoreCase)).ToList();
+            firmwareVersions = await _firmwareVersionServiceManager.GetCompatibleFirmwareVersions(listOfTags, module.FirmwareVersion, module.DeviceType, module.Modules);
 
-            foreach (var tag in listOfTags)
-            {
-                var moduleList = await _firmwareVersionServiceManager.GetListOfModulesAsync(tag, module.DeviceType).ConfigureAwait(false);
-                var contained = module.Modules.Intersect(moduleList, new ModuleReadModelComparer()).Count() == module.Modules.Count;
-                if (contained)
-                {
-                    firmwareVersions.Add(tag);
-                }
-            }
             return firmwareVersions;
         }
     }

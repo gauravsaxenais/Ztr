@@ -1,5 +1,6 @@
 ﻿namespace Business.GitRepository.Interfaces
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using ZTR.Framework.Business.File;
@@ -26,7 +27,7 @@
         /// Gets all tag names asynchronous.
         /// </summary>
         /// <returns></returns>
-        Task<List<string>> GetAllTagNamesAsync();
+        Task<Dictionary<string, DateTimeOffset>> GetAllTagNamesAsync();
 
         /// <summary>
         /// Gets the file data from tag asynchronous.
