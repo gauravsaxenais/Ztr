@@ -13,7 +13,7 @@ namespace Service
     /// </summary>
     public class Program
     {
-        /// <summary>
+        /// <summary>world
         /// Defines the entry point of the application.
         /// </summary>
         /// <param name="args">The arguments.</param>
