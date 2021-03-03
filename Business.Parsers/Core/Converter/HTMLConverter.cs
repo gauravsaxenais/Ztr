@@ -19,6 +19,7 @@ namespace Business.Parsers.Core.Converter
         private ITree _tree;
         private IEnumerable<ConfigMap> _map;
         private ITree _tomlTree;
+        private ITree _ReaderTomlTree;
         private IBuilder<ITree> _builder;
         public HTMLConverter(ConvertConfig config, IBuilder<ITree> builder)
         {
@@ -31,9 +32,9 @@ namespace Business.Parsers.Core.Converter
             _map = _config.GetMapping();
             CleanToCompatible(ref html);
             ToDictionary(html);
-
-            var toml = _config.BaseToml;
-            _tomlTree = _builder.ToDictionary(toml);
+          
+            _ReaderTomlTree = _builder.ToDictionary(_config.Toml.BaseToml);
+            _tomlTree = _builder.ToDictionary(_config.Toml.ViewToml);
             RemoveModule(_tomlTree, false);
             //RemoveArrays(_tomlTree);
             MergeValues();

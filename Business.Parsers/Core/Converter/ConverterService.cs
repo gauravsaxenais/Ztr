@@ -47,9 +47,9 @@
         /// </summary>
         /// <param name="html">The HTML.</param>
         /// <returns></returns>
-        public async Task<string> CreateFromHtmlAsync(string html, string baseToml)
+        public async Task<string> CreateFromHtmlAsync(string html, ConfigTOML Toml)
         {
-            _config.BaseToml = baseToml;
+            _config.Toml = Toml;
             var dictionary = _htmlParser.ToConverted(html);
             var contents = _builder.ToTOML(dictionary, ValueScheme.Quoted);
 

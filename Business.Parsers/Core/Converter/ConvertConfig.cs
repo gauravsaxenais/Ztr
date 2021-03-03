@@ -61,7 +61,7 @@
             var map = tags.Where(o => o.StartsWith("map:")).Select(o => new ConfigMap(o)).Distinct().ToArray();
             return map;
         }       
-        internal string BaseToml { get; set; }
+        internal ConfigTOML Toml { get; set; }
         internal bool EnableHidden { get; set; }
         void InitiateRule()
         {

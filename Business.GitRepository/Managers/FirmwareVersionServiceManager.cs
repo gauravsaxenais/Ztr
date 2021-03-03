@@ -117,17 +117,37 @@
             var listOfTags = new List<string>();
             var firmwareVersionConnectionOptions = ((FirmwareVersionGitConnectionOptions)ConnectionOptions);
             var devicesPath = Path.Combine(firmwareVersionConnectionOptions.TomlConfiguration.TomlConfigFolder, firmwareVersionConnectionOptions.TomlConfiguration.DeviceTomlFile);
+            var finalList = new List<string>();
 
-            foreach (var fromTag in fromTags)
+            string current;
+            for (int index = 0; index < tagList.Count; index++)
             {
-                if (!RepoManager.IsFileChangedBetweenTags(fromTag, mainTag, devicesPath))
+                current = tagList[index];
+                var main = mainTag;
+                bool changed = IsDeviceFileChanged(current, main, devicesPath);
+                var currentFirmwareVersionModuleList = await GetListOfModulesAsync(current, deviceType).ConfigureAwait(false);
+
+                if (!changed)
                 {
-                    listOfTags.Add(fromTag);
+                    var valid = IsCompatibleFirmwareVersion(mainModuleList, currentFirmwareVersionModuleList);
+                    if (valid)
+                    {
+                        finalList.Add(current);
+                    }
+                }
+                else
+                {
+                    var valid = IsCompatibleFirmwareVersion(mainModuleList, currentFirmwareVersionModuleList);
+                    if (valid)
+                    {
+                        finalList.Add(current);
+                    }
+                    main = current;
                 }
             }
 
             await Task.CompletedTask;
-            return listOfTags;
+            return finalList;
         }
 
         /// <summary>
@@ -155,6 +175,15 @@
             return listOfModules;
         }
 
+        private static bool IsCompatibleFirmwareVersion(List<ModuleReadModel> mainFirmwareVersionModules, List<ModuleReadModel> modules)
+        {
+            return mainFirmwareVersionModules.Intersect(modules, new ModuleReadModelComparer()).Count() == mainFirmwareVersionModules.Count;
+        }
+
+        private bool IsDeviceFileChanged(string fromTag, string toTag, string devicesPath)
+        {
+            return RepoManager.IsFileChangedBetweenTags(fromTag, toTag, devicesPath);
+        }
         /// <summary>
         /// Gets the file content from path.
         /// </summary>
