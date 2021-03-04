@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using ZTR.Framework.Business;
 
     internal class Extractor : IExtractor<ITree>
     {
@@ -74,6 +75,16 @@
                 if (o.ContainsKey(_config.Name))
                 {
                     dict.Add(o[_config.Name].ToString(), Extractvalue(o));
+                }
+
+
+                if (_config.EnableHidden && !dict.Keys.Contains(_config.VisibleKey))
+                {
+                    var v = o.Keys.FirstOrDefault(x => x.Compares(_config.VisibleKey));
+                    if(v != null)
+                    {
+                        dict.Add(_config.VisibleKey,o[_config.VisibleKey]);
+                    }                  
                 }
 
             });

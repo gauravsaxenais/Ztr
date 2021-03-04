@@ -56,12 +56,11 @@
         {
             var module = new { module = values };
             var model = new ConfigReadModel { Module = JsonConvert.SerializeObject(module), Block = "{}", Version = "{}" };
-            var Toml =
-                 new ConfigTOML
-                 {
-                     BaseToml = await _service.CreateConfigTomlAsync(model, true),
-                     ViewToml = await _service.CreateConfigTomlAsync(model, true)
-                 };
+            var Toml = new ConfigTOML
+                     {
+                         BaseToml = await _service.CreateConfigTomlAsync(model, true),
+                         ViewToml = string.Empty
+                     };
 
             var html = FileReaderExtensions.ReadAsString(htmlFile);            
 

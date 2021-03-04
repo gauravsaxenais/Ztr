@@ -14,6 +14,7 @@
     {
         internal string Value => "value";
         internal string Name => "name";
+        internal string VisibleKey => "isvisible";
         internal string Fields => "fields";
         internal string Arrays => "arrays";
      

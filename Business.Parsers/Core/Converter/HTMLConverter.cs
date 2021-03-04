@@ -18,8 +18,7 @@ namespace Business.Parsers.Core.Converter
         private HtmlDocument _document;
         private ITree _tree;
         private IEnumerable<ConfigMap> _map;
-        private ITree _tomlTree;
-        private ITree _ReaderTomlTree;
+        private ITree _tomlTree;      
         private IBuilder<ITree> _builder;
         public HTMLConverter(ConvertConfig config, IBuilder<ITree> builder)
         {
@@ -33,12 +32,11 @@ namespace Business.Parsers.Core.Converter
             CleanToCompatible(ref html);
             ToDictionary(html);
           
-            _ReaderTomlTree = _builder.ToDictionary(_config.Toml.BaseToml);
-            _tomlTree = _builder.ToDictionary(_config.Toml.ViewToml);
+            _tomlTree = _builder.ToDictionary(_config.Toml.BaseToml);
             RemoveModule(_tomlTree, false);
             //RemoveArrays(_tomlTree);
             MergeValues();
-
+            RemoveSkeletons(_tomlTree);
             return _tomlTree;
         }
         
@@ -450,6 +448,54 @@ namespace Business.Parsers.Core.Converter
 
                 html = html.Replace($"</{o}>", string.Empty);
             }
+        }
+        private bool RemoveSkeletons<T>(T input, bool Omiting = false) where T : ITree
+        {
+
+            if (Omiting)
+            {
+                var isForOmit = input.Any(u => u.Key.Compares(_config.VisibleKey) &&
+                                               u.Value.ToString().Compares("false"));
+                if (isForOmit)
+                {
+                    return true;
+                }
+            }
+
+
+            var dictionary = new Tree();
+            foreach (var item in input)
+            {
+                if(item.Key.Compares(_config.VisibleKey))
+                {
+                    input.Remove(item);
+                    continue;
+                }
+                if (item.Value is object[] tAry)
+                {
+                    IList<object> objects = new List<object>();
+                    tAry.ToList().ForEach(o =>
+                    {
+                        var omit = RemoveSkeletons((T)o, true);
+                        if (!omit) objects.Add(o);
+
+                    });
+
+                    dictionary.Add(item.Key, objects.ToArray());
+                }
+
+                if (item.Value is T t)
+                {
+                    var omit = RemoveSkeletons(t);                    
+                }
+            }
+
+            foreach (var item in dictionary)
+            {
+                input[item.Key] = dictionary[item.Key];
+            }
+
+            return false;
         }
         #endregion private members
     }
