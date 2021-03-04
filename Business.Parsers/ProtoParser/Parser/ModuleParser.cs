@@ -6,6 +6,7 @@
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
+    using ZTR.Framework.Business;
 
     public class ModuleParser : IModuleParser
     {
@@ -66,6 +67,7 @@
                             }
                             else
                             {
+                                tempJsonModel.IsVisible = false;
                                 if (message.IsRepeated)
                                 {
                                     tempJsonModel.Arrays.Add(MergeTomlWithProtoMessage(new Dictionary<string, object>(), message));
@@ -120,13 +122,13 @@
             return listOfData;
         }
 
-        private IEnumerable<JsonField> GetFieldsFromProtoMessage(ProtoParsedMessage protoParsedMessage)
+        private static IEnumerable<JsonField> GetFieldsFromProtoMessage(ProtoParsedMessage protoParsedMessage)
         {
             EnsureArg.IsNotNull(protoParsedMessage);
             var list = new List<JsonField>();
             foreach (var field in protoParsedMessage.Fields)
             {
-                var clonedField = (Field)field.Clone();
+                var clonedField = field.Copy();
                 var jsonField = new JsonField()
                 {
                     Name = clonedField.Name,
@@ -148,9 +150,9 @@
         #endregion
 
         #region Private helper methods
-        private void FixIndex(IReadOnlyList<JsonField> listOfData)
+        private static void FixIndex(IReadOnlyList<JsonField> listOfData)
         {
-            for (var index = 0; index < listOfData.Count(); index++)
+            for (var index = 0; index < listOfData.Count; index++)
             {
                 listOfData[index].Id = index;
             }
@@ -162,7 +164,7 @@
             {
                 var arrayTypes = listOfData.Where(x => x.DataType == "array").ToList();
 
-                for (int index = 0; index < arrayTypes.Count(); index++)
+                for (int index = 0; index < arrayTypes.Count; index++)
                 {
                     var fields = arrayTypes[index].Fields;
                     var arrays = arrayTypes[index].Arrays;
@@ -178,7 +180,7 @@
             // fix the indexes
             FixIndex(listOfData);
         }
-        private object GetFieldValue(object fieldValue)
+        private static object GetFieldValue(object fieldValue)
         {
             var fieldType = fieldValue.GetType();
             object result;
@@ -190,7 +192,7 @@
             else result = fieldValue;
             return result;
         }
-        private object GetRepeatedFieldValue(object fieldValue)
+        private static object GetRepeatedFieldValue(object fieldValue)
         {
             return fieldValue.GetType().IsArray ? ((IEnumerable)fieldValue).Cast<object>().ToList() : new List<object>();
         }

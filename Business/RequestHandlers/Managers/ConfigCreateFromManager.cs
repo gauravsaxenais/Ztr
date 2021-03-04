@@ -124,7 +124,7 @@
         /// </summary>
         /// <param name="configTomlFile">The configuration toml file.</param>
         /// <returns></returns>
-        private IEnumerable<ModuleReadModel> GetListOfModules(string configTomlFile)
+        private static IEnumerable<ModuleReadModel> GetListOfModules(string configTomlFile)
         {
             EnsureArg.IsNotEmptyOrWhiteSpace(configTomlFile);
 

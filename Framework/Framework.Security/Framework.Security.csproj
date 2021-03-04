@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>ZTR.Framework.Security</AssemblyName>
     <RootNamespace>ZTR.Framework.Security</RootNamespace>
     <Description>ZTR "Security" functionality.</Description>
@@ -15,13 +15,15 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <OutputPath></OutputPath>
+    <DocumentationFile>obj\Release\net5.0\ZTR.Framework.Security.xml</DocumentationFile>
+    <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <OutputPath></OutputPath>
-    <DocumentationFile>obj\Debug\netcoreapp3.1\ZTR.Framework.Security.xml</DocumentationFile>
-    <NoWarn>1701;1702</NoWarn>
+    <DocumentationFile>obj\Debug\net5.0\ZTR.Framework.Security.xml</DocumentationFile>
+    <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,7 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Ensure.That" Version="9.2.0" />
+    <PackageReference Include="Ensure.That" Version="10.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="5.0.0" />

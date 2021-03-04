@@ -40,22 +40,22 @@
         /// Gets all firmware versions asynchronous.
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<string>> GetAllFirmwareVersionsAsync()
+        public async Task<List<string>> GetAllFirmwareVersionsAsync()
         {
             _logger.LogInformation(
                 $"{Prefix} method name: {nameof(GetAllFirmwareVersionsAsync)}: Getting list of all firmware versions for deviceType.");
             var specConfigFolder = ((FirmwareVersionGitConnectionOptions)ConnectionOptions).TomlConfiguration.TomlConfigFolder;
             var firmwareVersions = await RepoManager.GetAllTagNamesAsync().ConfigureAwait(false);
-            var firmwareVersionsWithSpecFolder = new List<string>();
             Parallel.ForEach(firmwareVersions, async firmwareVersion =>
             {
-                var isPresent = await RepoManager.IsFolderPresentInTag(firmwareVersion, specConfigFolder).ConfigureAwait(false);
-                if (isPresent)
+                var isPresent = await RepoManager.IsFolderPresentInTag(firmwareVersion.Key, specConfigFolder).ConfigureAwait(false);
+                if (!isPresent)
                 {
-                    firmwareVersionsWithSpecFolder.Add(firmwareVersion);
+                    firmwareVersions.Remove(firmwareVersion.Key);
                 }
             });
 
+            var firmwareVersionsWithSpecFolder = firmwareVersions.OrderByDescending(item => item.Value).Select(item => item.Key).ToList();
             return firmwareVersionsWithSpecFolder;
         }
 
@@ -106,30 +106,23 @@
             return deviceValueFromTomlFile;
         }
 
-        /// <summary>
-        /// Gets the tags with device file modified.
-        /// </summary>
-        /// <param name="fromTags">From tags.</param>
-        /// <param name="mainTag">The main tag.</param>
-        /// <returns></returns>
-        public async Task<List<string>> GetTagsWithNoDeviceFileModified(IEnumerable<string> fromTags, string mainTag)
+        public async Task<List<string>> GetCompatibleFirmwareVersions(List<string> tagList, string mainTag, string deviceType, List<ModuleReadModel> mainModuleList)
         {
-            var listOfTags = new List<string>();
-            var firmwareVersionConnectionOptions = ((FirmwareVersionGitConnectionOptions)ConnectionOptions);
+            _logger.LogInformation($"{Prefix} method name: {nameof(GetCompatibleFirmwareVersions)}: Getting list of compatible firmware versions for selected firmware: {mainTag} and deviceType: {deviceType}.");
+            var firmwareVersionConnectionOptions = (FirmwareVersionGitConnectionOptions)ConnectionOptions;
             var devicesPath = Path.Combine(firmwareVersionConnectionOptions.TomlConfiguration.TomlConfigFolder, firmwareVersionConnectionOptions.TomlConfiguration.DeviceTomlFile);
             var finalList = new List<string>();
-
+            bool valid = true;
+            var main = mainTag;
             string current;
+
             for (int index = 0; index < tagList.Count; index++)
             {
                 current = tagList[index];
-                var main = mainTag;
-                bool changed = IsDeviceFileChanged(current, main, devicesPath);
-                var currentFirmwareVersionModuleList = await GetListOfModulesAsync(current, deviceType).ConfigureAwait(false);
 
+                bool changed = IsDeviceFileChanged(current, main, devicesPath);
                 if (!changed)
                 {
-                    var valid = IsCompatibleFirmwareVersion(mainModuleList, currentFirmwareVersionModuleList);
                     if (valid)
                     {
                         finalList.Add(current);
@@ -137,7 +130,7 @@
                 }
                 else
                 {
-                    var valid = IsCompatibleFirmwareVersion(mainModuleList, currentFirmwareVersionModuleList);
+                    valid = await IsCompatibleFirmwareVersionAsync(mainModuleList, current, deviceType);
                     if (valid)
                     {
                         finalList.Add(current);
@@ -146,7 +139,6 @@
                 }
             }
 
-            await Task.CompletedTask;
             return finalList;
         }
 
@@ -170,20 +162,19 @@
             }
 
             // fix the indexes.
-            listOfModules.Select((item, index) => { item.Id = index; return item; }).ToList();
+            listOfModules = listOfModules.Select((item, index) => { item.Id = index; return item; }).ToList();
 
             return listOfModules;
         }
 
-        private static bool IsCompatibleFirmwareVersion(List<ModuleReadModel> mainFirmwareVersionModules, List<ModuleReadModel> modules)
+        private async Task<bool> IsCompatibleFirmwareVersionAsync(List<ModuleReadModel> mainFirmwareVersionModules, string current, string deviceType)
         {
+            var modules = await GetListOfModulesAsync(current, deviceType);
             return mainFirmwareVersionModules.Intersect(modules, new ModuleReadModelComparer()).Count() == mainFirmwareVersionModules.Count;
         }
 
-        private bool IsDeviceFileChanged(string fromTag, string toTag, string devicesPath)
-        {
-            return RepoManager.IsFileChangedBetweenTags(fromTag, toTag, devicesPath);
-        }
+        private bool IsDeviceFileChanged(string fromTag, string toTag, string devicesPath) => RepoManager.IsFileChangedBetweenTags(fromTag, toTag, devicesPath);
+
         /// <summary>
         /// Gets the file content from path.
         /// </summary>

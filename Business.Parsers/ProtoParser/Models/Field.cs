@@ -1,41 +1,16 @@
 ﻿namespace Business.Parsers.ProtoParser.Models
 {
     using Newtonsoft.Json;
-    using System;
-
-    public class Field : ICloneable
+    public class Field
     {
         public int Id { get; set; }
         public string Name { get; set; }
-
         public object Value { get; set; }
-        
-        public object Min { get; set; }
-        
+        public object Min { get; set; }        
         public object Max { get; set; }
-
         public object DefaultValue { get; set; }
-
         public string DataType { get; set; }
-
         [JsonIgnore]
         public bool IsRepeated { get; set; }
-
-        public object Clone()
-        {
-            var other = (Field)MemberwiseClone();
-            DeepCopy(other);
-            return other;
-        }
-
-        private void DeepCopy(Field other)
-        {
-            other.Name = Name;
-            other.Value = Value;
-            other.Min = Min;
-            other.Max = Max;
-            other.DefaultValue = DefaultValue;
-            other.DataType = DataType;
-        }
     }
 }

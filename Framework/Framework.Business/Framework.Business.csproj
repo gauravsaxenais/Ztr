@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>ZTR.Framework.Business</AssemblyName>
     <RootNamespace>ZTR.Framework.Business</RootNamespace>
     <LangVersion>latest</LangVersion>
@@ -15,19 +15,21 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <OutputPath></OutputPath>
-    <DocumentationFile>obj\Debug\netcoreapp3.1\ZTR.Framework.Business.xml</DocumentationFile>
-    <NoWarn>1701;1702</NoWarn>
+    <DocumentationFile>obj\Debug\net5.0\ZTR.Framework.Business.xml</DocumentationFile>
+    <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <OutputPath></OutputPath>
+    <DocumentationFile>obj\Release\net5.0\ZTR.Framework.Business.xml</DocumentationFile>
+    <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Ben.Demystifier" Version="0.3.0" />
-    <PackageReference Include="Ensure.That" Version="9.2.0" />
-    <PackageReference Include="FluentValidation" Version="9.3.0" />
+    <PackageReference Include="Ensure.That" Version="10.0.0" />
+    <PackageReference Include="FluentValidation" Version="9.5.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="Nett" Version="0.15.0" />
   </ItemGroup>

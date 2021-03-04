@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
+FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
 # Update and install required dependencies
 RUN apt-get update && apt-get install -y protobuf-compiler
 
@@ -13,7 +13,7 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
+FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
 COPY ["DeviceConfigAPI/Service.csproj", "DeviceConfigAPI/"]
 COPY ["Framework/Framework.Service/Framework.Service.csproj", "Framework/Framework.Service/"]

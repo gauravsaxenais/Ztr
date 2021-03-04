@@ -3,12 +3,11 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
-    using System.Linq;
 
     /// <summary>
     ///   Returns list of arguments for block as a json.
     /// </summary>
-    public class BlockJsonModel : ICloneable, IEquatable<BlockJsonModel>
+    public class BlockJsonModel : IEquatable<BlockJsonModel>
     {
         /// <summary>Gets or sets the identifier.</summary>
         /// <value>The identifier.</value>
@@ -31,22 +30,6 @@
         public List<string> Modules { get; } = new List<string>();
 
         /// <summary>
-        /// Creates a new object that is a copy of the current instance.
-        /// </summary>
-        /// <returns>
-        /// A new object that is a copy of this instance.
-        /// </returns>
-        public object Clone()
-        {
-            var other = new BlockJsonModel { Id = Id };
-            other.Modules.AddRange(Modules);
-
-            DeepCopy(other);
-
-            return other;
-        }
-
-        /// <summary>
         /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>
         /// <param name="other">An object to compare with this object.</param>
@@ -55,7 +38,7 @@
         /// </returns>
         public bool Equals([AllowNull] BlockJsonModel other)
         {
-            if (ReferenceEquals(null, other)) return false;
+            if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
 
             return string.Equals(Type, other.Type);
@@ -69,7 +52,7 @@
         /// </returns>
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
+            if (obj is null) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
             return Equals((BlockJsonModel)obj);
@@ -112,15 +95,6 @@
                 var hashCode = (Type != null ? Type.GetHashCode() : 0);
                 return hashCode;
             }
-        }
-
-        private void DeepCopy(BlockJsonModel other)
-        {
-            other.Type = Type;
-            other.Tag = Tag;
-
-            var args = Args.Select(x => (NetworkArgumentReadModel)x.Clone()).ToList();
-            other.Args.AddRange(args);
         }
     }
 }

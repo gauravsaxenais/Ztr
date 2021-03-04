@@ -104,7 +104,7 @@
         /// <param name="moduleFilePath">The module file path.</param>
         /// <param name="metaTomlFilePath">The meta toml file path.</param>
         /// <returns></returns>
-        private string GetModuleIconUrl(ModuleReadModel module, string moduleFilePath, string metaTomlFilePath)
+        private static string GetModuleIconUrl(ModuleReadModel module, string moduleFilePath, string metaTomlFilePath)
         {
             EnsureArg.IsNotNull(module);
             var iconUrl = string.Empty;
