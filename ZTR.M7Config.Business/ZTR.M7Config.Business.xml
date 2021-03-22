@@ -192,11 +192,12 @@
             and responsible for parsing toml files.
             </summary>
         </member>
-        <member name="M:ZTR.M7Config.Business.RequestHandlers.Interfaces.IBlockManager.GetBlocksAsync(System.String)">
+        <member name="M:ZTR.M7Config.Business.RequestHandlers.Interfaces.IBlockManager.GetBlocksAsync(System.String,System.String)">
             <summary>
             Gets the blocks asynchronous.
             </summary>
             <param name="firmwareVersion">The firmware version.</param>
+            <param name="deviceType">Type of the device.</param>
             <returns></returns>
         </member>
         <member name="M:ZTR.M7Config.Business.RequestHandlers.Interfaces.IBlockManager.GetBlocksFromFileAsync(System.String)">
@@ -340,11 +341,12 @@
             <param name="blockServiceManager">The block service manager.</param>
             <param name="firmwareVersionServiceManager">The module service manager.</param>
         </member>
-        <member name="M:ZTR.M7Config.Business.RequestHandlers.Managers.BlockManager.GetBlocksAsync(System.String)">
+        <member name="M:ZTR.M7Config.Business.RequestHandlers.Managers.BlockManager.GetBlocksAsync(System.String,System.String)">
             <summary>
             Gets the blocks asynchronous.
             </summary>
             <param name="firmwareVersion">The firmware version.</param>
+            <param name="deviceType">Type of the device.</param>
             <returns></returns>
         </member>
         <member name="M:ZTR.M7Config.Business.RequestHandlers.Managers.BlockManager.GetBlocksFromFileAsync(System.String)">
@@ -576,13 +578,12 @@
             <seealso cref="T:ZTR.Framework.Business.Manager" />
             <seealso cref="T:ZTR.M7Config.Business.RequestHandlers.Interfaces.IFirmwareVersionManager" />
         </member>
-        <member name="M:ZTR.M7Config.Business.RequestHandlers.Managers.FirmwareVersionManager.#ctor(Microsoft.Extensions.Logging.ILogger{ZTR.M7Config.Business.RequestHandlers.Managers.DeviceTypeManager},ZTR.M7Config.Business.GitRepository.Interfaces.IFirmwareVersionServiceManager,ZTR.M7Config.Business.RequestHandlers.Interfaces.IDeviceTypeManager)">
+        <member name="M:ZTR.M7Config.Business.RequestHandlers.Managers.FirmwareVersionManager.#ctor(Microsoft.Extensions.Logging.ILogger{ZTR.M7Config.Business.RequestHandlers.Managers.DeviceTypeManager},ZTR.M7Config.Business.GitRepository.Interfaces.IFirmwareVersionServiceManager)">
             <summary>
             Initializes a new instance of the <see cref="T:ZTR.M7Config.Business.RequestHandlers.Managers.FirmwareVersionManager"/> class.
             </summary>
             <param name="logger">The logger.</param>
             <param name="firmwareVersionServiceManager">The firmware version service manager.</param>
-            <param name="deviceTypeManager">The device type manager.</param>
         </member>
         <member name="M:ZTR.M7Config.Business.RequestHandlers.Managers.FirmwareVersionManager.GetAllFirmwareVersionsAsync(System.String)">
             <summary>

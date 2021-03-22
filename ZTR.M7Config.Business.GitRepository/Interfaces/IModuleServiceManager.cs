@@ -10,6 +10,11 @@
     public interface IModuleServiceManager
     {
         /// <summary>
+        /// Sets the connection.
+        /// </summary>
+        void SetConnection();
+
+        /// <summary>
         /// Gets all modules asynchronous.
         /// </summary>
         /// <param name="listOfModules">The list of modules.</param>

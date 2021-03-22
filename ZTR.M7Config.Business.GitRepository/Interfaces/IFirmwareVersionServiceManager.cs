@@ -24,8 +24,9 @@
         /// <summary>
         /// Sets the git repo URL.
         /// </summary>
+        /// <param name="deviceType">Type of the device.</param>
         /// <param name="gitUrl">The git URL.</param>
-        void SetGitRepoUrl(string gitUrl);
+        void SetGitRepoUrl(string deviceType, string gitUrl);
 
         /// <summary>
         /// Gets the default toml file content asynchronous.
@@ -59,5 +60,12 @@
         /// <param name="modules">The modules.</param>
         /// <returns></returns>
         Task<List<string>> GetCompatibleFirmwareVersions(List<string> tagList, string mainTag, string deviceType, List<ModuleReadModel> modules);
+
+        /// <summary>
+        /// Gets the firmware URL asynchronous.
+        /// </summary>
+        /// <param name="deviceType">Type of the device.</param>
+        /// <returns></returns>
+        Task<string> GetFirmwareUrlAsync(string deviceType);
     }
 }

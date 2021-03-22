@@ -1,0 +1,379 @@
+[19:49:35 DBG Microsoft.Extensions.Hosting.Internal.Host.] Hosting starting
+[19:49:35 WRN Program.] AllowAllOrigins true, so all origins are allowed
+[19:49:35 WRN Program.] Caution: Use this setting in DEVELOPMENT only. In production, grant access to specific origins (websites) that you control and trust to access the API.
+[19:49:36 INF Microsoft.Hosting.Lifetime.] Now listening on: http://localhost:5000
+[19:49:36 DBG Microsoft.AspNetCore.Hosting.Diagnostics.] Loaded hosting startup assembly Service
+[19:49:36 INF Microsoft.Hosting.Lifetime.] Application started. Press Ctrl+C to shut down.
+[19:49:36 INF Microsoft.Hosting.Lifetime.] Hosting environment: Staging
+[19:49:36 INF Microsoft.Hosting.Lifetime.] Content root path: F:\ZTR\ZTR.M7Config.Web
+[19:49:36 DBG Microsoft.Extensions.Hosting.Internal.Host.] Hosting started
+[19:49:36 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM7AS83BCC5P" accepted.
+[19:49:36 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM7AS83BCC5Q" accepted.
+[19:49:36 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM7AS83BCC5Q" started.
+[19:49:36 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM7AS83BCC5P" started.
+[19:49:36 DBG Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.] Connection id "0HM7AS83BCC5P" received FIN.
+[19:49:36 DBG Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.] Connection id "0HM7AS83BCC5Q" received FIN.
+[19:49:36 DBG Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.] Connection id "0HM7AS83BCC5Q" sending FIN because: "The client closed the connection."
+[19:49:36 DBG Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.] Connection id "0HM7AS83BCC5P" sending FIN because: "The client closed the connection."
+[19:49:36 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM7AS83BCC5Q" disconnecting.
+[19:49:36 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM7AS83BCC5P" disconnecting.
+[19:49:36 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM7AS83BCC5P" stopped.
+[19:49:36 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM7AS83BCC5Q" stopped.
+[19:49:37 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM7AS83BCC5R" accepted.
+[19:49:37 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM7AS83BCC5R" started.
+[19:49:37 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM7AS83BCC5S" accepted.
+[19:49:37 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM7AS83BCC5S" started.
+[19:49:38 INF Microsoft.AspNetCore.Hosting.Diagnostics.GET] Request starting HTTP/1.1 GET http://localhost:5000/swagger/index.html - -
+[19:49:38 DBG Microsoft.AspNetCore.HostFiltering.HostFilteringMiddleware.] Wildcard detected, all requests with hosts will be allowed.
+[19:49:38 VRB Microsoft.AspNetCore.HostFiltering.HostFilteringMiddleware.] All hosts are allowed.
+[19:49:38 DBG Microsoft.AspNetCore.Routing.Matching.DfaMatcher.] No candidates found for the request path '/swagger/index.html'
+[19:49:38 DBG Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.] Request did not match any endpoints
+[19:49:38 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM7AS83BCC5R" completed keep alive response.
+[19:49:38 INF Microsoft.AspNetCore.Hosting.Diagnostics.GET] Request finished HTTP/1.1 GET http://localhost:5000/swagger/index.html - - - 200 - text/html;charset=utf-8 388.3604ms
+[19:49:38 INF Microsoft.AspNetCore.Hosting.Diagnostics.GET] Request starting HTTP/1.1 GET http://localhost:5000/swagger/v1/swagger.json - -
+[19:49:38 VRB Microsoft.AspNetCore.HostFiltering.HostFilteringMiddleware.] All hosts are allowed.
+[19:49:38 DBG Microsoft.AspNetCore.Routing.Matching.DfaMatcher.] No candidates found for the request path '/swagger/v1/swagger.json'
+[19:49:38 DBG Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.] Request did not match any endpoints
+[19:49:38 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM7AS83BCC5R" completed keep alive response.
+[19:49:38 INF Microsoft.AspNetCore.Hosting.Diagnostics.GET] Request finished HTTP/1.1 GET http://localhost:5000/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 123.3053ms
+[19:49:53 INF Microsoft.AspNetCore.Hosting.Diagnostics.GET] Request starting HTTP/1.1 GET http://localhost:5000/api/query/FirmwareVersion/GetAllFirmwareVersions?deviceType=m7 - -
+[19:49:53 VRB Microsoft.AspNetCore.HostFiltering.HostFilteringMiddleware.] All hosts are allowed.
+[19:49:53 DBG Microsoft.AspNetCore.Routing.Matching.DfaMatcher.] 1 candidate(s) found for the request path '/api/query/FirmwareVersion/GetAllFirmwareVersions'
+[19:49:53 DBG Microsoft.AspNetCore.Routing.Matching.DfaMatcher.] Endpoint 'Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service)' with route pattern 'api/query/FirmwareVersion/GetAllFirmwareVersions' is valid for the request path '/api/query/FirmwareVersion/GetAllFirmwareVersions'
+[19:49:53 DBG Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.] Request matched endpoint 'Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service)'
+[19:49:53 DBG Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware.] Static files was skipped as the request already matched an endpoint.
+[19:49:53 DBG Microsoft.AspNetCore.Rewrite.RewriteMiddleware.] Request is continuing in applying rules. Current url is http://localhost:5000/api/query/FirmwareVersion/GetAllFirmwareVersions?deviceType=m7
+[19:49:53 INF Microsoft.AspNetCore.Routing.EndpointMiddleware.] Executing endpoint 'Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service)'
+[19:49:53 DBG Microsoft.AspNetCore.Mvc.ModelBinding.ModelBinderFactory.] Registered model binder providers, in the following order: ["Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BinderTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ServicesModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BodyModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.HeaderModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FloatingPointTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.EnumTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.DateTimeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.SimpleTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.CancellationTokenModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ByteArrayModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FormFileModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FormCollectionModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.KeyValuePairModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.DictionaryModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ArrayModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.CollectionModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ComplexObjectModelBinderProvider"]
+[19:49:53 INF Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Route matched with {action = "GetAllFirmwareVersions", controller = "FirmwareVersion"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllFirmwareVersions(System.String) on controller Service.Controllers.FirmwareVersionController (Service).
+[19:49:53 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of authorization filters (in the following order): ["None"]
+[19:49:53 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of resource filters (in the following order): ["Microsoft.AspNetCore.Mvc.ConsumesAttribute"]
+[19:49:53 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of action filters (in the following order): ["Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter (Order: -3000)","Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter (Order: -2000)"]
+[19:49:53 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of exception filters (in the following order): ["None"]
+[19:49:53 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of result filters (in the following order): ["Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter (Order: -2000)","Microsoft.AspNetCore.Mvc.ProducesAttribute (Order: 0)"]
+[19:49:53 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResourceExecuting] Resource Filter: Before executing OnResourceExecuting on filter Microsoft.AspNetCore.Mvc.ConsumesAttribute.
+[19:49:53 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResourceExecuting] Resource Filter: After executing OnResourceExecuting on filter Microsoft.AspNetCore.Mvc.ConsumesAttribute.
+[19:49:53 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executing controller factory for controller Service.Controllers.FirmwareVersionController (Service)
+[19:49:53 INF Business.GitRepository.ZTR.M7Config.Business.DeviceServiceManager.] Setting git repository connection
+[19:49:53 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executed controller factory for controller Service.Controllers.FirmwareVersionController (Service)
+[19:49:53 DBG Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.] Attempting to bind parameter 'deviceType' of type 'System.String' ...
+[19:49:53 DBG Microsoft.AspNetCore.Mvc.ModelBinding.Binders.SimpleTypeModelBinder.] Attempting to bind parameter 'deviceType' of type 'System.String' using the name 'deviceType' in request data ...
+[19:49:53 DBG Microsoft.AspNetCore.Mvc.ModelBinding.Binders.SimpleTypeModelBinder.] Done attempting to bind parameter 'deviceType' of type 'System.String'.
+[19:49:53 DBG Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.] Done attempting to bind parameter 'deviceType' of type 'System.String'.
+[19:49:53 DBG Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.] Attempting to validate the bound parameter 'deviceType' of type 'System.String' ...
+[19:49:53 DBG Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.] Done attempting to validate the bound parameter 'deviceType' of type 'System.String'.
+[19:49:53 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuting] Action Filter: Before executing OnActionExecuting on filter Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter.
+[19:49:53 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuting] Action Filter: After executing OnActionExecuting on filter Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter.
+[19:49:53 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuting] Action Filter: Before executing OnActionExecuting on filter Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter.
+[19:49:53 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuting] Action Filter: After executing OnActionExecuting on filter Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter.
+[19:49:53 INF Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executing action method Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service) - Validation state: "Valid"
+[19:49:53 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executing action method Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service) with arguments (["m7"])
+[19:49:53 INF Service.Controllers.FirmwareVersionController.] FirmwareVersionController: Getting list of all firmware versions
+[19:49:53 INF ZTR.M7Config.Business.RequestHandlers.Managers.DeviceTypeManager.] FirmwareVersionManager: methodName: GetAllFirmwareVersionsAsync Getting list of compatible firmware versions based on a device type m7.
+[19:49:53 INF Business.GitRepository.ZTR.M7Config.Business.FirmwareVersionServiceManager.] Setting git repository connection
+[19:49:53 INF Business.GitRepository.ZTR.M7Config.Business.FirmwareVersionServiceManager.] Cloning github repository for firmware version.
+[19:50:04 INF Business.GitRepository.ZTR.M7Config.Business.FirmwareVersionServiceManager.] Github repository cloning is successful for firmware version.
+[19:50:04 INF Business.GitRepository.ZTR.M7Config.Business.FirmwareVersionServiceManager.] FirmwareVersionServiceManager method name: GetAllFirmwareVersionsAsync: Getting list of all firmware versions for deviceType.
+[19:50:04 INF Service.Controllers.FirmwareVersionController.] FirmwareVersionController: Successfully retrieved list of all firmware versions
+[19:50:04 INF Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executed action method Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 10428.7561ms.
+[19:50:04 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuted] Action Filter: Before executing OnActionExecuted on filter Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter.
+[19:50:04 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuted] Action Filter: After executing OnActionExecuted on filter Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter.
+[19:50:04 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuted] Action Filter: Before executing OnActionExecuted on filter Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter.
+[19:50:04 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuted] Action Filter: After executing OnActionExecuted on filter Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter.
+[19:50:04 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuting] Result Filter: Before executing OnResultExecuting on filter Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter.
+[19:50:04 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuting] Result Filter: After executing OnResultExecuting on filter Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter.
+[19:50:04 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuting] Result Filter: Before executing OnResultExecuting on filter Microsoft.AspNetCore.Mvc.ProducesAttribute.
+[19:50:04 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuting] Result Filter: After executing OnResultExecuting on filter Microsoft.AspNetCore.Mvc.ProducesAttribute.
+[19:50:04 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Before executing action result Microsoft.AspNetCore.Mvc.OkObjectResult.
+[19:50:04 DBG Microsoft.AspNetCore.Mvc.Infrastructure.DefaultOutputFormatterSelector.] List of registered output formatters, in the following order: ["Microsoft.AspNetCore.Mvc.Formatters.HttpNoContentOutputFormatter","Microsoft.AspNetCore.Mvc.Formatters.StringOutputFormatter","Microsoft.AspNetCore.Mvc.Formatters.StreamOutputFormatter","Microsoft.AspNetCore.Mvc.Formatters.NewtonsoftJsonOutputFormatter"]
+[19:50:04 DBG Microsoft.AspNetCore.Mvc.Infrastructure.DefaultOutputFormatterSelector.] Attempting to select an output formatter based on Accept header '["application/json"]' and explicitly specified content types '["application/json"]'. The content types in the accept header must be a subset of the explicitly set content types.
+[19:50:04 DBG Microsoft.AspNetCore.Mvc.Infrastructure.DefaultOutputFormatterSelector.] Selected output formatter 'Microsoft.AspNetCore.Mvc.Formatters.NewtonsoftJsonOutputFormatter' and content type 'application/json' to write the response.
+[19:50:04 INF Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor.] Executing OkObjectResult, writing value of type 'ZTR.Framework.Service.ApiResponse'.
+[19:50:04 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] After executing action result Microsoft.AspNetCore.Mvc.OkObjectResult.
+[19:50:04 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuted] Result Filter: Before executing OnResultExecuted on filter Microsoft.AspNetCore.Mvc.ProducesAttribute.
+[19:50:04 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuted] Result Filter: After executing OnResultExecuted on filter Microsoft.AspNetCore.Mvc.ProducesAttribute.
+[19:50:04 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuted] Result Filter: Before executing OnResultExecuted on filter Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter.
+[19:50:04 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuted] Result Filter: After executing OnResultExecuted on filter Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter.
+[19:50:04 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResourceExecuted] Resource Filter: Before executing OnResourceExecuted on filter Microsoft.AspNetCore.Mvc.ConsumesAttribute.
+[19:50:04 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResourceExecuted] Resource Filter: After executing OnResourceExecuted on filter Microsoft.AspNetCore.Mvc.ConsumesAttribute.
+[19:50:04 INF Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executed action Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service) in 10791.2478ms
+[19:50:04 INF Microsoft.AspNetCore.Routing.EndpointMiddleware.] Executed endpoint 'Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service)'
+[19:50:04 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM7AS83BCC5R" completed keep alive response.
+[19:50:04 INF Microsoft.AspNetCore.Hosting.Diagnostics.GET] Request finished HTTP/1.1 GET http://localhost:5000/api/query/FirmwareVersion/GetAllFirmwareVersions?deviceType=m7 - - - 200 129 application/json;+charset=utf-8 10869.6301ms
+[19:51:29 DBG Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.] Connection id "0HM7AS83BCC5S" received FIN.
+[19:51:29 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM7AS83BCC5S" disconnecting.
+[19:51:29 DBG Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.] Connection id "0HM7AS83BCC5S" sending FIN because: "The client closed the connection."
+[19:51:29 INF Microsoft.AspNetCore.Hosting.Diagnostics.GET] Request starting HTTP/1.1 GET http://localhost:5000/api/query/FirmwareVersion/GetAllFirmwareVersions?deviceType=m7 - -
+[19:51:29 VRB Microsoft.AspNetCore.HostFiltering.HostFilteringMiddleware.] All hosts are allowed.
+[19:51:29 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM7AS83BCC5S" stopped.
+[19:51:29 DBG Microsoft.AspNetCore.Routing.Matching.DfaMatcher.] 1 candidate(s) found for the request path '/api/query/FirmwareVersion/GetAllFirmwareVersions'
+[19:51:29 DBG Microsoft.AspNetCore.Routing.Matching.DfaMatcher.] Endpoint 'Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service)' with route pattern 'api/query/FirmwareVersion/GetAllFirmwareVersions' is valid for the request path '/api/query/FirmwareVersion/GetAllFirmwareVersions'
+[19:51:29 DBG Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.] Request matched endpoint 'Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service)'
+[19:51:29 DBG Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware.] Static files was skipped as the request already matched an endpoint.
+[19:51:29 DBG Microsoft.AspNetCore.Rewrite.RewriteMiddleware.] Request is continuing in applying rules. Current url is http://localhost:5000/api/query/FirmwareVersion/GetAllFirmwareVersions?deviceType=m7
+[19:51:29 INF Microsoft.AspNetCore.Routing.EndpointMiddleware.] Executing endpoint 'Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service)'
+[19:51:29 INF Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Route matched with {action = "GetAllFirmwareVersions", controller = "FirmwareVersion"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllFirmwareVersions(System.String) on controller Service.Controllers.FirmwareVersionController (Service).
+[19:51:29 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of authorization filters (in the following order): ["None"]
+[19:51:29 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of resource filters (in the following order): ["Microsoft.AspNetCore.Mvc.ConsumesAttribute"]
+[19:51:29 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of action filters (in the following order): ["Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter (Order: -3000)","Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter (Order: -2000)"]
+[19:51:29 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of exception filters (in the following order): ["None"]
+[19:51:29 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of result filters (in the following order): ["Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter (Order: -2000)","Microsoft.AspNetCore.Mvc.ProducesAttribute (Order: 0)"]
+[19:51:29 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResourceExecuting] Resource Filter: Before executing OnResourceExecuting on filter Microsoft.AspNetCore.Mvc.ConsumesAttribute.
+[19:51:29 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResourceExecuting] Resource Filter: After executing OnResourceExecuting on filter Microsoft.AspNetCore.Mvc.ConsumesAttribute.
+[19:51:29 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executing controller factory for controller Service.Controllers.FirmwareVersionController (Service)
+[19:51:29 INF Business.GitRepository.ZTR.M7Config.Business.DeviceServiceManager.] Setting git repository connection
+[19:51:29 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executed controller factory for controller Service.Controllers.FirmwareVersionController (Service)
+[19:51:29 DBG Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.] Attempting to bind parameter 'deviceType' of type 'System.String' ...
+[19:51:29 DBG Microsoft.AspNetCore.Mvc.ModelBinding.Binders.SimpleTypeModelBinder.] Attempting to bind parameter 'deviceType' of type 'System.String' using the name 'deviceType' in request data ...
+[19:51:29 DBG Microsoft.AspNetCore.Mvc.ModelBinding.Binders.SimpleTypeModelBinder.] Done attempting to bind parameter 'deviceType' of type 'System.String'.
+[19:51:29 DBG Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.] Done attempting to bind parameter 'deviceType' of type 'System.String'.
+[19:51:29 DBG Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.] Attempting to validate the bound parameter 'deviceType' of type 'System.String' ...
+[19:51:29 DBG Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.] Done attempting to validate the bound parameter 'deviceType' of type 'System.String'.
+[19:51:29 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuting] Action Filter: Before executing OnActionExecuting on filter Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter.
+[19:51:29 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuting] Action Filter: After executing OnActionExecuting on filter Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter.
+[19:51:29 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuting] Action Filter: Before executing OnActionExecuting on filter Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter.
+[19:51:29 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuting] Action Filter: After executing OnActionExecuting on filter Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter.
+[19:51:29 INF Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executing action method Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service) - Validation state: "Valid"
+[19:51:29 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executing action method Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service) with arguments (["m7"])
+[19:51:29 INF Service.Controllers.FirmwareVersionController.] FirmwareVersionController: Getting list of all firmware versions
+[19:51:29 INF ZTR.M7Config.Business.RequestHandlers.Managers.DeviceTypeManager.] FirmwareVersionManager: methodName: GetAllFirmwareVersionsAsync Getting list of compatible firmware versions based on a device type m7.
+[19:51:29 INF Business.GitRepository.ZTR.M7Config.Business.FirmwareVersionServiceManager.] Setting git repository connection
+[19:51:29 INF Business.GitRepository.ZTR.M7Config.Business.FirmwareVersionServiceManager.] Cloning github repository for firmware version.
+[19:51:37 INF Business.GitRepository.ZTR.M7Config.Business.FirmwareVersionServiceManager.] Github repository cloning is successful for firmware version.
+[19:51:37 INF Business.GitRepository.ZTR.M7Config.Business.FirmwareVersionServiceManager.] FirmwareVersionServiceManager method name: GetAllFirmwareVersionsAsync: Getting list of all firmware versions for deviceType.
+[19:51:37 INF Service.Controllers.FirmwareVersionController.] FirmwareVersionController: Successfully retrieved list of all firmware versions
+[19:51:37 INF Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executed action method Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 7286.5738ms.
+[19:51:37 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuted] Action Filter: Before executing OnActionExecuted on filter Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter.
+[19:51:37 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuted] Action Filter: After executing OnActionExecuted on filter Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter.
+[19:51:37 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuted] Action Filter: Before executing OnActionExecuted on filter Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter.
+[19:51:37 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuted] Action Filter: After executing OnActionExecuted on filter Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter.
+[19:51:37 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuting] Result Filter: Before executing OnResultExecuting on filter Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter.
+[19:51:37 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuting] Result Filter: After executing OnResultExecuting on filter Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter.
+[19:51:37 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuting] Result Filter: Before executing OnResultExecuting on filter Microsoft.AspNetCore.Mvc.ProducesAttribute.
+[19:51:37 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuting] Result Filter: After executing OnResultExecuting on filter Microsoft.AspNetCore.Mvc.ProducesAttribute.
+[19:51:37 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Before executing action result Microsoft.AspNetCore.Mvc.OkObjectResult.
+[19:51:37 DBG Microsoft.AspNetCore.Mvc.Infrastructure.DefaultOutputFormatterSelector.] List of registered output formatters, in the following order: ["Microsoft.AspNetCore.Mvc.Formatters.HttpNoContentOutputFormatter","Microsoft.AspNetCore.Mvc.Formatters.StringOutputFormatter","Microsoft.AspNetCore.Mvc.Formatters.StreamOutputFormatter","Microsoft.AspNetCore.Mvc.Formatters.NewtonsoftJsonOutputFormatter"]
+[19:51:37 DBG Microsoft.AspNetCore.Mvc.Infrastructure.DefaultOutputFormatterSelector.] Attempting to select an output formatter based on Accept header '["application/json"]' and explicitly specified content types '["application/json"]'. The content types in the accept header must be a subset of the explicitly set content types.
+[19:51:37 DBG Microsoft.AspNetCore.Mvc.Infrastructure.DefaultOutputFormatterSelector.] Selected output formatter 'Microsoft.AspNetCore.Mvc.Formatters.NewtonsoftJsonOutputFormatter' and content type 'application/json' to write the response.
+[19:51:37 INF Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor.] Executing OkObjectResult, writing value of type 'ZTR.Framework.Service.ApiResponse'.
+[19:51:37 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] After executing action result Microsoft.AspNetCore.Mvc.OkObjectResult.
+[19:51:37 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuted] Result Filter: Before executing OnResultExecuted on filter Microsoft.AspNetCore.Mvc.ProducesAttribute.
+[19:51:37 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuted] Result Filter: After executing OnResultExecuted on filter Microsoft.AspNetCore.Mvc.ProducesAttribute.
+[19:51:37 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuted] Result Filter: Before executing OnResultExecuted on filter Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter.
+[19:51:37 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuted] Result Filter: After executing OnResultExecuted on filter Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter.
+[19:51:37 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResourceExecuted] Resource Filter: Before executing OnResourceExecuted on filter Microsoft.AspNetCore.Mvc.ConsumesAttribute.
+[19:51:37 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResourceExecuted] Resource Filter: After executing OnResourceExecuted on filter Microsoft.AspNetCore.Mvc.ConsumesAttribute.
+[19:51:37 INF Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executed action Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service) in 7304.9054ms
+[19:51:37 INF Microsoft.AspNetCore.Routing.EndpointMiddleware.] Executed endpoint 'Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service)'
+[19:51:37 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM7AS83BCC5R" completed keep alive response.
+[19:51:37 INF Microsoft.AspNetCore.Hosting.Diagnostics.GET] Request finished HTTP/1.1 GET http://localhost:5000/api/query/FirmwareVersion/GetAllFirmwareVersions?deviceType=m7 - - - 200 129 application/json;+charset=utf-8 7341.9346ms
+[19:51:54 INF Microsoft.AspNetCore.Hosting.Diagnostics.GET] Request starting HTTP/1.1 GET http://localhost:5000/api/query/DefaultValues/GetAllDefaultValues?firmwareVersion=1.0.12&deviceType=m7 - -
+[19:51:54 VRB Microsoft.AspNetCore.HostFiltering.HostFilteringMiddleware.] All hosts are allowed.
+[19:51:54 DBG Microsoft.AspNetCore.Routing.Matching.DfaMatcher.] 1 candidate(s) found for the request path '/api/query/DefaultValues/GetAllDefaultValues'
+[19:51:54 DBG Microsoft.AspNetCore.Routing.Matching.DfaMatcher.] Endpoint 'Service.Controllers.DefaultValuesController.GetAllDefaultValues (Service)' with route pattern 'api/query/DefaultValues/GetAllDefaultValues' is valid for the request path '/api/query/DefaultValues/GetAllDefaultValues'
+[19:51:54 DBG Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.] Request matched endpoint 'Service.Controllers.DefaultValuesController.GetAllDefaultValues (Service)'
+[19:51:54 DBG Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware.] Static files was skipped as the request already matched an endpoint.
+[19:51:54 DBG Microsoft.AspNetCore.Rewrite.RewriteMiddleware.] Request is continuing in applying rules. Current url is http://localhost:5000/api/query/DefaultValues/GetAllDefaultValues?firmwareVersion=1.0.12&deviceType=m7
+[19:51:54 INF Microsoft.AspNetCore.Routing.EndpointMiddleware.] Executing endpoint 'Service.Controllers.DefaultValuesController.GetAllDefaultValues (Service)'
+[19:51:54 INF Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Route matched with {action = "GetAllDefaultValues", controller = "DefaultValues"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllDefaultValues(System.String, System.String) on controller Service.Controllers.DefaultValuesController (Service).
+[19:51:54 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of authorization filters (in the following order): ["None"]
+[19:51:54 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of resource filters (in the following order): ["Microsoft.AspNetCore.Mvc.ConsumesAttribute"]
+[19:51:54 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of action filters (in the following order): ["Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter (Order: -3000)","Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter (Order: -2000)"]
+[19:51:54 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of exception filters (in the following order): ["None"]
+[19:51:54 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of result filters (in the following order): ["Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter (Order: -2000)","Microsoft.AspNetCore.Mvc.ProducesAttribute (Order: 0)"]
+[19:51:54 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResourceExecuting] Resource Filter: Before executing OnResourceExecuting on filter Microsoft.AspNetCore.Mvc.ConsumesAttribute.
+[19:51:54 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResourceExecuting] Resource Filter: After executing OnResourceExecuting on filter Microsoft.AspNetCore.Mvc.ConsumesAttribute.
+[19:51:54 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executing controller factory for controller Service.Controllers.DefaultValuesController (Service)
+[19:51:54 INF Business.GitRepository.ZTR.M7Config.Business.ModuleServiceManager.] Setting git repository connection
+[19:51:54 INF Business.GitRepository.ZTR.M7Config.Business.DeviceServiceManager.] Setting git repository connection
+[19:51:54 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executed controller factory for controller Service.Controllers.DefaultValuesController (Service)
+[19:51:54 DBG Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.] Attempting to bind parameter 'firmwareVersion' of type 'System.String' ...
+[19:51:54 DBG Microsoft.AspNetCore.Mvc.ModelBinding.Binders.SimpleTypeModelBinder.] Attempting to bind parameter 'firmwareVersion' of type 'System.String' using the name 'firmwareVersion' in request data ...
+[19:51:54 DBG Microsoft.AspNetCore.Mvc.ModelBinding.Binders.SimpleTypeModelBinder.] Done attempting to bind parameter 'firmwareVersion' of type 'System.String'.
+[19:51:54 DBG Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.] Done attempting to bind parameter 'firmwareVersion' of type 'System.String'.
+[19:51:54 DBG Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.] Attempting to validate the bound parameter 'firmwareVersion' of type 'System.String' ...
+[19:51:54 DBG Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.] Done attempting to validate the bound parameter 'firmwareVersion' of type 'System.String'.
+[19:51:54 DBG Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.] Attempting to bind parameter 'deviceType' of type 'System.String' ...
+[19:51:54 DBG Microsoft.AspNetCore.Mvc.ModelBinding.Binders.SimpleTypeModelBinder.] Attempting to bind parameter 'deviceType' of type 'System.String' using the name 'deviceType' in request data ...
+[19:51:54 DBG Microsoft.AspNetCore.Mvc.ModelBinding.Binders.SimpleTypeModelBinder.] Done attempting to bind parameter 'deviceType' of type 'System.String'.
+[19:51:54 DBG Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.] Done attempting to bind parameter 'deviceType' of type 'System.String'.
+[19:51:54 DBG Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.] Attempting to validate the bound parameter 'deviceType' of type 'System.String' ...
+[19:51:54 DBG Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.] Done attempting to validate the bound parameter 'deviceType' of type 'System.String'.
+[19:51:54 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuting] Action Filter: Before executing OnActionExecuting on filter Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter.
+[19:51:54 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuting] Action Filter: After executing OnActionExecuting on filter Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter.
+[19:51:54 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuting] Action Filter: Before executing OnActionExecuting on filter Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter.
+[19:51:54 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuting] Action Filter: After executing OnActionExecuting on filter Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter.
+[19:51:54 INF Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executing action method Service.Controllers.DefaultValuesController.GetAllDefaultValues (Service) - Validation state: "Valid"
+[19:51:54 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executing action method Service.Controllers.DefaultValuesController.GetAllDefaultValues (Service) with arguments (["1.0.12","m7"])
+[19:51:54 INF Service.Controllers.DefaultValuesController.] DefaultValuesController: Getting default values for 1.0.12 and m7.
+[19:51:54 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: methodName: GetDefaultValuesAllModulesAsync Getting default values for 1.0.12 and m7.
+[19:51:59 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: methodName: GetDefaultValuesAllModulesAsync Cloning firmware version git repository.
+[19:52:05 INF Business.GitRepository.ZTR.M7Config.Business.FirmwareVersionServiceManager.] Setting git repository connection
+[19:52:11 INF Business.GitRepository.ZTR.M7Config.Business.FirmwareVersionServiceManager.] Cloning github repository for firmware version.
+[19:52:17 INF Business.GitRepository.ZTR.M7Config.Business.FirmwareVersionServiceManager.] Github repository cloning is successful for firmware version.
+[19:52:19 INF Business.GitRepository.ZTR.M7Config.Business.FirmwareVersionServiceManager.] FirmwareVersionServiceManager method name: GetDefaultTomlFileContentAsync: Getting default value from toml file for 1.0.12.
+[19:52:22 INF Business.GitRepository.ZTR.M7Config.Business.FirmwareVersionServiceManager.] FirmwareVersionServiceManager method name: GetDefaultTomlFileContentAsync: Successfully retrieved default value from toml file for 1.0.12.
+[19:52:22 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: methodName: GetDefaultValuesAllModulesAsync Getting list of modules 1.0.12 and m7.
+[19:52:22 INF Business.GitRepository.ZTR.M7Config.Business.FirmwareVersionServiceManager.] FirmwareVersionServiceManager method name: GetDeviceTomlFileContentAsync: Getting device value from toml file for 1.0.12.
+[19:52:24 INF Business.GitRepository.ZTR.M7Config.Business.ModuleServiceManager.] Setting git repository connection
+[19:52:24 INF Business.GitRepository.ZTR.M7Config.Business.ModuleServiceManager.] Cloning github repository for modules.
+[19:52:28 INF Business.GitRepository.ZTR.M7Config.Business.ModuleServiceManager.] Github repository cloning is successful for modules.
+[19:52:28 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: methodName: GetDefaultValuesAllModulesAsync Merging default values with module information. 1.0.12 and m7.
+[19:52:28 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeValuesWithModulesAsync Merging default values with list of modules in parallel...
+[19:52:28 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Getting proto file for power
+[19:52:28 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Retrieved proto file for power
+[19:52:28 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: GetProtoParsedMessage. Creating temp directory for protofilePath = F:\ZTR\ZTR.M7Config.Web\bin\Debug\net5.0\moduleconfig\power\abbbd3832ad747a0a1b0cd1b3c6d6579\module.proto.
+[19:52:28 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method GetProtoCompilerPath.
+[19:52:28 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: HasGeneratedCSharpFile. Now generating cs file.
+[19:52:29 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: HasGeneratedCSharpFile. cs file generated successfully.
+[19:52:29 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: GenerateDllFromCsFileAsync. Generating dll for module.proto and outputFolder: F:/ZTR/ZTR.M7Config.Web/bin/Debug/net5.0/Temp/157f1e0258e941caaea3ab9f4d896868/
+[19:52:29 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Getting proto file for adc
+[19:52:29 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Retrieved proto file for adc
+[19:52:29 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: GetProtoParsedMessage. Creating temp directory for protofilePath = F:\ZTR\ZTR.M7Config.Web\bin\Debug\net5.0\moduleconfig\adc\2e48782d9d424b678c583755877fa687\module.proto.
+[19:52:29 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method GetProtoCompilerPath.
+[19:52:29 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: HasGeneratedCSharpFile. Now generating cs file.
+[19:52:30 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: HasGeneratedCSharpFile. cs file generated successfully.
+[19:52:30 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: GenerateDllFromCsFileAsync. Generating dll for module.proto and outputFolder: F:/ZTR/ZTR.M7Config.Web/bin/Debug/net5.0/Temp/fbf510c3c0fd410aab1097c789c1fcae/
+[19:52:32 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: GenerateDllFromCsFileAsync. Generated dll for Module.proto and outputFolder: F:/ZTR/ZTR.M7Config.Web/bin/Debug/net5.0/Temp/fbf510c3c0fd410aab1097c789c1fcae/
+[19:52:32 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: GenerateDllFromCsFileAsync. Generated dll for Module.proto and outputFolder: F:/ZTR/ZTR.M7Config.Web/bin/Debug/net5.0/Temp/157f1e0258e941caaea3ab9f4d896868/
+[19:52:32 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Getting config values from default.toml file for adc
+[19:52:32 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Getting config values from default.toml file for power
+[19:52:32 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Merging config values with protoparsed message for adc
+[19:52:32 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Merging config values with protoparsed message for power
+[19:52:32 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Getting proto file for io
+[19:52:32 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Retrieved proto file for io
+[19:52:32 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: GetProtoParsedMessage. Creating temp directory for protofilePath = F:\ZTR\ZTR.M7Config.Web\bin\Debug\net5.0\moduleconfig\io\2fa4f8500e044f92b1368164d8e1e49c\module.proto.
+[19:52:32 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method GetProtoCompilerPath.
+[19:52:32 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: HasGeneratedCSharpFile. Now generating cs file.
+[19:52:32 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: HasGeneratedCSharpFile. cs file generated successfully.
+[19:52:32 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: GenerateDllFromCsFileAsync. Generating dll for module.proto and outputFolder: F:/ZTR/ZTR.M7Config.Web/bin/Debug/net5.0/Temp/feccf562c6b94641a57e53e4241597e9/
+[19:52:32 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Getting proto file for kv
+[19:52:32 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Retrieved proto file for kv
+[19:52:32 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Getting proto file for report
+[19:52:32 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Retrieved proto file for report
+[19:52:32 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: GetProtoParsedMessage. Creating temp directory for protofilePath = F:\ZTR\ZTR.M7Config.Web\bin\Debug\net5.0\moduleconfig\report\69fdf7ae3d5011eab77f2e728ce88125\module.proto.
+[19:52:32 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method GetProtoCompilerPath.
+[19:52:32 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: HasGeneratedCSharpFile. Now generating cs file.
+[19:52:33 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: GenerateDllFromCsFileAsync. Generated dll for Module.proto and outputFolder: F:/ZTR/ZTR.M7Config.Web/bin/Debug/net5.0/Temp/feccf562c6b94641a57e53e4241597e9/
+[19:52:33 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Getting config values from default.toml file for io
+[19:52:33 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Merging config values with protoparsed message for io
+[19:52:33 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: HasGeneratedCSharpFile. cs file generated successfully.
+[19:52:33 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: GenerateDllFromCsFileAsync. Generating dll for module.proto and outputFolder: F:/ZTR/ZTR.M7Config.Web/bin/Debug/net5.0/Temp/dc073ed7fde34889a3fa94378f970f6d/
+[19:52:33 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Getting proto file for register
+[19:52:33 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Retrieved proto file for register
+[19:52:33 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Getting proto file for j1939
+[19:52:33 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Retrieved proto file for j1939
+[19:52:33 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: GetProtoParsedMessage. Creating temp directory for protofilePath = F:\ZTR\ZTR.M7Config.Web\bin\Debug\net5.0\moduleconfig\j1939\e85bf76ea1cb449a8fcbfec5da8b50fb\module.proto.
+[19:52:33 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method GetProtoCompilerPath.
+[19:52:33 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: HasGeneratedCSharpFile. Now generating cs file.
+[19:52:33 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: GenerateDllFromCsFileAsync. Generated dll for Module.proto and outputFolder: F:/ZTR/ZTR.M7Config.Web/bin/Debug/net5.0/Temp/dc073ed7fde34889a3fa94378f970f6d/
+[19:52:33 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Getting config values from default.toml file for report
+[19:52:33 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Merging config values with protoparsed message for report
+[19:52:34 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: HasGeneratedCSharpFile. cs file generated successfully.
+[19:52:34 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: GenerateDllFromCsFileAsync. Generating dll for module.proto and outputFolder: F:/ZTR/ZTR.M7Config.Web/bin/Debug/net5.0/Temp/22414db554ba48c993e703f3569ae01a/
+[19:52:34 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Getting proto file for ble
+[19:52:34 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Retrieved proto file for ble
+[19:52:34 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: GetProtoParsedMessage. Creating temp directory for protofilePath = F:\ZTR\ZTR.M7Config.Web\bin\Debug\net5.0\moduleconfig\ble\20e7068614e94d4980cbffce06f71433\module.proto.
+[19:52:34 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method GetProtoCompilerPath.
+[19:52:34 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: HasGeneratedCSharpFile. Now generating cs file.
+[19:52:34 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: GenerateDllFromCsFileAsync. Generated dll for Module.proto and outputFolder: F:/ZTR/ZTR.M7Config.Web/bin/Debug/net5.0/Temp/22414db554ba48c993e703f3569ae01a/
+[19:52:34 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Getting config values from default.toml file for j1939
+[19:52:34 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Merging config values with protoparsed message for j1939
+[19:52:35 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: HasGeneratedCSharpFile. cs file generated successfully.
+[19:52:35 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: GenerateDllFromCsFileAsync. Generating dll for module.proto and outputFolder: F:/ZTR/ZTR.M7Config.Web/bin/Debug/net5.0/Temp/2cfc2075447d4563a1bc58d08a57f83f/
+[19:52:35 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: GenerateDllFromCsFileAsync. Generated dll for Module.proto and outputFolder: F:/ZTR/ZTR.M7Config.Web/bin/Debug/net5.0/Temp/2cfc2075447d4563a1bc58d08a57f83f/
+[19:52:35 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Getting config values from default.toml file for ble
+[19:52:35 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Merging config values with protoparsed message for ble
+[19:52:35 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Getting proto file for diagnostic
+[19:52:35 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Retrieved proto file for diagnostic
+[19:52:35 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: GetProtoParsedMessage. Creating temp directory for protofilePath = F:\ZTR\ZTR.M7Config.Web\bin\Debug\net5.0\moduleconfig\diagnostic\4947e836d9414a2ab59e260b52e5e252\module.proto.
+[19:52:35 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method GetProtoCompilerPath.
+[19:52:35 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: HasGeneratedCSharpFile. Now generating cs file.
+[19:52:35 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: HasGeneratedCSharpFile. cs file generated successfully.
+[19:52:35 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: GenerateDllFromCsFileAsync. Generating dll for module.proto and outputFolder: F:/ZTR/ZTR.M7Config.Web/bin/Debug/net5.0/Temp/d79e6d33e62e45b38bd97e9efbde1fa0/
+[19:52:35 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Getting proto file for cron
+[19:52:35 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Retrieved proto file for cron
+[19:52:35 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: GetProtoParsedMessage. Creating temp directory for protofilePath = F:\ZTR\ZTR.M7Config.Web\bin\Debug\net5.0\moduleconfig\cron\c609d032bc7844aba78ef3044d9fbec5\module.proto.
+[19:52:35 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method GetProtoCompilerPath.
+[19:52:35 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: HasGeneratedCSharpFile. Now generating cs file.
+[19:52:35 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: GenerateDllFromCsFileAsync. Generated dll for Module.proto and outputFolder: F:/ZTR/ZTR.M7Config.Web/bin/Debug/net5.0/Temp/d79e6d33e62e45b38bd97e9efbde1fa0/
+[19:52:36 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Getting config values from default.toml file for diagnostic
+[19:52:36 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Merging config values with protoparsed message for diagnostic
+[19:52:36 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: HasGeneratedCSharpFile. cs file generated successfully.
+[19:52:36 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: GenerateDllFromCsFileAsync. Generating dll for module.proto and outputFolder: F:/ZTR/ZTR.M7Config.Web/bin/Debug/net5.0/Temp/92d343ee1a2344d3bff13acddf801197/
+[19:52:36 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Getting proto file for gps
+[19:52:36 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Retrieved proto file for gps
+[19:52:36 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: GetProtoParsedMessage. Creating temp directory for protofilePath = F:\ZTR\ZTR.M7Config.Web\bin\Debug\net5.0\moduleconfig\gps\edce8ad7992042ecb031bff36e195163\module.proto.
+[19:52:36 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method GetProtoCompilerPath.
+[19:52:36 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: HasGeneratedCSharpFile. Now generating cs file.
+[19:52:36 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: GenerateDllFromCsFileAsync. Generated dll for Module.proto and outputFolder: F:/ZTR/ZTR.M7Config.Web/bin/Debug/net5.0/Temp/92d343ee1a2344d3bff13acddf801197/
+[19:52:36 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Getting config values from default.toml file for cron
+[19:52:36 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Merging config values with protoparsed message for cron
+[19:52:37 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: HasGeneratedCSharpFile. cs file generated successfully.
+[19:52:37 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: GenerateDllFromCsFileAsync. Generating dll for module.proto and outputFolder: F:/ZTR/ZTR.M7Config.Web/bin/Debug/net5.0/Temp/b6b9d4440a4240faa6c29be3ab266f8b/
+[19:52:37 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: GenerateDllFromCsFileAsync. Generated dll for Module.proto and outputFolder: F:/ZTR/ZTR.M7Config.Web/bin/Debug/net5.0/Temp/b6b9d4440a4240faa6c29be3ab266f8b/
+[19:52:37 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Getting config values from default.toml file for gps
+[19:52:37 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Merging config values with protoparsed message for gps
+[19:52:37 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Getting proto file for action
+[19:52:37 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Retrieved proto file for action
+[19:52:37 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Getting proto file for command
+[19:52:37 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Retrieved proto file for command
+[19:52:37 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: GetProtoParsedMessage. Creating temp directory for protofilePath = F:\ZTR\ZTR.M7Config.Web\bin\Debug\net5.0\moduleconfig\command\fffe404e84ae497aab2625818a2fcbfa\module.proto.
+[19:52:37 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method GetProtoCompilerPath.
+[19:52:37 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: HasGeneratedCSharpFile. Now generating cs file.
+[19:52:37 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: HasGeneratedCSharpFile. cs file generated successfully.
+[19:52:37 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: GenerateDllFromCsFileAsync. Generating dll for module.proto and outputFolder: F:/ZTR/ZTR.M7Config.Web/bin/Debug/net5.0/Temp/d2b64aa8964a4d539fef91afd9843a11/
+[19:52:37 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: GenerateDllFromCsFileAsync. Generated dll for Module.proto and outputFolder: F:/ZTR/ZTR.M7Config.Web/bin/Debug/net5.0/Temp/d2b64aa8964a4d539fef91afd9843a11/
+[19:52:37 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Getting config values from default.toml file for command
+[19:52:37 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Merging config values with protoparsed message for command
+[19:52:37 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Getting proto file for equipment
+[19:52:37 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Retrieved proto file for equipment
+[19:52:37 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: GetProtoParsedMessage. Creating temp directory for protofilePath = F:\ZTR\ZTR.M7Config.Web\bin\Debug\net5.0\moduleconfig\equipment\f3e71404564c4adca6eb6d6d1db01f28\module.proto.
+[19:52:37 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method GetProtoCompilerPath.
+[19:52:37 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: HasGeneratedCSharpFile. Now generating cs file.
+[19:52:38 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: HasGeneratedCSharpFile. cs file generated successfully.
+[19:52:38 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: GenerateDllFromCsFileAsync. Generating dll for module.proto and outputFolder: F:/ZTR/ZTR.M7Config.Web/bin/Debug/net5.0/Temp/4cbd5615652c40f6a1e3d2c7bccfc8bc/
+[19:52:38 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Getting proto file for flags
+[19:52:38 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Retrieved proto file for flags
+[19:52:38 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Getting proto file for keypad
+[19:52:38 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Retrieved proto file for keypad
+[19:52:38 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: GetProtoParsedMessage. Creating temp directory for protofilePath = F:\ZTR\ZTR.M7Config.Web\bin\Debug\net5.0\moduleconfig\keypad\11ff3fe0b38849398795d83791fdc7be\module.proto.
+[19:52:38 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method GetProtoCompilerPath.
+[19:52:38 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: HasGeneratedCSharpFile. Now generating cs file.
+[19:52:38 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: GenerateDllFromCsFileAsync. Generated dll for Module.proto and outputFolder: F:/ZTR/ZTR.M7Config.Web/bin/Debug/net5.0/Temp/4cbd5615652c40f6a1e3d2c7bccfc8bc/
+[19:52:38 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Getting config values from default.toml file for equipment
+[19:52:38 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Merging config values with protoparsed message for equipment
+[19:52:38 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: HasGeneratedCSharpFile. cs file generated successfully.
+[19:52:38 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: GenerateDllFromCsFileAsync. Generating dll for module.proto and outputFolder: F:/ZTR/ZTR.M7Config.Web/bin/Debug/net5.0/Temp/85c9895b65ce49698805824f9afe15e4/
+[19:52:38 INF ZTR.M7Config.Business.Parsers.ProtoParser.Parser.ProtoMessageParser.] Inside method: GenerateDllFromCsFileAsync. Generated dll for Module.proto and outputFolder: F:/ZTR/ZTR.M7Config.Web/bin/Debug/net5.0/Temp/85c9895b65ce49698805824f9afe15e4/
+[19:52:39 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Getting config values from default.toml file for keypad
+[19:52:39 INF ZTR.M7Config.Business.RequestHandlers.Managers.DefaultValueManager.] DefaultValueManager: method name: MergeDefaultValuesWithModuleAsync Merging config values with protoparsed message for keypad
+[19:52:39 INF Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executed action method Service.Controllers.DefaultValuesController.GetAllDefaultValues (Service), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 44487.6462ms.
+[19:52:39 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuted] Action Filter: Before executing OnActionExecuted on filter Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter.
+[19:52:39 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuted] Action Filter: After executing OnActionExecuted on filter Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter.
+[19:52:39 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuted] Action Filter: Before executing OnActionExecuted on filter Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter.
+[19:52:39 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuted] Action Filter: After executing OnActionExecuted on filter Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter.
+[19:52:39 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuting] Result Filter: Before executing OnResultExecuting on filter Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter.
+[19:52:39 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuting] Result Filter: After executing OnResultExecuting on filter Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter.
+[19:52:39 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuting] Result Filter: Before executing OnResultExecuting on filter Microsoft.AspNetCore.Mvc.ProducesAttribute.
+[19:52:39 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuting] Result Filter: After executing OnResultExecuting on filter Microsoft.AspNetCore.Mvc.ProducesAttribute.
+[19:52:39 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Before executing action result Microsoft.AspNetCore.Mvc.OkObjectResult.
+[19:52:39 DBG Microsoft.AspNetCore.Mvc.Infrastructure.DefaultOutputFormatterSelector.] List of registered output formatters, in the following order: ["Microsoft.AspNetCore.Mvc.Formatters.HttpNoContentOutputFormatter","Microsoft.AspNetCore.Mvc.Formatters.StringOutputFormatter","Microsoft.AspNetCore.Mvc.Formatters.StreamOutputFormatter","Microsoft.AspNetCore.Mvc.Formatters.NewtonsoftJsonOutputFormatter"]
+[19:52:39 DBG Microsoft.AspNetCore.Mvc.Infrastructure.DefaultOutputFormatterSelector.] Attempting to select an output formatter based on Accept header '["application/json"]' and explicitly specified content types '["application/json"]'. The content types in the accept header must be a subset of the explicitly set content types.
+[19:52:39 DBG Microsoft.AspNetCore.Mvc.Infrastructure.DefaultOutputFormatterSelector.] Selected output formatter 'Microsoft.AspNetCore.Mvc.Formatters.NewtonsoftJsonOutputFormatter' and content type 'application/json' to write the response.
+[19:52:39 INF Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor.] Executing OkObjectResult, writing value of type 'ZTR.Framework.Service.ApiResponse'.
+[19:52:39 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] After executing action result Microsoft.AspNetCore.Mvc.OkObjectResult.
+[19:52:39 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuted] Result Filter: Before executing OnResultExecuted on filter Microsoft.AspNetCore.Mvc.ProducesAttribute.
+[19:52:39 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuted] Result Filter: After executing OnResultExecuted on filter Microsoft.AspNetCore.Mvc.ProducesAttribute.
+[19:52:39 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuted] Result Filter: Before executing OnResultExecuted on filter Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter.
+[19:52:39 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuted] Result Filter: After executing OnResultExecuted on filter Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter.
+[19:52:39 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResourceExecuted] Resource Filter: Before executing OnResourceExecuted on filter Microsoft.AspNetCore.Mvc.ConsumesAttribute.
+[19:52:39 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResourceExecuted] Resource Filter: After executing OnResourceExecuted on filter Microsoft.AspNetCore.Mvc.ConsumesAttribute.
+[19:52:39 INF Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executed action Service.Controllers.DefaultValuesController.GetAllDefaultValues (Service) in 44745.1917ms
+[19:52:39 INF Microsoft.AspNetCore.Routing.EndpointMiddleware.] Executed endpoint 'Service.Controllers.DefaultValuesController.GetAllDefaultValues (Service)'
+[19:52:39 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM7AS83BCC5R" completed keep alive response.
+[19:52:39 INF Microsoft.AspNetCore.Hosting.Diagnostics.GET] Request finished HTTP/1.1 GET http://localhost:5000/api/query/DefaultValues/GetAllDefaultValues?firmwareVersion=1.0.12&deviceType=m7 - - - 200 19477 application/json;+charset=utf-8 44772.1092ms
+[19:57:39 DBG Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.] Connection id "0HM7AS83BCC5R" received FIN.
+[19:57:39 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM7AS83BCC5R" disconnecting.
+[19:57:39 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM7AS83BCC5R" stopped.
+[19:57:39 DBG Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.] Connection id "0HM7AS83BCC5R" sending FIN because: "The Socket transport's send loop completed gracefully."

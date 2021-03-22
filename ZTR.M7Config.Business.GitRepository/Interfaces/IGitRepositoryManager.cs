@@ -3,7 +3,7 @@
     using global::ZTR.Framework.Business.File;
     using global::ZTR.Framework.Configuration;
     using System;
-    using System.Collections.Generic;
+    using System.Collections.Concurrent;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -15,7 +15,8 @@
         /// Sets the connection options.
         /// </summary>
         /// <param name="gitConnection">The git connection.</param>
-        void SetConnectionOptions(GitConnectionOptions gitConnection);
+        /// <param name="path">The path.</param>
+        void SetConnectionOptions(GitConnectionOptions gitConnection, string path = "");
 
         /// <summary>
         /// Clones the repository asynchronous.
@@ -27,7 +28,7 @@
         /// Gets all tag names asynchronous.
         /// </summary>
         /// <returns></returns>
-        Task<Dictionary<string, DateTimeOffset>> GetAllTagNamesAsync();
+        Task<ConcurrentDictionary<string, DateTimeOffset>> GetAllTagNamesAsync();
 
         /// <summary>
         /// Gets the file data from tag asynchronous.

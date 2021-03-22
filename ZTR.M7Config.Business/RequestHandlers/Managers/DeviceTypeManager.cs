@@ -55,17 +55,7 @@
         /// <returns></returns>
         public async Task<string> GetFirmwareGitUrlAsync(string deviceType)
         {
-            object url = null;
-            var dictionaryDevices = await _deviceServiceManager.GetListOfDevicesAsync().ConfigureAwait(false);
-
-            var device =
-                dictionaryDevices.FirstOrDefault(d => d.TryGetValue("name", out object value)
-                                                      && value is string i
-                                                      && string.Equals(i, deviceType,
-                                                          StringComparison.OrdinalIgnoreCase));
-            device?.TryGetValue("url", out url);
-
-            dictionaryDevices.Clear();
+            var url = await _deviceServiceManager.GetFirmwareGitUrlAsync(deviceType).ConfigureAwait(false);
             return url != null ? url.ToString() : string.Empty;
         }
     }

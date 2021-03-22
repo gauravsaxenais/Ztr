@@ -53,8 +53,9 @@
 
             _logger.LogInformation($"{prefix}: methodName: {nameof(GetCompatibleFirmwareVersionsAsync)} Getting list of compatible firmware versions based on a firmware version.");
             _logger.LogInformation($"{prefix}: methodName: {nameof(GetCompatibleFirmwareVersionsAsync)} Cloning firmware version git repository.");
+            var firmwareVersionUrl = await _firmwareVersionServiceManager.GetFirmwareUrlAsync(module.DeviceType).ConfigureAwait(false);
+            _firmwareVersionServiceManager.SetGitRepoUrl(module.DeviceType, firmwareVersionUrl);
             await _firmwareVersionServiceManager.CloneGitRepoAsync().ConfigureAwait(false);
-
             var listOfTags = await _firmwareVersionServiceManager.GetAllFirmwareVersionsAsync().ConfigureAwait(false);
             listOfTags = listOfTags.Where(x => !string.Equals(x, module.FirmwareVersion, StringComparison.OrdinalIgnoreCase)).ToList();
             firmwareVersions = await _firmwareVersionServiceManager.GetCompatibleFirmwareVersions(listOfTags, module.FirmwareVersion, module.DeviceType, module.Modules);

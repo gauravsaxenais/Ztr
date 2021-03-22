@@ -14,8 +14,9 @@
         /// Gets the blocks asynchronous.
         /// </summary>
         /// <param name="firmwareVersion">The firmware version.</param>
+        /// <param name="deviceType">Type of the device.</param>
         /// <returns></returns>
-        Task<object> GetBlocksAsync(string firmwareVersion);
+        Task<object> GetBlocksAsync(string firmwareVersion, string deviceType);
 
         /// <summary>
         /// Gets the list of blocks asynchronous.

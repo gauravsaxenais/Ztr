@@ -1,0 +1,38 @@
+[21:31:35 DBG Microsoft.Extensions.Hosting.Internal.Host.] Hosting starting
+[21:31:36 WRN Program.] AllowAllOrigins true, so all origins are allowed
+[21:31:36 WRN Program.] Caution: Use this setting in DEVELOPMENT only. In production, grant access to specific origins (websites) that you control and trust to access the API.
+[21:31:36 INF Microsoft.Hosting.Lifetime.] Now listening on: http://localhost:5000
+[21:31:36 DBG Microsoft.AspNetCore.Hosting.Diagnostics.] Loaded hosting startup assembly Service
+[21:31:36 INF Microsoft.Hosting.Lifetime.] Application started. Press Ctrl+C to shut down.
+[21:31:36 INF Microsoft.Hosting.Lifetime.] Hosting environment: Staging
+[21:31:36 INF Microsoft.Hosting.Lifetime.] Content root path: F:\ZTR\ZTR.M7Config.Web
+[21:31:36 DBG Microsoft.Extensions.Hosting.Internal.Host.] Hosting started
+[21:31:37 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM7AU13BCUUD" accepted.
+[21:31:37 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM7AU13BCUUE" accepted.
+[21:31:37 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM7AU13BCUUD" started.
+[21:31:37 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM7AU13BCUUE" started.
+[21:31:37 DBG Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.] Connection id "0HM7AU13BCUUD" received FIN.
+[21:31:37 DBG Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.] Connection id "0HM7AU13BCUUE" received FIN.
+[21:31:37 DBG Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.] Connection id "0HM7AU13BCUUD" sending FIN because: "The client closed the connection."
+[21:31:37 DBG Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.] Connection id "0HM7AU13BCUUE" sending FIN because: "The client closed the connection."
+[21:31:37 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM7AU13BCUUE" disconnecting.
+[21:31:37 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM7AU13BCUUD" disconnecting.
+[21:31:37 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM7AU13BCUUD" stopped.
+[21:31:37 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM7AU13BCUUE" stopped.
+[21:31:42 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM7AU13BCUUF" accepted.
+[21:31:42 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM7AU13BCUUF" started.
+[21:31:42 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM7AU13BCUUG" accepted.
+[21:31:42 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM7AU13BCUUG" started.
+[21:31:42 INF Microsoft.AspNetCore.Hosting.Diagnostics.GET] Request starting HTTP/1.1 GET http://localhost:5000/swagger/index.html - -
+[21:31:42 DBG Microsoft.AspNetCore.HostFiltering.HostFilteringMiddleware.] Wildcard detected, all requests with hosts will be allowed.
+[21:31:42 VRB Microsoft.AspNetCore.HostFiltering.HostFilteringMiddleware.] All hosts are allowed.
+[21:31:42 DBG Microsoft.AspNetCore.Routing.Matching.DfaMatcher.] No candidates found for the request path '/swagger/index.html'
+[21:31:42 DBG Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.] Request did not match any endpoints
+[21:31:42 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM7AU13BCUUF" completed keep alive response.
+[21:31:42 INF Microsoft.AspNetCore.Hosting.Diagnostics.GET] Request finished HTTP/1.1 GET http://localhost:5000/swagger/index.html - - - 200 - text/html;charset=utf-8 355.7732ms
+[21:31:42 INF Microsoft.AspNetCore.Hosting.Diagnostics.GET] Request starting HTTP/1.1 GET http://localhost:5000/swagger/v1/swagger.json - -
+[21:31:42 VRB Microsoft.AspNetCore.HostFiltering.HostFilteringMiddleware.] All hosts are allowed.
+[21:31:42 DBG Microsoft.AspNetCore.Routing.Matching.DfaMatcher.] No candidates found for the request path '/swagger/v1/swagger.json'
+[21:31:42 DBG Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.] Request did not match any endpoints
+[21:31:42 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM7AU13BCUUF" completed keep alive response.
+[21:31:42 INF Microsoft.AspNetCore.Hosting.Diagnostics.GET] Request finished HTTP/1.1 GET http://localhost:5000/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 128.7114ms

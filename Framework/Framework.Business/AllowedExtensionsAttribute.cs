@@ -50,7 +50,7 @@
         /// Gets the error message.
         /// </summary>
         /// <returns></returns>
-        public string GetErrorMessage()
+        public static string GetErrorMessage()
         {
             return $"This extension is not allowed!";
         }

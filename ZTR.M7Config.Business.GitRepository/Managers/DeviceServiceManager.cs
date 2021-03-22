@@ -1,12 +1,13 @@
 ﻿namespace Business.GitRepository.ZTR.M7Config.Business
 {
     using EnsureThat;
+    using global::ZTR.Framework.Business;
     using global::ZTR.Framework.Business.File.FileReaders;
-    using global::ZTR.Framework.Configuration;
     using global::ZTR.M7Config.Business.Common.Configuration;
     using global::ZTR.M7Config.Business.GitRepository.Interfaces;
     using Microsoft.Extensions.Logging;
     using Nett;
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -17,9 +18,11 @@
     /// </summary>
     /// <seealso cref="Manager" />
     /// <seealso cref="IDeviceServiceManager" />
-    public class DeviceServiceManager : ServiceManager, IDeviceServiceManager
+    public class DeviceServiceManager : IDeviceServiceManager
     {
         private readonly ILogger<DeviceServiceManager> _logger;
+        private readonly DeviceGitConnectionOptions _deviceGitConnectionOptions;
+        private readonly IGitRepositoryManager _repoManager;
         private const string Prefix = nameof(DeviceServiceManager);
 
         /// <summary>
@@ -28,20 +31,38 @@
         /// <param name="logger">The logger.</param>
         /// <param name="gitConnectionOptions">The git connection options.</param>
         /// <param name="gitRepoManager">The git repo manager.</param>
-        public DeviceServiceManager(ILogger<DeviceServiceManager> logger, DeviceGitConnectionOptions gitConnectionOptions, IGitRepositoryManager gitRepoManager) : base(logger, gitConnectionOptions, gitRepoManager)
+        public DeviceServiceManager(ILogger<DeviceServiceManager> logger, DeviceGitConnectionOptions gitConnectionOptions, IGitRepositoryManager gitRepoManager)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
+            EnsureArg.IsNotNull(gitConnectionOptions, nameof(gitConnectionOptions));
+            EnsureArg.IsNotNull(gitRepoManager, nameof(gitRepoManager));
+
             _logger = logger;
+            _deviceGitConnectionOptions = gitConnectionOptions;
+            _repoManager = gitRepoManager;
         }
 
+        public async Task<string> GetFirmwareGitUrlAsync(string deviceType)
+        {
+            object url = null;
+            var dictionaryDevices = await GetListOfDevicesAsync().ConfigureAwait(false);
+            
+            var device = dictionaryDevices.FirstOrDefault(d => d.TryGetValue("name", out object value)
+                                                      && value is string i
+                                                      && string.Equals(i, deviceType,
+                                                          StringComparison.OrdinalIgnoreCase));
+            device?.TryGetValue("url", out url);
+            dictionaryDevices.Clear();
+            return url != null ? url.ToString() : string.Empty;
+        }
         /// <summary>
         /// Clones the git repo asynchronous.
         /// </summary>
         public async Task CloneGitRepoAsync()
         {
+            SetConnection();
             _logger.LogInformation($"Cloning github repository for devices.");
-            SetConnection((DeviceGitConnectionOptions)ConnectionOptions);
-            await CloneGitHubRepoAsync().ConfigureAwait(false);
+            await _repoManager.InitRepositoryAsync().ConfigureAwait(false);
             _logger.LogInformation($"Github repository cloning is successful for devices.");
         }
 
@@ -51,14 +72,15 @@
         /// <returns></returns>
         public async Task<IEnumerable<string>> GetAllDevicesAsync()
         {
-            var dictionaryDevices = await GetListOfDevicesAsync().ConfigureAwait(false);
+            _logger.LogInformation(
+                $"{Prefix} method name: {nameof(GetAllDevicesAsync)}: Getting list of all directories as devices.");
 
+            var dictionaryDevices = await GetListOfDevicesAsync().ConfigureAwait(false);
+            
             var listOfDevices = dictionaryDevices.SelectMany(x => x)
                 .Where(y => y.Key == "name")
                 .Select(z => z.Value.ToString());
-
-            _logger.LogInformation(
-                $"{Prefix} method name: {nameof(GetAllDevicesAsync)}: Getting list of all directories as devices.");
+                        
             return listOfDevices;
         }
 
@@ -68,7 +90,7 @@
         /// <returns></returns>
         public async Task<List<Dictionary<string, object>>> GetListOfDevicesAsync()
         {
-            string filePath = ((DeviceGitConnectionOptions)ConnectionOptions).DeviceToml;
+            string filePath = _deviceGitConnectionOptions.DeviceToml;
             var tomlSettings = TomlFileReader.LoadLowerCaseTomlSettings();
             var fileContent = await File.ReadAllTextAsync(filePath);
 
@@ -79,10 +101,18 @@
             return dictionaryDevices.ToList();
         }
 
-        protected override void SetupDependencies(GitConnectionOptions connectionOptions)
+        /// <summary>
+        /// Sets the connection.
+        /// </summary>
+        /// <param name="connectionOptions">The connection options.</param>
+        public void SetConnection()
         {
-            var deviceGitConnectionOptions = (DeviceGitConnectionOptions)connectionOptions;
-            deviceGitConnectionOptions.DeviceToml = Path.Combine(AppPath, deviceGitConnectionOptions.GitLocalFolder, deviceGitConnectionOptions.DeviceToml);
+            _logger.LogInformation("Setting git repository connection");
+
+            var appPath = GlobalMethods.GetCurrentAppPath();
+            _deviceGitConnectionOptions.DeviceToml = Path.Combine(appPath, _deviceGitConnectionOptions.GitLocalFolder, _deviceGitConnectionOptions.DeviceToml);
+            _deviceGitConnectionOptions.GitLocalFolder = Path.Combine(appPath, _deviceGitConnectionOptions.GitLocalFolder);
+            _repoManager.SetConnectionOptions(_deviceGitConnectionOptions);
         }
     }
 }

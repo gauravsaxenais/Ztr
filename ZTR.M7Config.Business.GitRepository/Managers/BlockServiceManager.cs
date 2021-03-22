@@ -2,7 +2,6 @@
 {
     using EnsureThat;
     using global::ZTR.Framework.Business;
-    using global::ZTR.Framework.Configuration;
     using global::ZTR.M7Config.Business.Common.Configuration;
     using global::ZTR.M7Config.Business.GitRepository.Interfaces;
     using Microsoft.Extensions.Logging;
@@ -17,10 +16,12 @@
     /// <seealso cref="Manager" />
     /// <seealso cref="IBlockServiceManager" />
     /// <seealso cref="IServiceManager" />
-    public class BlockServiceManager : ServiceManager, IBlockServiceManager
+    public class BlockServiceManager : IBlockServiceManager
     {
         private readonly ILogger<BlockServiceManager> _logger;
         private readonly IModuleServiceManager _moduleServiceManager;
+        private readonly IGitRepositoryManager _repoManager;
+        private readonly BlockGitConnectionOptions _blockGitConnectionOptions;
         private const string Prefix = nameof(BlockServiceManager);
         private readonly string TomlFileExtension = ".toml";
 
@@ -30,11 +31,17 @@
         /// <param name="logger">The logger.</param>
         /// <param name="blockGitConnectionOptions">The block git connection options.</param>
         /// <param name="gitRepoManager">The git repo manager.</param>
-        public BlockServiceManager(ILogger<BlockServiceManager> logger, BlockGitConnectionOptions blockGitConnectionOptions, IGitRepositoryManager gitRepoManager, IModuleServiceManager moduleServiceManager) : base(logger, blockGitConnectionOptions, gitRepoManager)
+        public BlockServiceManager(ILogger<BlockServiceManager> logger, BlockGitConnectionOptions blockGitConnectionOptions, IGitRepositoryManager gitRepoManager, IModuleServiceManager moduleServiceManager)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
+            EnsureArg.IsNotNull(moduleServiceManager, nameof(moduleServiceManager));
+            EnsureArg.IsNotNull(blockGitConnectionOptions, nameof(blockGitConnectionOptions));
+            EnsureArg.IsNotNull(gitRepoManager, nameof(gitRepoManager));
+
             _logger = logger;
             _moduleServiceManager = moduleServiceManager;
+            _blockGitConnectionOptions = blockGitConnectionOptions;
+            _repoManager = gitRepoManager;
         }
 
         /// <summary>
@@ -44,16 +51,25 @@
         public async Task<List<FileInfo>> GetAllBlockFilesAsync()
         {
             _logger.LogInformation($"{Prefix}: method name: {nameof(GetAllBlockFilesAsync)} Getting list of all blocks.");
-            var connectionOption = (BlockGitConnectionOptions)ConnectionOptions;
-            var blockConfigPath = Path.Combine(AppPath, connectionOption.GitLocalFolder, connectionOption.TomlConfiguration.TomlConfigFolder);
-
+            var appPath = GlobalMethods.GetCurrentAppPath();
+            var blockConfigPath = Path.Combine(appPath, _blockGitConnectionOptions.GitLocalFolder, _blockGitConnectionOptions.TomlConfiguration.TomlConfigFolder);
             var blockConfigDirectory = new DirectoryInfo(blockConfigPath);
             var filesInDirectory = blockConfigDirectory.EnumerateFiles().ToList();
 
             // return only files with .toml extension.
             var blockFiles = filesInDirectory.Where(item => item.Extension.Compares(TomlFileExtension)).ToList();
-
             return await Task.FromResult(blockFiles);
+        }
+
+        /// <summary>
+        /// Sets the connection.
+        /// </summary>
+        public void SetConnection()
+        {
+            _logger.LogInformation("Setting git repository connection");
+            var appPath = GlobalMethods.GetCurrentAppPath();
+            _blockGitConnectionOptions.GitLocalFolder = Path.Combine(appPath, _blockGitConnectionOptions.GitLocalFolder);
+            _repoManager.SetConnectionOptions(_blockGitConnectionOptions);
         }
 
         /// <summary>
@@ -63,18 +79,9 @@
         public async Task CloneGitRepoAsync()
         {
             _logger.LogInformation($"Cloning github repository for blocks.");
-            SetConnection((BlockGitConnectionOptions)ConnectionOptions);
-            await CloneGitHubRepoAsync().ConfigureAwait(false);
+            SetConnection();
+            await _repoManager.InitRepositoryAsync().ConfigureAwait(false);
             _logger.LogInformation($"Github repository cloning is successful for blocks.");
-        }
-
-        /// <summary>
-        /// Setups the dependencies.
-        /// </summary>
-        protected override void SetupDependencies(GitConnectionOptions connectionOptions)
-        {
-            var blockGitConnectionOptions = (BlockGitConnectionOptions)connectionOptions;
-            blockGitConnectionOptions.GitLocalFolder = Path.Combine(AppPath, blockGitConnectionOptions.GitLocalFolder);
         }
     }
 }

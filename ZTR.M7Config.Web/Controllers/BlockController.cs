@@ -50,7 +50,7 @@
             var prefix = nameof(BlockController);
             _logger.LogInformation(
                 $"{prefix}: Getting list of blocks for firmware version: {firmwareVersion} and device type: {deviceType}");
-            var result = await _manager.GetBlocksAsync(firmwareVersion).ConfigureAwait(false);
+            var result = await _manager.GetBlocksAsync(firmwareVersion, deviceType).ConfigureAwait(false);
             _logger.LogInformation(
                 $"{prefix}: Successfully retrieved list of blocks for firmware version: {firmwareVersion} and device type: {deviceType}");
             return Ok(result);

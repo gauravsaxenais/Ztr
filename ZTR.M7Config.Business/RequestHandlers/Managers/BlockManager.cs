@@ -55,13 +55,17 @@
         /// Gets the blocks asynchronous.
         /// </summary>
         /// <param name="firmwareVersion">The firmware version.</param>
+        /// <param name="deviceType">Type of the device.</param>
         /// <returns></returns>
-        public async Task<object> GetBlocksAsync(string firmwareVersion)
+        public async Task<object> GetBlocksAsync(string firmwareVersion, string deviceType)
         {
             _logger.LogInformation($"{Prefix}: methodName: {nameof(GetBlocksAsync)} Getting list of blocks for {firmwareVersion}.");
 
             // clone repo here.
             await _blockServiceManager.CloneGitRepoAsync().ConfigureAwait(false);
+            var firmwareVersionUrl = await _firmwareVersionServiceManager.GetFirmwareUrlAsync(deviceType).ConfigureAwait(false);
+            _firmwareVersionServiceManager.SetGitRepoUrl(deviceType, firmwareVersionUrl);
+
             // clone repo here.
             await _firmwareVersionServiceManager.CloneGitRepoAsync().ConfigureAwait(false);
             // read default values from toml file defaults.toml

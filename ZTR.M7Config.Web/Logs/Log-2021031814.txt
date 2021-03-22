@@ -1,0 +1,412 @@
+[14:49:59 DBG Microsoft.Extensions.Hosting.Internal.Host.] Hosting starting
+[14:50:00 WRN Program.] AllowAllOrigins true, so all origins are allowed
+[14:50:00 WRN Program.] Caution: Use this setting in DEVELOPMENT only. In production, grant access to specific origins (websites) that you control and trust to access the API.
+[14:50:00 INF Microsoft.Hosting.Lifetime.] Now listening on: http://localhost:5000
+[14:50:00 DBG Microsoft.AspNetCore.Hosting.Diagnostics.] Loaded hosting startup assembly Service
+[14:50:00 INF Microsoft.Hosting.Lifetime.] Application started. Press Ctrl+C to shut down.
+[14:50:00 INF Microsoft.Hosting.Lifetime.] Hosting environment: Staging
+[14:50:00 INF Microsoft.Hosting.Lifetime.] Content root path: F:\ZTR\ZTR.M7Config.Web
+[14:50:00 DBG Microsoft.Extensions.Hosting.Internal.Host.] Hosting started
+[14:50:01 DBG Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.] Connection id "0HM79TS0TS7IE" received FIN.
+[14:50:01 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM79TS0TS7IE" accepted.
+[14:50:01 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM79TS0TS7IE" started.
+[14:50:01 DBG Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.] Connection id "0HM79TS0TS7IE" sending FIN because: "The client closed the connection."
+[14:50:01 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM79TS0TS7IE" disconnecting.
+[14:50:01 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM79TS0TS7IE" stopped.
+[14:50:01 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM79TS0TS7IF" accepted.
+[14:50:01 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM79TS0TS7IF" started.
+[14:50:01 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM79TS0TS7IG" accepted.
+[14:50:01 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM79TS0TS7IG" started.
+[14:50:02 INF Microsoft.AspNetCore.Hosting.Diagnostics.GET] Request starting HTTP/1.1 GET http://localhost:5000/swagger/index.html - -
+[14:50:02 DBG Microsoft.AspNetCore.HostFiltering.HostFilteringMiddleware.] Wildcard detected, all requests with hosts will be allowed.
+[14:50:02 VRB Microsoft.AspNetCore.HostFiltering.HostFilteringMiddleware.] All hosts are allowed.
+[14:50:02 DBG Microsoft.AspNetCore.Routing.Matching.DfaMatcher.] No candidates found for the request path '/swagger/index.html'
+[14:50:02 DBG Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.] Request did not match any endpoints
+[14:50:02 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM79TS0TS7IF" completed keep alive response.
+[14:50:02 INF Microsoft.AspNetCore.Hosting.Diagnostics.GET] Request finished HTTP/1.1 GET http://localhost:5000/swagger/index.html - - - 200 - text/html;charset=utf-8 350.1742ms
+[14:50:02 INF Microsoft.AspNetCore.Hosting.Diagnostics.GET] Request starting HTTP/1.1 GET http://localhost:5000/swagger/v1/swagger.json - -
+[14:50:02 VRB Microsoft.AspNetCore.HostFiltering.HostFilteringMiddleware.] All hosts are allowed.
+[14:50:02 DBG Microsoft.AspNetCore.Routing.Matching.DfaMatcher.] No candidates found for the request path '/swagger/v1/swagger.json'
+[14:50:02 DBG Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.] Request did not match any endpoints
+[14:50:02 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM79TS0TS7IF" completed keep alive response.
+[14:50:02 INF Microsoft.AspNetCore.Hosting.Diagnostics.GET] Request finished HTTP/1.1 GET http://localhost:5000/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 135.1067ms
+[14:51:27 DBG Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.] Connection id "0HM79TS0TS7IG" received FIN.
+[14:51:27 INF Microsoft.AspNetCore.Hosting.Diagnostics.GET] Request starting HTTP/1.1 GET http://localhost:5000/api/query/DeviceType/GetAllDevices - -
+[14:51:27 VRB Microsoft.AspNetCore.HostFiltering.HostFilteringMiddleware.] All hosts are allowed.
+[14:51:27 DBG Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.] Connection id "0HM79TS0TS7IG" sending FIN because: "The client closed the connection."
+[14:51:27 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM79TS0TS7IG" disconnecting.
+[14:51:27 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM79TS0TS7IG" stopped.
+[14:51:27 DBG Microsoft.AspNetCore.Routing.Matching.DfaMatcher.] 1 candidate(s) found for the request path '/api/query/DeviceType/GetAllDevices'
+[14:51:27 DBG Microsoft.AspNetCore.Routing.Matching.DfaMatcher.] Endpoint 'Service.Controllers.DeviceTypeController.GetAllDevices (Service)' with route pattern 'api/query/DeviceType/GetAllDevices' is valid for the request path '/api/query/DeviceType/GetAllDevices'
+[14:51:27 DBG Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.] Request matched endpoint 'Service.Controllers.DeviceTypeController.GetAllDevices (Service)'
+[14:51:27 DBG Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware.] Static files was skipped as the request already matched an endpoint.
+[14:51:27 DBG Microsoft.AspNetCore.Rewrite.RewriteMiddleware.] Request is continuing in applying rules. Current url is http://localhost:5000/api/query/DeviceType/GetAllDevices
+[14:51:27 INF Microsoft.AspNetCore.Routing.EndpointMiddleware.] Executing endpoint 'Service.Controllers.DeviceTypeController.GetAllDevices (Service)'
+[14:51:27 DBG Microsoft.AspNetCore.Mvc.ModelBinding.ModelBinderFactory.] Registered model binder providers, in the following order: ["Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BinderTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ServicesModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BodyModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.HeaderModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FloatingPointTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.EnumTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.DateTimeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.SimpleTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.CancellationTokenModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ByteArrayModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FormFileModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FormCollectionModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.KeyValuePairModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.DictionaryModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ArrayModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.CollectionModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ComplexObjectModelBinderProvider"]
+[14:51:27 INF Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Route matched with {action = "GetAllDevices", controller = "DeviceType"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllDevices() on controller Service.Controllers.DeviceTypeController (Service).
+[14:51:27 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of authorization filters (in the following order): ["None"]
+[14:51:27 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of resource filters (in the following order): ["Microsoft.AspNetCore.Mvc.ConsumesAttribute"]
+[14:51:27 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of action filters (in the following order): ["Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter (Order: -3000)","Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter (Order: -2000)"]
+[14:51:27 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of exception filters (in the following order): ["None"]
+[14:51:27 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of result filters (in the following order): ["Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter (Order: -2000)","Microsoft.AspNetCore.Mvc.ProducesAttribute (Order: 0)"]
+[14:51:27 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResourceExecuting] Resource Filter: Before executing OnResourceExecuting on filter Microsoft.AspNetCore.Mvc.ConsumesAttribute.
+[14:51:27 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResourceExecuting] Resource Filter: After executing OnResourceExecuting on filter Microsoft.AspNetCore.Mvc.ConsumesAttribute.
+[14:51:27 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executing controller factory for controller Service.Controllers.DeviceTypeController (Service)
+[14:51:27 INF Business.GitRepository.ZTR.M7Config.Business.DeviceServiceManager.] Setting git repository connection
+[14:51:27 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executed controller factory for controller Service.Controllers.DeviceTypeController (Service)
+[14:51:27 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuting] Action Filter: Before executing OnActionExecuting on filter Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter.
+[14:51:27 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuting] Action Filter: After executing OnActionExecuting on filter Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter.
+[14:51:27 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuting] Action Filter: Before executing OnActionExecuting on filter Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter.
+[14:51:27 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuting] Action Filter: After executing OnActionExecuting on filter Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter.
+[14:51:27 INF Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executing action method Service.Controllers.DeviceTypeController.GetAllDevices (Service) - Validation state: "Valid"
+[14:51:27 INF Service.Controllers.DeviceTypeController.] DeviceTypeController method name: GetAllDevices: Getting list of all devices.
+[14:51:27 INF ZTR.M7Config.Business.RequestHandlers.Managers.DeviceTypeManager.] DeviceTypeManager method name: GetAllDevicesAsync: Getting list of all devices.
+[14:51:27 INF Business.GitRepository.ZTR.M7Config.Business.DeviceServiceManager.] Cloning github repository for devices.
+[14:51:27 INF Business.GitRepository.ZTR.M7Config.Business.DeviceServiceManager.] Setting git repository connection
+[14:51:30 INF Business.GitRepository.ZTR.M7Config.Business.DeviceServiceManager.] Github repository cloning is successful for devices.
+[14:51:30 INF Business.GitRepository.ZTR.M7Config.Business.DeviceServiceManager.] DeviceServiceManager method name: GetAllDevicesAsync: Getting list of all directories as devices.
+[14:51:30 INF Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executed action method Service.Controllers.DeviceTypeController.GetAllDevices (Service), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 2594.4642ms.
+[14:51:30 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuted] Action Filter: Before executing OnActionExecuted on filter Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter.
+[14:51:30 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuted] Action Filter: After executing OnActionExecuted on filter Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter.
+[14:51:30 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuted] Action Filter: Before executing OnActionExecuted on filter Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter.
+[14:51:30 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuted] Action Filter: After executing OnActionExecuted on filter Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter.
+[14:51:30 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuting] Result Filter: Before executing OnResultExecuting on filter Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter.
+[14:51:30 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuting] Result Filter: After executing OnResultExecuting on filter Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter.
+[14:51:30 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuting] Result Filter: Before executing OnResultExecuting on filter Microsoft.AspNetCore.Mvc.ProducesAttribute.
+[14:51:30 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuting] Result Filter: After executing OnResultExecuting on filter Microsoft.AspNetCore.Mvc.ProducesAttribute.
+[14:51:30 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Before executing action result Microsoft.AspNetCore.Mvc.OkObjectResult.
+[14:51:30 DBG Microsoft.AspNetCore.Mvc.Infrastructure.DefaultOutputFormatterSelector.] List of registered output formatters, in the following order: ["Microsoft.AspNetCore.Mvc.Formatters.HttpNoContentOutputFormatter","Microsoft.AspNetCore.Mvc.Formatters.StringOutputFormatter","Microsoft.AspNetCore.Mvc.Formatters.StreamOutputFormatter","Microsoft.AspNetCore.Mvc.Formatters.NewtonsoftJsonOutputFormatter"]
+[14:51:30 DBG Microsoft.AspNetCore.Mvc.Infrastructure.DefaultOutputFormatterSelector.] Attempting to select an output formatter based on Accept header '["application/json"]' and explicitly specified content types '["application/json"]'. The content types in the accept header must be a subset of the explicitly set content types.
+[14:51:30 DBG Microsoft.AspNetCore.Mvc.Infrastructure.DefaultOutputFormatterSelector.] Selected output formatter 'Microsoft.AspNetCore.Mvc.Formatters.NewtonsoftJsonOutputFormatter' and content type 'application/json' to write the response.
+[14:51:30 INF Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor.] Executing OkObjectResult, writing value of type 'ZTR.Framework.Service.ApiResponse'.
+[14:51:30 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] After executing action result Microsoft.AspNetCore.Mvc.OkObjectResult.
+[14:51:30 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuted] Result Filter: Before executing OnResultExecuted on filter Microsoft.AspNetCore.Mvc.ProducesAttribute.
+[14:51:30 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuted] Result Filter: After executing OnResultExecuted on filter Microsoft.AspNetCore.Mvc.ProducesAttribute.
+[14:51:30 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuted] Result Filter: Before executing OnResultExecuted on filter Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter.
+[14:51:30 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuted] Result Filter: After executing OnResultExecuted on filter Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter.
+[14:51:30 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResourceExecuted] Resource Filter: Before executing OnResourceExecuted on filter Microsoft.AspNetCore.Mvc.ConsumesAttribute.
+[14:51:30 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResourceExecuted] Resource Filter: After executing OnResourceExecuted on filter Microsoft.AspNetCore.Mvc.ConsumesAttribute.
+[14:51:30 INF Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executed action Service.Controllers.DeviceTypeController.GetAllDevices (Service) in 2913.6844ms
+[14:51:30 INF Microsoft.AspNetCore.Routing.EndpointMiddleware.] Executed endpoint 'Service.Controllers.DeviceTypeController.GetAllDevices (Service)'
+[14:51:30 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM79TS0TS7IF" completed keep alive response.
+[14:51:30 INF Microsoft.AspNetCore.Hosting.Diagnostics.GET] Request finished HTTP/1.1 GET http://localhost:5000/api/query/DeviceType/GetAllDevices - - - 200 53 application/json;+charset=utf-8 3057.0014ms
+[14:53:37 INF Microsoft.AspNetCore.Hosting.Diagnostics.GET] Request starting HTTP/1.1 GET http://localhost:5000/api/query/FirmwareVersion/GetAllFirmwareVersions?deviceType=m7 - -
+[14:53:37 VRB Microsoft.AspNetCore.HostFiltering.HostFilteringMiddleware.] All hosts are allowed.
+[14:53:37 DBG Microsoft.AspNetCore.Routing.Matching.DfaMatcher.] 1 candidate(s) found for the request path '/api/query/FirmwareVersion/GetAllFirmwareVersions'
+[14:53:37 DBG Microsoft.AspNetCore.Routing.Matching.DfaMatcher.] Endpoint 'Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service)' with route pattern 'api/query/FirmwareVersion/GetAllFirmwareVersions' is valid for the request path '/api/query/FirmwareVersion/GetAllFirmwareVersions'
+[14:53:37 DBG Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.] Request matched endpoint 'Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service)'
+[14:53:37 DBG Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware.] Static files was skipped as the request already matched an endpoint.
+[14:53:37 DBG Microsoft.AspNetCore.Rewrite.RewriteMiddleware.] Request is continuing in applying rules. Current url is http://localhost:5000/api/query/FirmwareVersion/GetAllFirmwareVersions?deviceType=m7
+[14:53:37 INF Microsoft.AspNetCore.Routing.EndpointMiddleware.] Executing endpoint 'Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service)'
+[14:53:37 INF Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Route matched with {action = "GetAllFirmwareVersions", controller = "FirmwareVersion"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllFirmwareVersions(System.String) on controller Service.Controllers.FirmwareVersionController (Service).
+[14:53:37 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of authorization filters (in the following order): ["None"]
+[14:53:37 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of resource filters (in the following order): ["Microsoft.AspNetCore.Mvc.ConsumesAttribute"]
+[14:53:37 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of action filters (in the following order): ["Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter (Order: -3000)","Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter (Order: -2000)"]
+[14:53:37 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of exception filters (in the following order): ["None"]
+[14:53:37 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of result filters (in the following order): ["Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter (Order: -2000)","Microsoft.AspNetCore.Mvc.ProducesAttribute (Order: 0)"]
+[14:53:37 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResourceExecuting] Resource Filter: Before executing OnResourceExecuting on filter Microsoft.AspNetCore.Mvc.ConsumesAttribute.
+[14:53:37 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResourceExecuting] Resource Filter: After executing OnResourceExecuting on filter Microsoft.AspNetCore.Mvc.ConsumesAttribute.
+[14:53:37 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executing controller factory for controller Service.Controllers.FirmwareVersionController (Service)
+[14:53:37 INF Business.GitRepository.ZTR.M7Config.Business.FirmwareVersionServiceManager.] Setting git repository connection
+[14:53:37 INF Business.GitRepository.ZTR.M7Config.Business.DeviceServiceManager.] Setting git repository connection
+[14:53:37 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executed controller factory for controller Service.Controllers.FirmwareVersionController (Service)
+[14:53:37 DBG Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.] Attempting to bind parameter 'deviceType' of type 'System.String' ...
+[14:53:37 DBG Microsoft.AspNetCore.Mvc.ModelBinding.Binders.SimpleTypeModelBinder.] Attempting to bind parameter 'deviceType' of type 'System.String' using the name 'deviceType' in request data ...
+[14:53:37 DBG Microsoft.AspNetCore.Mvc.ModelBinding.Binders.SimpleTypeModelBinder.] Done attempting to bind parameter 'deviceType' of type 'System.String'.
+[14:53:37 DBG Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.] Done attempting to bind parameter 'deviceType' of type 'System.String'.
+[14:53:37 DBG Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.] Attempting to validate the bound parameter 'deviceType' of type 'System.String' ...
+[14:53:37 DBG Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.] Done attempting to validate the bound parameter 'deviceType' of type 'System.String'.
+[14:53:37 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuting] Action Filter: Before executing OnActionExecuting on filter Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter.
+[14:53:37 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuting] Action Filter: After executing OnActionExecuting on filter Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter.
+[14:53:37 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuting] Action Filter: Before executing OnActionExecuting on filter Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter.
+[14:53:37 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuting] Action Filter: After executing OnActionExecuting on filter Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter.
+[14:53:37 INF Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executing action method Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service) - Validation state: "Valid"
+[14:53:37 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executing action method Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service) with arguments (["m7"])
+[14:53:37 INF Service.Controllers.FirmwareVersionController.] FirmwareVersionController: Getting list of all firmware versions
+[14:53:37 INF ZTR.M7Config.Business.RequestHandlers.Managers.DeviceTypeManager.] FirmwareVersionManager: methodName: GetAllFirmwareVersionsAsync Getting list of compatible firmware versions based on a device type m7.
+[14:53:37 INF Business.GitRepository.ZTR.M7Config.Business.FirmwareVersionServiceManager.] Setting git repository connection
+[14:53:37 INF Business.GitRepository.ZTR.M7Config.Business.FirmwareVersionServiceManager.] Cloning github repository for firmware version.
+[14:53:41 INF Business.GitRepository.ZTR.M7Config.Business.FirmwareVersionServiceManager.] Github repository cloning is successful for firmware version.
+[14:53:41 INF Business.GitRepository.ZTR.M7Config.Business.FirmwareVersionServiceManager.] FirmwareVersionServiceManager method name: GetAllFirmwareVersionsAsync: Getting list of all firmware versions for deviceType.
+[14:53:42 INF Service.Controllers.FirmwareVersionController.] FirmwareVersionController: Successfully retrieved list of all firmware versions
+[14:53:42 INF Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executed action method Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 4237.8534ms.
+[14:53:42 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuted] Action Filter: Before executing OnActionExecuted on filter Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter.
+[14:53:42 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuted] Action Filter: After executing OnActionExecuted on filter Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter.
+[14:53:42 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuted] Action Filter: Before executing OnActionExecuted on filter Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter.
+[14:53:42 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuted] Action Filter: After executing OnActionExecuted on filter Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter.
+[14:53:42 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuting] Result Filter: Before executing OnResultExecuting on filter Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter.
+[14:53:42 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuting] Result Filter: After executing OnResultExecuting on filter Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter.
+[14:53:42 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuting] Result Filter: Before executing OnResultExecuting on filter Microsoft.AspNetCore.Mvc.ProducesAttribute.
+[14:53:42 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuting] Result Filter: After executing OnResultExecuting on filter Microsoft.AspNetCore.Mvc.ProducesAttribute.
+[14:53:42 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Before executing action result Microsoft.AspNetCore.Mvc.OkObjectResult.
+[14:53:42 DBG Microsoft.AspNetCore.Mvc.Infrastructure.DefaultOutputFormatterSelector.] List of registered output formatters, in the following order: ["Microsoft.AspNetCore.Mvc.Formatters.HttpNoContentOutputFormatter","Microsoft.AspNetCore.Mvc.Formatters.StringOutputFormatter","Microsoft.AspNetCore.Mvc.Formatters.StreamOutputFormatter","Microsoft.AspNetCore.Mvc.Formatters.NewtonsoftJsonOutputFormatter"]
+[14:53:42 DBG Microsoft.AspNetCore.Mvc.Infrastructure.DefaultOutputFormatterSelector.] Attempting to select an output formatter based on Accept header '["application/json"]' and explicitly specified content types '["application/json"]'. The content types in the accept header must be a subset of the explicitly set content types.
+[14:53:42 DBG Microsoft.AspNetCore.Mvc.Infrastructure.DefaultOutputFormatterSelector.] Selected output formatter 'Microsoft.AspNetCore.Mvc.Formatters.NewtonsoftJsonOutputFormatter' and content type 'application/json' to write the response.
+[14:53:42 INF Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor.] Executing OkObjectResult, writing value of type 'ZTR.Framework.Service.ApiResponse'.
+[14:53:42 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] After executing action result Microsoft.AspNetCore.Mvc.OkObjectResult.
+[14:53:42 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuted] Result Filter: Before executing OnResultExecuted on filter Microsoft.AspNetCore.Mvc.ProducesAttribute.
+[14:53:42 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuted] Result Filter: After executing OnResultExecuted on filter Microsoft.AspNetCore.Mvc.ProducesAttribute.
+[14:53:42 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuted] Result Filter: Before executing OnResultExecuted on filter Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter.
+[14:53:42 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuted] Result Filter: After executing OnResultExecuted on filter Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter.
+[14:53:42 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResourceExecuted] Resource Filter: Before executing OnResourceExecuted on filter Microsoft.AspNetCore.Mvc.ConsumesAttribute.
+[14:53:42 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResourceExecuted] Resource Filter: After executing OnResourceExecuted on filter Microsoft.AspNetCore.Mvc.ConsumesAttribute.
+[14:53:42 INF Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executed action Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service) in 4279.5359ms
+[14:53:42 INF Microsoft.AspNetCore.Routing.EndpointMiddleware.] Executed endpoint 'Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service)'
+[14:53:42 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM79TS0TS7IF" completed keep alive response.
+[14:53:42 INF Microsoft.AspNetCore.Hosting.Diagnostics.GET] Request finished HTTP/1.1 GET http://localhost:5000/api/query/FirmwareVersion/GetAllFirmwareVersions?deviceType=m7 - - - 200 86 application/json;+charset=utf-8 4321.2455ms
+[14:53:51 INF Microsoft.AspNetCore.Hosting.Diagnostics.GET] Request starting HTTP/1.1 GET http://localhost:5000/api/query/FirmwareVersion/GetAllFirmwareVersions?deviceType=m7%20lite - -
+[14:53:51 VRB Microsoft.AspNetCore.HostFiltering.HostFilteringMiddleware.] All hosts are allowed.
+[14:53:51 DBG Microsoft.AspNetCore.Routing.Matching.DfaMatcher.] 1 candidate(s) found for the request path '/api/query/FirmwareVersion/GetAllFirmwareVersions'
+[14:53:51 DBG Microsoft.AspNetCore.Routing.Matching.DfaMatcher.] Endpoint 'Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service)' with route pattern 'api/query/FirmwareVersion/GetAllFirmwareVersions' is valid for the request path '/api/query/FirmwareVersion/GetAllFirmwareVersions'
+[14:53:51 DBG Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.] Request matched endpoint 'Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service)'
+[14:53:51 DBG Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware.] Static files was skipped as the request already matched an endpoint.
+[14:53:51 DBG Microsoft.AspNetCore.Rewrite.RewriteMiddleware.] Request is continuing in applying rules. Current url is http://localhost:5000/api/query/FirmwareVersion/GetAllFirmwareVersions?deviceType=m7%20lite
+[14:53:51 INF Microsoft.AspNetCore.Routing.EndpointMiddleware.] Executing endpoint 'Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service)'
+[14:53:51 INF Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Route matched with {action = "GetAllFirmwareVersions", controller = "FirmwareVersion"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllFirmwareVersions(System.String) on controller Service.Controllers.FirmwareVersionController (Service).
+[14:53:51 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of authorization filters (in the following order): ["None"]
+[14:53:51 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of resource filters (in the following order): ["Microsoft.AspNetCore.Mvc.ConsumesAttribute"]
+[14:53:51 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of action filters (in the following order): ["Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter (Order: -3000)","Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter (Order: -2000)"]
+[14:53:51 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of exception filters (in the following order): ["None"]
+[14:53:51 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of result filters (in the following order): ["Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter (Order: -2000)","Microsoft.AspNetCore.Mvc.ProducesAttribute (Order: 0)"]
+[14:53:51 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResourceExecuting] Resource Filter: Before executing OnResourceExecuting on filter Microsoft.AspNetCore.Mvc.ConsumesAttribute.
+[14:53:51 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResourceExecuting] Resource Filter: After executing OnResourceExecuting on filter Microsoft.AspNetCore.Mvc.ConsumesAttribute.
+[14:53:51 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executing controller factory for controller Service.Controllers.FirmwareVersionController (Service)
+[14:53:51 INF Business.GitRepository.ZTR.M7Config.Business.FirmwareVersionServiceManager.] Setting git repository connection
+[14:53:51 INF Business.GitRepository.ZTR.M7Config.Business.DeviceServiceManager.] Setting git repository connection
+[14:53:51 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executed controller factory for controller Service.Controllers.FirmwareVersionController (Service)
+[14:53:51 DBG Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.] Attempting to bind parameter 'deviceType' of type 'System.String' ...
+[14:53:51 DBG Microsoft.AspNetCore.Mvc.ModelBinding.Binders.SimpleTypeModelBinder.] Attempting to bind parameter 'deviceType' of type 'System.String' using the name 'deviceType' in request data ...
+[14:53:51 DBG Microsoft.AspNetCore.Mvc.ModelBinding.Binders.SimpleTypeModelBinder.] Done attempting to bind parameter 'deviceType' of type 'System.String'.
+[14:53:51 DBG Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.] Done attempting to bind parameter 'deviceType' of type 'System.String'.
+[14:53:51 DBG Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.] Attempting to validate the bound parameter 'deviceType' of type 'System.String' ...
+[14:53:51 DBG Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.] Done attempting to validate the bound parameter 'deviceType' of type 'System.String'.
+[14:53:51 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuting] Action Filter: Before executing OnActionExecuting on filter Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter.
+[14:53:51 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuting] Action Filter: After executing OnActionExecuting on filter Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter.
+[14:53:51 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuting] Action Filter: Before executing OnActionExecuting on filter Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter.
+[14:53:51 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuting] Action Filter: After executing OnActionExecuting on filter Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter.
+[14:53:51 INF Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executing action method Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service) - Validation state: "Valid"
+[14:53:51 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executing action method Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service) with arguments (["m7 lite"])
+[14:53:51 INF Service.Controllers.FirmwareVersionController.] FirmwareVersionController: Getting list of all firmware versions
+[14:53:51 INF ZTR.M7Config.Business.RequestHandlers.Managers.DeviceTypeManager.] FirmwareVersionManager: methodName: GetAllFirmwareVersionsAsync Getting list of compatible firmware versions based on a device type m7 lite.
+[14:53:51 INF Business.GitRepository.ZTR.M7Config.Business.FirmwareVersionServiceManager.] Setting git repository connection
+[14:53:51 INF Business.GitRepository.ZTR.M7Config.Business.FirmwareVersionServiceManager.] Cloning github repository for firmware version.
+[14:53:54 INF Business.GitRepository.ZTR.M7Config.Business.FirmwareVersionServiceManager.] Github repository cloning is successful for firmware version.
+[14:53:54 INF Business.GitRepository.ZTR.M7Config.Business.FirmwareVersionServiceManager.] FirmwareVersionServiceManager method name: GetAllFirmwareVersionsAsync: Getting list of all firmware versions for deviceType.
+[14:53:54 INF Service.Controllers.FirmwareVersionController.] FirmwareVersionController: Successfully retrieved list of all firmware versions
+[14:53:54 INF Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executed action method Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 2811.3287ms.
+[14:53:54 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuted] Action Filter: Before executing OnActionExecuted on filter Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter.
+[14:53:54 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuted] Action Filter: After executing OnActionExecuted on filter Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter.
+[14:53:54 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuted] Action Filter: Before executing OnActionExecuted on filter Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter.
+[14:53:54 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuted] Action Filter: After executing OnActionExecuted on filter Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter.
+[14:53:54 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuting] Result Filter: Before executing OnResultExecuting on filter Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter.
+[14:53:54 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuting] Result Filter: After executing OnResultExecuting on filter Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter.
+[14:53:54 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuting] Result Filter: Before executing OnResultExecuting on filter Microsoft.AspNetCore.Mvc.ProducesAttribute.
+[14:53:54 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuting] Result Filter: After executing OnResultExecuting on filter Microsoft.AspNetCore.Mvc.ProducesAttribute.
+[14:53:54 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Before executing action result Microsoft.AspNetCore.Mvc.OkObjectResult.
+[14:53:54 DBG Microsoft.AspNetCore.Mvc.Infrastructure.DefaultOutputFormatterSelector.] List of registered output formatters, in the following order: ["Microsoft.AspNetCore.Mvc.Formatters.HttpNoContentOutputFormatter","Microsoft.AspNetCore.Mvc.Formatters.StringOutputFormatter","Microsoft.AspNetCore.Mvc.Formatters.StreamOutputFormatter","Microsoft.AspNetCore.Mvc.Formatters.NewtonsoftJsonOutputFormatter"]
+[14:53:54 DBG Microsoft.AspNetCore.Mvc.Infrastructure.DefaultOutputFormatterSelector.] Attempting to select an output formatter based on Accept header '["application/json"]' and explicitly specified content types '["application/json"]'. The content types in the accept header must be a subset of the explicitly set content types.
+[14:53:54 DBG Microsoft.AspNetCore.Mvc.Infrastructure.DefaultOutputFormatterSelector.] Selected output formatter 'Microsoft.AspNetCore.Mvc.Formatters.NewtonsoftJsonOutputFormatter' and content type 'application/json' to write the response.
+[14:53:54 INF Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor.] Executing OkObjectResult, writing value of type 'ZTR.Framework.Service.ApiResponse'.
+[14:53:54 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] After executing action result Microsoft.AspNetCore.Mvc.OkObjectResult.
+[14:53:54 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuted] Result Filter: Before executing OnResultExecuted on filter Microsoft.AspNetCore.Mvc.ProducesAttribute.
+[14:53:54 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuted] Result Filter: After executing OnResultExecuted on filter Microsoft.AspNetCore.Mvc.ProducesAttribute.
+[14:53:54 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuted] Result Filter: Before executing OnResultExecuted on filter Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter.
+[14:53:54 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuted] Result Filter: After executing OnResultExecuted on filter Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter.
+[14:53:54 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResourceExecuted] Resource Filter: Before executing OnResourceExecuted on filter Microsoft.AspNetCore.Mvc.ConsumesAttribute.
+[14:53:54 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResourceExecuted] Resource Filter: After executing OnResourceExecuted on filter Microsoft.AspNetCore.Mvc.ConsumesAttribute.
+[14:53:54 INF Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executed action Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service) in 2830.5488ms
+[14:53:54 INF Microsoft.AspNetCore.Routing.EndpointMiddleware.] Executed endpoint 'Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service)'
+[14:53:54 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM79TS0TS7IF" completed keep alive response.
+[14:53:54 INF Microsoft.AspNetCore.Hosting.Diagnostics.GET] Request finished HTTP/1.1 GET http://localhost:5000/api/query/FirmwareVersion/GetAllFirmwareVersions?deviceType=m7%20lite - - - 200 86 application/json;+charset=utf-8 2852.0381ms
+[14:54:39 INF Microsoft.AspNetCore.Hosting.Diagnostics.GET] Request starting HTTP/1.1 GET http://localhost:5000/api/query/FirmwareVersion/GetAllFirmwareVersions?deviceType=m7%20lite - -
+[14:54:39 VRB Microsoft.AspNetCore.HostFiltering.HostFilteringMiddleware.] All hosts are allowed.
+[14:54:39 DBG Microsoft.AspNetCore.Routing.Matching.DfaMatcher.] 1 candidate(s) found for the request path '/api/query/FirmwareVersion/GetAllFirmwareVersions'
+[14:54:39 DBG Microsoft.AspNetCore.Routing.Matching.DfaMatcher.] Endpoint 'Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service)' with route pattern 'api/query/FirmwareVersion/GetAllFirmwareVersions' is valid for the request path '/api/query/FirmwareVersion/GetAllFirmwareVersions'
+[14:54:39 DBG Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.] Request matched endpoint 'Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service)'
+[14:54:39 DBG Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware.] Static files was skipped as the request already matched an endpoint.
+[14:54:39 DBG Microsoft.AspNetCore.Rewrite.RewriteMiddleware.] Request is continuing in applying rules. Current url is http://localhost:5000/api/query/FirmwareVersion/GetAllFirmwareVersions?deviceType=m7%20lite
+[14:54:39 INF Microsoft.AspNetCore.Routing.EndpointMiddleware.] Executing endpoint 'Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service)'
+[14:54:39 INF Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Route matched with {action = "GetAllFirmwareVersions", controller = "FirmwareVersion"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllFirmwareVersions(System.String) on controller Service.Controllers.FirmwareVersionController (Service).
+[14:54:39 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of authorization filters (in the following order): ["None"]
+[14:54:39 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of resource filters (in the following order): ["Microsoft.AspNetCore.Mvc.ConsumesAttribute"]
+[14:54:39 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of action filters (in the following order): ["Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter (Order: -3000)","Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter (Order: -2000)"]
+[14:54:39 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of exception filters (in the following order): ["None"]
+[14:54:39 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of result filters (in the following order): ["Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter (Order: -2000)","Microsoft.AspNetCore.Mvc.ProducesAttribute (Order: 0)"]
+[14:54:39 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResourceExecuting] Resource Filter: Before executing OnResourceExecuting on filter Microsoft.AspNetCore.Mvc.ConsumesAttribute.
+[14:54:39 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResourceExecuting] Resource Filter: After executing OnResourceExecuting on filter Microsoft.AspNetCore.Mvc.ConsumesAttribute.
+[14:54:39 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executing controller factory for controller Service.Controllers.FirmwareVersionController (Service)
+[14:54:39 INF Business.GitRepository.ZTR.M7Config.Business.FirmwareVersionServiceManager.] Setting git repository connection
+[14:54:39 INF Business.GitRepository.ZTR.M7Config.Business.DeviceServiceManager.] Setting git repository connection
+[14:54:39 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executed controller factory for controller Service.Controllers.FirmwareVersionController (Service)
+[14:54:39 DBG Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.] Attempting to bind parameter 'deviceType' of type 'System.String' ...
+[14:54:39 DBG Microsoft.AspNetCore.Mvc.ModelBinding.Binders.SimpleTypeModelBinder.] Attempting to bind parameter 'deviceType' of type 'System.String' using the name 'deviceType' in request data ...
+[14:54:39 DBG Microsoft.AspNetCore.Mvc.ModelBinding.Binders.SimpleTypeModelBinder.] Done attempting to bind parameter 'deviceType' of type 'System.String'.
+[14:54:39 DBG Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.] Done attempting to bind parameter 'deviceType' of type 'System.String'.
+[14:54:39 DBG Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.] Attempting to validate the bound parameter 'deviceType' of type 'System.String' ...
+[14:54:39 DBG Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.] Done attempting to validate the bound parameter 'deviceType' of type 'System.String'.
+[14:54:39 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuting] Action Filter: Before executing OnActionExecuting on filter Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter.
+[14:54:39 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuting] Action Filter: After executing OnActionExecuting on filter Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter.
+[14:54:39 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuting] Action Filter: Before executing OnActionExecuting on filter Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter.
+[14:54:39 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuting] Action Filter: After executing OnActionExecuting on filter Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter.
+[14:54:39 INF Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executing action method Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service) - Validation state: "Valid"
+[14:54:39 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executing action method Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service) with arguments (["m7 lite"])
+[14:54:39 INF Service.Controllers.FirmwareVersionController.] FirmwareVersionController: Getting list of all firmware versions
+[14:54:39 INF ZTR.M7Config.Business.RequestHandlers.Managers.DeviceTypeManager.] FirmwareVersionManager: methodName: GetAllFirmwareVersionsAsync Getting list of compatible firmware versions based on a device type m7 lite.
+[14:54:39 INF Business.GitRepository.ZTR.M7Config.Business.FirmwareVersionServiceManager.] Setting git repository connection
+[14:54:39 INF Business.GitRepository.ZTR.M7Config.Business.FirmwareVersionServiceManager.] Cloning github repository for firmware version.
+[14:54:41 INF Business.GitRepository.ZTR.M7Config.Business.FirmwareVersionServiceManager.] Github repository cloning is successful for firmware version.
+[14:54:41 INF Business.GitRepository.ZTR.M7Config.Business.FirmwareVersionServiceManager.] FirmwareVersionServiceManager method name: GetAllFirmwareVersionsAsync: Getting list of all firmware versions for deviceType.
+[14:54:42 INF Service.Controllers.FirmwareVersionController.] FirmwareVersionController: Successfully retrieved list of all firmware versions
+[14:54:42 INF Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executed action method Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 2857.2734ms.
+[14:54:42 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuted] Action Filter: Before executing OnActionExecuted on filter Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter.
+[14:54:42 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuted] Action Filter: After executing OnActionExecuted on filter Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter.
+[14:54:42 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuted] Action Filter: Before executing OnActionExecuted on filter Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter.
+[14:54:42 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuted] Action Filter: After executing OnActionExecuted on filter Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter.
+[14:54:42 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuting] Result Filter: Before executing OnResultExecuting on filter Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter.
+[14:54:42 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuting] Result Filter: After executing OnResultExecuting on filter Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter.
+[14:54:42 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuting] Result Filter: Before executing OnResultExecuting on filter Microsoft.AspNetCore.Mvc.ProducesAttribute.
+[14:54:42 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuting] Result Filter: After executing OnResultExecuting on filter Microsoft.AspNetCore.Mvc.ProducesAttribute.
+[14:54:42 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Before executing action result Microsoft.AspNetCore.Mvc.OkObjectResult.
+[14:54:42 DBG Microsoft.AspNetCore.Mvc.Infrastructure.DefaultOutputFormatterSelector.] List of registered output formatters, in the following order: ["Microsoft.AspNetCore.Mvc.Formatters.HttpNoContentOutputFormatter","Microsoft.AspNetCore.Mvc.Formatters.StringOutputFormatter","Microsoft.AspNetCore.Mvc.Formatters.StreamOutputFormatter","Microsoft.AspNetCore.Mvc.Formatters.NewtonsoftJsonOutputFormatter"]
+[14:54:42 DBG Microsoft.AspNetCore.Mvc.Infrastructure.DefaultOutputFormatterSelector.] Attempting to select an output formatter based on Accept header '["application/json"]' and explicitly specified content types '["application/json"]'. The content types in the accept header must be a subset of the explicitly set content types.
+[14:54:42 DBG Microsoft.AspNetCore.Mvc.Infrastructure.DefaultOutputFormatterSelector.] Selected output formatter 'Microsoft.AspNetCore.Mvc.Formatters.NewtonsoftJsonOutputFormatter' and content type 'application/json' to write the response.
+[14:54:42 INF Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor.] Executing OkObjectResult, writing value of type 'ZTR.Framework.Service.ApiResponse'.
+[14:54:42 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] After executing action result Microsoft.AspNetCore.Mvc.OkObjectResult.
+[14:54:42 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuted] Result Filter: Before executing OnResultExecuted on filter Microsoft.AspNetCore.Mvc.ProducesAttribute.
+[14:54:42 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuted] Result Filter: After executing OnResultExecuted on filter Microsoft.AspNetCore.Mvc.ProducesAttribute.
+[14:54:42 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuted] Result Filter: Before executing OnResultExecuted on filter Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter.
+[14:54:42 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuted] Result Filter: After executing OnResultExecuted on filter Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter.
+[14:54:42 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResourceExecuted] Resource Filter: Before executing OnResourceExecuted on filter Microsoft.AspNetCore.Mvc.ConsumesAttribute.
+[14:54:42 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResourceExecuted] Resource Filter: After executing OnResourceExecuted on filter Microsoft.AspNetCore.Mvc.ConsumesAttribute.
+[14:54:42 INF Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executed action Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service) in 2876.0577ms
+[14:54:42 INF Microsoft.AspNetCore.Routing.EndpointMiddleware.] Executed endpoint 'Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service)'
+[14:54:42 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM79TS0TS7IF" completed keep alive response.
+[14:54:42 INF Microsoft.AspNetCore.Hosting.Diagnostics.GET] Request finished HTTP/1.1 GET http://localhost:5000/api/query/FirmwareVersion/GetAllFirmwareVersions?deviceType=m7%20lite - - - 200 86 application/json;+charset=utf-8 2908.9713ms
+[14:54:47 INF Microsoft.AspNetCore.Hosting.Diagnostics.GET] Request starting HTTP/1.1 GET http://localhost:5000/api/query/FirmwareVersion/GetAllFirmwareVersions?deviceType=m7 - -
+[14:54:47 VRB Microsoft.AspNetCore.HostFiltering.HostFilteringMiddleware.] All hosts are allowed.
+[14:54:47 DBG Microsoft.AspNetCore.Routing.Matching.DfaMatcher.] 1 candidate(s) found for the request path '/api/query/FirmwareVersion/GetAllFirmwareVersions'
+[14:54:47 DBG Microsoft.AspNetCore.Routing.Matching.DfaMatcher.] Endpoint 'Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service)' with route pattern 'api/query/FirmwareVersion/GetAllFirmwareVersions' is valid for the request path '/api/query/FirmwareVersion/GetAllFirmwareVersions'
+[14:54:47 DBG Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.] Request matched endpoint 'Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service)'
+[14:54:47 DBG Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware.] Static files was skipped as the request already matched an endpoint.
+[14:54:47 DBG Microsoft.AspNetCore.Rewrite.RewriteMiddleware.] Request is continuing in applying rules. Current url is http://localhost:5000/api/query/FirmwareVersion/GetAllFirmwareVersions?deviceType=m7
+[14:54:47 INF Microsoft.AspNetCore.Routing.EndpointMiddleware.] Executing endpoint 'Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service)'
+[14:54:47 INF Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Route matched with {action = "GetAllFirmwareVersions", controller = "FirmwareVersion"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllFirmwareVersions(System.String) on controller Service.Controllers.FirmwareVersionController (Service).
+[14:54:47 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of authorization filters (in the following order): ["None"]
+[14:54:47 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of resource filters (in the following order): ["Microsoft.AspNetCore.Mvc.ConsumesAttribute"]
+[14:54:47 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of action filters (in the following order): ["Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter (Order: -3000)","Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter (Order: -2000)"]
+[14:54:47 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of exception filters (in the following order): ["None"]
+[14:54:47 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of result filters (in the following order): ["Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter (Order: -2000)","Microsoft.AspNetCore.Mvc.ProducesAttribute (Order: 0)"]
+[14:54:47 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResourceExecuting] Resource Filter: Before executing OnResourceExecuting on filter Microsoft.AspNetCore.Mvc.ConsumesAttribute.
+[14:54:47 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResourceExecuting] Resource Filter: After executing OnResourceExecuting on filter Microsoft.AspNetCore.Mvc.ConsumesAttribute.
+[14:54:47 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executing controller factory for controller Service.Controllers.FirmwareVersionController (Service)
+[14:54:47 INF Business.GitRepository.ZTR.M7Config.Business.FirmwareVersionServiceManager.] Setting git repository connection
+[14:54:47 INF Business.GitRepository.ZTR.M7Config.Business.DeviceServiceManager.] Setting git repository connection
+[14:54:47 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executed controller factory for controller Service.Controllers.FirmwareVersionController (Service)
+[14:54:47 DBG Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.] Attempting to bind parameter 'deviceType' of type 'System.String' ...
+[14:54:47 DBG Microsoft.AspNetCore.Mvc.ModelBinding.Binders.SimpleTypeModelBinder.] Attempting to bind parameter 'deviceType' of type 'System.String' using the name 'deviceType' in request data ...
+[14:54:47 DBG Microsoft.AspNetCore.Mvc.ModelBinding.Binders.SimpleTypeModelBinder.] Done attempting to bind parameter 'deviceType' of type 'System.String'.
+[14:54:47 DBG Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.] Done attempting to bind parameter 'deviceType' of type 'System.String'.
+[14:54:47 DBG Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.] Attempting to validate the bound parameter 'deviceType' of type 'System.String' ...
+[14:54:47 DBG Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.] Done attempting to validate the bound parameter 'deviceType' of type 'System.String'.
+[14:54:47 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuting] Action Filter: Before executing OnActionExecuting on filter Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter.
+[14:54:47 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuting] Action Filter: After executing OnActionExecuting on filter Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter.
+[14:54:47 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuting] Action Filter: Before executing OnActionExecuting on filter Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter.
+[14:54:47 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuting] Action Filter: After executing OnActionExecuting on filter Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter.
+[14:54:47 INF Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executing action method Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service) - Validation state: "Valid"
+[14:54:47 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executing action method Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service) with arguments (["m7"])
+[14:54:47 INF Service.Controllers.FirmwareVersionController.] FirmwareVersionController: Getting list of all firmware versions
+[14:54:47 INF ZTR.M7Config.Business.RequestHandlers.Managers.DeviceTypeManager.] FirmwareVersionManager: methodName: GetAllFirmwareVersionsAsync Getting list of compatible firmware versions based on a device type m7.
+[14:54:47 INF Business.GitRepository.ZTR.M7Config.Business.FirmwareVersionServiceManager.] Setting git repository connection
+[14:54:47 INF Business.GitRepository.ZTR.M7Config.Business.FirmwareVersionServiceManager.] Cloning github repository for firmware version.
+[14:54:49 INF Business.GitRepository.ZTR.M7Config.Business.FirmwareVersionServiceManager.] Github repository cloning is successful for firmware version.
+[14:54:49 INF Business.GitRepository.ZTR.M7Config.Business.FirmwareVersionServiceManager.] FirmwareVersionServiceManager method name: GetAllFirmwareVersionsAsync: Getting list of all firmware versions for deviceType.
+[14:54:50 INF Service.Controllers.FirmwareVersionController.] FirmwareVersionController: Successfully retrieved list of all firmware versions
+[14:54:50 INF Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executed action method Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 2861.1033ms.
+[14:54:50 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuted] Action Filter: Before executing OnActionExecuted on filter Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter.
+[14:54:50 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuted] Action Filter: After executing OnActionExecuted on filter Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter.
+[14:54:50 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuted] Action Filter: Before executing OnActionExecuted on filter Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter.
+[14:54:50 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuted] Action Filter: After executing OnActionExecuted on filter Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter.
+[14:54:50 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuting] Result Filter: Before executing OnResultExecuting on filter Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter.
+[14:54:50 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuting] Result Filter: After executing OnResultExecuting on filter Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter.
+[14:54:50 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuting] Result Filter: Before executing OnResultExecuting on filter Microsoft.AspNetCore.Mvc.ProducesAttribute.
+[14:54:50 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuting] Result Filter: After executing OnResultExecuting on filter Microsoft.AspNetCore.Mvc.ProducesAttribute.
+[14:54:50 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Before executing action result Microsoft.AspNetCore.Mvc.OkObjectResult.
+[14:54:50 DBG Microsoft.AspNetCore.Mvc.Infrastructure.DefaultOutputFormatterSelector.] List of registered output formatters, in the following order: ["Microsoft.AspNetCore.Mvc.Formatters.HttpNoContentOutputFormatter","Microsoft.AspNetCore.Mvc.Formatters.StringOutputFormatter","Microsoft.AspNetCore.Mvc.Formatters.StreamOutputFormatter","Microsoft.AspNetCore.Mvc.Formatters.NewtonsoftJsonOutputFormatter"]
+[14:54:50 DBG Microsoft.AspNetCore.Mvc.Infrastructure.DefaultOutputFormatterSelector.] Attempting to select an output formatter based on Accept header '["application/json"]' and explicitly specified content types '["application/json"]'. The content types in the accept header must be a subset of the explicitly set content types.
+[14:54:50 DBG Microsoft.AspNetCore.Mvc.Infrastructure.DefaultOutputFormatterSelector.] Selected output formatter 'Microsoft.AspNetCore.Mvc.Formatters.NewtonsoftJsonOutputFormatter' and content type 'application/json' to write the response.
+[14:54:50 INF Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor.] Executing OkObjectResult, writing value of type 'ZTR.Framework.Service.ApiResponse'.
+[14:54:50 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] After executing action result Microsoft.AspNetCore.Mvc.OkObjectResult.
+[14:54:50 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuted] Result Filter: Before executing OnResultExecuted on filter Microsoft.AspNetCore.Mvc.ProducesAttribute.
+[14:54:50 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuted] Result Filter: After executing OnResultExecuted on filter Microsoft.AspNetCore.Mvc.ProducesAttribute.
+[14:54:50 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuted] Result Filter: Before executing OnResultExecuted on filter Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter.
+[14:54:50 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuted] Result Filter: After executing OnResultExecuted on filter Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter.
+[14:54:50 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResourceExecuted] Resource Filter: Before executing OnResourceExecuted on filter Microsoft.AspNetCore.Mvc.ConsumesAttribute.
+[14:54:50 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResourceExecuted] Resource Filter: After executing OnResourceExecuted on filter Microsoft.AspNetCore.Mvc.ConsumesAttribute.
+[14:54:50 INF Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executed action Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service) in 2989.87ms
+[14:54:50 INF Microsoft.AspNetCore.Routing.EndpointMiddleware.] Executed endpoint 'Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service)'
+[14:54:50 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM79TS0TS7IF" completed keep alive response.
+[14:54:50 INF Microsoft.AspNetCore.Hosting.Diagnostics.GET] Request finished HTTP/1.1 GET http://localhost:5000/api/query/FirmwareVersion/GetAllFirmwareVersions?deviceType=m7 - - - 200 86 application/json;+charset=utf-8 3120.7078ms
+[14:56:06 INF Microsoft.AspNetCore.Hosting.Diagnostics.GET] Request starting HTTP/1.1 GET http://localhost:5000/api/query/FirmwareVersion/GetAllFirmwareVersions?deviceType=m7 - -
+[14:56:06 VRB Microsoft.AspNetCore.HostFiltering.HostFilteringMiddleware.] All hosts are allowed.
+[14:56:06 DBG Microsoft.AspNetCore.Routing.Matching.DfaMatcher.] 1 candidate(s) found for the request path '/api/query/FirmwareVersion/GetAllFirmwareVersions'
+[14:56:06 DBG Microsoft.AspNetCore.Routing.Matching.DfaMatcher.] Endpoint 'Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service)' with route pattern 'api/query/FirmwareVersion/GetAllFirmwareVersions' is valid for the request path '/api/query/FirmwareVersion/GetAllFirmwareVersions'
+[14:56:06 DBG Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.] Request matched endpoint 'Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service)'
+[14:56:06 DBG Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware.] Static files was skipped as the request already matched an endpoint.
+[14:56:06 DBG Microsoft.AspNetCore.Rewrite.RewriteMiddleware.] Request is continuing in applying rules. Current url is http://localhost:5000/api/query/FirmwareVersion/GetAllFirmwareVersions?deviceType=m7
+[14:56:06 INF Microsoft.AspNetCore.Routing.EndpointMiddleware.] Executing endpoint 'Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service)'
+[14:56:06 INF Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Route matched with {action = "GetAllFirmwareVersions", controller = "FirmwareVersion"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllFirmwareVersions(System.String) on controller Service.Controllers.FirmwareVersionController (Service).
+[14:56:06 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of authorization filters (in the following order): ["None"]
+[14:56:06 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of resource filters (in the following order): ["Microsoft.AspNetCore.Mvc.ConsumesAttribute"]
+[14:56:06 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of action filters (in the following order): ["Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter (Order: -3000)","Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter (Order: -2000)"]
+[14:56:06 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of exception filters (in the following order): ["None"]
+[14:56:06 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Execution plan of result filters (in the following order): ["Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter (Order: -2000)","Microsoft.AspNetCore.Mvc.ProducesAttribute (Order: 0)"]
+[14:56:06 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResourceExecuting] Resource Filter: Before executing OnResourceExecuting on filter Microsoft.AspNetCore.Mvc.ConsumesAttribute.
+[14:56:06 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResourceExecuting] Resource Filter: After executing OnResourceExecuting on filter Microsoft.AspNetCore.Mvc.ConsumesAttribute.
+[14:56:06 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executing controller factory for controller Service.Controllers.FirmwareVersionController (Service)
+[14:56:06 INF Business.GitRepository.ZTR.M7Config.Business.FirmwareVersionServiceManager.] Setting git repository connection
+[14:56:06 INF Business.GitRepository.ZTR.M7Config.Business.DeviceServiceManager.] Setting git repository connection
+[14:56:06 DBG Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executed controller factory for controller Service.Controllers.FirmwareVersionController (Service)
+[14:56:06 DBG Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.] Attempting to bind parameter 'deviceType' of type 'System.String' ...
+[14:56:06 DBG Microsoft.AspNetCore.Mvc.ModelBinding.Binders.SimpleTypeModelBinder.] Attempting to bind parameter 'deviceType' of type 'System.String' using the name 'deviceType' in request data ...
+[14:56:06 DBG Microsoft.AspNetCore.Mvc.ModelBinding.Binders.SimpleTypeModelBinder.] Done attempting to bind parameter 'deviceType' of type 'System.String'.
+[14:56:06 DBG Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.] Done attempting to bind parameter 'deviceType' of type 'System.String'.
+[14:56:06 DBG Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.] Attempting to validate the bound parameter 'deviceType' of type 'System.String' ...
+[14:56:06 DBG Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.] Done attempting to validate the bound parameter 'deviceType' of type 'System.String'.
+[14:56:06 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuting] Action Filter: Before executing OnActionExecuting on filter Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter.
+[14:56:06 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuting] Action Filter: After executing OnActionExecuting on filter Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter.
+[14:56:06 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuting] Action Filter: Before executing OnActionExecuting on filter Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter.
+[14:56:06 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuting] Action Filter: After executing OnActionExecuting on filter Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter.
+[14:56:06 INF Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executing action method Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service) - Validation state: "Valid"
+[14:56:06 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executing action method Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service) with arguments (["m7"])
+[14:56:06 INF Service.Controllers.FirmwareVersionController.] FirmwareVersionController: Getting list of all firmware versions
+[14:56:06 INF ZTR.M7Config.Business.RequestHandlers.Managers.DeviceTypeManager.] FirmwareVersionManager: methodName: GetAllFirmwareVersionsAsync Getting list of compatible firmware versions based on a device type m7.
+[14:56:06 INF Business.GitRepository.ZTR.M7Config.Business.FirmwareVersionServiceManager.] Setting git repository connection
+[14:56:06 INF Business.GitRepository.ZTR.M7Config.Business.FirmwareVersionServiceManager.] Cloning github repository for firmware version.
+[14:56:08 INF Business.GitRepository.ZTR.M7Config.Business.FirmwareVersionServiceManager.] Github repository cloning is successful for firmware version.
+[14:56:08 INF Business.GitRepository.ZTR.M7Config.Business.FirmwareVersionServiceManager.] FirmwareVersionServiceManager method name: GetAllFirmwareVersionsAsync: Getting list of all firmware versions for deviceType.
+[14:56:09 INF Service.Controllers.FirmwareVersionController.] FirmwareVersionController: Successfully retrieved list of all firmware versions
+[14:56:09 INF Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executed action method Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 2818.2916ms.
+[14:56:09 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuted] Action Filter: Before executing OnActionExecuted on filter Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter.
+[14:56:09 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuted] Action Filter: After executing OnActionExecuted on filter Microsoft.AspNetCore.Mvc.Infrastructure.ModelStateInvalidFilter.
+[14:56:09 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuted] Action Filter: Before executing OnActionExecuted on filter Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter.
+[14:56:09 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnActionExecuted] Action Filter: After executing OnActionExecuted on filter Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter.
+[14:56:09 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuting] Result Filter: Before executing OnResultExecuting on filter Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter.
+[14:56:09 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuting] Result Filter: After executing OnResultExecuting on filter Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter.
+[14:56:09 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuting] Result Filter: Before executing OnResultExecuting on filter Microsoft.AspNetCore.Mvc.ProducesAttribute.
+[14:56:09 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuting] Result Filter: After executing OnResultExecuting on filter Microsoft.AspNetCore.Mvc.ProducesAttribute.
+[14:56:09 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Before executing action result Microsoft.AspNetCore.Mvc.OkObjectResult.
+[14:56:09 DBG Microsoft.AspNetCore.Mvc.Infrastructure.DefaultOutputFormatterSelector.] List of registered output formatters, in the following order: ["Microsoft.AspNetCore.Mvc.Formatters.HttpNoContentOutputFormatter","Microsoft.AspNetCore.Mvc.Formatters.StringOutputFormatter","Microsoft.AspNetCore.Mvc.Formatters.StreamOutputFormatter","Microsoft.AspNetCore.Mvc.Formatters.NewtonsoftJsonOutputFormatter"]
+[14:56:09 DBG Microsoft.AspNetCore.Mvc.Infrastructure.DefaultOutputFormatterSelector.] Attempting to select an output formatter based on Accept header '["application/json"]' and explicitly specified content types '["application/json"]'. The content types in the accept header must be a subset of the explicitly set content types.
+[14:56:09 DBG Microsoft.AspNetCore.Mvc.Infrastructure.DefaultOutputFormatterSelector.] Selected output formatter 'Microsoft.AspNetCore.Mvc.Formatters.NewtonsoftJsonOutputFormatter' and content type 'application/json' to write the response.
+[14:56:09 INF Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor.] Executing OkObjectResult, writing value of type 'ZTR.Framework.Service.ApiResponse'.
+[14:56:09 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] After executing action result Microsoft.AspNetCore.Mvc.OkObjectResult.
+[14:56:09 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuted] Result Filter: Before executing OnResultExecuted on filter Microsoft.AspNetCore.Mvc.ProducesAttribute.
+[14:56:09 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuted] Result Filter: After executing OnResultExecuted on filter Microsoft.AspNetCore.Mvc.ProducesAttribute.
+[14:56:09 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuted] Result Filter: Before executing OnResultExecuted on filter Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter.
+[14:56:09 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResultExecuted] Result Filter: After executing OnResultExecuted on filter Microsoft.AspNetCore.Mvc.Infrastructure.ClientErrorResultFilter.
+[14:56:09 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResourceExecuted] Resource Filter: Before executing OnResourceExecuted on filter Microsoft.AspNetCore.Mvc.ConsumesAttribute.
+[14:56:09 VRB Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.OnResourceExecuted] Resource Filter: After executing OnResourceExecuted on filter Microsoft.AspNetCore.Mvc.ConsumesAttribute.
+[14:56:09 INF Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.] Executed action Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service) in 2840.0337ms
+[14:56:09 INF Microsoft.AspNetCore.Routing.EndpointMiddleware.] Executed endpoint 'Service.Controllers.FirmwareVersionController.GetAllFirmwareVersions (Service)'
+[14:56:09 DBG Microsoft.AspNetCore.Server.Kestrel.] Connection id "0HM79TS0TS7IF" completed keep alive response.
+[14:56:09 INF Microsoft.AspNetCore.Hosting.Diagnostics.GET] Request finished HTTP/1.1 GET http://localhost:5000/api/query/FirmwareVersion/GetAllFirmwareVersions?deviceType=m7 - - - 200 86 application/json;+charset=utf-8 2866.7979ms

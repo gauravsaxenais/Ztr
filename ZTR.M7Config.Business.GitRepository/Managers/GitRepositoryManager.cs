@@ -9,6 +9,7 @@
     using global::ZTR.M7Config.Business.GitRepository.Interfaces;
     using LibGit2Sharp;
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -35,18 +36,25 @@
         private readonly object _syncRoot = new();
         #endregion
 
-        #region Public methods
+        #region Public methods        
         /// <summary>
         /// Sets the connection options.
         /// </summary>
         /// <param name="gitConnection">The git connection.</param>
-        public void SetConnectionOptions(GitConnectionOptions gitConnection)
+        /// <param name="path">The path.</param>
+        /// <returns></returns>
+        public void SetConnectionOptions(GitConnectionOptions gitConnection, string path = "")
         {
             EnsureArg.IsNotNull(gitConnection);
             EnsureArg.IsNotEmptyOrWhiteSpace(gitConnection.GitLocalFolder);
             EnsureArg.IsNotEmptyOrWhiteSpace(gitConnection.GitRemoteLocation);
 
-            _gitConnection = gitConnection;
+            _gitConnection = gitConnection.Copy();
+
+            if (!string.IsNullOrWhiteSpace(path))
+            {
+                _gitConnection.GitLocalFolder = path;
+            }
 
             _userNamePasswordCredentials = new UsernamePasswordCredentials()
             {
@@ -64,7 +72,7 @@
         {
             lock (_syncRoot)
             {
-                // clone only when there is a change.
+                //// clone only when there is a change.
                 // and local repository matches remote repo details
                 if (IsExistsLocalRepositoryDirectory() && IsLocalRepositorySameAsRemote())
                 {
@@ -102,9 +110,9 @@
         /// Gets all tag names asynchronous.
         /// </summary>
         /// <returns></returns>
-        public async Task<Dictionary<string, DateTimeOffset>> GetAllTagNamesAsync()
+        public async Task<ConcurrentDictionary<string, DateTimeOffset>> GetAllTagNamesAsync()
         {
-            var tags = new Dictionary<string, DateTimeOffset>();
+            var tags = new ConcurrentDictionary<string, DateTimeOffset>(StringComparer.OrdinalIgnoreCase);
             _repository = new Repository(_gitConnection.GitLocalFolder);
 
             // Add new tags.
@@ -116,7 +124,7 @@
                 {
                     // We're not interested by Tags pointing at Blobs or Trees
                     // only interested in tags for a commit.
-                    tags.Add(tag.FriendlyName, ((Commit)tag.PeeledTarget).Author.When);
+                    tags.TryAdd(tag.FriendlyName, ((Commit)tag.PeeledTarget).Author.When);
                 }
             }
 
@@ -335,9 +343,25 @@
             _repository = new Repository(_gitConnection.GitLocalFolder);
             var network = _repository.Network.Remotes.First();
             var refSpecs = new List<string>() { network.FetchRefSpecs.First().Specification };
-            var fetchOptions = new FetchOptions { TagFetchMode = TagFetchMode.All };
+            var fetchOptions = new FetchOptions { TagFetchMode = TagFetchMode.Auto };
             fetchOptions.CredentialsProvider = (_url, _user, _cred) => new DefaultCredentials();
             fetchOptions.CredentialsProvider += (_url, _user, _cred) => _userNamePasswordCredentials;
+
+            Commands.Pull(_repository, new Signature(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), DateTime.Now), new PullOptions()
+            {
+                FetchOptions = fetchOptions,
+                MergeOptions = new MergeOptions()
+                {
+                    MergeFileFavor = MergeFileFavor.Theirs,
+                    CommitOnSuccess = true
+                }
+            });
+
+            //foreach (Remote remote in _repository.Network.Remotes)
+            //{
+            //    Commands.Fetch(_repository, remote.Name, new string[0], fetchOptions, null);
+            //    _repository.Network.Fetch(remote.Name, remote.FetchRefSpecs.Select(r => r.Specification), fetchOptions);
+            //}
 
             _repository.Network.Fetch(network.Name, refSpecs, fetchOptions);
         }
@@ -365,21 +389,21 @@
                 foreach (var f in fol.GetFiles())
                 {
                     f.Attributes &= ~(FileAttributes.Archive | FileAttributes.ReadOnly | FileAttributes.Hidden);
-                    f.Delete();
+                    SafeDelete(new Action(() => f.Delete()));
                 }
             }
 
-            SafeDeleteDirectory(root.FullName);
+            SafeDelete(new Action(() => Directory.Delete(root.FullName, true)));
         }
 
-        private static void SafeDeleteDirectory(string destinationDirectory)
+        private static void SafeDelete(Action action)
         {
             const int tries = 10;
             for (var index = 1; index <= tries; index++)
             {
                 try
                 {
-                    Directory.Delete(destinationDirectory, true);
+                    action();
                 }
                 catch (DirectoryNotFoundException)
                 {

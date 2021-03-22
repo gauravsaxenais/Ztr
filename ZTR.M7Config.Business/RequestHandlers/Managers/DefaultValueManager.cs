@@ -74,6 +74,9 @@
         {
             _logger.LogInformation($"{Prefix}: methodName: {nameof(GetDefaultValuesAllModulesAsync)} Getting default values for {firmwareVersion} and {deviceType}.");
             _logger.LogInformation($"{Prefix}: methodName: {nameof(GetDefaultValuesAllModulesAsync)} Cloning firmware version git repository.");
+
+            var firmwareVersionUrl = await _firmwareVersionServiceManager.GetFirmwareUrlAsync(deviceType).ConfigureAwait(false);
+            _firmwareVersionServiceManager.SetGitRepoUrl(deviceType, firmwareVersionUrl);
             await _firmwareVersionServiceManager.CloneGitRepoAsync().ConfigureAwait(false);
 
             // read default values from toml file defaults.toml
@@ -83,6 +86,7 @@
             _logger.LogInformation($"{Prefix}: methodName: {nameof(GetDefaultValuesAllModulesAsync)} Getting list of modules {firmwareVersion} and {deviceType}.");
             var listOfModules = await _firmwareVersionServiceManager.GetListOfModulesAsync(firmwareVersion, deviceType).ConfigureAwait(false);
 
+            _moduleServiceManager.SetConnection();
             // clone git repo when we need it.
             await _moduleServiceManager.CloneGitRepoAsync().ConfigureAwait(false);
             // get list of all modules.

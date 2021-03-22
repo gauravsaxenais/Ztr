@@ -8,6 +8,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Threading.Tasks;
+    using System.Web;
     using ZTR.Framework.Service;
     using ZTR.M7Config.Business.RequestHandlers.Interfaces;
 
@@ -50,7 +51,8 @@
         {
             var prefix = nameof(FirmwareVersionController);
 
-            _logger.LogInformation($"{prefix}: Getting list of all firmware versions");
+            _logger.LogInformation($"{prefix}: Getting list of all firmware versions for {deviceType}");
+            deviceType = HttpUtility.UrlDecode(deviceType);
             var result = await _manager.GetAllFirmwareVersionsAsync(deviceType).ConfigureAwait(false);
             _logger.LogInformation($"{prefix}: Successfully retrieved list of all firmware versions");
 
